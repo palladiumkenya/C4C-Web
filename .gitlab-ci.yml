@@ -1,24 +1,43 @@
-image: python:3.6
-
+version: "3.6"
 services:
-  db:
-    image: mysql:5.7
-    ports:
-      - '3306:3306'
-    environment:
-       MYSQL_DATABASE: 'my-app-db'
-       MYSQL_USER: 'root'
-       MYSQL_PASSWORD: 'password'
-       MYSQL_ROOT_PASSWORD: 'password'
-  web:
+  - mysql:5.7
+
+variables:
+  # Configure mysql environment variables (https://hub.docker.com/_/mysql/)
+  MYSQL_DATABASE: "<your_mysql_database>"
+  MYSQL_ROOT_PASSWORD: "<your_mysql_password>"
+    
+  django:
     build: .
+    restart: always
+    container_name: c4c_Web
     command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/my_app_dir
     ports:
       - "8000:8000"
     depends_on:
       - db
+    
+stages:
+    - test
+    - build
+     - deploy
+test:
+    stage: test
+    script: echo "Testing the app"
+build:
+    stage: build
+    script:
+    - echo "Building the app"
+    - docker-compose build
+deploy_staiging:
+    stage: deploy
+    only:
+    - master
+script:
+    - echo "Deploying the app"
+    - docker-compose up -d
+    
+    
    
 
 
