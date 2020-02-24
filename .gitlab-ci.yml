@@ -1,9 +1,26 @@
 image: python:3.6
 
-all_tests:
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: ${MYSQL_DATABASE}
+  MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+stages:
+  - build
+  - test
+
+before_script:
+  - python -V                                   # Print out python version for debugging
+  - pip install -r req.txt
+
+Build:
+  stage: build
   script:
-   - sh ./sh_scripts/install.sh
-   - python3 manage.py test -k
-  when: on_success
-  only:
-    - develop
+    - python manage.py test --pattern="sign_in.py"
