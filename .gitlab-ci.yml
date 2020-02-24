@@ -20,7 +20,7 @@ variables:
 stages:
     - test
     - build
-     - deploy
+    
 test:
     stage: test
     script: echo "Testing the app"
@@ -29,10 +29,7 @@ build:
     script:
     - echo "Building the app"
     - docker-compose build
-deploy_staiging:
-    stage: deploy
-    only:
-    - master
+
 script:
     - echo "Deploying the app"
     - docker-compose up -d
