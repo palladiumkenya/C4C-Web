@@ -6,6 +6,15 @@
 <body>
 
 {% block content %}
+    <div class="col-md-8">
+
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+            </div>
+    {% endfor %}
+    {% endif %}
   <h2>Add person</h2>
  <form method="post">
   {% csrf_token %}
@@ -15,7 +24,6 @@
             {{ field.label_tag }} {{ field | add_class:"form-control" }}
         </div>
         {% endfor %}
-
 
   <div class="form-group">
     <button type="submit" class="btn btn-success">
