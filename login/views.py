@@ -1,3 +1,5 @@
+import bcrypt as bcrypt
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -18,19 +20,33 @@ def login(request):
         if form.is_valid():
             # here we create a variable clean to store the key value array for the form
             clean = form.cleaned_data
-            # we get the value of the email
-            user = User.objects.get(email=clean['email'])
+            # we get the user object through email
+            u = User.objects.get(email=clean['email'])
+            user = checkUser(email=clean['email'], password=clean['password'])
             if user is not None:
                 # we get the password after we see email exits, and return success message
-                if user.password == clean['password']:
-                    message = messages.success(request, f'Login Succesfull {user.email}!')
+                if user:
+                    messages.success(request, f'Login Succesfull {u.email}!')
                     return HttpResponse(user)
                 else:
-                    message = messages.warning(request, f'Login Unsuccesfull {user.email}!')
-                    return render(request, 'login/login.html', {"form": form, 'message': message})
+                    messages.warning(request, 'Login Unsuccesfull! Check password')
+                    return render(request, 'login/login.html', {"form": form})
             else:
-                message = messages.warning(request, f'Login Unsuccesfull {user.email}!')
-                return render(request, 'login/login.html', {"form": form, 'message': message})
+                messages.warning(request, f'Login Unsuccesfull! Check email {u.email}!')
+                return render(request, 'login/login.html', {"form": form})
 
     # the form will be returned if there is no POST request
     return render(request, 'login/login.html', {"form": form})
+
+
+def checkUser(email, password):
+    try:
+        user = User.objects.get(email=email)
+    except ObjectDoesNotExist:
+        user = None
+    password = str(password)
+    if user is None:
+        return None
+    else:
+        
+        return True if user.email == email and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')) else False
