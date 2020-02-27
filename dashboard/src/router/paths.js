@@ -56,9 +56,9 @@ export default [
     path: '/notifications',
     view: 'Notifications'
   },
-  // {
-  //   path: '/calendar',
-  //   name: 'Calendar',
-  //   view: 'Calendar'
-  // }
+  {
+    path: '/new-broadcast',
+    name: 'BroadcastForm',
+    view: 'BroadcastForm'
+  }
 ]

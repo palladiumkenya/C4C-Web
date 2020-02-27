@@ -24,8 +24,8 @@
                   md4
                 >
                   <v-text-field
-                    label="Company (disabled)"
-                    disabled/>
+                    label="Facility MFL CODE"
+                    />
                 </v-flex>
                 <v-flex
                   xs12
@@ -65,31 +65,35 @@
                   md12
                 >
                   <v-text-field
-                    label="Adress"
+                    label="Address"
                     class="purple-input"/>
                 </v-flex>
-                <v-flex
+                  <v-flex
                   xs12
                   md4>
                   <v-text-field
-                    label="City"
+                    label="Age"
                     class="purple-input"/>
                 </v-flex>
-                <v-flex
-                  xs12
-                  md4>
-                  <v-text-field
-                    label="Country"
-                    class="purple-input"/>
-                </v-flex>
+
                 <v-flex
                   xs12
                   md4>
                   <v-text-field
                     class="purple-input"
-                    label="Postal Code"
+                    label="Role"
                     type="number"/>
                 </v-flex>
+
+                <v-flex
+                  xs12
+                  md4>
+                  <v-text-field
+                    label="Department"
+                    class="purple-input"/>
+                </v-flex>
+               
+                
                 <v-flex xs12>
                   <v-textarea
                     class="purple-input"

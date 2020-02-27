@@ -13,35 +13,37 @@
       >
         <material-card
           color="green"
-          title="Add a New Healthcare Worker"
-          text="Kindly fill all the required fields"
+          title="Send A New Broadcast "
+          text="Kindly fill all the required fields carefully"
         >
           <v-form>
             <v-container py-0>
               <v-layout wrap>
                 <v-flex
                   xs12
-                  md4
                 >
                   <v-text-field
-                    label="Facility MFL CODE"
+                    label="Cadre"
+                    type="text"
                     />
                 </v-flex>
                 <v-flex
                   xs12
-                  md4
+                  md6
                 >
                   <v-text-field
                     class="purple-input"
-                    label="User Name"
+                    type="text"
+                    label="County"
                   />
                 </v-flex>
                 <v-flex
                   xs12
-                  md4
+                  md6
                 >
                   <v-text-field
-                    label="Email Address"
+                    label="Sub-County"
+                    type="text"
                     class="purple-input"/>
                 </v-flex>
                 <v-flex
@@ -49,7 +51,8 @@
                   md6
                 >
                   <v-text-field
-                    label="First Name"
+                    label="Facility"
+                    type="text"
                     class="purple-input"/>
                 </v-flex>
                 <v-flex
@@ -57,7 +60,8 @@
                   md6
                 >
                   <v-text-field
-                    label="Last Name"
+                    label="Date"
+                    type="date"
                     class="purple-input"/>
                 </v-flex>
                 <v-flex
@@ -65,41 +69,15 @@
                   md12
                 >
                   <v-text-field
-                    label="Address"
-                    class="purple-input"/>
-                </v-flex>
-                <v-flex
-                  xs12
-                  md4>
-                  <v-text-field
-                    label="Age"
+                    label="Broadcast Title"
+                    type="text"
                     class="purple-input"/>
                 </v-flex>
 
-                <v-flex
-                  xs12
-                  md4>
-                  <v-text-field
-                    class="purple-input"
-                    label="Role"
-                    type="number"/>
-                </v-flex>
-
-                <v-flex
-                  xs12
-                  md4>
-                  <v-text-field
-                    label="Department"
-                    class="purple-input"/>
-                </v-flex>
-                
                 <v-flex xs12>
-                  <v-textarea
-                    class="purple-input"
-                    label="About Me"
-                    value="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                  />
+                  <ckeditor-ckeditor/>
                 </v-flex>
+              
                 <v-flex
                   xs12
                   text-xs-right

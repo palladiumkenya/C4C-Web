@@ -10,9 +10,9 @@
     >
       <v-flex
         xs12
-        text-xs-center
-        >
-        <v-btn
+        text-xs-center>
+
+        <v-btn @click="$router.push('new-broadcast')"
           class="mx-0 font-weight-light"
           color="success"
           >
