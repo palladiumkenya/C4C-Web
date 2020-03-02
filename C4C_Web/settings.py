@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'login.apps.LoginConfig',
     'widget_tweaks',
+    'exposures.apps.ExposuresConfig',
 
 ]
 
@@ -90,7 +91,7 @@ DATABASES = {
         'NAME': 'c4c2',
         'USER': 'root',
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+           # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 }

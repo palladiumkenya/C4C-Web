@@ -1,4 +1,4 @@
-import bcrypt as bcrypt
+import bcrypt
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -7,6 +7,7 @@ from .forms import UserLoginForm
 from .models import User
 from django.contrib.auth import authenticate
 from django.contrib.admin import AdminSite
+
 
 # method to login user into the dashboard
 
@@ -22,7 +23,7 @@ def login(request):
             clean = form.cleaned_data
             # we get the user object through email
             u = User.objects.get(email=clean['email'])
-            user = checkUser(email=clean['email'], password=clean['password'])
+            user = checkUser(request=request, email=clean['email'], password=clean['password'])
             if user is not None:
                 # we get the password after we see email exits, and return success message
                 if user:
@@ -39,7 +40,7 @@ def login(request):
     return render(request, 'login/login.html', {"form": form})
 
 
-def checkUser(email, password):
+def checkUser(request, email, password):
     try:
         user = User.objects.get(email=email)
     except ObjectDoesNotExist:
@@ -48,5 +49,10 @@ def checkUser(email, password):
     if user is None:
         return None
     else:
-        
-        return True if user.email == email and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')) else False
+
+       #  from requests import request
+
+       request.session['email'] = email
+       print(request.session.get("email", "unknown"))
+       return render(request, 'exposures/exposures.html') if user.email == email and bcrypt.checkpw(password.encode('utf-8'),
+                                                              user.password.encode('utf-8')) else False
