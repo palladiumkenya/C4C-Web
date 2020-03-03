@@ -8,5 +8,7 @@ class User(models.Model):
     role_id = models.IntegerField(default=1)
     password = models.CharField(max_length=255)
 
-
     # here we add class Meta to specify the table we want the User model to interact with
+    class Meta:
+        db_table = "users"
+
