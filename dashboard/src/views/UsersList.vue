@@ -41,39 +41,7 @@
               <td>{{ item.name }}</td>
               <td>{{ item.country }}</td>
               <td>{{ item.city }}</td>
-             
-              <td> 
-                    <v-tooltip
-                      top
-                      content-class="top">
-                      <v-btn
-                        slot="activator"
-                        class="v-btn--simple"
-                        color="success"
-                        icon
-                      >
-                        <v-icon color="primary">mdi-pencil</v-icon>
-                      </v-btn>
-                      <span>Edit</span>
-                    </v-tooltip>
-              </td>
-
-              <td>
-                    <v-tooltip
-                      top
-                      content-class="top">
-                      <v-btn
-                        slot="activator"
-                        class="v-btn--simple"
-                        color="danger"
-                        icon
-                      >
-                        <v-icon color="error">mdi-delete</v-icon>
-                      </v-btn>
-                      <span>Delete</span>
-                    </v-tooltip>
-
-                  </td>
+                       
 
             </template>
           </v-data-table>
@@ -108,16 +76,6 @@ export default {
         value: 'city'
       },
        
-      {
-        sortable: false,
-        text: 'Update',
-        value: 'update',
-      },
-      {
-        sortable: false,
-        text: 'Delete',
-        value: 'delete',
-      },
     ],
     items: [
       {

@@ -100,22 +100,12 @@ export default {
         icon: 'mdi-account-switch',
         text: 'Broadcasts'
       },
-      // {
-      //   to: '/calendar',
-      //   icon: 'mdi-alarm-check',
-      //   text: 'Immunization Calendar'
-      // },
       
        {
-        to: '/maps',
-        icon: 'mdi-map-marker',
-         text: 'Maps'
+        to: '/resources',
+        icon: 'mdi-arrow-down-bold-circle',
+         text: 'Resources'
        },
-      // {
-      //   to: '/notifications',
-      //   icon: 'mdi-bell',
-      //   text: 'Notifications'
-      // },
       {
         to: '/logout',
         icon: 'mdi-clipboard-outline',
