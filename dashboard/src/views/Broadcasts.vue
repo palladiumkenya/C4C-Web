@@ -25,7 +25,7 @@
       >
         <material-card
           color="green"
-          title="All Broadcast Messages"
+          title="Create a New Resource"
         >
           <v-data-table
             :headers="headers"
@@ -87,8 +87,8 @@ export default {
       },
       {
         sortable: false,
-        text: 'City',
-        value: 'city'
+        text: 'Approved By',
+        value: 'approved_by'
       },
       
     ],

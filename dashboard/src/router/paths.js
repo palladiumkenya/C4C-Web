@@ -49,6 +49,10 @@ export default [
     view: 'Icons'
   },
   {
+    path: '/resources',
+    view: 'Resources'
+  },
+  {
     path: '/maps',
     view: 'Maps'
   },

@@ -93,14 +93,6 @@
                     class="purple-input"/>
                 </v-flex>
                
-                
-                <v-flex xs12>
-                  <v-textarea
-                    class="purple-input"
-                    label="About Me"
-                    value="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                  />
-                </v-flex>
                 <v-flex
                   xs12
                   text-xs-right
