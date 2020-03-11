@@ -10,7 +10,6 @@ yarn
   >
     <v-layout wrap>
 
-      <!-- Filters -->
 
 
       <!-- Start Cards -->
@@ -76,6 +75,10 @@ yarn
 
       <!-- End Cards -->
 
+  <!-- Filters -->
+     <template>
+        <core-filters />
+     </template>
 
       <!-- Start Tables -->
 
@@ -118,8 +121,11 @@ yarn
 </template>
 
 <script>
+
+  import Filters from './views/filters.vue';
 export default {
    components: {
+     'dashboard-filters': Filters,
     VueHighcharts
   },
   data () {
