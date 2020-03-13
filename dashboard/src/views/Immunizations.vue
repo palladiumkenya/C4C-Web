@@ -1,27 +1,27 @@
 <template>
   <div>
-    <highmaps :options="chartOptions"></highmaps>
+    <highmaps :options="chartOptions"/>
   </div>
 </template>
 
 <script>
-  import VueHighcharts from "vue2-highcharts";
-  import Highcharts from "highcharts";
-  //import json from './components/map.json'
+import VueHighcharts from 'vue2-highcharts'
+import Highcharts from 'highcharts'
+// import json from './components/map.json'
 
-  export default {
-    components: {
+export default {
+  components: {
     VueHighcharts
   },
-    data() {
-      return {
-        chartOptions: {
-          chart: {
-            map: json,
-          },
+  data () {
+    return {
+      chartOptions: {
+        chart: {
+          map: json
         }
-
       }
+
     }
   }
+}
 </script>

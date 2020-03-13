@@ -58,8 +58,8 @@
                 >
                   <v-text-field
                     v-model="email"
-                    label="Email Address"
                     :rules="[rules.emailRules]"
+                    label="Email Address"
                     class="purple-input"/>
                 </v-flex>
                 <v-flex
@@ -144,8 +144,8 @@
               </v-layout>
             </v-container>
           </v-form>
-          
-          <pre>{{output}}</pre>
+
+          <pre>{{ output }}</pre>
         </material-card>
       </v-flex>
 
@@ -172,7 +172,7 @@ export default {
       rules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
-        emailRules: v => /.+@.+/.test(v) || 'E-mail must be valid',
+        emailRules: v => /.+@.+/.test(v) || 'E-mail must be valid'
       },
       gender: [
         'Male',
@@ -186,15 +186,15 @@ export default {
   },
   methods: {
     postUser (e) {
-      e.preventDefault();
+      e.preventDefault()
       const head = {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        } 
+        }
       }
-      let currentObj = this;
-      axios.post('http://192.168.0.7:5500/api/auth/signup',{
+      let currentObj = this
+      axios.post('http://192.168.0.7:5500/api/auth/signup', {
         first_name: this.fname,
         surname: this.surname,
         msisdn: this.msisdn,
@@ -202,15 +202,15 @@ export default {
         gender: this.gendInp,
         email: this.email,
         password: this.password,
-        password_confirmation: this.cnf_pass},
-        head
-        )
-      .then(function (response) {
-        currentObj.output = response.data;
-      })
-      .catch(function (error) {
-        currentObj.output = error;
-      });
+        password_confirmation: this.cnf_pass },
+      head
+      )
+        .then(function (response) {
+          currentObj.output = response.data
+        })
+        .catch(function (error) {
+          currentObj.output = error
+        })
     }
   }
 }

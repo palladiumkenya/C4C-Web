@@ -100,7 +100,11 @@ export default {
         icon: 'mdi-account-switch',
         text: 'Broadcasts'
       },
-
+      {
+        to: '/add_device',
+        icon: 'mdi-gamepad',
+        text: 'Devices'
+      },
       {
         to: '/resources',
         icon: 'mdi-arrow-down-bold-circle',

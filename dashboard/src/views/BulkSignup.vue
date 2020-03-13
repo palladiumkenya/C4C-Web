@@ -26,11 +26,12 @@
             <v-data-table
               :headers="tableHead"
               :items="tableData.slice(0, 500)"
-              :items-per-page="10"
+              rowsPerPage=100
               class="elevation-1"
-              loading
+              :loading="true"
               loading-text="Loading... Please wait"
             >
+            <v-progress-linear v-slot:progress color="blue" indeterminate></v-progress-linear>
               <template
                 slot="headerCell"
                 slot-scope="{ header }"

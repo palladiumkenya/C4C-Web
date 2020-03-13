@@ -70,5 +70,11 @@ export default [
     path: '/new-broadcast',
     name: 'BroadcastForm',
     view: 'BroadcastForm'
-  }
+  },
+  {
+    path: '/add_device',
+    name: 'Add Devices',
+    view: 'AddDevices',
+    meta: { title: 'Add Devices' }
+  },
 ]

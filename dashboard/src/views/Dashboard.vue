@@ -6,8 +6,6 @@
   >
     <v-layout wrap>
 
-
-
       <!-- Start Cards -->
       <v-flex
         sm6
@@ -68,13 +66,12 @@
         />
       </v-flex>
 
-
       <!-- End Cards -->
 
-  <!-- Filters -->
-     <template>
+      <!-- Filters -->
+      <template>
         <core-filters />
-     </template>
+      </template>
 
       <!-- Start Tables -->
 
@@ -84,44 +81,41 @@
         sm12
         lg12
       >
-<template>
-  <section class="charts">
-        <h3>Exposures Visualization</h3>
-        <vue-highcharts :options="options" ></vue-highcharts>
-    </section>
-</template>
+        <template>
+          <section class="charts">
+            <h3>Exposures Visualization</h3>
+            <vue-highcharts :options="options" />
+          </section>
+        </template>
 
-    </v-flex>
-
+      </v-flex>
 
       <!-- End Graphs -->
 
       <!-- Start Maps -->
-<v-flex
->
+      <v-flex
+      >
 
-<template>
-  <div>
-    <highmaps :options="chartOptions"></highmaps>
-  </div>
-</template>
+        <template>
+          <div>
+            <highmaps :options="chartOptions"/>
+          </div>
+        </template>
 
-</v-flex>
-
-
+      </v-flex>
 
       <!-- Start Tables -->
-      
+
     </v-layout>
   </v-container>
 </template>
 
 <script>
 
-  import Filters from './views/filters.vue';
+import Filters from './views/filters.vue'
 export default {
-   components: {
-     'dashboard-filters': Filters,
+  components: {
+    'dashboard-filters': Filters,
     VueHighcharts
   },
   data () {
@@ -218,8 +212,6 @@ export default {
 </script>
 <!-- Pie Exposure chart -->
 
-
-
 <script>
 import VueHighcharts from "vue2-highcharts";
 //import SeriesLabel from "highcharts/modules/series-label";
@@ -297,7 +289,6 @@ export default {
 };
 </script>
 
-
 <!-- chart scripts
 
 <script>
@@ -317,7 +308,3 @@ export default {
     }
   }
 </script> -->
-
-
-
-

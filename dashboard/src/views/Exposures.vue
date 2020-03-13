@@ -1,25 +1,26 @@
 <template>
   <section class="charts">
-        <h3>Exposure Rates</h3>
-        <vue-highcharts :options="options" ref="barChart"></vue-highcharts>
-    </section>
+    <h3>Exposure Rates</h3>
+    <vue-highcharts
+      ref="barChart"
+      :options="options"/>
+  </section>
 </template>
 
-
 <script>
-import VueHighcharts from "vue2-highcharts";
-import Highcharts from "highcharts";
+import VueHighcharts from 'vue2-highcharts'
+import Highcharts from 'highcharts'
 
 const data = {
   chart: {
-    type: "bar"
+    type: 'bar'
   },
   title: {
-    text: "Exposures Rates Per Cadre"
+    text: 'Exposures Rates Per Cadre'
   },
 
   xAxis: {
-    categories: ["Doctor", "Clinical Officer", "Nurse", "Student", "Laboratory Technologist", "Cleaner", "Waste Handler", "VCT Counsellor", "Other"],
+    categories: ['Doctor', 'Clinical Officer', 'Nurse', 'Student', 'Laboratory Technologist', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other'],
     title: {
       text: null
     }
@@ -27,15 +28,15 @@ const data = {
   yAxis: {
     min: 0,
     title: {
-      text: "Number",
-      align: "high"
+      text: 'Number',
+      align: 'high'
     },
     labels: {
-      overflow: "justify"
+      overflow: 'justify'
     }
   },
   tooltip: {
-    valueSuffix: " hundreds"
+    valueSuffix: ' hundreds'
   },
   plotOptions: {
     bar: {
@@ -45,15 +46,15 @@ const data = {
     }
   },
   legend: {
-    layout: "vertical",
-    align: "right",
-    verticalAlign: "top",
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'top',
     x: -40,
     y: 80,
     floating: true,
     borderWidth: 1,
     backgroundColor:
-      (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || "#FFFFFF",
+      (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
     shadow: true
   },
   credits: {
@@ -61,24 +62,24 @@ const data = {
   },
   series: [
     {
-      name: "Reported Exposures",
+      name: 'Reported Exposures',
       data: [107, 31, 635, 203, 2, 55, 8, 90, 21]
     },
     {
-      name: "Registered HCWs",
+      name: 'Registered HCWs',
       data: [133, 156, 947, 408, 6, 82, 67, 104, 78]
-    },
+    }
 
   ]
-};
+}
 export default {
   components: {
     VueHighcharts
   },
-  data() {
+  data () {
     return {
       options: data
-    };
+    }
   }
-};
+}
 </script>
