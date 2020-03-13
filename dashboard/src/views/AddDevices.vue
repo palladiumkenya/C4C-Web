@@ -61,7 +61,7 @@
         <material-card
           color="blue"
           title="Add a New Device"
-          text="Kindly fill all the required fields">
+          text="Devices List">
           <template>
             <v-data-table
               :headers="headers"
@@ -74,15 +74,17 @@
               slot-scope="{ header }"
             >
               <span
-                class="subheading font-weight-light text--darken-3"
+                class="subheading text--darken-3"
                 v-text="header.text"
               />
             </template>
             <template
               slot="items"
-              slot-scope="{  }"
+              slot-scope="{ item }"
             >
-                
+                <td>{{item.name}}</td>
+                <td>{{item.safety}}</td>
+                <td>{{item.date}}</td>
               </template>
             </v-data-table>
           </template>
@@ -102,6 +104,24 @@ export default {
       switch1: true,
       name: '',
       output: '',
+      headers: [
+        {
+          sortable: false,
+          text: 'Name',
+          value: 'name'
+        },
+        {
+          sortable: false,
+          text: 'Safety Design',
+          value: 'safety'
+        },
+        {
+          sortable: false,
+          text: 'Created On',
+          value: 'date'
+        }
+      ],
+      items: [],
       rules: {
         required: value => !!value || 'Required.'
       }
