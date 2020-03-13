@@ -25,7 +25,7 @@
                   <v-text-field
                     label="Cadre"
                     type="text"
-                  />
+                    />
                 </v-flex>
                 <v-flex
                   xs12
@@ -77,7 +77,7 @@
                 <v-flex xs12>
                   <ckeditor-ckeditor/>
                 </v-flex>
-
+              
                 <v-flex
                   xs12
                   text-xs-right
@@ -94,7 +94,7 @@
           </v-form>
         </material-card>
       </v-flex>
-
+      
     </v-layout>
   </v-container>
 </template>

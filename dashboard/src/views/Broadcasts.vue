@@ -12,14 +12,13 @@
         xs12
         text-xs-center>
 
-        <v-btn
+        <v-btn @click="$router.push('new-broadcast')"
           class="mx-0 font-weight-light"
           color="success"
-          @click="$router.push('new-broadcast')"
-        >
+          >
           Send A New Broadcast
-        </v-btn>
-      </v-flex>
+          </v-btn>
+          </v-flex>
 
       <v-flex
         md12
@@ -46,17 +45,17 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td>{{ item.number }}</td>
+              <td>{{ item.number }}</td>  
               <td>{{ item.name }}</td>
               <td>{{ item.country }}</td>
               <td> {{ item.cadre }}</td>
               <td>{{ item.city }}</td>
-
+              
             </template>
           </v-data-table>
         </material-card>
       </v-flex>
-
+      
     </v-layout>
   </v-container>
 </template>
@@ -65,12 +64,12 @@
 export default {
   data: () => ({
     headers: [
-      {
+       {
         sortable: false,
         text: 'Number',
-        value: 'number'
-
-      },
+        value: 'number',
+        
+      }, 
       {
         sortable: false,
         text: 'Title',
@@ -81,7 +80,7 @@ export default {
         text: 'Facility',
         value: 'country'
       },
-      {
+        {
         sortable: false,
         text: 'Cadre',
         value: 'cadre'
@@ -90,8 +89,8 @@ export default {
         sortable: false,
         text: 'Approved By',
         value: 'approved_by'
-      }
-
+      },
+      
     ],
     items: [
       {
@@ -115,14 +114,14 @@ export default {
         number: '3',
         cadre: 'Nurse'
 
-      },
+      }, 
       {
         name: 'Philip Chanley',
         country: 'Korea, South',
         city: 'Gloucester',
         number: '3',
         cadre: 'Nurse'
-      },
+      }, 
       {
         name: 'Doris Greene',
         country: 'Malawi',
