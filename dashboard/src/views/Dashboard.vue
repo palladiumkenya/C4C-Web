@@ -80,35 +80,35 @@
         lg4
       >
         <material-chart-card
-            :data="dailySalesChart.data"
-            :options="dailySalesChart.options"
-            color="info"
-            type="Line"
-          >
-            <h4 class="title font-weight-light">Daily Sales</h4>
-            <p class="category d-inline-flex font-weight-light">
-              <v-icon
-                color="green"
-                small
-              >
-                mdi-arrow-up
-              </v-icon>
-              <span class="green--text">55%</span>&nbsp;
-              increase in today's sales
-            </p>
+          :data="dailySalesChart.data"
+          :options="dailySalesChart.options"
+          color="info"
+          type="Line"
+        >
+          <h4 class="title font-weight-light">Daily Sales</h4>
+          <p class="category d-inline-flex font-weight-light">
+            <v-icon
+              color="green"
+              small
+            >
+              mdi-arrow-up
+            </v-icon>
+            <span class="green--text">55%</span>&nbsp;
+            increase in today's sales
+          </p>
 
-            <template slot="actions">
-              <v-icon
-                class="mr-2"
-                small
-              >
-                mdi-clock-outline
-              </v-icon>
-              <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
-            </template>
+          <template slot="actions">
+            <v-icon
+              class="mr-2"
+              small
+            >
+              mdi-clock-outline
+            </v-icon>
+            <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
+          </template>
         </material-chart-card>
 
-    </v-flex>
+      </v-flex>
 
       <v-flex
         md12
@@ -116,24 +116,24 @@
         lg4
       >
         <material-chart-card
-            :data="emailsSubscriptionChart.data"
-            :options="emailsSubscriptionChart.options"
-            :responsive-options="emailsSubscriptionChart.responsiveOptions"
-            color="red"
-            type="Bar"
-          >
-            <h4 class="title font-weight-light">Email Subscription</h4>
-            <p class="category d-inline-flex font-weight-light">Last Campaign Performance</p>
+          :data="emailsSubscriptionChart.data"
+          :options="emailsSubscriptionChart.options"
+          :responsive-options="emailsSubscriptionChart.responsiveOptions"
+          color="red"
+          type="Bar"
+        >
+          <h4 class="title font-weight-light">Email Subscription</h4>
+          <p class="category d-inline-flex font-weight-light">Last Campaign Performance</p>
 
-            <template slot="actions">
-              <v-icon
-                class="mr-2"
-                small
-              >
-                mdi-clock-outline
-              </v-icon>
-              <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-            </template>
+          <template slot="actions">
+            <v-icon
+              class="mr-2"
+              small
+            >
+              mdi-clock-outline
+            </v-icon>
+            <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
+          </template>
         </material-chart-card>
       </v-flex>
 
@@ -166,7 +166,7 @@
       <!-- End Graphs -->
 
       <!-- Start Tables -->
-      
+
       <v-flex
         md12
         lg6
@@ -371,7 +371,7 @@
       </v-flex>
 
       <!-- Start Tables -->
-      
+
     </v-layout>
   </v-container>
 </template>
@@ -528,4 +528,3 @@ export default {
   }
 }
 </script>
-

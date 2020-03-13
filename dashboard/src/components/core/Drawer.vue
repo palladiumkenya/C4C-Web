@@ -29,7 +29,7 @@
             />
           </v-list-tile-avatar>
           <v-list-tile-title class="title">
-            Care For The Carer 
+            Care For The Carer
           </v-list-tile-title>
         </v-list-tile>
         <v-divider/>
@@ -100,17 +100,17 @@ export default {
         icon: 'mdi-account-switch',
         text: 'Broadcasts'
       },
-      
-       {
+
+      {
         to: '/resources',
         icon: 'mdi-arrow-down-bold-circle',
-         text: 'Resources'
-       },
+        text: 'Resources'
+      },
       {
         to: '/logout',
         icon: 'mdi-clipboard-outline',
         text: 'Logout'
-      },
+      }
     ]
   }),
   computed: {
@@ -146,4 +146,3 @@ export default {
     }
   }
 </style>
-

@@ -12,11 +12,16 @@
     "@ckeditor/ckeditor5-build-classic": "^17.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
     "chartist": "0.11.0",
+    "csvtojson": "^2.0.10",
+    "element-ui": "^2.13.0",
+    "js-xlsx": "^0.8.22",
     "sass-loader": "7.1.0",
     "vue": "2.5.22",
     "vue-chartist": "2.1.2",
+    "vue-el-element": "^1.12.2",
     "vue-meta": "1.5.2",
-    "vuetify": "1.4.3"
+    "vuetify": "1.4.3",
+    "xlsx": "^0.15.5"
   },
   "devDependencies": {
     "@mdi/font": "2.5.94",

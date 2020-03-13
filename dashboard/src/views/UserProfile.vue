@@ -25,7 +25,7 @@
                 >
                   <v-text-field
                     label="Facility MFL CODE"
-                    />
+                  />
                 </v-flex>
                 <v-flex
                   xs12
@@ -68,7 +68,7 @@
                     label="Address"
                     class="purple-input"/>
                 </v-flex>
-                  <v-flex
+                <v-flex
                   xs12
                   md4>
                   <v-text-field
@@ -92,7 +92,7 @@
                     label="Department"
                     class="purple-input"/>
                 </v-flex>
-               
+
                 <v-flex
                   xs12
                   text-xs-right
