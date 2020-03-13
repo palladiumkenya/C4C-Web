@@ -1,8 +1,4 @@
-yarn
-
-
 <template>
-
   <v-container
     fill-height
     fluid

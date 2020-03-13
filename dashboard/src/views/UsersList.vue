@@ -8,7 +8,6 @@
       justify-center
       wrap
     >
-     
 
       <v-flex
         md12
@@ -41,7 +40,6 @@
               <td>{{ item.name }}</td>
               <td>{{ item.country }}</td>
               <td>{{ item.city }}</td>
-                       
 
             </template>
           </v-data-table>
@@ -58,7 +56,7 @@ export default {
       {
         sortable: false,
         text: 'Number',
-        value: 'number',
+        value: 'number'
       },
       {
         sortable: false,
@@ -74,16 +72,16 @@ export default {
         sortable: false,
         text: 'City',
         value: 'city'
-      },
-       
+      }
+
     ],
     items: [
       {
         number: '1',
         name: 'Dakota Rice',
         country: 'Niger',
-        city: 'Oud-Tunrhout',
-        
+        city: 'Oud-Tunrhout'
+
       },
       {
         name: 'Minerva Hooper',
@@ -115,4 +113,3 @@ export default {
   })
 }
 </script>
-

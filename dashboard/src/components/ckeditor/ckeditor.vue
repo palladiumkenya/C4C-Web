@@ -1,7 +1,10 @@
 <template>
-    <div id="app-editor"> 
-        <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"> </ckeditor>
-    </div>
+  <div id="app-editor">
+    <ckeditor
+      :editor="editor"
+      v-model="editorData"
+      :config="editorConfig"/>
+  </div>
 </template>
 
 <script>
@@ -9,14 +12,14 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default {
-    data() {
-        return{
-            editor: ClassicEditor,
-            editorData: '<p> Write Your Message Here. </p>',
-            editorConfig : {
-            }
-        };
+  data () {
+    return {
+      editor: ClassicEditor,
+      editorData: '<p> Write Your Message Here. </p>',
+      editorConfig: {
+      }
     }
+  }
 }
 </script>
 <style >

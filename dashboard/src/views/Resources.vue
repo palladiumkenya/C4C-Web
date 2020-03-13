@@ -19,9 +19,7 @@
           <v-form>
             <v-container py-0>
               <v-layout wrap>
-            
-                
-                
+
                 <v-flex
                   xs12
                   md12
@@ -35,7 +33,7 @@
                 <v-flex xs12>
                   <ckeditor-ckeditor/>
                 </v-flex>
-              
+
                 <v-flex
                   xs12
                   text-xs-right
@@ -52,7 +50,7 @@
           </v-form>
         </material-card>
       </v-flex>
-      
+
     </v-layout>
   </v-container>
 </template>
