@@ -136,6 +136,11 @@ export default {
         ]
       },
       {
+        to: 'registration-reports',
+        icon: '',
+        text:'Registration Reports',
+      },
+      {
         to: '/exposures',
         icon: 'mdi-alert-circle-outline',
         text: 'Exposures'
@@ -164,7 +169,11 @@ export default {
         to: '/logout',
         icon: 'mdi-clipboard-outline',
         text: 'Logout'
+
       }
+
+
+
     ]
   }),
   computed: {

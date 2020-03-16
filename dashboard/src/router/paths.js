@@ -3,12 +3,17 @@
  * for more information on routes, see the
  * official documentation https://router.vuejs.org/en/
  */
+
+
+
+
 export default [
   {
     path: '',
     // Relative to /src/views
     view: 'Dashboard'
   },
+
   {
     path: '/user-profile',
     name: 'User Profile',
@@ -31,10 +36,18 @@ export default [
     meta: { title: 'Upload Excel' }
   },
   {
+    path: 'registration-summary',
+    name: 'Registration Summary',
+    view: 'RegistrationSummary',
+  },
+
+  {
     path: '/users-list',
     name: 'Users List',
     view: 'UsersList'
   },
+
+
   {
     path: '/exposures',
     name: 'Exposures',
