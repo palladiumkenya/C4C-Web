@@ -119,14 +119,11 @@ export default {
         to: '/logout',
         icon: 'mdi-clipboard-outline',
         text: 'Logout'
-<<<<<<< HEAD
+
       }
-=======
-      },
-      {
-        to: '/registration-summary',
-      },
->>>>>>> 6844d6324d5fe3a9f82f1d5fd34a0daa2031f064
+
+
+
     ]
   }),
   computed: {
