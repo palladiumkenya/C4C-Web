@@ -35,8 +35,7 @@
                 >
                   <v-switch
                     v-model="switch1"
-                    :label="`Safety Engineered?  ${switch1.toString()}`">
-                  </v-switch>
+                    :label="`Safety Engineered?  ${switch1.toString()}`"/>
                 </v-flex>
 
                 <v-flex
@@ -58,6 +57,7 @@
 
           <pre>{{ output }}</pre>
         </material-card>
+
         <material-card
           color="blue"
           title="Add a New Device"
@@ -65,9 +65,9 @@
           <template>
             <v-data-table
               :headers="headers"
-              :items="desserts"
+              :items="items"
               :loading="true"
-              rowsPerPage=-1
+              rows-per-page="-1"
               class="elevation-1"
             ><template
               slot="headerCell"
@@ -78,13 +78,13 @@
                 v-text="header.text"
               />
             </template>
-            <template
-              slot="items"
-              slot-scope="{ item }"
-            >
-                <td>{{item.name}}</td>
-                <td>{{item.safety}}</td>
-                <td>{{item.date}}</td>
+              <template
+                slot="items"
+                slot-scope="{ item }"
+              >
+                <td>{{ item.name }}</td>
+                <td>{{ item.safety }}</td>
+                <td>{{ item.date }}</td>
               </template>
             </v-data-table>
           </template>
@@ -135,13 +135,13 @@ export default {
           'token': '',
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
+        }
       }
       let currentObj = this
       axios.get('http://192.168.0.7:5500/', {
         name: this.name,
         safety_designed: this.switch1
-        },
+      },
       head
       )
         .then(function (response) {

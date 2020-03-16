@@ -14,7 +14,7 @@
       height="100%"
     >
       <v-layout
-        class="fill-height"
+        class="fill-height items"
         tag="v-list"
         column
       >
@@ -34,20 +34,64 @@
         </v-list-tile>
         <v-divider/>
         <v-list-tile
-          v-for="(link, i) in links"
-          :key="i"
-          :to="link.to"
+          :to="'/bulk-signup'"
           :active-class="color"
           avatar
-          class="v-list-item"
-        >
+          class="v-list-item">
           <v-list-tile-action>
-            <v-icon>{{ link.icon }}</v-icon>
+            <v-icon>mdi-account</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title
-            v-text="link.text"
-          />
+          <v-list-tile-title>
+            Care For The Carer
+          </v-list-tile-title>
+
         </v-list-tile>
+        <div
+          v-for="(link, i) in links"
+          :key="i">
+          <v-list-tile
+            v-if="!link.subLinks"
+            :to="link.to"
+            :active-class="color"
+            avatar
+            class="v-list-item"
+          >
+            <v-list-tile-action>
+              <v-icon>{{ link.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title
+              v-text="link.text"
+            />
+          </v-list-tile>
+          <v-list-group
+              v-else
+              :key="link.text"
+              no-action
+            >
+            
+              <v-list-tile slot="activator">
+                <v-list-tile-action>
+                  <v-icon>{{ link.icon }}</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ link.text }}</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile
+                v-for="sublink in link.subLinks"
+                :to="sublink.to"
+                :active-class="color"
+                :key="sublink.text"
+              >
+                <v-list-tile-action>
+                    <v-icon>{{ sublink.icon }}</v-icon>
+                  </v-list-tile-action>
+                <v-list-tile-title v-text="sublink.text" />
+              </v-list-tile>
+
+            </v-list-group>
+        </div>
       </v-layout>
     </v-img>
   </v-navigation-drawer>
@@ -76,14 +120,20 @@ export default {
         text: 'Dashboard'
       },
       {
-        to: '/add-user',
         icon: 'mdi-account',
-        text: 'Upload HCW'
-      },
-      {
-        to: '/users-list',
-        icon: 'mdi-account-box-multiple',
-        text: 'View Users'
+        text: 'Users',
+        subLinks: [
+          {
+            text: 'Upload HCW',
+            to: '/add-user',
+            icon: 'mdi-account-plus'
+          },
+          {
+            to: '/users-list',
+            icon: 'mdi-account-box-multiple',
+            text: 'View Users'
+          }
+        ]
       },
       {
         to: 'registration-reports',
@@ -157,5 +207,8 @@ export default {
         margin-bottom: 17px;
       }
     }
+  }
+  .items {
+    overflow: auto;
   }
 </style>
