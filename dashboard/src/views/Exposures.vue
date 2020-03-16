@@ -1,3 +1,4 @@
+
 <template>
    <v-card>
    <v-tabs
@@ -114,4 +115,3 @@ export default {
   }
 };
 </script>
-

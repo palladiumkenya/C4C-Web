@@ -11,18 +11,31 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^17.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
+    "@syncfusion/ej2-vue-calendars": "^17.4.51",
     "chartist": "0.11.0",
+<<<<<<< HEAD
     "highcharts": "^8.0.4",
     "js-xlsx": "^0.8.22",
+=======
+    "date-fns": "^2.10.0",
+    "highcharts": "^8.0.3",
+>>>>>>> 6844d6324d5fe3a9f82f1d5fd34a0daa2031f064
     "sass-loader": "7.1.0",
     "vue": "2.5.22",
     "vue-axios": "^2.1.5",
     "vue-chartist": "2.1.2",
+    "vue-date-calendar": "^2.0.1",
+    "vue-datepicker": "^1.3.0",
     "vue-highcharts": "^0.1.0",
     "vue-meta": "1.5.2",
+    "vue2-daterange-picker": "^0.4.6",
     "vue2-highcharts": "^1.2.5",
     "vuetify": "1.4.3",
+<<<<<<< HEAD
     "xlsx": "^0.15.5"
+=======
+    "vuetify-daterange-picker": "3"
+>>>>>>> 6844d6324d5fe3a9f82f1d5fd34a0daa2031f064
   },
   "devDependencies": {
     "@mdi/font": "2.5.94",
@@ -33,8 +46,8 @@
     "axios": "^0.19.2",
     "material-design-icons-iconfont": "3.0.3",
     "node-sass": "^4.9.3",
-    "stylus": "0.54.5",
-    "stylus-loader": "3.0.1",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2",
     "vue-analytics": "5.8.0",
     "vue-i18n": "7.4.0",
     "vue-router": "3.0.1",
