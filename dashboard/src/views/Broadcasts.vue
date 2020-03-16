@@ -9,7 +9,7 @@
       wrap
     >
       <v-flex
-        xs12
+        xs8
         text-xs-center>
 
         <v-btn @click="$router.push('new-broadcast')"
@@ -20,12 +20,14 @@
           </v-btn>
           </v-flex>
 
+
+
       <v-flex
         md12
       >
         <material-card
           color="green"
-          title="Create a New Resource"
+          title="Broadcast Messages"
         >
           <v-data-table
             :headers="headers"

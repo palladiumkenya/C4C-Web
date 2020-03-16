@@ -1,142 +1,9 @@
-<template>
- <v-container
-    fill-height
-    fluid
-    grid-list-xl
-  >
-    <v-layout wrap>
-     <v-flex
-        md6
-        lg3
-      >
-    <material-card
-
-    >
-      <v-select
-      v-model="selectedFruits"
-      :items="fruits"
-      label="Cadre"
-      multiple
-    >
-      <template v-slot:prepend-item>
-        <v-list-item
-          ripple
-          @click="toggle"
-        >
-          <v-list-item-action>
-            <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Select All</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider class="mt-2"></v-divider>
-      </template>
-      <template v-slot:append-item>
-        <v-divider class="mb-2"></v-divider>
-        <v-list-item disabled>
-          <v-list-item-avatar color="grey lighten-3">
-            <v-icon>mdi-food-apple</v-icon>
-          </v-list-item-avatar>
-
-        </v-list-item>
-      </template>
-    </v-select>
-      </material-card>
-    </v-flex>
-
-<!-- second select -->
-
-    <v-flex
-        md6
-        lg3
-      >
-    <material-card
-
-     >
-      <v-select
-      v-model="selectedFruits"
-      :items="fruits"
-      label="Gender"
-      multiple
-    >
-      <template v-slot:prepend-item>
-        <v-list-item
-          ripple
-          @click="toggle"
-        >
-          <v-list-item-action>
-            <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Select All</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider class="mt-2"></v-divider>
-      </template>
-      <template v-slot:append-item>
-        <v-divider class="mb-2"></v-divider>
-        <v-list-item disabled>
-          <v-list-item-avatar color="grey lighten-3">
-            <v-icon>mdi-food-apple</v-icon>
-          </v-list-item-avatar>
-
-        </v-list-item>
-      </template>
-    </v-select>
-      </material-card>
-    </v-flex>
+yarn
 
 
-      <!-- third select -->
-     <v-flex
-        md6
-        lg3
-      >
-    <material-card
-
-     >
-      <v-select
-      v-model="selectedFruits"
-      :items="fruits"
-      label="Age Group"
-      multiple
-    >
-      <template v-slot:prepend-item>
-        <v-list-item
-          ripple
-          @click="toggle"
-        >
-          <v-list-item-action>
-            <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Select All</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider class="mt-2"></v-divider>
-      </template>
-      <template v-slot:append-item>
-        <v-divider class="mb-2"></v-divider>
-        <v-list-item disabled>
-          <v-list-item-avatar color="grey lighten-3">
-            <v-icon>mdi-food-apple</v-icon>
-          </v-list-item-avatar>
-
-        </v-list-item>
-      </template>
-    </v-select>
-      </material-card>
-    </v-flex>
-
-      <!-- Fourth select -->
+<!-- Filter button -->
 
 
-
-    </v-layout>
-  </v-container>
-
-</template>
 
 <template>
 
@@ -151,6 +18,7 @@
 
       </template>
     </v-btn>
+
 
 </template>
 
@@ -214,6 +82,45 @@
             this.selectedFruits = this.fruits.slice()
           }
         })
+      },
+    },
+  }
+</script>
+
+
+<script>
+  export default {
+    data: vm => ({
+      date: new Date().toISOString().substr(0, 10),
+      dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+      menu1: false,
+      menu2: false,
+    }),
+
+    computed: {
+      computedDateFormatted () {
+        return this.formatDate(this.date)
+      },
+    },
+
+    watch: {
+      date (val) {
+        this.dateFormatted = this.formatDate(this.date)
+      },
+    },
+
+    methods: {
+      formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${month}/${day}/${year}`
+      },
+      parseDate (date) {
+        if (!date) return null
+
+        const [month, day, year] = date.split('/')
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       },
     },
   }

@@ -77,8 +77,12 @@ yarn
 
   <!-- Filters -->
      <template>
-        <core-filters />
+        <core-DatePicker />
      </template>
+
+    <template>
+        <core-filters/>
+    </template>
 
       <!-- Start Tables -->
 
