@@ -76,5 +76,5 @@ export default [
     name: 'Add Devices',
     view: 'AddDevices',
     meta: { title: 'Add Devices' }
-  },
+  }
 ]
