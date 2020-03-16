@@ -1,10 +1,12 @@
 <template>
+<v-container>
   <section class="charts">
     <h3>Exposure Rates</h3>
     <vue-highcharts
       ref="barChart"
       :options="options"/>
   </section>
+</v-container>
 </template>
 
 <script>

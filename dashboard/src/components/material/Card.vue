@@ -4,39 +4,6 @@
     :style="styles"
     v-on="$listeners"
   >
-    <helper-offset
-      v-if="hasOffset"
-      :inline="inline"
-      :full-width="fullWidth"
-      :offset="offset"
-    >
-      <v-card
-        v-if="!$slots.offset"
-        :color="color"
-        :class="`elevation-${elevation}`"
-        class="v-card--material__header"
-        dark
-      >
-        <slot
-          v-if="!title && !text"
-          name="header"
-        />
-        <span v-else>
-          <h4
-            class="title font-weight-light mb-2"
-            v-text="title"
-          />
-          <p
-            class="category font-weight-thin"
-            v-text="text"
-          />
-        </span>
-      </v-card>
-      <slot
-        v-else
-        name="offset"
-      />
-    </helper-offset>
 
     <v-card-text>
       <slot />
@@ -62,10 +29,6 @@ export default {
       type: String,
       default: 'secondary'
     },
-    elevation: {
-      type: [Number, String],
-      default: 10
-    },
     inline: {
       type: Boolean,
       default: false
@@ -73,10 +36,6 @@ export default {
     fullWidth: {
       type: Boolean,
       default: false
-    },
-    offset: {
-      type: [Number, String],
-      default: 24
     },
     title: {
       type: String,

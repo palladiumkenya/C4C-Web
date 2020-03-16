@@ -68,7 +68,7 @@ export default {
     }
   },
   data: () => ({
-    logo: 'favicon.ico',
+    logo: 'c4c_new.png',
     links: [
       {
         to: '/',

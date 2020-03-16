@@ -19,9 +19,8 @@
           title="All Users"
         >
           <v-data-table
-            :headers="headers"
-            :items="items.slice(0, 7)"
             hide-actions
+            v-if="facilities"
           >
             <template
               slot="headerCell"
@@ -32,14 +31,30 @@
                 v-text="header.text"
               />
             </template>
-            <template
-              slot="items"
-              slot-scope="{ item }"
-            >
-              <td>{{ item.number }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.country }}</td>
-              <td>{{ item.city }}</td>
+            <template>
+                <div class="loading" v-if="loading">
+            Loading...
+            </div>
+
+            <div v-if="error" class="error">
+                {{ error }}
+
+              
+            </div>
+
+              {{ facilities}}
+              
+                <!-- <tr v-for="facility in facilities" :key="facility.id" >
+                 <td> {{ facility.name }} </td>
+                 <td> {{ facility.county }} </td>
+                 <td> {{ facility.mfl_code }} </td> 
+                 <td> {{ facility.sub_county}} </td>                      
+                 <td>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-danger btn-sm"> View More </button>
+                </div>
+                 </td>
+             </tr> -->
 
             </template>
           </v-data-table>
@@ -50,66 +65,29 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-  data: () => ({
-    headers: [
-      {
-        sortable: false,
-        text: 'Number',
-        value: 'number'
-      },
-      {
-        sortable: false,
-        text: 'Name',
-        value: 'name'
-      },
-      {
-        sortable: false,
-        text: 'Country',
-        value: 'country'
-      },
-      {
-        sortable: false,
-        text: 'City',
-        value: 'city'
-      }
-
-    ],
-    items: [
-      {
-        number: '1',
-        name: 'Dakota Rice',
-        country: 'Niger',
-        city: 'Oud-Tunrhout'
-
-      },
-      {
-        name: 'Minerva Hooper',
-        country: 'Curaçao',
-        city: 'Sinaai-Waas',
-        number: '2'
-      }, {
-        name: 'Sage Rodriguez',
-        country: 'Netherlands',
-        city: 'Overland Park',
-        number: '3'
-      }, {
-        name: 'Philip Chanley',
-        country: 'Korea, South',
-        city: 'Gloucester',
-        number: '4'
-      }, {
-        name: 'Doris Greene',
-        country: 'Malawi',
-        city: 'Feldkirchen in Kārnten',
-        number: '5'
-      }, {
-        name: 'Mason Porter',
-        country: 'Chile',
-        city: 'Gloucester',
-        number: '6'
-      }
-    ]
-  })
-}
+    data() {
+      return {
+        loading: false,
+        facilities: null,
+        error: null,
+      };
+    },
+    methods: {
+        fetchFacilities() {
+          this.error = this.facilities = null;
+          this.loading = true;
+         axios.
+         get('https://api/facilities')
+            .then((response) => {
+                this.loading = false;
+                this.facilities = response.data;
+            });
+        },
+     created() {
+    this.fetchFacilities ();
+},
+    },
+};
 </script>

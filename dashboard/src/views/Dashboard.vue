@@ -27,6 +27,7 @@
         md6
         lg3
       >
+      
         <material-stats-card
           color="white"
           title="Number of Reported Exposures"
