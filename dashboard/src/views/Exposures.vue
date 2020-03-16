@@ -11,6 +11,7 @@
          <v-container fluid>
             <v-card-text v-if="n==1">
   <!-- Start Graphs -->
+                
       <v-flex
         md12
         sm12
