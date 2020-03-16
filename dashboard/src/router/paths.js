@@ -4,9 +4,6 @@
  * official documentation https://router.vuejs.org/en/
  */
 
-
-
-
 export default [
   {
     path: '',
@@ -38,7 +35,7 @@ export default [
   {
     path: 'registration-summary',
     name: 'Registration Summary',
-    view: 'RegistrationSummary',
+    view: 'RegistrationSummary'
   },
 
   {
@@ -46,7 +43,6 @@ export default [
     name: 'Users List',
     view: 'UsersList'
   },
-
 
   {
     path: '/exposures',
