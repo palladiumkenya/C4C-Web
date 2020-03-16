@@ -68,21 +68,19 @@
 
       <!-- End Cards -->
 
-
       <!-- Filters -->
       <template>
         <core-filters />
       </template>
 
-  <!-- Filters -->
-     <template>
+      <!-- Filters -->
+      <template>
         <core-DatePicker />
-     </template>
+      </template>
 
-
-    <template>
+      <template>
         <core-filters/>
-    </template>
+      </template>
 
       <!-- Start Tables -->
 
