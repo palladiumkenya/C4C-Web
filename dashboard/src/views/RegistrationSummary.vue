@@ -1,3 +1,3 @@
 <template>
-    <core-DatePicker/>
+  <core-DatePicker/>
 </template>
