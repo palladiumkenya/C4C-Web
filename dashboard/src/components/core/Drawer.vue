@@ -33,19 +33,6 @@
           </v-list-tile-title>
         </v-list-tile>
         <v-divider/>
-        <v-list-tile
-          :to="'/bulk-signup'"
-          :active-class="color"
-          avatar
-          class="v-list-item">
-          <v-list-tile-action>
-            <v-icon>mdi-account</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>
-            Care For The Carer
-          </v-list-tile-title>
-
-        </v-list-tile>
         <div
           v-for="(link, i) in links"
           :key="i">
