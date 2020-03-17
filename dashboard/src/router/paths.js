@@ -33,9 +33,9 @@ export default [
     meta: { title: 'Upload Excel' }
   },
   {
-    path: 'registration-summary',
-    name: 'Registration Summary',
-    view: 'RegistrationSummary'
+    path: '/registration-reports',
+    name: 'Registration Reports',
+    view: 'RegistrationReports'
   },
 
   {
