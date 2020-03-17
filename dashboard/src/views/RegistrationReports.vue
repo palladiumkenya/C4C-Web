@@ -6,7 +6,7 @@
       centered
     >
       <v-tab>Summary</v-tab>
-        <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Cadre</v-tab>
       <v-tab>Report By Age</v-tab>
       <v-tab>Report By Gender</v-tab>
       <v-tab-item

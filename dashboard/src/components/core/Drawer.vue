@@ -133,9 +133,20 @@ export default {
         text: 'Registration Reports'
       },
       {
-        to: '/exposures',
         icon: 'mdi-alert-circle-outline',
-        text: 'Exposures'
+        text: 'Exposures',
+        subLinks: [
+          {
+            text: 'Exposure report',
+            to: '/exposures',
+            icon: 'mdi-chart-bar'
+          },
+          {
+            to: '/exposure-list',
+            icon: 'mdi-playlist-check',
+            text: 'View Users'
+          }
+        ]
       },
       {
         to: '/immunizations',
