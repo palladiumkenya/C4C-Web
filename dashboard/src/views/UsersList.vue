@@ -19,8 +19,8 @@
           title="All Users"
         >
           <v-data-table
-            hide-actions
             v-if="facilities"
+            hide-actions
           >
             <template
               slot="headerCell"
@@ -32,23 +32,26 @@
               />
             </template>
             <template>
-                <div class="loading" v-if="loading">
-            Loading...
-            </div>
+              <div
+                v-if="loading"
+                class="loading">
+                Loading...
+              </div>
 
-            <div v-if="error" class="error">
+              <div
+                v-if="error"
+                class="error">
                 {{ error }}
 
-              
-            </div>
+              </div>
 
-              {{ facilities}}
-              
-                <!-- <tr v-for="facility in facilities" :key="facility.id" >
+              {{ facilities }}
+
+              <!-- <tr v-for="facility in facilities" :key="facility.id" >
                  <td> {{ facility.name }} </td>
                  <td> {{ facility.county }} </td>
-                 <td> {{ facility.mfl_code }} </td> 
-                 <td> {{ facility.sub_county}} </td>                      
+                 <td> {{ facility.mfl_code }} </td>
+                 <td> {{ facility.sub_county}} </td>
                  <td>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-danger btn-sm"> View More </button>
@@ -65,29 +68,29 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 export default {
-    data() {
-      return {
-        loading: false,
-        facilities: null,
-        error: null,
-      };
+  data () {
+    return {
+      loading: false,
+      facilities: null,
+      error: null
+    }
+  },
+  methods: {
+    fetchFacilities () {
+      this.error = this.facilities = null
+      this.loading = true
+      axios
+        .get('https://api/facilities')
+        .then((response) => {
+          this.loading = false
+          this.facilities = response.data
+        })
     },
-    methods: {
-        fetchFacilities() {
-          this.error = this.facilities = null;
-          this.loading = true;
-         axios.
-         get('https://api/facilities')
-            .then((response) => {
-                this.loading = false;
-                this.facilities = response.data;
-            });
-        },
-     created() {
-    this.fetchFacilities ();
-},
-    },
-};
+    created () {
+      this.fetchFacilities()
+    }
+  }
+}
 </script>

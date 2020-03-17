@@ -27,7 +27,7 @@
         md6
         lg3
       >
-      
+
         <material-stats-card
           color="white"
           title="Number of Reported Exposures"
@@ -69,21 +69,19 @@
 
       <!-- End Cards -->
 
-
       <!-- Filters -->
       <template>
         <core-filters />
       </template>
 
-  <!-- Filters -->
-     <template>
+      <!-- Filters -->
+      <template>
         <core-DatePicker />
-     </template>
+      </template>
 
-
-    <template>
+      <template>
         <core-filters/>
-    </template>
+      </template>
 
       <!-- Start Tables -->
 
