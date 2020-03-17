@@ -194,7 +194,7 @@ export default {
         }
       }
       let currentObj = this
-      axios.post('http://192.168.0.7:5500/api/auth/signup', {
+      axios.post('http://c4ctest.mhealthkenya.org/api/auth/signup', {
         first_name: this.fname,
         surname: this.surname,
         msisdn: this.msisdn,
