@@ -5,9 +5,9 @@
       color="teal lighten-5"
       centered
     >
-      <v-tab>Full Dose</v-tab>
-      <v-tab>Partial Dose</v-tab>
-      <v-tab>No Dose</v-tab>
+      <v-tab>First Disease</v-tab>
+      <v-tab>Second Disease</v-tab>
+      <v-tab>Third Disease</v-tab>
       <v-tab-item
         v-for="n in 3"
         :key="n">
@@ -22,15 +22,15 @@
             >
               <template>
                 <section class="charts">
-                  <h3>HBV Immunization Summary</h3>
+                  <h3>Other Diseases Summary</h3>
                   <vue-highcharts :options="options" />
                 </section>
               </template>
 
             </v-flex>
           </v-card-text>
-          <v-card-text v-if="n==2">Partial Dose list</v-card-text>
-          <v-card-text v-if="n==3">No dose list</v-card-text>
+          <v-card-text v-if="n==2">Disease list</v-card-text>
+          <v-card-text v-if="n==3">Disease list</v-card-text>
         </v-container>
       </v-tab-item>
     </v-tabs>

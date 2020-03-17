@@ -149,10 +149,21 @@ export default {
           }
         ]
       },
-      {
-        to: '/immunizations',
+            {
         icon: 'mdi-account-edit',
-        text: 'Immunizations'
+        text: 'Immunizations',
+        subLinks: [
+          {
+            text: 'HBV Reports',
+            to: '/hbv-summary',
+            icon: 'mdi-account-plus'
+          },
+          {
+            to: '/other-diseases',
+            icon: 'mdi-account-box-multiple',
+            text: 'Other Diseases'
+          }
+        ]
       },
       {
         to: '/broadcast',

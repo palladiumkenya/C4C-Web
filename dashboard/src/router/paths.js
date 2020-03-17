@@ -21,6 +21,16 @@ export default [
     name: 'Immunizations',
     view: 'Immunizations'
   },
+    {
+    path: '/hbv-summary',
+    name: 'HBV Reports',
+    view: 'HbvReports'
+  },
+    {
+    path: '/other-diseases',
+    name: 'Other Diseases',
+    view: 'OtherDiseases'
+  },
   {
     path: '/add-user',
     name: 'HCW Upload',
