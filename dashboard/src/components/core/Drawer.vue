@@ -129,7 +129,7 @@ export default {
       },
       {
         to: 'registration-reports',
-        icon: '',
+        icon: 'mdi-transcribe',
         text: 'Registration Reports'
       },
       {
