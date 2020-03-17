@@ -27,20 +27,20 @@ export default [
     view: 'HCW_Upload'
   },
   {
-    path: '/exposures_list',
+    path: '/exposure-list',
     name: 'Exposures List',
-    view: 'Exposures-List'
+    view: 'Exposures_List'
   },
   {
     path: '/bulk-signup',
-    name: 'Bulk Signup',
+    name: 'BulkSignup',
     view: 'BulkSignup',
     meta: { title: 'Upload Excel' }
   },
   {
-    path: 'registration-summary',
-    name: 'Registration Summary',
-    view: 'RegistrationSummary'
+    path: '/registration-reports',
+    name: 'Registration Reports',
+    view: 'RegistrationReports'
   },
 
   {

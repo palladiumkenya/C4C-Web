@@ -55,11 +55,11 @@
             :key="link.text"
             no-action
           >
-
             <v-list-tile
               slot="activator"
-              avatar
-              class="v-list-item">
+              :active-class="color"
+              class="v-list-item"
+              avatar>
               <v-list-tile-action>
                 <v-icon>{{ link.icon }}</v-icon>
               </v-list-tile-action>
@@ -71,10 +71,10 @@
             <v-list-tile
               v-for="sublink in link.subLinks"
               :to="sublink.to"
-              :key="sublink.text"
               :active-class="color"
-              avatar
+              :key="sublink.text"
               class="v-list-item"
+              avatar
             >
               <v-list-tile-action>
                 <v-icon>{{ sublink.icon }}</v-icon>
@@ -133,21 +133,20 @@ export default {
         text: 'Registration Reports'
       },
       {
-        text: 'Exposures',
         icon: 'mdi-alert-circle-outline',
+        text: 'Exposures',
         subLinks: [
           {
             text: 'Exposure report',
             to: '/exposures',
-            icon: 'mdi-account-plus'
+            icon: 'mdi-chart-bar'
           },
           {
-            to: '/exposures_list',
-            icon: 'mdi-account-box-multiple',
-            text: 'Exposure list'
+            to: '/exposure-list',
+            icon: 'mdi-playlist-check',
+            text: 'View Users'
           }
         ]
-        
       },
       {
         to: '/immunizations',

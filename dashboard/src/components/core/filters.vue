@@ -1,19 +1,153 @@
-yarn
+<template>
+  <v-container
+    fill-height
+    fluid
+    grid-list-xl
+  >
+    <v-layout wrap>
+      <v-flex
+        md6
+        lg3
+      >
+        <material-card
 
-<!-- Filter button -->
+        >
+          <v-select
+            v-model="selectedFruits"
+            :items="fruits"
+            label="Cadre"
+            multiple
+          >
+            <template v-slot:prepend-item>
+              <v-list-item
+                ripple
+                @click="toggle"
+              >
+                <v-list-item-action>
+                  <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Select All</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider class="mt-2"/>
+            </template>
+            <template v-slot:append-item>
+              <v-divider class="mb-2"/>
+              <v-list-item disabled>
+                <v-list-item-avatar color="grey lighten-3">
+                  <v-icon>mdi-food-apple</v-icon>
+                </v-list-item-avatar>
+
+              </v-list-item>
+            </template>
+          </v-select>
+        </material-card>
+      </v-flex>
+
+      <!-- second select -->
+
+      <v-flex
+        md6
+        lg3
+      >
+        <material-card
+
+        >
+          <v-select
+            v-model="selectedFruits"
+            :items="fruits"
+            label="Gender"
+            multiple
+          >
+            <template v-slot:prepend-item>
+              <v-list-item
+                ripple
+                @click="toggle"
+              >
+                <v-list-item-action>
+                  <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Select All</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider class="mt-2"/>
+            </template>
+            <template v-slot:append-item>
+              <v-divider class="mb-2"/>
+              <v-list-item disabled>
+                <v-list-item-avatar color="grey lighten-3">
+                  <v-icon>mdi-food-apple</v-icon>
+                </v-list-item-avatar>
+
+              </v-list-item>
+            </template>
+          </v-select>
+        </material-card>
+      </v-flex>
+
+      <!-- third select -->
+      <v-flex
+        md6
+        lg3
+      >
+        <material-card
+
+        >
+          <v-select
+            v-model="selectedFruits"
+            :items="fruits"
+            label="Age Group"
+            multiple
+          >
+            <template v-slot:prepend-item>
+              <v-list-item
+                ripple
+                @click="toggle"
+              >
+                <v-list-item-action>
+                  <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Select All</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider class="mt-2"/>
+            </template>
+            <template v-slot:append-item>
+              <v-divider class="mb-2"/>
+              <v-list-item disabled>
+                <v-list-item-avatar color="grey lighten-3">
+                  <v-icon>mdi-food-apple</v-icon>
+                </v-list-item-avatar>
+
+              </v-list-item>
+            </template>
+          </v-select>
+        </material-card>
+      </v-flex>
+
+      <!-- Fourth select -->
+
+    </v-layout>
+  </v-container>
+
+</template>
 
 <template>
 
-  <v-btn
-    :loading="loading2"
-    :disabled="loading2"
-    block
-    color="success"
-    @click="loader = 'loading2'"
-  >
-    Filter
-    <template v-slot:loader/>
-  </v-btn>
+  <v-btn block
+      :loading="loading2"
+      :disabled="loading2"
+      color="success"
+      @click="loader = 'loading2'"
+    >
+      Filter
+      <template v-slot:loader>
+
+      </template>
+    </v-btn>
 
 </template>
 

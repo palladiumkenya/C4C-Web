@@ -21,12 +21,10 @@
               lg12
             >
               <template>
-                <v-container>
-                  <section class="charts">
-                    <h3>Exposures Visualization</h3>
-                    <vue-highcharts :options="options" />
-                  </section>
-                </v-container>
+                <section class="charts">
+                  <h3>Exposures Visualization</h3>
+                  <vue-highcharts :options="options" />
+                </section>
               </template>
 
             </v-flex>
