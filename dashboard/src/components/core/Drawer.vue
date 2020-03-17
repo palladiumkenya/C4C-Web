@@ -53,13 +53,14 @@
           <v-list-group
             v-else
             :key="link.text"
-            :active-class="color"
-            class="v-list-item"
-            avatar
             no-action
           >
 
-            <v-list-tile slot="activator">
+            <v-list-tile
+              slot="activator"
+              :active-class="color"
+              class="v-list-item"
+              avatar>
               <v-list-tile-action>
                 <v-icon>{{ link.icon }}</v-icon>
               </v-list-tile-action>
