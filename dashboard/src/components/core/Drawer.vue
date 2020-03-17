@@ -139,11 +139,11 @@ export default {
           {
             text: 'Exposure report',
             to: '/exposures',
-            icon: 'mdi-account-plus'
+            icon: 'mdi-chart-bar'
           },
           {
             to: '/exposures_list',
-            icon: 'mdi-account-box-multiple',
+            icon: 'mdi-format-list-bulleted',
             text: 'Exposure list'
           }
         ]
