@@ -184,33 +184,39 @@ export default {
       ]
     }
   },
+  mounted(){
+    
+  },
   methods: {
     postUser (e) {
       e.preventDefault()
-      const head = {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
+
+      const axios = require("axios");
       let currentObj = this
-      axios.post('http://192.168.0.7:5500/api/auth/signup', {
-        first_name: this.fname,
-        surname: this.surname,
-        msisdn: this.msisdn,
-        role_id: this.role.charAt(0),
-        gender: this.gendInp,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.cnf_pass },
-      head
-      )
-        .then(function (response) {
-          currentObj.output = response.data
-        })
-        .catch(function (error) {
-          currentObj.output = error
-        })
+
+      axios({
+        "method":"POST",
+        "url":"http://c4ctest.mhealthkenya.org/api/auth/signup",
+        "headers":{
+          "Accept": "application/json",
+          'Content-Type': "application/json",
+        },"data":{
+          first_name: this.fname,
+          surname: this.surname,
+          msisdn: this.msisdn,
+          role_id: this.role.charAt(0),
+          gender: this.gendInp,
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.cnf_pass
+        }
+      })
+      .then((response)=> {
+        console.log(response)
+      })
+      .catch((error)=> {
+        console.log(error)
+      })
     }
   }
 }
