@@ -17,9 +17,9 @@ export default [
     view: 'UserProfile'
   },
   {
-    path: '/immunizations',
-    name: 'Immunizations',
-    view: 'Immunizations'
+    path: '/hbv-summary',
+    name: 'HBV Reports',
+    view: 'HbvReports'
   },
   {
     path: '/add-user',
@@ -73,8 +73,8 @@ export default [
     view: 'Resources'
   },
   {
-    path: '/hbv-summary',
-    view: 'HbvReports'
+    path: '/maps',
+    view: 'Maps'
   },
   {
     path: '/notifications',

@@ -237,7 +237,7 @@
   export default {
     data: () => ({
       fruits: [
-    
+
       ],
       selectedFruits: [],
     }),

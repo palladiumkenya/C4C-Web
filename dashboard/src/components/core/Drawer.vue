@@ -55,6 +55,10 @@
             :key="link.text"
             no-action
           >
+<<<<<<< HEAD
+=======
+
+>>>>>>> c235ca33f4ea9707ae41b3e08a2531ce3d842132
             <v-list-tile
               slot="activator"
               :active-class="color"
@@ -149,7 +153,7 @@ export default {
         ]
       },
       {
-        to: '/immunizations',
+
         icon: 'mdi-account-edit',
         text: 'Immunizations',
         subLinks: [
@@ -158,9 +162,11 @@ export default {
             to: '/hbv-summary',
             icon: 'mdi-signal-hspa-plus'
           },
+
           {
             to: '/other-diseases',
-            icon: 'mdi-chart-line',
+            icon: 'mdi-account-box-multiple',
+
             text: 'Other Diseases'
           }
         ]

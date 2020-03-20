@@ -59,7 +59,7 @@
         lg3
       >
         <material-stats-card
-          color="green"
+          color="white"
           title="Number of Broadcast Messages"
           value="1075"
           sub-icon="mdi-tag"
@@ -67,15 +67,9 @@
         />
       </v-flex>
 
-    <template>
-  <v-divider></v-divider>
-</template>
-
       <!-- End Cards -->
 
       <!-- Filters -->
-
-
 
       <!-- Start Tables -->
 
