@@ -19,7 +19,7 @@
           title="All Users"
         >
           <v-data-table
-            v-if="facilities"
+            v-if="users"
             hide-actions
           >
             <template
@@ -30,34 +30,21 @@
                 class="subheading font-weight-light text--darken-3"
                 v-text="header.text"
               />
-            </template>
-            <template>
-              <div
-                v-if="loading"
-                class="loading">
-                Loading...
-              </div>
 
-              <div
-                v-if="error"
-                class="error">
-                {{ error }}
+              {{ data }}
 
-              </div>
-
-              {{ facilities }}
-
-              <!-- <tr v-for="facility in facilities" :key="facility.id" >
-                 <td> {{ facility.name }} </td>
-                 <td> {{ facility.county }} </td>
-                 <td> {{ facility.mfl_code }} </td>
-                 <td> {{ facility.sub_county}} </td>
+               <tr v-for="user in users" :key="user.id" >
+                 <td> {{user.first_name }} </td>
+                 <td> {{user.surname }} </td>
+                 <td> {{user.gender }} </td>
+                 <td> {{user.msisdn}} </td>
+                 <td> {{user.role_id}} </td>
                  <td>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-danger btn-sm"> View More </button>
                 </div>
                  </td>
-             </tr> -->
+             </tr> 
 
             </template>
           </v-data-table>
@@ -69,28 +56,27 @@
 
 <script>
 import axios from 'axios'
-export default {
-  data () {
-    return {
-      loading: false,
-      facilities: null,
-      error: null
-    }
-  },
-  methods: {
-    fetchFacilities () {
-      this.error = this.facilities = null
-      this.loading = true
-      axios
-        .get('https://api/facilities')
-        .then((response) => {
-          this.loading = false
-          this.facilities = response.data
-        })
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+        data: []
     },
-    created () {
-      this.fetchFacilities()
-    }
-  }
-}
+    mounted () {
+        axios
+          .request({
+            method: 'get',
+            baseURL: 'http://api/users',
+            headers: {
+                'Authorization': 'Bearer '
+            }
+          })
+          .then(response => {
+            console.log(response.data)
+          })
+      }
+
+})
+    
+
 </script>

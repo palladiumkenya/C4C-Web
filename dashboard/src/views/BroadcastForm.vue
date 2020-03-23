@@ -22,30 +22,22 @@
                 <v-flex
                   xs12
                 >
-                  <v-text-field
-                    label="Cadre"
-                    type="text"
-                  />
-                </v-flex>
-                <v-flex
-                  xs12
-                  md6
-                >
-                  <v-text-field
-                    class="purple-input"
-                    type="text"
-                    label="County"
-                  />
-                </v-flex>
-                <v-flex
-                  xs12
-                  md6
-                >
-                  <v-text-field
-                    label="Sub-County"
-                    type="text"
+
+                 <v-text-field
+                    label="Date"
+                    type="date"
                     class="purple-input"/>
                 </v-flex>
+
+                  	<!-- <div class="form-group">
+                    <label>Select Country:</label>
+                    <select class='form-control' v-model='country' >
+                          <option value='0' >Select Country</option>
+                          <option v-for='data in facilities' :value='data.id'>{{ data.name }}</option>
+                        </select>
+
+                  </div> -->
+                
                 <v-flex
                   xs12
                   md6
@@ -100,7 +92,25 @@
 </template>
 
 <script>
-export default {
-  //
-}
+  var app = new Vue({
+    el: '#app',
+    data: {
+      facilities: 0
+    },
+    methods: {
+      getFacilities: function(){
+        axios.get('http://api/facilities', {
+          params: {
+            request: 'facilities'
+          } 
+        })
+     .then(response => {
+        console.log(response.data)
+       });
+      }
+    },
+     created: function(){
+       this.getFacilities();
+     }
+  });
 </script>
