@@ -53,13 +53,13 @@
           <v-list-group
             v-else
             :key="link.text"
-            :active-class="color"
-            class="v-list-item"
-            avatar
             no-action
           >
-
-            <v-list-tile slot="activator">
+            <v-list-tile
+              slot="activator"
+              :active-class="color"
+              class="v-list-item"
+              avatar>
               <v-list-tile-action>
                 <v-icon>{{ link.icon }}</v-icon>
               </v-list-tile-action>
@@ -129,18 +129,41 @@ export default {
       },
       {
         to: 'registration-reports',
-        icon: '',
+        icon: 'mdi-transcribe',
         text: 'Registration Reports'
       },
       {
-        to: '/exposures',
         icon: 'mdi-alert-circle-outline',
-        text: 'Exposures'
+        text: 'Exposures',
+        subLinks: [
+          {
+            text: 'Exposure report',
+            to: '/exposures',
+            icon: 'mdi-chart-bar'
+          },
+          {
+            to: '/exposure-list',
+            icon: 'mdi-playlist-check',
+            text: 'Exposure HCWs List'
+          }
+        ]
       },
       {
         to: '/immunizations',
         icon: 'mdi-account-edit',
-        text: 'Immunizations'
+        text: 'Immunizations',
+        subLinks: [
+          {
+            text: 'HBV Reports',
+            to: '/hbv-summary',
+            icon: 'mdi-signal-hspa-plus'
+          },
+          {
+            to: '/other-diseases',
+            icon: 'mdi-chart-line',
+            text: 'Other Diseases'
+          }
+        ]
       },
       {
         to: '/broadcast',

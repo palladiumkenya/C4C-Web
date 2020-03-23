@@ -23,8 +23,13 @@ export default [
   },
   {
     path: '/add-user',
-    name: 'HCW_Upload',
+    name: 'HCW Upload',
     view: 'HCW_Upload'
+  },
+  {
+    path: '/exposure-list',
+    name: 'Exposures List',
+    view: 'Exposures_List'
   },
   {
     path: '/bulk-signup',
@@ -33,9 +38,9 @@ export default [
     meta: { title: 'Upload Excel' }
   },
   {
-    path: 'registration-summary',
-    name: 'Registration Summary',
-    view: 'RegistrationSummary'
+    path: '/registration-reports',
+    name: 'Registration Reports',
+    view: 'RegistrationReports'
   },
 
   {

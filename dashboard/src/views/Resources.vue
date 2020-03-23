@@ -33,7 +33,12 @@
                 <v-flex xs12>
                   <ckeditor-ckeditor/>
                 </v-flex>
-
+                <v-flex xs12>
+                  <input
+                    ref="excel-upload-input"
+                    class="excel-upload-input"
+                    type="file">
+                </v-flex>
                 <v-flex
                   xs12
                   text-xs-right

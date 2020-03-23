@@ -81,6 +81,8 @@
                     v-model="msisdn"
                     :rules="[rules.required]"
                     label="Mobile"
+                    value="650"
+                    single-line
                     class="purple-input"/>
                 </v-flex>
                 <v-flex
@@ -154,7 +156,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   //
   data () {
@@ -184,32 +185,41 @@ export default {
       ]
     }
   },
+  mounted () {
+
+  },
   methods: {
     postUser (e) {
       e.preventDefault()
-      const head = {
-        headers: {
+
+      const axios = require('axios')
+      let currentObj = this
+
+      axios({
+        'method': 'POST',
+        'url': 'http://c4ctest.mhealthkenya.org/api/auth/signup',
+        'headers': {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
+        },
+        'data': {
+          first_name: this.fname,
+          surname: this.surname,
+          msisdn: this.msisdn,
+          role_id: this.role.charAt(0),
+          gender: this.gendInp,
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.cnf_pass
         }
-      }
-      let currentObj = this
-      axios.post('http://192.168.0.7:5500/api/auth/signup', {
-        first_name: this.fname,
-        surname: this.surname,
-        msisdn: this.msisdn,
-        role_id: this.role.charAt(0),
-        gender: this.gendInp,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.cnf_pass },
-      head
-      )
-        .then(function (response) {
-          currentObj.output = response.data
+      })
+        .then((response) => {
+          currentObj.output = response
+          console.log(currentObj.output)
         })
-        .catch(function (error) {
+        .catch((error) => {
           currentObj.output = error
+          console.log(currentObj.output)
         })
     }
   }
