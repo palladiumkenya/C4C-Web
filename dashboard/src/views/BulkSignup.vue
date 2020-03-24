@@ -28,7 +28,6 @@
               :items="tableData.slice(0, 500)"
               :loading="true"
               :rows-per-page-items="rowsPerPageItems"
-              rows-per-page="100"
               class="elevation-1"
               loading-text="Loading... Please wait"
             >

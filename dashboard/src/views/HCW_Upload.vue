@@ -204,30 +204,38 @@
     postUser (e) {
       e.preventDefault()
 
-      const head = {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-      let currentObj = this;
-      axios.post('http://127.0.0.1:8000/api/auth/signup',{
-        first_name: this.fname,
-        surname: this.surname,
-        msisdn: this.msisdn,
-        role_id: this.role.charAt(0),
-        gender: this.gendInp,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.cnf_pass},
-        head
-        )
-      .then(function (response) {
-        currentObj.output = response.data;
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Accept', 'application/json');
+      headers.append('Origin','http://localhost:8080');
+
+      fetch( 'http://c4ctest.mhealthkenya.org/api/auth/signup',{
+          mode: 'cors',
+          credentials: 'include',
+          method: 'POST',
+          headers: headers
       })
-      .catch(function (error) {
-        currentObj.output = error['error'];
-      });
+      .then(response => response.json())
+      .then(json => console.log(json))
+      .catch(error => console.log('Authorization failed : ' + error.message));
+      let currentObj = this;
+      // axios.post('http://c4ctest.mhealthkenya.org/api/auth/signup',{
+      //   first_name: this.fname,
+      //   surname: this.surname,
+      //   msisdn: this.msisdn,
+      //   role_id: this.role.charAt(0),
+      //   gender: this.gendInp,
+      //   email: this.email,
+      //   password: this.password,
+      //   password_confirmation: this.cnf_pass},
+      //   head
+      //   )
+      // .then(function (response) {
+      //   currentObj.output = response.data;
+      // })
+      // .catch(function (error) {
+      //   currentObj.output = error['error'];
+      // });
 
       // axios({
       //   'method': 'POST',
