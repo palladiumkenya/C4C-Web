@@ -11,6 +11,7 @@ import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
 import Router from 'vue-router'
 import Meta from 'vue-meta'
+import login from "../views/login";
 
 import login from "../views/login";
 
@@ -34,16 +35,23 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: paths.map(path => route(path.path, path.view, path.name)).concat([
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
     { path: '*', redirect: '/' },
     {
      path: '/login',
      name: 'login',
      component: login
+<<<<<<< HEAD
     },
 
 
     { path: '*', redirect: '/' }
+=======
+    }
+>>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
 
   ]),
   scrollBehavior (to, from, savedPosition) {

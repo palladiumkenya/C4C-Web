@@ -127,14 +127,13 @@
             <h6 class="category text-gray font-weight-thin mb-3">CEO / CO-FOUNDER</h6>
             <h4 class="card-title font-weight-light">Alec Thompson</h4>
             <p class="card-description font-weight-light">Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...</p>
-<<<<<<< HEAD
-=======
+
             <v-btn
               color="success"
               round
               class="font-weight-light"
             >Follow</v-btn>
->>>>>>> c235ca33f4ea9707ae41b3e08a2531ce3d842132
+
           </v-card-text>
         </material-card>
       </v-flex>

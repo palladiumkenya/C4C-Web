@@ -144,7 +144,7 @@ export default {
           {
             to: '/exposure-list',
             icon: 'mdi-playlist-check',
-            text: 'View Users'
+            text: 'Exposures List'
           }
         ]
       },
@@ -158,11 +158,9 @@ export default {
             to: '/hbv-summary',
             icon: 'mdi-signal-hspa-plus'
           },
-
           {
             to: '/other-diseases',
-            icon: 'mdi-account-box-multiple',
-
+            icon: 'mdi-chart-line',
             text: 'Other Diseases'
           }
         ]

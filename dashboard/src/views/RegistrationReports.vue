@@ -9,10 +9,15 @@
       <v-tab>Report By Cadre</v-tab>
       <v-tab>Report By Age</v-tab>
       <v-tab>Report By Gender</v-tab>
+<<<<<<< HEAD
 
 
       <v-tab-item
         v-for="n in 4"
+=======
+      <v-tab-item
+        v-for="n in 3"
+>>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n==1">
@@ -23,17 +28,24 @@
               sm12
               lg12
             >
+<<<<<<< HEAD
 
               <template>
                 <section class="charts">
                   <h3>Registration Visualization</h3>
                     <core-filters />
+=======
+              <template>
+                <section class="charts">
+                  <h3>Registration Visualization</h3>
+>>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
                   <vue-highcharts :options="options" />
                 </section>
               </template>
 
             </v-flex>
           </v-card-text>
+<<<<<<< HEAD
           <v-card-text v-if="n==2">
 
             <v-flex
@@ -88,6 +100,10 @@
             </v-flex>
 
            </v-card-text>
+=======
+          <v-card-text v-if="n==2">This is the second tab</v-card-text>
+          <v-card-text v-if="n==3">This is the Third tab</v-card-text>
+>>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
         </v-container>
       </v-tab-item>
     </v-tabs>

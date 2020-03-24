@@ -25,21 +25,32 @@
               lg12
             >
 
-              <div id="chartType">
-        <h3>Select chart type:</h3>
-        <select v-model="chartType">
-          <option>Spline</option>
-          <option>AreaSpline</option>
-          <option>Line</option>
-          <option>Scatter</option>
-          <option>Column</option>
-          <option>Area</option>
+        <select>
+          <option>County</option>
+          <option>Nairobi</option>
+          <option>Mombasa</option>
+          <option>Kisumu</option>
+          <option>Lamu</option>
+          <option>Kwale</option>
         </select>
-      </div>
+
+              &nbsp;
+      <select>
+          <option>Sub-county</option>
+          <option></option>
+      </select>
+              &nbsp;&nbsp;&nbsp;
+       <select>
+           <option>Facility</option>
+           <option></option>
+       </select>
+              &nbsp;&nbsp;&nbsp;
+        <select>
+            <option>Partner</option>
+        </select>
 
               <template>
                 <section class="charts">
-                  <h3>Exposures Visualization</h3>
                   <vue-highcharts :options="options" />
                 </section>
               </template>
@@ -63,7 +74,6 @@
 
 <script>
 import VueHighcharts from 'vue2-highcharts'
-// import SeriesLabel from "highcharts/modules/series-label";
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 // SeriesLabel(Highcharts);
@@ -80,7 +90,7 @@ const data = {
   labels: {
     items: [
       {
-        html: 'Exposures Summary',
+        html: '',
         style: {
           left: '50px',
           top: '18px',
@@ -101,6 +111,7 @@ const data = {
 }
 
 export default {
+
   components: {
     VueHighcharts
   },

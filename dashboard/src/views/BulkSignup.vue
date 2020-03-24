@@ -27,9 +27,7 @@
               :headers="tableHead"
               :items="tableData.slice(0, 500)"
               :loading="true"
-
               :rows-per-page-items="rowsPerPageItems"
-
               class="elevation-1"
               loading-text="Loading... Please wait"
             >
@@ -70,10 +68,7 @@ export default {
   components: { UploadExcelComponent },
   data () {
     return {
-
       rowsPerPageItems: [50, 250, 500],
-
-
       tableData: [],
       tableHead: [
         {
