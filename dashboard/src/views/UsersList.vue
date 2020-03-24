@@ -14,12 +14,12 @@
       >
         <material-card
           color="green"
-          flat
           full-width
           title="All Users"
         >
           <v-data-table
-            v-if="facilities"
+            :headers="headers"
+            v-if="users"
             hide-actions
           >
             <template
@@ -30,8 +30,6 @@
                 class="subheading font-weight-light text--darken-3"
                 v-text="header.text"
               />
-            </template>
-            <template>
               <div
                 v-if="loading"
                 class="loading">
@@ -44,20 +42,17 @@
                 {{ error }}
 
               </div>
+            </template>
 
-              {{ facilities }}
-
-              <!-- <tr v-for="facility in facilities" :key="facility.id" >
-                 <td> {{ facility.name }} </td>
-                 <td> {{ facility.county }} </td>
-                 <td> {{ facility.mfl_code }} </td>
-                 <td> {{ facility.sub_county}} </td>
-                 <td>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-danger btn-sm"> View More </button>
-                </div>
-                 </td>
-             </tr> -->
+            <template>
+              {{ users }}
+              <tr v-for="user in users" :key="user.id" >
+                 <td> {{ user.first_name }} </td>
+                 <td> {{ user.surname }} </td>
+                 <td> {{ user.msisdn }} </td>
+                 <td> {{ user.role_id}} </td>
+                 <td> {{ user.gender}}</td>
+             </tr> 
 
             </template>
           </v-data-table>
@@ -69,27 +64,61 @@
 
 <script>
 import axios from 'axios'
+
 export default {
-  data () {
-    return {
+  data: () => ({
+    
       loading: false,
-      facilities: null,
-      error: null
-    }
-  },
+      users: [],
+      error: null,
+      headers: [
+      
+      {
+        sortable: false,
+        text: 'First Name',
+        value: 'first_name'
+      },
+      {
+        sortable: false,
+        text: 'Surname',
+        value: 'surname'
+
+      },
+      {
+        sortable: false,
+        text: 'Phone Number',
+        value: 'phone_number'
+      },
+      {
+        sortable: false,
+        text: 'Role',
+        value: 'role'
+      },
+      {
+        sortable: false,
+        text: 'Gender',
+        value: 'gender'
+      }
+
+    ],
+    
+  }),
   methods: {
-    fetchFacilities () {
-      this.error = this.facilities = null
-      this.loading = true
+    fetchUsers () {
+     let url = 'http://api/users';
+      let AuthStr = 'your token';
+    
       axios
-        .get('https://api/facilities')
-        .then((response) => {
+      .get(this.url, { headers: {'Authorization' : 'Bearer ${AuthStr}'} })     
+      .then((response) => {
           this.loading = false
-          this.facilities = response.data
+          this.users = response.data
         })
+        .catch(error => console.log(error)) 
+
     },
     created () {
-      this.fetchFacilities()
+      this.fetchUsers()
     }
   }
 }

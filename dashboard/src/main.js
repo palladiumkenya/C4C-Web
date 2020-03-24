@@ -16,7 +16,6 @@ import App from './App'
 import router from '@/router'
 import store from '@/store'
 
-import axios from 'axios'
 
 //axios.defaults.baseURL = 'http://192.168.0.7:5500/api'
 

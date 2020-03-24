@@ -55,10 +55,6 @@
             :key="link.text"
             no-action
           >
-<<<<<<< HEAD
-=======
-
->>>>>>> c235ca33f4ea9707ae41b3e08a2531ce3d842132
             <v-list-tile
               slot="activator"
               :active-class="color"
@@ -125,7 +121,7 @@ export default {
             icon: 'mdi-account-plus'
           },
           {
-            to: '/users-list',
+            to: '/api/users',
             icon: 'mdi-account-box-multiple',
             text: 'View Users'
           }

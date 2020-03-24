@@ -1,7 +1,7 @@
 <template>
   <v-container
     fill-height
-    fluid
+    fluid 
     grid-list-xl
   >
     <v-layout
@@ -9,11 +9,12 @@
       wrap
     >
       <v-flex
-        xs8
-        text-xs-center>
+        xs12
+        text-xs-right
+        >
 
         <v-btn
-          class="mx-0 font-weight-light"
+          class="mx-0 font-weight-light "
           color="success"
           @click="$router.push('new-broadcast')"
         >
@@ -30,7 +31,7 @@
         >
           <v-data-table
             :headers="headers"
-            :items="items"
+            :items="broadcasts"
             hide-actions
           >
             <template
@@ -43,14 +44,14 @@
               />
             </template>
             <template
-              slot="items"
-              slot-scope="{ item }"
+              slot="broadcasts"
+              slot-scope="{ broadcast }"
             >
-              <td>{{ item.number }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.country }}</td>
-              <td> {{ item.cadre }}</td>
-              <td>{{ item.city }}</td>
+              <td>{{ broadcast.facility_id }}</td>
+              <td>{{ broadcast.created_by }}</td>
+              <td>{{ broadcast.approved_by }}</td>
+              <td> {{ broadcast.cadre }}</td>
+              <td>{{ broadcast.message }}</td>
 
             </template>
           </v-data-table>
@@ -64,22 +65,24 @@
 <script>
 export default {
   data: () => ({
+    broadcasts : [],
     headers: [
+      
       {
         sortable: false,
-        text: 'Number',
-        value: 'number'
+        text: 'Facility',
+        value: 'facility'
+      },
+      {
+        sortable: false,
+        text: 'Created By',
+        value: 'created_by'
 
       },
       {
         sortable: false,
-        text: 'Title',
-        value: 'name'
-      },
-      {
-        sortable: false,
-        text: 'Facility',
-        value: 'country'
+        text: 'Approved By',
+        value: 'approved_by'
       },
       {
         sortable: false,
@@ -88,55 +91,30 @@ export default {
       },
       {
         sortable: false,
-        text: 'Approved By',
-        value: 'approved_by'
+        text: 'Message',
+        value: 'message'
       }
 
     ],
-    items: [
-      {
-        name: 'Dakota Rice',
-        country: 'Niger',
-        city: 'Oud-Tunrhout',
-        number: '1',
-        cadre: 'Nurse'
-      },
-      {
-        name: 'Minerva Hooper',
-        country: 'Curaçao',
-        city: 'Sinaai-Waas',
-        number: '2',
-        cadre: 'Nurse'
-      },
-      {
-        name: 'Sage Rodriguez',
-        country: 'Netherlands',
-        city: 'Overland Park',
-        number: '3',
-        cadre: 'Nurse'
+  }),
 
-      },
-      {
-        name: 'Philip Chanley',
-        country: 'Korea, South',
-        city: 'Gloucester',
-        number: '3',
-        cadre: 'Nurse'
-      },
-      {
-        name: 'Doris Greene',
-        country: 'Malawi',
-        city: 'Feldkirchen in Kārnten',
-        number: '4',
-        cadre: 'Nurse'
-      }, {
-        name: 'Mason Porter',
-        country: 'Chile',
-        city: 'Gloucester',
-        number: '5',
-        cadre: 'Nurse'
-      }
-    ]
-  })
+  methods: {
+    fetchBroadcasts () {
+     let url = 'http://api/broadcasts';
+      let AuthStr = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjUyOTJiZGM0MTE1MGZiYTQyMDcxMmQxNzQ1OWFhMGJhZmZmYzRmN2Y3YTUzZDAxM2M3NjAzYzJlMjQ3NWQ2YWJkOTU0NGZhYjdjZmMxNzAxIn0';
+    
+      axios
+      .get(url, { headers: {'Authorization' : 'Bearer ${AuthStr}'} })     
+      .then((response) => {
+          this.loading = false
+          this.broadcasts = response.data
+        })
+        .catch(error => console.log(error)) 
+
+    },
+    created () {
+      this.fetchBroadcasts()
+    }
+  }
 }
 </script>
