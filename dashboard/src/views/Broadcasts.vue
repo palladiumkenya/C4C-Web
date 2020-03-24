@@ -30,29 +30,26 @@
         >
           <v-data-table
             :headers="headers"
-            :items="items"
             hide-actions
           >
-            <template
-              slot="headerCell"
-              slot-scope="{ header }"
-            >
-              <span
-                class="subheading font-weight-light text-success text--darken-3"
-                v-text="header.text"
-              />
-            </template>
-            <template
-              slot="items"
-              slot-scope="{ item }"
-            >
-              <td>{{ item.number }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.country }}</td>
-              <td> {{ item.cadre }}</td>
-              <td>{{ item.city }}</td>
-
-            </template>
+             <thead>
+            <tr>
+                <th>Cadre</th>
+                <th>Facility</th>
+                <th>Status</th>
+                <th> Approved By </th>
+                <th>Message</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr v-for="broadcast in broadcasts" :key="broadcast.id">
+                    <td>{{ broadcast.cadre_id }}</td>
+                    <td>{{ broadcast.facility_id }}</td>
+                    <td>{{ broadcast.approved }}</td>
+                    <td> {{broadcast.approved_by}}</td>
+                    <td>{{broadcast.message}}</td>
+                </tr>
+            </tbody>
           </v-data-table>
         </material-card>
       </v-flex>
@@ -62,81 +59,18 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
-  data: () => ({
-    headers: [
-      {
-        sortable: false,
-        text: 'Number',
-        value: 'number'
-
-      },
-      {
-        sortable: false,
-        text: 'Title',
-        value: 'name'
-      },
-      {
-        sortable: false,
-        text: 'Facility',
-        value: 'country'
-      },
-      {
-        sortable: false,
-        text: 'Cadre',
-        value: 'cadre'
-      },
-      {
-        sortable: false,
-        text: 'Approved By',
-        value: 'approved_by'
-      }
-
-    ],
-    items: [
-      {
-        name: 'Dakota Rice',
-        country: 'Niger',
-        city: 'Oud-Tunrhout',
-        number: '1',
-        cadre: 'Nurse'
-      },
-      {
-        name: 'Minerva Hooper',
-        country: 'Curaçao',
-        city: 'Sinaai-Waas',
-        number: '2',
-        cadre: 'Nurse'
-      },
-      {
-        name: 'Sage Rodriguez',
-        country: 'Netherlands',
-        city: 'Overland Park',
-        number: '3',
-        cadre: 'Nurse'
-
-      },
-      {
-        name: 'Philip Chanley',
-        country: 'Korea, South',
-        city: 'Gloucester',
-        number: '3',
-        cadre: 'Nurse'
-      },
-      {
-        name: 'Doris Greene',
-        country: 'Malawi',
-        city: 'Feldkirchen in Kārnten',
-        number: '4',
-        cadre: 'Nurse'
-      }, {
-        name: 'Mason Porter',
-        country: 'Chile',
-        city: 'Gloucester',
-        number: '5',
-        cadre: 'Nurse'
-      }
-    ]
-  })
+  data () {
+    return {
+      broadcast: []
+    }
+  },
+  mounted() {
+    axios
+    .get('https://broadcasts')
+    .then(response => (this.info = response))
+  }  
 }
+    
 </script>
