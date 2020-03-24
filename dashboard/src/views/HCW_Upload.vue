@@ -16,6 +16,17 @@
           title="Add a New Healthcare Worker"
           text="Kindly fill all the required fields"
         >
+        <v-card-text>
+      <div>Word of the Day</div>
+      <p class="display-1 text--primary">
+        be•nev•o•lent
+      </p>
+      <p>adjective</p>
+      <div class="text--primary">
+        well meaning and kindly.<br>
+        "a benevolent smile"
+      </div>
+    </v-card-text>
           <v-form @submit="postUser">
             <v-container py-0>
               <v-layout wrap>
@@ -156,7 +167,8 @@
 </template>
 
 <script>
-export default {
+  import axios from 'axios'
+  export default {
   //
   data () {
     return {
@@ -192,35 +204,55 @@ export default {
     postUser (e) {
       e.preventDefault()
 
-      const axios = require('axios')
-      let currentObj = this
-
-      axios({
-        'method': 'POST',
-        'url': 'http://c4ctest.mhealthkenya.org/api/auth/signup',
-        'headers': {
+      const head = {
+        headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        'data': {
-          first_name: this.fname,
-          surname: this.surname,
-          msisdn: this.msisdn,
-          role_id: this.role.charAt(0),
-          gender: this.gendInp,
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.cnf_pass
         }
+      }
+      let currentObj = this;
+      axios.post('http://127.0.0.1:8000/api/auth/signup',{
+        first_name: this.fname,
+        surname: this.surname,
+        msisdn: this.msisdn,
+        role_id: this.role.charAt(0),
+        gender: this.gendInp,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.cnf_pass},
+        head
+        )
+      .then(function (response) {
+        currentObj.output = response.data;
       })
-        .then((response) => {
-          currentObj.output = response
-          console.log(currentObj.output)
-        })
-        .catch((error) => {
-          currentObj.output = error
-          console.log(currentObj.output)
-        })
+      .catch(function (error) {
+        currentObj.output = error['error'];
+      });
+
+      // axios({
+      //   'method': 'POST',
+      //   'url': 'http://127.0.0.1:8000/api/auth/signup/',
+      //   'headers': {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   'data': {
+      //     first_name: currentObj.fname,
+      //     surname: currentObj.surname,
+      //     msisdn: currentObj.msisdn,
+      //     role_id: currentObj.role.charAt(0),
+      //     gender: currentObj.gendInp,
+      //     email: currentObj.email,
+      //     password: currentObj.password,
+      //   }
+      // })
+      //   .then((response) => {
+      //     currentObj.output = response
+      //     console.log(currentObj.output)
+      //   })
+      //   .catch((error) => {
+      //     currentObj.output = error
+      //     console.log(currentObj.output)
+      //   })
     }
   }
 }

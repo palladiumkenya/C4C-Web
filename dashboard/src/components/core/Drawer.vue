@@ -144,7 +144,7 @@ export default {
           {
             to: '/exposure-list',
             icon: 'mdi-playlist-check',
-            text: 'View Users'
+            text: 'Exposures List'
           }
         ]
       },
