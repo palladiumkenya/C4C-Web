@@ -11,7 +11,7 @@ import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
 import Router from 'vue-router'
 import Meta from 'vue-meta'
-import login from "../views/login";
+import login from "../components/core/login";
 
 
 
