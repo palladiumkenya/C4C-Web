@@ -44,7 +44,7 @@ export default [
   },
 
   {
-    path: '/api/users',
+    path: '/users-list',
     name: 'Users List',
     view: 'UsersList'
   },

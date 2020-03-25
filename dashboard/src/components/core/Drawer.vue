@@ -121,7 +121,7 @@ export default {
             icon: 'mdi-account-plus'
           },
           {
-            to: '/api/users',
+            to: '/users-list',
             icon: 'mdi-account-box-multiple',
             text: 'View Users'
           }

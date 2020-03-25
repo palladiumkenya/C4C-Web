@@ -19,6 +19,7 @@
         >
           <v-data-table
             :headers="headers"
+            :items="[]"
             v-if="users"
             hide-actions
           >
@@ -64,15 +65,15 @@
 
 <script>
 import axios from 'axios'
+import Vue from 'vue'
 
-export default {
-  data: () => ({
-    
+  export default{
+  data() {
+    return {
       loading: false,
       users: [],
       error: null,
       headers: [
-      
       {
         sortable: false,
         text: 'First Name',
@@ -101,25 +102,41 @@ export default {
       }
 
     ],
-    
-  }),
-  methods: {
-    fetchUsers () {
-     let url = '/api/users';
-      let AuthStr = '';
-    
-      axios
-      .get(this.url, { headers: {'Authorization' : 'Bearer ${AuthStr}'} })     
-      .then((response) => {
-          this.loading = false
-          this.users = response.data
-        })
-        .catch(error => console.log(error)) 
-
-    },
-    created () {
-      this.fetchUsers()
-    }
   }
+},
+
+  mounted () {
+  axios
+    .get('http://c4ctest.mhealthkenya.org/api/users')
+    .then(response => {
+      this.users = response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
 }
 </script>
+
+//   methods: {
+//     fetchUsers () {
+//      let url = 'http://c4ctest.mhealthkenya.org/api/users';
+//       let AuthStr = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE5YWVlNWY2NDEzMTJhZGVhMDJlMWZlNjFkYmIwMjViYjJiN2Y4ZGVlOWJhZjhlOWRhZDJiMDQ4ODE5MWZkMGJiMDM4ZDVjYzdjODgxZGJlIn0';
+    
+//       axios
+//       .get(url, { headers: {'Authorization' : `Bearer ${AuthStr}`} })     
+//       .then((response) => {
+//           this.loading = false
+//           this.users = response.data
+//           console.log(message)
+//         })
+//         .catch(error => console.log(error)) 
+
+//     },
+//     created () {
+//       this.fetchUsers()
+//     }
+//   }
+// }
+
