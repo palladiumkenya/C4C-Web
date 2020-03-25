@@ -17,14 +17,12 @@
           text="Kindly fill all the required fields"
         >
           <v-card-text>
-            <div>Word of the Day</div>
+            <div></div>
             <p class="display-1 text--primary">
-              be•nev•o•lent
+              Add A New Healthcare Worker
             </p>
-            <p>adjective</p>
             <div class="text--primary">
-              well meaning and kindly.<br>
-              "a benevolent smile"
+              Kindly fill all the required fields
             </div>
           </v-card-text>
           <v-form @submit="postUser">

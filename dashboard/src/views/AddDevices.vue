@@ -16,7 +16,7 @@
           title="Add a New Device"
           text="Kindly fill all the required fields"
         >
-          <v-form @submit="postUser">
+          <v-form @submit="AddDevice">
             <v-container py-0>
               <v-layout wrap>
                 <v-flex
@@ -83,8 +83,8 @@
                 slot-scope="{ item }"
               >
                 <td>{{ item.name }}</td>
-                <td>{{ item.safety }}</td>
-                <td>{{ item.date }}</td>
+                <td>{{ Boolean(item.safety_designed) }}</td>
+                <td>{{ item.created_at }}</td>
               </template>
             </v-data-table>
           </template>
@@ -113,12 +113,12 @@ export default {
         {
           sortable: false,
           text: 'Safety Design',
-          value: 'safety'
+          value: 'safety_designed'
         },
         {
           sortable: false,
           text: 'Created On',
-          value: 'date'
+          value: 'created_at'
         }
       ],
       items: [],
@@ -127,29 +127,30 @@ export default {
       }
     }
   },
+  created (){
+    this.DeviceList()
+  },
   methods: {
-    postUser (e) {
+    DeviceList () {
+      axios.get('devices/all/')
+      .then((exp) => {
+        this.items = exp.data.data
+      })
+      .catch(error => console.log(error.message));
+    },
+    AddDevice (e) {
       e.preventDefault()
-      const head = {
-        headers: {
-          'token': '',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
       let currentObj = this
-      axios.get('http://192.168.0.7:5500/', {
+      axios.get('devices/all/', {
         name: this.name,
         safety_designed: this.switch1
-      },
-      head
-      )
-        .then(function (response) {
-          currentObj.output = response.data
-        })
-        .catch(function (error) {
-          currentObj.output = error
-        })
+      })
+      .then(function (response) {
+        currentObj.output = response.data
+      })
+      .catch(function (error) {
+        currentObj.output = error
+      })
     }
   }
 }

@@ -2,37 +2,62 @@
   <v-container
     fill-height
     fluid
-    grid-list-xl
-  >{{ form }}
+    grid-list-xl>
+    <v-layout
+      justify-center
+      wrap
+    >
+      <v-flex
+        xs12
+        md10
+      >
+    <v-card>
+      <v-card-text>
+            <div></div>
+            <p class="display-1 text--primary">
+              Login
+            </p>
+            <div class="text--primary">
+              Provide credentials
+            </div>
+          </v-card-text>
+      {{ form }}
     <form @submit.prevent="submit">
       <div>
-        <label for="email">
-          Email
-        </label>
-
-        <input
-          id="email"
-          v-model="form.email"
-          type="email"
-          name="email">
-
-        <label for="password">
-          Password
-        </label>
-
-        <input
+        <v-flex
+          xs12
+          md6
+        >
+          <v-text-field
+            id="email"
+            label="Email"
+            v-model="form.email"
+            type="email"
+            name="email"/>
+        </v-flex>
+        <v-flex
+          xs12
+          md6
+        >
+          <v-text-field
           id="password"
           v-model="form.password"
           type="password"
-          name="password">
+          name="password"
+          label="Password"/>
+        </v-flex>
 
         <div>
-          <button type="submit">
+          <v-btn type="submit"
+          color="success">
             Login
-          </button>
+          </v-btn>
         </div>
       </div>
     </form>
+  </v-card>
+    </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
