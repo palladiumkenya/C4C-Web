@@ -17,43 +17,33 @@
           full-width
           title="All Users"
         >
+         <v-text-field
+            v-model="search"
+            append-icon="mdi-search-web"
+            label="Search"
+            single-line
+            hide-details
+          /> <br>
+
           <v-data-table
             :headers="headers"
-            :items="[]"
-            v-if="users"
-            hide-actions
-          >
+            :items="users"
+            :rows-per-page-items="rowsPerPageItems"
+            show-actions
+            item-key="id">
+
             <template
-              slot="headerCell"
-              slot-scope="{ header }"
-            >
-              <span
-                class="subheading font-weight-light text--darken-3"
-                v-text="header.text"
-              />
-              <div
-                v-if="loading"
-                class="loading">
-                Loading...
-              </div>
+                slot="items"
+                slot-scope="props"> 
+                
+                <tr @click="props.expanded = !props.expanded">
 
-              <div
-                v-if="error"
-                class="error">
-                {{ error }}
-
-              </div>
-            </template>
-
-            <template>
-              {{ users }}
-              <tr v-for="user in users" :key="user.id" >
-                 <td> {{ user.first_name }} </td>
-                 <td> {{ user.surname }} </td>
-                 <td> {{ user.msisdn }} </td>
-                 <td> {{ user.role_id}} </td>
-                 <td> {{ user.gender}}</td>
-             </tr> 
+                 <td> {{ props.item.first_name }} </td>
+                 <td> {{ props.item.surname }} </td>
+                 <td> {{ props.item.msisdn }} </td>
+                 <td> {{ props.item.role_id}} </td>
+                 <td> {{ props.item.gender}}</td>
+                </tr>
 
             </template>
           </v-data-table>
@@ -65,14 +55,13 @@
 
 <script>
 import axios from 'axios'
-import Vue from 'vue'
 
-  export default{
+export default {
   data() {
     return {
-      loading: false,
+      rowsPerPageItems: [50, 250, 500],
       users: [],
-      error: null,
+      output: [],
       headers: [
       {
         sortable: false,
@@ -88,55 +77,33 @@ import Vue from 'vue'
       {
         sortable: false,
         text: 'Phone Number',
-        value: 'phone_number'
+        value: 'msisdn'
       },
       {
         sortable: false,
         text: 'Role',
-        value: 'role'
+        value: 'role_id'
       },
       {
         sortable: false,
         text: 'Gender',
         value: 'gender'
       }
-
     ],
   }
 },
 
-  mounted () {
-  axios
-    .get('http://c4ctest.mhealthkenya.org/api/users')
-    .then(response => {
-      this.users = response.data
-    })
-    .catch(error => {
-      console.log(error)
-    })
+created () {
+    this.fetchUsers()
+  },
+  methods: {
+    fetchUsers() {
+    axios.get('users')
+      .then( function (response) {
+        this.users = response.data.data
+      })
+      .catch(function (error) {
+           currentObj.output = error})
+      } 
+    }
 }
-
-}
-</script>
-
-//   methods: {
-//     fetchUsers () {
-//      let url = 'http://c4ctest.mhealthkenya.org/api/users';
-//       let AuthStr = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE5YWVlNWY2NDEzMTJhZGVhMDJlMWZlNjFkYmIwMjViYjJiN2Y4ZGVlOWJhZjhlOWRhZDJiMDQ4ODE5MWZkMGJiMDM4ZDVjYzdjODgxZGJlIn0';
-    
-//       axios
-//       .get(url, { headers: {'Authorization' : `Bearer ${AuthStr}`} })     
-//       .then((response) => {
-//           this.loading = false
-//           this.users = response.data
-//           console.log(message)
-//         })
-//         .catch(error => console.log(error)) 
-
-//     },
-//     created () {
-//       this.fetchUsers()
-//     }
-//   }
-// }
-
