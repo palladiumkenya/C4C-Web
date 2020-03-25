@@ -167,12 +167,8 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-export default {
-=======
   import axios from 'axios'
   export default {
->>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
   //
   data () {
     return {
@@ -208,37 +204,6 @@ export default {
     postUser (e) {
       e.preventDefault()
 
-<<<<<<< HEAD
-      const axios = require('axios')
-      let currentObj = this
-
-      axios({
-        'method': 'POST',
-        'url': 'http://c4ctest.mhealthkenya.org/api/auth/signup',
-        'headers': {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        'data': {
-          first_name: this.fname,
-          surname: this.surname,
-          msisdn: this.msisdn,
-          role_id: this.role.charAt(0),
-          gender: this.gendInp,
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.cnf_pass
-        }
-      })
-        .then((response) => {
-          currentObj.output = response
-          console.log(currentObj.output)
-        })
-        .catch((error) => {
-          currentObj.output = error
-          console.log(currentObj.output)
-        })
-=======
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
       headers.append('Accept', 'application/json');
@@ -296,7 +261,6 @@ export default {
       //     currentObj.output = error
       //     console.log(currentObj.output)
       //   })
->>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
     }
   }
 }

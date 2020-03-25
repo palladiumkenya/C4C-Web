@@ -31,7 +31,6 @@
         >
           <v-data-table
             :headers="headers"
-<<<<<<< HEAD
             :items="broadcasts"
             hide-actions
           >
@@ -55,28 +54,6 @@
               <td>{{ broadcast.message }}</td>
 
             </template>
-=======
-            hide-actions
-          >
-             <thead>
-            <tr>
-                <th>Cadre</th>
-                <th>Facility</th>
-                <th>Status</th>
-                <th> Approved By </th>
-                <th>Message</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr v-for="broadcast in broadcasts" :key="broadcast.id">
-                    <td>{{ broadcast.cadre_id }}</td>
-                    <td>{{ broadcast.facility_id }}</td>
-                    <td>{{ broadcast.approved }}</td>
-                    <td> {{broadcast.approved_by}}</td>
-                    <td>{{broadcast.message}}</td>
-                </tr>
-            </tbody>
->>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
           </v-data-table>
         </material-card>
       </v-flex>
@@ -88,7 +65,6 @@
 <script>
 import Axios from 'axios'
 export default {
-<<<<<<< HEAD
   data: () => ({
     broadcasts : [],
     headers: [
@@ -126,7 +102,7 @@ export default {
   methods: {
     fetchBroadcasts () {
      let url = 'http://api/broadcasts';
-      let AuthStr = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjUyOTJiZGM0MTE1MGZiYTQyMDcxMmQxNzQ1OWFhMGJhZmZmYzRmN2Y3YTUzZDAxM2M3NjAzYzJlMjQ3NWQ2YWJkOTU0NGZhYjdjZmMxNzAxIn0';
+      let AuthStr = 'your token';
     
       axios
       .get(url, { headers: {'Authorization' : 'Bearer ${AuthStr}'} })     
@@ -141,18 +117,6 @@ export default {
       this.fetchBroadcasts()
     }
   }
-=======
-  data () {
-    return {
-      broadcast: []
-    }
-  },
-  mounted() {
-    axios
-    .get('https://broadcasts')
-    .then(response => (this.info = response))
-  }  
->>>>>>> 0fa2db61c103f3ff3124c00af8465b1e363c9f84
 }
     
 </script>

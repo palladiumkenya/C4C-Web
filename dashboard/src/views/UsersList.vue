@@ -105,8 +105,8 @@ export default {
   }),
   methods: {
     fetchUsers () {
-     let url = 'http://api/users';
-      let AuthStr = 'your token';
+     let url = '/api/users';
+      let AuthStr = '';
     
       axios
       .get(this.url, { headers: {'Authorization' : 'Bearer ${AuthStr}'} })     
