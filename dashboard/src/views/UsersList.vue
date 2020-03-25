@@ -33,18 +33,24 @@
 
               {{ data }}
 
-               <tr v-for="user in users" :key="user.id" >
-                 <td> {{user.first_name }} </td>
-                 <td> {{user.surname }} </td>
-                 <td> {{user.gender }} </td>
-                 <td> {{user.msisdn}} </td>
-                 <td> {{user.role_id}} </td>
-                 <td>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-danger btn-sm"> View More </button>
-                </div>
-                 </td>
-             </tr> 
+              <tr
+                v-for="user in users"
+                :key="user.id" >
+                <td> {{ user.first_name }} </td>
+                <td> {{ user.surname }} </td>
+                <td> {{ user.gender }} </td>
+                <td> {{ user.msisdn }} </td>
+                <td> {{ user.role_id }} </td>
+                <td>
+                  <div
+                    class="btn-group"
+                    role="group">
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"> View More </button>
+                  </div>
+                </td>
+              </tr>
 
             </template>
           </v-data-table>
@@ -57,26 +63,25 @@
 <script>
 import axios from 'axios'
 
-  var app = new Vue({
-    el: '#app',
-    data: {
-        data: []
-    },
-    mounted () {
-        axios
-          .request({
-            method: 'get',
-            baseURL: 'http://api/users',
-            headers: {
-                'Authorization': 'Bearer '
-            }
-          })
-          .then(response => {
-            console.log(response.data)
-          })
-      }
+var app = new Vue({
+  el: '#app',
+  data: {
+    data: []
+  },
+  mounted () {
+    axios
+      .request({
+        method: 'get',
+        baseURL: 'http://api/users',
+        headers: {
+          'Authorization': 'Bearer '
+        }
+      })
+      .then(response => {
+        console.log(response.data)
+      })
+  }
 
 })
-    
 
 </script>

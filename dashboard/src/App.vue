@@ -16,5 +16,3 @@
   vertical-align: unset;
 }
 </style>
-
-

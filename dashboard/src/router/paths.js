@@ -3,14 +3,29 @@
  * for more information on routes, see the
  * official documentation https://router.vuejs.org/en/
  */
+import store from '@/store'
 
 export default [
   {
     path: '',
+    name: 'Dashboard',
     // Relative to /src/views
-    view: 'Dashboard'
+    view: 'Dashboard',
+    beforeEnter: (to, from, next) => {
+      // ...
+      console.log('logged out')
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
-
+  {
+    path: '/login',
+    name: 'login',
+    view: 'login'
+  },
   {
     path: '/user-profile',
     name: 'User Profile',
@@ -29,7 +44,16 @@ export default [
   {
     path: '/exposure-list',
     name: 'Exposures List',
-    view: 'Exposures_List'
+    view: 'Exposures_List',
+    beforeEnter: (to, from, next) => {
+      // ...
+      console.log('logged out')
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
   {
     path: '/bulk-signup',

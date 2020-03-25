@@ -32,23 +32,25 @@
             :headers="headers"
             hide-actions
           >
-             <thead>
-            <tr>
+            <thead>
+              <tr>
                 <th>Cadre</th>
                 <th>Facility</th>
                 <th>Status</th>
                 <th> Approved By </th>
                 <th>Message</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-                <tr v-for="broadcast in broadcasts" :key="broadcast.id">
-                    <td>{{ broadcast.cadre_id }}</td>
-                    <td>{{ broadcast.facility_id }}</td>
-                    <td>{{ broadcast.approved }}</td>
-                    <td> {{broadcast.approved_by}}</td>
-                    <td>{{broadcast.message}}</td>
-                </tr>
+              <tr
+                v-for="broadcast in broadcasts"
+                :key="broadcast.id">
+                <td>{{ broadcast.cadre_id }}</td>
+                <td>{{ broadcast.facility_id }}</td>
+                <td>{{ broadcast.approved }}</td>
+                <td> {{ broadcast.approved_by }}</td>
+                <td>{{ broadcast.message }}</td>
+              </tr>
             </tbody>
           </v-data-table>
         </material-card>
@@ -66,11 +68,11 @@ export default {
       broadcast: []
     }
   },
-  mounted() {
+  mounted () {
     axios
-    .get('https://broadcasts')
-    .then(response => (this.info = response))
-  }  
+      .get('https://broadcasts')
+      .then(response => (this.info = response))
+  }
 }
-    
+
 </script>
