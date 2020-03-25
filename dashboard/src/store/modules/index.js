@@ -1,7 +1,10 @@
 // https://vuex.vuejs.org/en/modules.html
+import auth from '../auth'
 
 const requireModule = require.context('.', true, /\.js$/)
-const modules = {}
+const modules = {
+  auth
+}
 
 requireModule.keys().forEach(fileName => {
   if (fileName === './index.js') return

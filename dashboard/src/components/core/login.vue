@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import {mapActions} from 'vuex'
     export default {
         name: "login",
         components: {
@@ -44,10 +44,12 @@
           }
         },
         methods: {
-            async submit() {
-                //console.log('submitted');
-                let response = axios.post('http://c4ctest.mhealthkenya.org/api/auth/login', this.form)
-                console.log(response.data);
+            ...mapActions({
+                signIn: 'auth/signIn'
+            }
+            ),
+            submit() {
+                this.signIn(this.form)
             }
         }
     }
