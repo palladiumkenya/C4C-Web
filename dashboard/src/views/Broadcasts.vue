@@ -1,27 +1,13 @@
 <template>
   <v-container
     fill-height
-    fluid 
+    fluid
     grid-list-xl
   >
     <v-layout
       justify-center
       wrap
     >
-      <v-flex
-        xs12
-        text-xs-right
-        >
-
-        <v-btn
-          class="mx-0 font-weight-light "
-          color="success"
-          @click="$router.push('new-broadcast')"
-        >
-          Send A New Broadcast
-        </v-btn>
-      </v-flex>
-
       <v-flex
         md12
       >
@@ -31,29 +17,22 @@
         >
           <v-data-table
             :headers="headers"
-            :items="broadcasts"
-            hide-actions
+            :items="all_messages"
+            show-actions
+            item-key="id"
           >
             <template
-              slot="headerCell"
-              slot-scope="{ header }"
-            >
-              <span
-                class="subheading font-weight-light text-success text--darken-3"
-                v-text="header.text"
-              />
+              slot="items"
+              slot-scope="props">
+              <tr @click="props.expanded = !props.expanded">
+                <td>{{ props.item.cadre }}</td>
+                <td>{{ props.item.created_by }}</td>
+                <td>{{ props.item.approved_by }}</td>
+                <td>{{ props.item.facility_id }}</td>
+                <td>{{ props.item.message }}</td>
+              </tr>
             </template>
-            <template
-              slot="broadcasts"
-              slot-scope="{ broadcast }"
-            >
-              <td>{{ broadcast.facility_id }}</td>
-              <td>{{ broadcast.created_by }}</td>
-              <td>{{ broadcast.approved_by }}</td>
-              <td> {{ broadcast.cadre }}</td>
-              <td>{{ broadcast.message }}</td>
-
-            </template>
+            
           </v-data-table>
         </material-card>
       </v-flex>
@@ -63,65 +42,53 @@
 </template>
 
 <script>
-import Axios from 'axios'
+import axios from 'axios'
 export default {
-  data: () => ({
-    broadcasts : [],
-    headers: [
-      
-      {
-        sortable: false,
-        text: 'Facility',
-        value: 'facility'
-      },
-      {
-        sortable: false,
-        text: 'Created By',
-        value: 'created_by'
-
-      },
-      {
-        sortable: false,
-        text: 'Approved By',
-        value: 'approved_by'
-      },
-      {
-        sortable: false,
-        text: 'Cadre',
-        value: 'cadre'
-      },
-      {
-        sortable: false,
-        text: 'Message',
-        value: 'message'
-      }
-
-    ],
-  }),
-
-  methods: {
-    fetchBroadcasts () {
-     let url = 'http://api/broadcasts';
-      let AuthStr = 'your token';
-    
-      axios
-      .get(url, { headers: {'Authorization' : 'Bearer ${AuthStr}'} })     
-      .then((response) => {
-          this.loading = false
-          this.broadcasts = response.data
-        })
-        .catch(error => console.log(error)) 
-
-    },
-    created () {
-      this.fetchBroadcasts()
+  data () {
+    return {
+      output: [],
+      all_messages: [],
+      headers: [
+        {
+          sortable:false,
+          text: 'Cadre',
+          value: 'cadre_id'
+        },
+        {
+          sortable: false,
+          text: 'Created By',
+          value: 'created_by'
+        },
+        {
+          sortable: false,
+          text: 'Approved By',
+          value: 'approved_by'
+        },
+        {
+          sortable: false,
+          text: 'Facility',
+          value: 'facility_id'
+        },
+        {
+          sortable: false,
+          text: 'Message',
+          value: 'message'
+        },
+      ],
     }
   },
-  mounted () {
-    axios
-      .get('https://broadcasts')
-      .then(response => (this.info = response))
+  created () {
+    this.getBroadcast()
+  },
+  methods: {
+    getBroadcast () {
+        axios.get('users')
+        .then((broadcast) => {
+          console.log(broadcast.data)
+          this.all_messages = broadcast.data.data
+        })
+        .catch(error => console.log(error.message));
+    }
   }
 }
-
 </script>
