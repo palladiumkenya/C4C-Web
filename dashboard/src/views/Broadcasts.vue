@@ -116,7 +116,12 @@ export default {
     created () {
       this.fetchBroadcasts()
     }
+  },
+  mounted () {
+    axios
+      .get('https://broadcasts')
+      .then(response => (this.info = response))
   }
 }
-    
+
 </script>

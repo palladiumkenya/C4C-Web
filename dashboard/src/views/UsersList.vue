@@ -42,6 +42,7 @@
                 class="error">
                 {{ error }}
 
+<<<<<<< HEAD
               </div>
             </template>
 
@@ -54,6 +55,26 @@
                  <td> {{ user.role_id}} </td>
                  <td> {{ user.gender}}</td>
              </tr> 
+=======
+              <tr
+                v-for="user in users"
+                :key="user.id" >
+                <td> {{ user.first_name }} </td>
+                <td> {{ user.surname }} </td>
+                <td> {{ user.gender }} </td>
+                <td> {{ user.msisdn }} </td>
+                <td> {{ user.role_id }} </td>
+                <td>
+                  <div
+                    class="btn-group"
+                    role="group">
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"> View More </button>
+                  </div>
+                </td>
+              </tr>
+>>>>>>> 2cee6ee4b08655ffbfc29a505b056b45d71c19b6
 
             </template>
           </v-data-table>

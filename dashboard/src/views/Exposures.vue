@@ -25,29 +25,29 @@
               lg12
             >
 
-        <select>
-          <option>County</option>
-          <option>Nairobi</option>
-          <option>Mombasa</option>
-          <option>Kisumu</option>
-          <option>Lamu</option>
-          <option>Kwale</option>
-        </select>
+              <select>
+                <option>County</option>
+                <option>Nairobi</option>
+                <option>Mombasa</option>
+                <option>Kisumu</option>
+                <option>Lamu</option>
+                <option>Kwale</option>
+              </select>
 
               &nbsp;
-      <select>
-          <option>Sub-county</option>
-          <option></option>
-      </select>
+              <select>
+                <option>Sub-county</option>
+                <option/>
+              </select>
               &nbsp;&nbsp;&nbsp;
-       <select>
-           <option>Facility</option>
-           <option></option>
-       </select>
+              <select>
+                <option>Facility</option>
+                <option/>
+              </select>
               &nbsp;&nbsp;&nbsp;
-        <select>
-            <option>Partner</option>
-        </select>
+              <select>
+                <option>Partner</option>
+              </select>
 
               <template>
                 <section class="charts">

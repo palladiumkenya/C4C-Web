@@ -23,13 +23,13 @@
                   xs12
                 >
 
-                 <v-text-field
+                  <v-text-field
                     label="Date"
                     type="date"
                     class="purple-input"/>
                 </v-flex>
 
-                  	<!-- <div class="form-group">
+                <!-- <div class="form-group">
                     <label>Select Country:</label>
                     <select class='form-control' v-model='country' >
                           <option value='0' >Select Country</option>
@@ -37,7 +37,7 @@
                         </select>
 
                   </div> -->
-                
+
                 <v-flex
                   xs12
                   md6
@@ -92,25 +92,25 @@
 </template>
 
 <script>
-  var app = new Vue({
-    el: '#app',
-    data: {
-      facilities: 0
-    },
-    methods: {
-      getFacilities: function(){
-        axios.get('http://api/facilities', {
-          params: {
-            request: 'facilities'
-          } 
+var app = new Vue({
+  el: '#app',
+  data: {
+    facilities: 0
+  },
+  created: function () {
+    this.getFacilities()
+  },
+  methods: {
+    getFacilities: function () {
+      axios.get('http://api/facilities', {
+        params: {
+          request: 'facilities'
+        }
+      })
+        .then(response => {
+          console.log(response.data)
         })
-     .then(response => {
-        console.log(response.data)
-       });
-      }
-    },
-     created: function(){
-       this.getFacilities();
-     }
-  });
+    }
+  }
+})
 </script>

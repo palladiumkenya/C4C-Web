@@ -27,6 +27,8 @@ sync(store, router)
 
 Vue.config.productionTip = false
 
+store.dispatch('auth/attempt', localStorage.getItem('token'))
+
 Vue.use(CKEditor)
 
 /* eslint-disable no-new */
