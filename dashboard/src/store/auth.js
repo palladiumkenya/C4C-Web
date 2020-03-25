@@ -6,21 +6,46 @@ export default{
         token: null,
         user: null,
     },
-    mutations: {},
+    getters:{
+        authenticated (state) {
+            return state.token && state.user
+        },
+        user (state) {
+            return state.user
+        }
+    },
+    mutations: {
+        SET_TOKEN (state, token) {
+            state.token = token
+        },
+        SET_USER (state, data) {
+            state.user = data
+        },
+    },
     actions: {
-        async signIn(_, credentials ) {
-            let headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            headers.append('Accept', 'application/json');
-
-            //console.log('submitted');
-            axios.post('http://c4ctest.mhealthkenya.org/api/auth/login',{
+        async signIn({dispatch}, credentials ) {
+            let response = await axios.post('auth/login',{
                 email: credentials.email,
                 password: credentials.password
-            }, headers)
+            })
             // .then(response => response.json())
-            .then(json => console.log(json))
-            .catch(error => console.log(error.message));
+            // .then(json => console.log(json))
+            // .catch(error => console.log(error.message));
+
+            dispatch('attempt', response.data.access_token)
+        },
+
+        async attempt({commit}, token){
+            commit('SET_TOKEN', token)
+
+            try{
+                let response = await axios.get('auth/user')
+
+                commit('SET_USER', response.data)
+            } catch (e) {
+                commit('SET_USER', null),
+                commit('SET_TOKEN', null)
+            }
         }
     },
 }

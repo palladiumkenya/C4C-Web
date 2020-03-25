@@ -50,6 +50,12 @@
             ),
             submit() {
                 this.signIn(this.form)
+                .then(()=>{
+                    // code to redirect
+                })
+                .catch(()=>{
+                    console.log('failed')
+                })
             }
         }
     }

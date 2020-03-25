@@ -14,10 +14,12 @@ import 'vuetify-daterange-picker/dist/vuetify-daterange-picker.css'
 // Application imports
 import App from './App'
 import router from '@/router'
-import store from '@/store'
+import store from './store'
 import axios from 'axios'
 
-//axios.defaults.baseURL = 'http://192.168.0.7:5500/api'
+require('@/store/subscriber')
+
+axios.defaults.baseURL = 'http://c4ctest.mhealthkenya.org/api'
 Vue.use(VuetifyDaterangePicker)
 
 // Sync store with router
