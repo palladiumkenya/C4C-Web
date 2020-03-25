@@ -151,8 +151,5 @@ export default {
         .catch(error => console.log(error.message))
     }
   }
-<<<<<<< HEAD
-=======
 }
->>>>>>> 2cee6ee4b08655ffbfc29a505b056b45d71c19b6
 </script>
