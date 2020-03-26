@@ -156,11 +156,34 @@
             </v-container>
           </v-form>
 
-          <pre>{{ output }}</pre>
+          <pre>{{ output.message }}</pre>
         </material-card>
       </v-flex>
 
     </v-layout>
+    <v-snackbar
+      :color="color"
+      :bottom="bottom"
+      :top="top"
+      :left="left"
+      :right="right"
+      v-model="snackbar"
+      dark
+    >
+      <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div>{{output.message}}<br> {{output.errors}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -192,7 +215,18 @@ export default {
       items: [
         '3 | Health care worker',
         '4 | Facility Admin'
-      ]
+      ],
+      resp: false,
+      color: null,
+      colors: [
+        'success',
+        'error'
+      ],
+      top: true,
+      bottom: false,
+      left: false,
+      right: false,
+      snackbar: false
     }
   },
   mounted () {
@@ -201,63 +235,44 @@ export default {
   methods: {
     postUser (e) {
       e.preventDefault()
-
-      let headers = new Headers()
-      headers.append('Content-Type', 'application/json')
-      headers.append('Accept', 'application/json')
-      headers.append('Origin', 'http://localhost:8080')
-
-      fetch('http://c4ctest.mhealthkenya.org/api/auth/signup', {
-        mode: 'cors',
-        credentials: 'include',
-        method: 'POST',
-        headers: headers
+      
+      axios.post('auth/signup',{
+        first_name: this.fname,
+        surname: this.surname,
+        msisdn: this.msisdn,
+        role_id: this.role.charAt(0),
+        gender: this.gendInp,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.cnf_pass},
+        )
+      .then((response) => {
+        this.output = response.data;
+        this.resp = Boolean(response.data.success)
+        this.snack('top', 'center')
       })
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(error => console.log(error.message))
-      // axios.post('http://c4ctest.mhealthkenya.org/api/auth/signup',{
-      //   first_name: this.fname,
-      //   surname: this.surname,
-      //   msisdn: this.msisdn,
-      //   role_id: this.role.charAt(0),
-      //   gender: this.gendInp,
-      //   email: this.email,
-      //   password: this.password,
-      //   password_confirmation: this.cnf_pass},
-      //   head
-      //   )
-      // .then(function (response) {
-      //   currentObj.output = response.data;
-      // })
-      // .catch(function (error) {
-      //   currentObj.output = error['error'];
-      // });
+      .catch((error)=> {
+        this.output = error;
+        this.snack('top', 'center')
+      });
 
-      // axios({
-      //   'method': 'POST',
-      //   'url': 'http://127.0.0.1:8000/api/auth/signup/',
-      //   'headers': {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   'data': {
-      //     first_name: currentObj.fname,
-      //     surname: currentObj.surname,
-      //     msisdn: currentObj.msisdn,
-      //     role_id: currentObj.role.charAt(0),
-      //     gender: currentObj.gendInp,
-      //     email: currentObj.email,
-      //     password: currentObj.password,
-      //   }
-      // })
-      //   .then((response) => {
-      //     currentObj.output = response
-      //     console.log(currentObj.output)
-      //   })
-      //   .catch((error) => {
-      //     currentObj.output = error
-      //     console.log(currentObj.output)
-      //   })
+    },
+    snack (...args) {
+      this.top = false
+      this.bottom = false
+      this.left = false
+      this.right = false
+
+      for (const loc of args) {
+        this[loc] = true
+      }
+      if(this.resp){
+        this.color = this.colors[0]
+      } else {
+        this.color = this.colors[1]
+      }
+
+      this.snackbar = true
     }
   }
 }

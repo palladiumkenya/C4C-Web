@@ -98,8 +98,19 @@ export default {
     getExp () {
         axios.get('exposures/all/')
         .then((exp) => {
-          console.log(exp.data)
           this.exposures = exp.data.data
+          console.log(this.exposures)
+          let link = exp.data.links.next
+          while(link != null){
+            console.log("in")
+            axios.get(link)
+            .then((nex) => {
+              this.exposures = this.exposures.concat(nex.data.data)
+              
+              link = nex.data.link.next
+            })
+          }
+          
         })
         .catch(error => console.log(error.message));
     }
