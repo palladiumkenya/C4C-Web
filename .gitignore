@@ -1,6 +1,21 @@
 # Created by https://www.gitignore.io/api/pycharm,python,django
 # Edit at https://www.gitignore.io/?templates=pycharm,python,django
 
+##VUE##
+  
+.DS_Store
+dashboard/node_modules/
+/dist/
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+dashboard/npm-debug.log*
+dashboard/yarn-debug.log*
+dashboard/yarn-error.log*
+
 ### Django ###
 *.log
 *.pot
