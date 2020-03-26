@@ -155,8 +155,6 @@
               </v-layout>
             </v-container>
           </v-form>
-
-          <pre>{{ output.message }}</pre>
         </material-card>
       </v-flex>
 

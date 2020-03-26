@@ -34,7 +34,7 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.user_id }}</td>
+                <td>{{ props.item.first_name }} {{ props.item.surname }} </td>
                 <td>{{ props.item.previous_exposures }}</td>
                 <td>{{ props.item.location }}</td>
                 <td>{{ props.item.date }}</td>
@@ -66,8 +66,8 @@ export default {
       output: [],
       headers: [
         {
-          text: 'User',
-          value: 'user_id'
+          text: 'Name',
+          value: 'name'
         },
         {
           sortable: false,
@@ -106,7 +106,6 @@ export default {
             axios.get(link)
             .then((nex) => {
               this.exposures = this.exposures.concat(nex.data.data)
-              
               link = nex.data.link.next
             })
           }

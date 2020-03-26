@@ -21,6 +21,18 @@
               <v-layout wrap>
                 <v-flex
                   xs12
+                  md3
+                >
+                  <v-combobox
+                    v-model="facility_id"
+                    :rules="[rules.required]"
+                    :items="facilities"
+                    label="Facility"
+                    class="purple-input"
+                  />
+                </v-flex>
+                <v-flex
+                  xs12
                   md6
                 >
                   <v-text-field
@@ -31,7 +43,7 @@
                 </v-flex>
                 <v-flex
                   xs12
-                  md6
+                  md3
                 >
                   <v-switch
                     v-model="switch1"
@@ -54,8 +66,6 @@
               </v-layout>
             </v-container>
           </v-form>
-
-          <pre>{{ output }}</pre>
         </material-card>
 
         <material-card
@@ -67,7 +77,7 @@
               :headers="headers"
               :items="items"
               :loading="true"
-              rows-per-page="-1"
+              :rows-per-page-items="rowsPerPageItems"
               class="elevation-1"
             ><template
               slot="headerCell"
@@ -92,6 +102,29 @@
       </v-flex>
 
     </v-layout>
+    <v-snackbar
+      :color="color"
+      :bottom="bottom"
+      :top="top"
+      :left="left"
+      :right="right"
+      v-model="snackbar"
+      dark
+    >
+      <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div>{{output.message}}<br> {{output.errors}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -101,9 +134,11 @@ export default {
   //
   data () {
     return {
+      rowsPerPageItems: [50, 250, 500],
       switch1: true,
       name: '',
-      output: '',
+      facility_id:'',
+      facilities: ['name'],
       headers: [
         {
           sortable: false,
@@ -122,15 +157,38 @@ export default {
         }
       ],
       items: [],
+      facilities_all:[],
       rules: {
         required: value => !!value || 'Required.'
-      }
+      },
+      resp: false,
+      output: '',
+      color: null,
+      colors: [
+        'success',
+        'error'
+      ],
+      top: true,
+      bottom: false,
+      left: false,
+      right: false,
+      snackbar: false
     }
   },
   created (){
     this.DeviceList()
+    this.Facilities()
   },
   methods: {
+    Facilities () {
+      axios.get('facilities')
+      .then((resp) =>{
+        this.facilities_all = resp.data.data
+        for (var k in resp.data.data){
+          this.facilities.push(this.facilities_all[k].name)
+        }
+      })
+    },
     DeviceList () {
       axios.get('devices/all/')
       .then((exp) => {
@@ -140,17 +198,37 @@ export default {
     },
     AddDevice (e) {
       e.preventDefault()
-      let currentObj = this
-      axios.get('devices/all/', {
+      axios.post('devices/create', {
+        facility_id: this.facilities_all[this.facilities.indexOf(this.facility_id)].id,
         name: this.name,
         safety_designed: this.switch1
       })
-      .then(function (response) {
-        currentObj.output = response.data
+      .then((response) => {
+        this.output = response.data;
+        this.resp = Boolean(response.data.success)
+        this.snack('top', 'center')
       })
-      .catch(function (error) {
-        currentObj.output = error
+      .catch((error) => {
+        this.output = error;
+        this.snack('top', 'center')
       })
+    },
+    snack (...args) {
+      this.top = false
+      this.bottom = false
+      this.left = false
+      this.right = false
+
+      for (const loc of args) {
+        this[loc] = true
+      }
+      if(this.resp){
+        this.color = this.colors[0]
+      } else {
+        this.color = this.colors[1]
+      }
+
+      this.snackbar = true
     }
   }
 }
