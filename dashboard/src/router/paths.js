@@ -94,8 +94,13 @@ export default [
   },
   {
     path: '/resources',
+    view: 'AllResources'
+  },
+  {
+    path: '/add-resource',
     view: 'Resources'
   },
+
   {
     path: '/maps',
     view: 'Maps'

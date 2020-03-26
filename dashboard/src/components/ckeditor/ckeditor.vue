@@ -2,6 +2,7 @@
   <div id="app-editor">
     <ckeditor
       :editor="editor"
+      tag-name="textarea"
       v-model="editorData"
       :config="editorConfig"/>
   </div>
@@ -15,11 +16,15 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      editorData: '<p> Write Your Message Here. </p>',
+      editorData: '',
       editorConfig: {
       }
-    }
+    } 
+  },
+  methods : {
+    
   }
+  
 }
 </script>
 <style >

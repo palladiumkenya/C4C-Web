@@ -8,6 +8,20 @@
       justify-center
       wrap
     >
+    <v-flex
+        xs12
+        text-xs-right
+        >
+
+        <v-btn
+          class="mx-0 font-weight-light "
+          color="success"
+          @click="$router.push('new-broadcast')"
+        >
+          Send A New Broadcast
+        </v-btn>
+      </v-flex>
+
       <v-flex
         md12
       >
