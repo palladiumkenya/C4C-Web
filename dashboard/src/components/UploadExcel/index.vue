@@ -12,14 +12,15 @@
       @dragover="handleDragover"
       @dragenter="handleDragover">
       Drop excel file here or
-      <button
+      <v-btn
         :loading="loading"
         style="margin-left:16px;"
         size="mini"
+        color="info"
         type="submit"
         @click="handleUpload">
         Browse
-      </button>
+      </v-btn>
     </div>
   </div>
 </template>
