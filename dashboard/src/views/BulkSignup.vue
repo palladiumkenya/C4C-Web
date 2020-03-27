@@ -52,6 +52,8 @@
                 slot="items"
                 slot-scope="{ item }"
               >
+              <!-- <td>
+              {{typeof(item)}}</td> -->
                 <td
                   v-for="(msg, index) in item"
                   :key="index">{{ msg }}</td>
@@ -83,7 +85,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div>{{output}}<br> {{output.errors}}</div>
+      <div>{{output.message}}<br> {{output.errors}} {{output_pre}}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -104,6 +106,7 @@ export default {
     return {
       is_data: true,
       output: '',
+      output_pre: '',
       resp: false,
       color: null,
       colors: [
@@ -119,6 +122,10 @@ export default {
       tableData: [],
       tableHeader: [],
       tableHead: [
+        // {
+        //   text: 'Number',
+        //   value: 'number'
+        // },
         {
           sortable: false,
           text: 'First Name',
@@ -155,45 +162,59 @@ export default {
   methods: {
     postUsers (e) {
       e.preventDefault()
-      console.log(this.tableData)
       for (var u in this.tableData){
-        console.log(this.tableData[u].email)
         if (this.tableData[u].first_name === undefined){
-          this.output = "Fill all appropriately";
+          this.output_pre = `ERROR: Fill first name for record: ${u+1}`;
           this.snack('bottom', 'center')
+          return
         }else if (this.tableData[u].surname === undefined){
-          this.output = "Fill all appropriately";
+          this.output_pre = `ERROR: Fill surname for record: ${u+1}`;
           this.snack('bottom', 'center')
-        }else if (this.tableData[u].msisdn === undefined){
-          this.output = "Fill all appropriately";
+          return
+        }else if (this.tableData[u].mobile === undefined){
+          this.output_pre = `ERROR: Fill mobile for record: ${u+1}`;
           this.snack('bottom', 'center')
+          return
+        }else if (this.tableData[u].mobile.toString().length < 9){
+          this.output_pre = `ERROR: Fill valid mobile for record: ${u+1}`;
+          this.snack('bottom', 'center')
+          return
         }else if (this.tableData[u].gender === undefined){
-          this.output = "Fill all appropriately";
+          this.output_pre = `ERROR: Fill gender for record: ${u+1}`;
           this.snack('bottom', 'center')
+          return
         }else if (this.tableData[u].password === undefined){
-          this.output = "Fill all appropriately";
+          this.output_pre = `ERROR: Fill password for record: ${u+1}`;
           this.snack('bottom', 'center')
-        }else {
-          this.pushData()
+          return
+        }else if (this.tableData[u].password.toString().length < 6){
+          this.output_pre = `ERROR: Password for record: ${u+1} should be more the 5 characters`;
+          this.snack('bottom', 'center')
+          return
         }
       }
+      this.pushData()
     },
     pushData (){
       for (var v in this.tableData){
         axios.post('auth/signup',{
-          first_name: this.tableData[u].first_name,
-          surname: this.tableData[u].surname,
-          msisdn: this.tableData[u].msisdn,
+          first_name: this.tableData[v].first_name,
+          surname: this.tableData[v].surname,
+          msisdn: this.tableData[v].mobile.toString(),
           role_id: "3",
-          gender: this.tableData[u].gender,
-          email: this.tableData[u].email,
-          password: this.tableData[u].password,
-          password_confirmation: this.tableData[u].password},
+          gender: this.tableData[v].gender,
+          email: this.tableData[v].email,
+          password: this.tableData[v].password.toString(),
+          password_confirmation: this.tableData[v].password.toString()},
           )
         .then((response) => {
           this.output = response.data;
           console.log(this.output)
           this.resp = Boolean(response.data.success)
+          if(!this.resp){
+            this.snack('bottom', 'center')
+            return
+          }
           this.snack('top', 'center')
         })
         .catch((error)=> {
@@ -201,6 +222,7 @@ export default {
           this.snack('top', 'center')
         });
       }
+      console.log("Good")
     },
     beforeUpload (file) {
       const isLt1M = file.size / 1024 / 1024 < 1
