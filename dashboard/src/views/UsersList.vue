@@ -27,7 +27,7 @@
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.first_name }}</td>
                 <td>{{ props.item.surname }}</td>
-                <td>{{ props.item.role_id }}</td>
+                <td>{{ props.item.role.name }}</td>
                 <td>{{ props.item.msisdn }}</td>
                 <td>{{ props.item.gender }}</td>
               </tr>

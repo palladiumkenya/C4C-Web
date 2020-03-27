@@ -178,7 +178,7 @@ export default {
       {
         to: '/resources',
         icon: 'mdi-arrow-down-bold-circle',
-        text: 'Resources'
+        text: 'Resource Center'
       },
       {
         to: '/logout',

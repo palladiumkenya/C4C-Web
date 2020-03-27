@@ -16,7 +16,7 @@
           title="Create A Resource, Guideline or Protocal "
           text="Kindly fill all the required fields carefully"
         >
-          <v-form>
+          <v-form @submit="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -26,17 +26,26 @@
                 >
                   <v-text-field
                     label="Title"
-                    type="text"
+                    id="title"
+                    :rules="[rules.required]"
+                    v-model="title"
                     class="purple-input"/>
                 </v-flex>
 
                 <v-flex xs12>
-                  <ckeditor-ckeditor/>
+                  <ckeditor-ckeditor
+                    id="editor"
+                    v-model="editor"
+                  />  
                 </v-flex>
+
                 <v-flex xs12>
                   <input
-                    ref="excel-upload-input"
+                    ref="file"
+                    id="file"
                     class="excel-upload-input"
+                    name="file"
+                    v-on:change="handleFile"
                     type="file">
                 </v-flex>
                 <v-flex
@@ -46,6 +55,7 @@
                   <v-btn
                     class="mx-0 font-weight-light"
                     color="success"
+                    type="submit"
                   >
                     Submit
                   </v-btn>
@@ -53,6 +63,8 @@
               </v-layout>
             </v-container>
           </v-form>
+          <strong>Output:</strong>
+           <pre> {{output}} </pre>
         </material-card>
       </v-flex>
 
@@ -61,7 +73,56 @@
 </template>
 
 <script>
+import axios from 'axios'
+import ckeditor from './../components/ckeditor/ckeditor'
+
 export default {
-  //
+   components: {
+        ckeditor : ckeditor
+   },
+  data () {
+    return{
+      title: '',
+      editor: '',
+      file: '',
+      output: '',
+      rules: {
+        required: value => !!value || 'Required.'
+      }
+    }
+  },
+
+  methods: {
+    handleFile(e){
+        this.file = this.$refs.file.files[0];
+      },
+   
+
+    postCME (e) {
+      e.preventDefault();
+    
+    const allData = new FormData();
+    // dict of all elements
+    allData.append("file", file);
+    allData.append("title", this.title);
+    allData.append("editor", this.editor);
+
+    let currentObj = this
+    
+    axios({
+      method: "POST",
+      url: 'resources/cmes/create',
+      data: allData,
+      
+    })
+    .then(function (response) {
+      currentObj.output = response.data
+    })
+    .catch(function (error) {
+      currentObj.output = error
+    })
+  }
+  }
+
 }
 </script>
