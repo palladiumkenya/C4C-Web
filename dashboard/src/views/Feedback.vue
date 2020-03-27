@@ -27,6 +27,8 @@
             :items="exposures"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
+            show-actions
+            item-key="id"
           >
             <template
               slot="items"
@@ -46,9 +48,6 @@
                 <v-card-text>patient hiv status: {{ props.item.patient_hiv_status }} <br> patient hbv status: {{ props.item.patient_hbv_status }} <v-spacer/> description: {{ props.item.description }}</v-card-text>
               </v-card>
             </template>
-            <v-alert slot="no-results" :value="true" color="error" icon="mdi-emoticon-sad">
-              Your search for "{{ search }}" found no results.
-            </v-alert>
           </v-data-table>
         </material-card>
       </v-flex>
@@ -77,7 +76,6 @@ export default {
           value: 'previous_exposures'
         },
         {
-          sortable: false,
           text: 'Location',
           value: 'location'
         },
@@ -103,7 +101,8 @@ export default {
         .then((exp) => {
           this.exposures = exp.data.data
           this.link = exp.data.links.next
-          console.log(exp.data.data)
+          let last = exp.data.links.last
+          console.log(this.link)
           this.loopT(this.link)
         })
         .catch(error => console.log(error.message));
