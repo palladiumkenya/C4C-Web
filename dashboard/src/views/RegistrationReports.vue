@@ -63,7 +63,7 @@
                 <section class="charts">
                   <h3>Age Visualization</h3>
                     <core-filters />
-                  <vue-highcharts :options="options" />
+                  <views-HbvReports :options="options" />
                 </section>
               </template>
 
@@ -104,68 +104,55 @@ import Highcharts from 'highcharts'
 
 const data = {
   title: {
-    text: 'Exposures Chart Analysis'
+    text: 'Registration Summary'
   },
   xAxis: {
     categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   },
-  labels: {
-    items: [
-      {
-        html: 'Exposures Per Cadre',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
+
   series: [
 
     {
       type: 'column',
       name: 'Monthly Exposures',
-      data: [7, 3, 3, 9, 0, 5, 6, 2, 4, 1, 8, 0]
+      data: []
     },
     {
 
     },
-    {
-      type: 'pie',
-      name: 'Number of Exposure:',
-      data: [
-        {
-          name: 'Doctor',
-          y: 13,
-          color: Highcharts.getOptions().colors[0] // Jane's color
-        },
-        {
-          name: 'Nurse',
-          y: 23,
-          color: Highcharts.getOptions().colors[1] // John's color
-        },
-        {
-          name: 'Clinical Officer',
-          y: 19,
-          color: Highcharts.getOptions().colors[2] // Joe's color
-        }
-      ],
-      center: [100, 80],
-      size: 100,
-      showInLegend: false,
-      dataLabels: {
-        enabled: false
-      }
-    }
+
   ]
 }
 export default {
   components: {
     VueHighcharts
   },
+
+   mounted() {
+     // Imitate sending data request
+     setTimeout(() => {
+       console.log(this.$refs.chart.chart)
+       this.chartOptions.series[0].data = [1, 2, 3];
+       this.$refs.chart.chart.hideLoading();
+     }, 2000)
+   },
+
   data () {
     return {
+       counter: 2,
+      chartOptions: {
+        chart: {
+          events: {
+            load() {
+              this.showLoading();
+            }
+          }
+        },
+        series: [{
+          data: []
+        }]
+      },
+
       options: data
     }
   }
