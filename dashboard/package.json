@@ -29,6 +29,7 @@
         "vue2-highcharts": "^1.2.5",
         "vuetify": "1.4.3",
         "vuetify-daterange-picker": "3",
+        "vuetify-markdown-editor": "^1.6.2",
         "xlsx": "^0.15.6"
     },
     "devDependencies": {

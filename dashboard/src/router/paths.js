@@ -57,7 +57,7 @@ export default [
   },
   {
     path: '/bulk-signup',
-    name: 'BulkSignup',
+    name: 'Bulk Signup',
     view: 'BulkSignup',
     meta: { title: 'Upload Excel' }
   },
@@ -68,9 +68,14 @@ export default [
   },
 
   {
-    path: '/users-list',
+    path: '/users_list',
     name: 'Users List',
-    view: 'UsersList'
+    view: 'All_Users'
+  },
+  {
+    path: '/hcw_list',
+    name: 'HCW List',
+    view: 'All_HCW'
   },
 
   {
@@ -79,40 +84,35 @@ export default [
     view: 'Exposures'
   },
   {
-    path: '/broadcast',
+    path: '/all_broadcast',
     name: 'Broadcast',
-    view: 'Broadcasts'
+    view: 'All_Broadcasts'
   },
   {
-    path: '/table-list',
-    name: 'Table List',
-    view: 'TableList'
+    path: '/broadcast',
+    name: 'Broadcast Facility',
+    view: 'Broadcast_Facility'
   },
   {
-    path: '/icons',
-    view: 'Icons'
+    path: '/new_broadcast',
+    name: 'New Broadcast',
+    view: 'New_Broadcast'
   },
+  
   {
     path: '/resources',
-    view: 'AllResources'
+    name: 'Resource Center',
+    view: 'All_Resources'
   },
   {
-    path: '/add-resource',
-    view: 'Resources'
+    path: '/add_resource',
+    name: 'All Resources',
+    view: 'New_Resource'
   },
 
   {
-    path: '/maps',
-    view: 'Maps'
-  },
-  {
     path: '/notifications',
     view: 'Notifications'
-  },
-  {
-    path: '/new-broadcast',
-    name: 'BroadcastForm',
-    view: 'BroadcastForm'
   },
   {
     path: '/add_device',

@@ -11,7 +11,7 @@
     <v-btn
       class="mx-0 font-weight-light "
       color="success"
-      @click="$router.push('add-resource')"
+      @click="$router.push('add_resource')"
      >
       Add A New Resource
     </v-btn>
@@ -25,26 +25,27 @@
 
   >
 
-    <v-img
-      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+    <!-- <v-img
+      src="{{https://cdn.vuetifyjs.com/images/cards/sunshine.jpg}}"
       height="200px"
-    ></v-img>
+    ></v-img> -->
 
     <v-card-title>
       {{result.title}}
     </v-card-title>
 
+    <v-card-title>
+      {{result.file}}
+    </v-card-title>
+
 
     <v-card-actions>
-      <v-btn
-      color="green"
-       text>Share</v-btn>
 
       <v-btn
         color="purple"
         text
       >
-        Explore
+        View More
       </v-btn>
 
       <v-spacer></v-spacer>

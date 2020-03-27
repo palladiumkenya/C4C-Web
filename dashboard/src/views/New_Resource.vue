@@ -33,10 +33,12 @@
                 </v-flex>
 
                 <v-flex xs12>
-                  <ckeditor-ckeditor
-                    id="editor"
-                    v-model="editor"
-                  />  
+                    <ckeditor 
+                    :editor="editor"
+                     v-model="body" 
+                     id="body"
+                     :config="editorConfig">
+                     </ckeditor>
                 </v-flex>
 
                 <v-flex xs12>
@@ -45,8 +47,10 @@
                     id="file"
                     class="excel-upload-input"
                     name="file"
-                    v-on:change="handleFile"
+                    v-on:change="handleFileUpload()"
                     type="file">
+                </input>
+                    
                 </v-flex>
                 <v-flex
                   xs12
@@ -63,8 +67,6 @@
               </v-layout>
             </v-container>
           </v-form>
-          <strong>Output:</strong>
-           <pre> {{output}} </pre>
         </material-card>
       </v-flex>
 
@@ -74,18 +76,16 @@
 
 <script>
 import axios from 'axios'
-import ckeditor from './../components/ckeditor/ckeditor'
-
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 export default {
-   components: {
-        ckeditor : ckeditor
-   },
+  
   data () {
     return{
+      editor: ClassicEditor,
+      editorConfig: {},
       title: '',
-      editor: '',
+      body: '',
       file: '',
-      output: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -93,7 +93,7 @@ export default {
   },
 
   methods: {
-    handleFile(e){
+    handleFileUpload(e){
         this.file = this.$refs.file.files[0];
       },
    
@@ -103,22 +103,26 @@ export default {
     
     const allData = new FormData();
     // dict of all elements
-    allData.append("file", file);
+    allData.append("file", this.file);
     allData.append("title", this.title);
-    allData.append("editor", this.editor);
+    allData.append("body", this.body);
 
     let currentObj = this
     
     axios({
       method: "POST",
       url: 'resources/cmes/create',
-      data: allData,
-      
+      data: allData, 
+        headers: {
+        'Content-Type': 'multipart/form-data'
+      } 
     })
     .then(function (response) {
+      console.log('Success')
       currentObj.output = response.data
     })
     .catch(function (error) {
+      console.log('Failed')
       currentObj.output = error
     })
   }
@@ -126,3 +130,9 @@ export default {
 
 }
 </script>
+<style>
+.ck-editor__editable_inline {
+    min-height: 200px !important;
+}
+
+</style>
