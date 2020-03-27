@@ -138,7 +138,7 @@ export default {
       switch1: true,
       name: '',
       facility_id:'',
-      facilities: ['name'],
+      facilities: [],
       headers: [
         {
           sortable: false,
@@ -193,6 +193,7 @@ export default {
       axios.get('devices/all/')
       .then((exp) => {
         this.items = exp.data.data
+        console.log(exp.data)
       })
       .catch(error => console.log(error.message));
     },
