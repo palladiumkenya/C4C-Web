@@ -67,26 +67,26 @@ export default {
       output: [],
       headers: [
         {
-          text: 'Name',
-          value: 'name'
+          text: 'Category',
+          value: 'category'
         },
         {
           sortable: false,
-          text: 'Previous exposures',
-          value: 'previous_exposures'
+          text: 'Type',
+          value: 'type'
         },
         {
-          text: 'Location',
-          value: 'location'
+          text: 'Feedback',
+          value: 'feedback'
         },
         {
           sortable: false,
-          text: 'Date',
-          value: 'Date'
+          text: 'File',
+          value: 'File'
         },
         {
-          text: 'Pep Initiated',
-          value: 'pep_initiated'
+          text: 'Anonymous',
+          value: 'Anonymous'
         }
       ],
       exposures: []
@@ -97,15 +97,15 @@ export default {
   },
   methods: {
     getExp () {
-        axios.get('exposures/all/')
-        .then((exp) => {
-          this.exposures = exp.data.data
-          this.link = exp.data.links.next
-          let last = exp.data.links.last
-          console.log(this.link)
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message));
+        // axios.get('exposures/all/')
+        // .then((exp) => {
+        //   this.exposures = exp.data.data
+        //   this.link = exp.data.links.next
+        //   let last = exp.data.links.last
+        //   console.log(this.link)
+        //   this.loopT(this.link)
+        // })
+        // .catch(error => console.log(error.message));
     },
     async loopT(l){
       var i;

@@ -18,7 +18,8 @@
           <v-data-table
             :headers="headers"
             :items="all_users"
-            show-actions
+            :rows-per-page-items="rowsPerPageItems"
+            :dark="true"
             item-key="id"
           >
             <template
@@ -46,6 +47,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
+      rowsPerPageItems: [50, 250, 500],
       output: [],
       all_users: [],
       headers: [
@@ -86,8 +88,21 @@ export default {
         .then((users) => {
           console.log(users.data)
           this.all_users = users.data.data
+          this.loopT(users.data.links.next)
         })
         .catch(error => console.log(error.message));
+    },
+    async loopT(l){
+      var i;
+      for (i = 0; i <1;) {
+        if (l!=null){
+          let response= await axios.get(l)
+          l = response.data.links.next
+          this.all_users = this.all_users.concat(response.data.data)
+        }else {
+          i=11
+        }
+      }
     }
   }
 }
