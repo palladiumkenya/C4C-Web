@@ -186,6 +186,11 @@ export default {
         text: 'Resource Center'
       },
       {
+        to: '/feed-back',
+        icon: 'mdi-backburger',
+        text: 'Feedback'
+      },
+      {
         to: '/logout',
         icon: 'mdi-clipboard-outline',
         text: 'Logout'

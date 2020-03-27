@@ -16,6 +16,15 @@
           title="Add a New Device"
           text="Kindly fill all the required fields"
         >
+        <v-card-text>
+          <div></div>
+          <p class="display-1 text--primary">
+            Add A New Device
+          </p>
+          <div class="text--primary">
+            Kindly fill all the required fields
+          </div>
+        </v-card-text>
           <v-form @submit="AddDevice">
             <v-container py-0>
               <v-layout wrap>
@@ -66,12 +75,18 @@
               </v-layout>
             </v-container>
           </v-form>
-        </material-card>
+        </material-card> <br>
 
         <material-card
           color="blue"
           title="Add a New Device"
           text="Devices List">
+          <v-card-text>
+            <div></div>
+            <p class="display-1 text--primary">
+              Devices List
+            </p>
+          </v-card-text>
           <template>
             <v-data-table
               :headers="headers"
@@ -117,7 +132,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div>{{output.message}}<br> {{output.errors}}</div>
+      <div>{{pre_out}} {{output.message}}<br> {{output.errors}}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -138,7 +153,7 @@ export default {
       switch1: true,
       name: '',
       facility_id:'',
-      facilities: ['name'],
+      facilities: [],
       headers: [
         {
           sortable: false,
@@ -163,6 +178,7 @@ export default {
       },
       resp: false,
       output: '',
+      pre_out: '',
       color: null,
       colors: [
         'success',
@@ -180,6 +196,18 @@ export default {
     this.Facilities()
   },
   methods: {
+    checkData () {
+      if (this.facility_id == '') {
+        this.pre_out = "Pick facilty to proceed"
+        this.snack('top', 'center')
+        return false
+      }else if (this.name == ''){
+        this.pre_out = "Provide device name to proceed"
+        this.snack('top', 'center')
+        return false
+      } else 
+        return true
+    },
     Facilities () {
       axios.get('facilities')
       .then((resp) =>{
@@ -193,25 +221,29 @@ export default {
       axios.get('devices/all/')
       .then((exp) => {
         this.items = exp.data.data
+        console.log(exp.data)
       })
       .catch(error => console.log(error.message));
     },
     AddDevice (e) {
       e.preventDefault()
-      axios.post('devices/create', {
-        facility_id: this.facilities_all[this.facilities.indexOf(this.facility_id)].id,
-        name: this.name,
-        safety_designed: this.switch1
-      })
-      .then((response) => {
-        this.output = response.data;
-        this.resp = Boolean(response.data.success)
-        this.snack('top', 'center')
-      })
-      .catch((error) => {
-        this.output = error;
-        this.snack('top', 'center')
-      })
+      if (this.checkData()){
+        axios.post('devices/create', {
+          facility_id: this.facilities_all[this.facilities.indexOf(this.facility_id)].id,
+          name: this.name,
+          safety_designed: this.switch1
+        })
+        .then((response) => {
+          this.output = response.data;
+          this.resp = Boolean(response.data.success)
+          this.snack('top', 'center')
+        })
+        .catch((error) => {
+          this.output = error;
+          this.snack('top', 'center')
+        })
+        this.DeviceList()
+      }
     },
     snack (...args) {
       this.top = false
@@ -227,7 +259,6 @@ export default {
       } else {
         this.color = this.colors[1]
       }
-
       this.snackbar = true
     }
   }

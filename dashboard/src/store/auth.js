@@ -28,10 +28,6 @@ export default{
         email: credentials.email,
         password: credentials.password
       })
-      // .then(response => response.json())
-      // .then(json => console.log(json))
-      // .catch(error => console.log(error.message));
-
       dispatch('attempt', response.data.access_token)
     },
 
@@ -47,7 +43,7 @@ export default{
       try {
         let response = await axios.get('auth/user')
 
-        commit('SET_USER', response.data)
+        commit('SET_USER', response.data.data)
       } catch (e) {
         commit('SET_USER', null)
         commit('SET_TOKEN', null)

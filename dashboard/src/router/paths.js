@@ -46,7 +46,6 @@ export default [
     name: 'Exposures List',
     view: 'Exposures_List',
     beforeEnter: (to, from, next) => {
-      // ...
       console.log('logged out')
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -60,6 +59,11 @@ export default [
     name: 'Bulk Signup',
     view: 'BulkSignup',
     meta: { title: 'Upload Excel' }
+  },
+  {
+    path: '/feed-back',
+    name: 'Feedback',
+    view: 'Feedback',
   },
   {
     path: '/registration-reports',

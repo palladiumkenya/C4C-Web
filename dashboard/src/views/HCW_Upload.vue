@@ -90,7 +90,6 @@
                     v-model="msisdn"
                     :rules="[rules.required]"
                     label="Mobile"
-                    value="650"
                     single-line
                     class="purple-input"/>
                 </v-flex>
@@ -174,7 +173,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div>{{output.message}}<br> {{output.errors}}</div>
+      <div>{{pre_out}}{{output.message}}<br> {{output.errors}}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -201,6 +200,7 @@ export default {
       msisdn: '',
       email: '',
       output: '',
+      pre_out:'',
       rules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
@@ -231,29 +231,70 @@ export default {
 
   },
   methods: {
+    testFill() {
+      if (this.fname == "") {
+        this.pre_out ="First Name must be filled out";
+        this.snack('top', 'center')
+        return false;
+      }else if(this.surname == "") {
+        this.pre_out ="surname must be filled out";
+        this.snack('top', 'center')
+        return false;
+      }else if(this.msisdn == "") {
+        this.pre_out ="Mobile must be filled out";
+        this.snack('top', 'center')
+        return false;
+      }else if(this.role_id == "") {
+        this.pre_out ="Role must be filled out";
+        this.snack('top', 'center')
+        return false;
+      }else if(this.gender == "") {
+        this.pre_out ="gender must be filled out";
+        this.snack('top', 'center')
+        return false;
+      }else if(this.password == "") {
+        this.pre_out ="password must be filled out";
+        this.snack('top', 'center')
+        return false;
+      }else if(this.cnf_pass == "") {
+        this.pre_out ="Repeate password must be filled out";
+        this.snack('top', 'center')
+        return false;
+      }else if(this.password != this.cnf_pass) {
+        this.pre_out ="Passwords dont match";
+        this.snack('top', 'center')
+        return false;
+      }else{
+        return true
+      }
+    },
+    clearData(){
+      
+    },
     postUser (e) {
       e.preventDefault()
-      
-      axios.post('auth/signup',{
-        first_name: this.fname,
-        surname: this.surname,
-        msisdn: this.msisdn,
-        role_id: this.role.charAt(0),
-        gender: this.gendInp,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.cnf_pass},
-        )
-      .then((response) => {
-        this.output = response.data;
-        this.resp = Boolean(response.data.success)
-        this.snack('top', 'center')
-      })
-      .catch((error)=> {
-        this.output = error;
-        this.snack('top', 'center')
-      });
-
+      if(this.testFill()){
+        axios.post('auth/signup',{
+          first_name: this.fname,
+          surname: this.surname,
+          msisdn: this.msisdn,
+          role_id: this.role.charAt(0),
+          gender: this.gendInp,
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.cnf_pass},
+          )
+        .then((response) => {
+          this.output = response.data;
+          this.resp = Boolean(response.data.success)
+          this.clearData()
+          this.snack('top', 'center')
+        })
+        .catch((error)=> {
+          this.output = error;
+          this.snack('top', 'center')
+        });
+      }
     },
     snack (...args) {
       this.top = false
