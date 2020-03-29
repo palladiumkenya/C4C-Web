@@ -33,7 +33,7 @@
                 <td>{{ props.item.gender }}</td>
               </tr>
             </template>
-            
+
           </v-data-table>
         </material-card>
       </v-flex>
@@ -52,7 +52,7 @@ export default {
       all_users: [],
       headers: [
         {
-          sortable:false,
+          sortable: false,
           text: 'First Name',
           value: 'first_name'
         },
@@ -75,8 +75,8 @@ export default {
           sortable: false,
           text: 'Gender',
           value: 'gender'
-        },
-      ],
+        }
+      ]
     }
   },
   created () {
@@ -84,23 +84,23 @@ export default {
   },
   methods: {
     getUsers () {
-        axios.get('users')
+      axios.get('users')
         .then((users) => {
           console.log(users.data)
           this.all_users = users.data.data
           this.loopT(users.data.links.next)
         })
-        .catch(error => console.log(error.message));
+        .catch(error => console.log(error.message))
     },
-    async loopT(l){
-      var i;
-      for (i = 0; i <1;) {
-        if (l!=null){
-          let response= await axios.get(l)
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
           l = response.data.links.next
           this.all_users = this.all_users.concat(response.data.data)
-        }else {
-          i=11
+        } else {
+          i = 11
         }
       }
     }

@@ -8,60 +8,60 @@
         lg4
       >
 
-         <template>
+        <template>
 
-  <v-container fluid>
-    <v-select
-      v-model="selectedFruits"
-      :items="fruits"
-      label="Select Cadre"
-      multiple
-    >
-      <template v-slot:prepend-item>
-        <v-list-item
-          ripple
-          @click="toggle"
-        >
-          <v-list-item-action>
-            <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Select All</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider class="mt-2"></v-divider>
+          <v-container fluid>
+            <v-select
+              v-model="selectedFruits"
+              :items="fruits"
+              label="Select Cadre"
+              multiple
+            >
+              <template v-slot:prepend-item>
+                <v-list-item
+                  ripple
+                  @click="toggle"
+                >
+                  <v-list-item-action>
+                    <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>Select All</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"/>
 
-      </template>
-      <template v-slot:append-item>
-        <v-divider class="mb-2"></v-divider>
-        <v-list-item disabled>
-          <v-list-item-avatar color="grey lighten-3">
-            <v-icon>mdi-food-apple</v-icon>
-          </v-list-item-avatar>
+              </template>
+              <template v-slot:append-item>
+                <v-divider class="mb-2"/>
+                <v-list-item disabled>
+                  <v-list-item-avatar color="grey lighten-3">
+                    <v-icon>mdi-food-apple</v-icon>
+                  </v-list-item-avatar>
 
-          <v-list-item-content v-if="likesAllFruit">
-            <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
-          </v-list-item-content>
+                  <v-list-item-content v-if="likesAllFruit">
+                    <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
+                  </v-list-item-content>
 
-          <v-list-item-content v-else-if="likesSomeFruit">
-            <v-list-item-title>Fruit Count</v-list-item-title>
-            <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
-          </v-list-item-content>
+                  <v-list-item-content v-else-if="likesSomeFruit">
+                    <v-list-item-title>Fruit Count</v-list-item-title>
+                    <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
+                  </v-list-item-content>
 
-          <v-list-item-content v-else>
-            <v-list-item-title>
-              How could you not like fruit?
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              Go ahead, make a selection above!
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-    </v-select>
-  </v-container>
+                  <v-list-item-content v-else>
+                    <v-list-item-title>
+                      How could you not like fruit?
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      Go ahead, make a selection above!
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-select>
+          </v-container>
 
-</template>
+        </template>
 
       </v-flex>
 
@@ -72,57 +72,57 @@
         lg4
       >
 
-          <template>
-  <v-container fluid>
-    <v-select
-      v-model="selectedFruits"
-      :items="fruits"
-      label="Select Gender"
-      multiple
-    >
-      <template v-slot:prepend-item>
-        <v-list-item
-          ripple
-          @click="toggle"
-        >
-          <v-list-item-action>
-            <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Select All</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider class="mt-2"></v-divider>
-      </template>
-      <template v-slot:append-item>
-        <v-divider class="mb-2"></v-divider>
-        <v-list-item disabled>
-          <v-list-item-avatar color="grey lighten-3">
-            <v-icon>mdi-food-apple</v-icon>
-          </v-list-item-avatar>
+        <template>
+          <v-container fluid>
+            <v-select
+              v-model="selectedFruits"
+              :items="fruits"
+              label="Select Gender"
+              multiple
+            >
+              <template v-slot:prepend-item>
+                <v-list-item
+                  ripple
+                  @click="toggle"
+                >
+                  <v-list-item-action>
+                    <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>Select All</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"/>
+              </template>
+              <template v-slot:append-item>
+                <v-divider class="mb-2"/>
+                <v-list-item disabled>
+                  <v-list-item-avatar color="grey lighten-3">
+                    <v-icon>mdi-food-apple</v-icon>
+                  </v-list-item-avatar>
 
-          <v-list-item-content v-if="likesAllFruit">
-            <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
-          </v-list-item-content>
+                  <v-list-item-content v-if="likesAllFruit">
+                    <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
+                  </v-list-item-content>
 
-          <v-list-item-content v-else-if="likesSomeFruit">
-            <v-list-item-title>Fruit Count</v-list-item-title>
-            <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
-          </v-list-item-content>
+                  <v-list-item-content v-else-if="likesSomeFruit">
+                    <v-list-item-title>Fruit Count</v-list-item-title>
+                    <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
+                  </v-list-item-content>
 
-          <v-list-item-content v-else>
-            <v-list-item-title>
-              How could you not like fruit?
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              Go ahead, make a selection above!
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-    </v-select>
-  </v-container>
-</template>
+                  <v-list-item-content v-else>
+                    <v-list-item-title>
+                      How could you not like fruit?
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      Go ahead, make a selection above!
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-select>
+          </v-container>
+        </template>
 
       </v-flex>
 
@@ -132,140 +132,129 @@
         lg4
       >
 
-          <template>
-  <v-container fluid>
-    <v-select
-      v-model="selectedFruits"
-      :items="fruits"
-      label="Select Age Group"
-      multiple
-    >
-      <template v-slot:prepend-item>
-        <v-list-item
-          ripple
-          @click="toggle"
-        >
-          <v-list-item-action>
-            <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Select All</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider class="mt-2"></v-divider>
-      </template>
-      <template v-slot:append-item>
-        <v-divider class="mb-2"></v-divider>
-        <v-list-item disabled>
-          <v-list-item-avatar color="grey lighten-3">
-            <v-icon>mdi-food-apple</v-icon>
-          </v-list-item-avatar>
+        <template>
+          <v-container fluid>
+            <v-select
+              v-model="selectedFruits"
+              :items="fruits"
+              label="Select Age Group"
+              multiple
+            >
+              <template v-slot:prepend-item>
+                <v-list-item
+                  ripple
+                  @click="toggle"
+                >
+                  <v-list-item-action>
+                    <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>Select All</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"/>
+              </template>
+              <template v-slot:append-item>
+                <v-divider class="mb-2"/>
+                <v-list-item disabled>
+                  <v-list-item-avatar color="grey lighten-3">
+                    <v-icon>mdi-food-apple</v-icon>
+                  </v-list-item-avatar>
 
-          <v-list-item-content v-if="likesAllFruit">
-            <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
-          </v-list-item-content>
+                  <v-list-item-content v-if="likesAllFruit">
+                    <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
+                  </v-list-item-content>
 
-          <v-list-item-content v-else-if="likesSomeFruit">
-            <v-list-item-title>Fruit Count</v-list-item-title>
-            <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
-          </v-list-item-content>
+                  <v-list-item-content v-else-if="likesSomeFruit">
+                    <v-list-item-title>Fruit Count</v-list-item-title>
+                    <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
+                  </v-list-item-content>
 
-          <v-list-item-content v-else>
-            <v-list-item-title>
-              How could you not like fruit?
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              Go ahead, make a selection above!
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-    </v-select>
-  </v-container>
-</template>
-
+                  <v-list-item-content v-else>
+                    <v-list-item-title>
+                      How could you not like fruit?
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      Go ahead, make a selection above!
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-select>
+          </v-container>
+        </template>
 
       </v-flex>
 
       <!-- Fourth select -->
 
-
-
       <template>
 
+        <v-flex
+          md6
+          lg6
+        >
+          <core-DatePicker/>
 
-          <v-flex
-        md6
-        lg6
-      >
-        <core-DatePicker/>
+        </v-flex>
 
-      </v-flex>
-
-     <v-flex
-        md6
-        lg6
-      >
-    <v-btn block
-      :loading="loading2"
-      :disabled="loading2"
-      color="success"
-      @click="loader = 'loading2'"
-    >
-      Filter
-      <template v-slot:loader>
+        <v-flex
+          md6
+          lg6
+        >
+          <v-btn
+            :loading="loading2"
+            :disabled="loading2"
+            block
+            color="success"
+            @click="loader = 'loading2'"
+          >
+            Filter
+            <template v-slot:loader/>
+          </v-btn>
+        </v-flex>
 
       </template>
-    </v-btn>
-     </v-flex>
-
-
-</template>
-
 
     </v-layout>
   </v-container
-    >
-
+  >
 
 </template>
 
-
-
-
 <script>
-  export default {
-    data: () => ({
-      fruits: [
+export default {
+  data: () => ({
+    fruits: [
 
-      ],
-      selectedFruits: [],
-    }),
+    ],
+    selectedFruits: []
+  }),
 
-    computed: {
-      likesAllFruit () {
-        return this.selectedFruits.length === this.fruits.length
-      },
-      likesSomeFruit () {
-        return this.selectedFruits.length > 0 && !this.likesAllFruit
-      },
-      icon () {
-        if (this.likesAllFruit) return 'mdi-close-box'
-        if (this.likesSomeFruit) return 'mdi-minus-box'
-        return 'mdi-checkbox-blank-outline'
-      },
+  computed: {
+    likesAllFruit () {
+      return this.selectedFruits.length === this.fruits.length
     },
-
-    methods: {
-      toggle () {
-        this.$nextTick(() => {
-          if (this.likesAllFruit) {
-            this.selectedFruits = []
-          } else {
-            this.selectedFruits = this.fruits.slice()
-          }
-        })
-      },
+    likesSomeFruit () {
+      return this.selectedFruits.length > 0 && !this.likesAllFruit
     },
+    icon () {
+      if (this.likesAllFruit) return 'mdi-close-box'
+      if (this.likesSomeFruit) return 'mdi-minus-box'
+      return 'mdi-checkbox-blank-outline'
+    }
+  },
+
+  methods: {
+    toggle () {
+      this.$nextTick(() => {
+        if (this.likesAllFruit) {
+          this.selectedFruits = []
+        } else {
+          this.selectedFruits = this.fruits.slice()
+        }
+      })
+    }
   }
+}
 </script>

@@ -1,12 +1,25 @@
 <template>
   <v-app>
-    <core-toolbar />
+    <div
+    v-if="this.$route.path !== '/login'">
+      <core-toolbar />
 
-    <core-drawer />
-
+      <core-drawer />
+    </div>
     <core-view />
   </v-app>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  }
+}
+</script>
 
 <style lang="scss">
 @import 'styles/index.scss';

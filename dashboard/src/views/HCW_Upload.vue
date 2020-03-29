@@ -17,7 +17,7 @@
           text="Kindly fill all the required fields"
         >
           <v-card-text>
-            <div></div>
+            <div/>
             <p class="display-1 text--primary">
               Add A New Healthcare Worker
             </p>
@@ -173,7 +173,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div>{{pre_out}}{{output.message}}<br> {{output.errors}}</div>
+      <div>{{ pre_out }}{{ output.message }}<br> {{ output.errors }}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -200,7 +200,7 @@ export default {
       msisdn: '',
       email: '',
       output: '',
-      pre_out:'',
+      pre_out: '',
       rules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
@@ -231,50 +231,50 @@ export default {
 
   },
   methods: {
-    testFill() {
-      if (this.fname == "") {
-        this.pre_out ="First Name must be filled out";
+    testFill () {
+      if (this.fname == '') {
+        this.pre_out = 'First Name must be filled out'
         this.snack('top', 'center')
-        return false;
-      }else if(this.surname == "") {
-        this.pre_out ="surname must be filled out";
+        return false
+      } else if (this.surname == '') {
+        this.pre_out = 'surname must be filled out'
         this.snack('top', 'center')
-        return false;
-      }else if(this.msisdn == "") {
-        this.pre_out ="Mobile must be filled out";
+        return false
+      } else if (this.msisdn == '') {
+        this.pre_out = 'Mobile must be filled out'
         this.snack('top', 'center')
-        return false;
-      }else if(this.role_id == "") {
-        this.pre_out ="Role must be filled out";
+        return false
+      } else if (this.role_id == '') {
+        this.pre_out = 'Role must be filled out'
         this.snack('top', 'center')
-        return false;
-      }else if(this.gender == "") {
-        this.pre_out ="gender must be filled out";
+        return false
+      } else if (this.gender == '') {
+        this.pre_out = 'gender must be filled out'
         this.snack('top', 'center')
-        return false;
-      }else if(this.password == "") {
-        this.pre_out ="password must be filled out";
+        return false
+      } else if (this.password == '') {
+        this.pre_out = 'password must be filled out'
         this.snack('top', 'center')
-        return false;
-      }else if(this.cnf_pass == "") {
-        this.pre_out ="Repeate password must be filled out";
+        return false
+      } else if (this.cnf_pass == '') {
+        this.pre_out = 'Repeate password must be filled out'
         this.snack('top', 'center')
-        return false;
-      }else if(this.password != this.cnf_pass) {
-        this.pre_out ="Passwords dont match";
+        return false
+      } else if (this.password != this.cnf_pass) {
+        this.pre_out = 'Passwords dont match'
         this.snack('top', 'center')
-        return false;
-      }else{
+        return false
+      } else {
         return true
       }
     },
-    clearData(){
-      
+    clearData () {
+
     },
     postUser (e) {
       e.preventDefault()
-      if(this.testFill()){
-        axios.post('auth/signup',{
+      if (this.testFill()) {
+        axios.post('auth/signup', {
           first_name: this.fname,
           surname: this.surname,
           msisdn: this.msisdn,
@@ -282,18 +282,18 @@ export default {
           gender: this.gendInp,
           email: this.email,
           password: this.password,
-          password_confirmation: this.cnf_pass},
-          )
-        .then((response) => {
-          this.output = response.data;
-          this.resp = Boolean(response.data.success)
-          this.clearData()
-          this.snack('top', 'center')
-        })
-        .catch((error)=> {
-          this.output = error;
-          this.snack('top', 'center')
-        });
+          password_confirmation: this.cnf_pass }
+        )
+          .then((response) => {
+            this.output = response.data
+            this.resp = Boolean(response.data.success)
+            this.clearData()
+            this.snack('top', 'center')
+          })
+          .catch((error) => {
+            this.output = error
+            this.snack('top', 'center')
+          })
       }
     },
     snack (...args) {
@@ -305,7 +305,7 @@ export default {
       for (const loc of args) {
         this[loc] = true
       }
-      if(this.resp){
+      if (this.resp) {
         this.color = this.colors[0]
       } else {
         this.color = this.colors[1]

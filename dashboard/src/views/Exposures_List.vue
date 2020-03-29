@@ -46,7 +46,11 @@
                 <v-card-text>patient hiv status: {{ props.item.patient_hiv_status }} <br> patient hbv status: {{ props.item.patient_hbv_status }} <v-spacer/> description: {{ props.item.description }}</v-card-text>
               </v-card>
             </template>
-            <v-alert slot="no-results" :value="true" color="error" icon="mdi-emoticon-sad">
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="error"
+              icon="mdi-emoticon-sad">
               Your search for "{{ search }}" found no results.
             </v-alert>
           </v-data-table>
@@ -99,24 +103,24 @@ export default {
   },
   methods: {
     getExp () {
-        axios.get('exposures/all/')
+      axios.get('exposures/all/')
         .then((exp) => {
           this.exposures = exp.data.data
           this.link = exp.data.links.next
           console.log(exp.data.data)
           this.loopT(this.link)
         })
-        .catch(error => console.log(error.message));
+        .catch(error => console.log(error.message))
     },
-    async loopT(l){
-      var i;
-      for (i = 0; i <1;) {
-        if (l!=null){
-          let response= await axios.get(l)
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
           l = response.data.links.next
           this.exposures = this.exposures.concat(response.data.data)
-        }else {
-          i=11
+        } else {
+          i = 11
         }
       }
     }

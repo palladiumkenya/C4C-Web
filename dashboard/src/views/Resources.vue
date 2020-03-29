@@ -25,10 +25,10 @@
                   md12
                 >
                   <v-text-field
-                    label="Title"
                     id="title"
                     :rules="[rules.required]"
                     v-model="title"
+                    label="Title"
                     class="purple-input"/>
                 </v-flex>
 
@@ -36,17 +36,17 @@
                   <ckeditor-ckeditor
                     id="editor"
                     v-model="editor"
-                  />  
+                  />
                 </v-flex>
 
                 <v-flex xs12>
                   <input
-                    ref="file"
                     id="file"
+                    ref="file"
                     class="excel-upload-input"
                     name="file"
-                    v-on:change="handleFile"
-                    type="file">
+                    type="file"
+                    @change="handleFile">
                 </v-flex>
                 <v-flex
                   xs12
@@ -64,7 +64,7 @@
             </v-container>
           </v-form>
           <strong>Output:</strong>
-           <pre> {{output}} </pre>
+          <pre> {{ output }} </pre>
         </material-card>
       </v-flex>
 
@@ -77,11 +77,11 @@ import axios from 'axios'
 import ckeditor from './../components/ckeditor/ckeditor'
 
 export default {
-   components: {
-        ckeditor : ckeditor
-   },
+  components: {
+    ckeditor: ckeditor
+  },
   data () {
-    return{
+    return {
       title: '',
       editor: '',
       file: '',
@@ -93,35 +93,34 @@ export default {
   },
 
   methods: {
-    handleFile(e){
-        this.file = this.$refs.file.files[0];
-      },
-   
+    handleFile (e) {
+      this.file = this.$refs.file.files[0]
+    },
 
     postCME (e) {
-      e.preventDefault();
-    
-    const allData = new FormData();
-    // dict of all elements
-    allData.append("file", file);
-    allData.append("title", this.title);
-    allData.append("editor", this.editor);
+      e.preventDefault()
 
-    let currentObj = this
-    
-    axios({
-      method: "POST",
-      url: 'resources/cmes/create',
-      data: allData,
-      
-    })
-    .then(function (response) {
-      currentObj.output = response.data
-    })
-    .catch(function (error) {
-      currentObj.output = error
-    })
-  }
+      const allData = new FormData()
+      // dict of all elements
+      allData.append('file', file)
+      allData.append('title', this.title)
+      allData.append('editor', this.editor)
+
+      let currentObj = this
+
+      axios({
+        method: 'POST',
+        url: 'resources/cmes/create',
+        data: allData
+
+      })
+        .then(function (response) {
+          currentObj.output = response.data
+        })
+        .catch(function (error) {
+          currentObj.output = error
+        })
+    }
   }
 
 }

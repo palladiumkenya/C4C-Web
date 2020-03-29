@@ -94,7 +94,7 @@ import {
 export default {
   data: () => ({
     notifications: [
-      
+
     ],
     title: null,
     responsive: false

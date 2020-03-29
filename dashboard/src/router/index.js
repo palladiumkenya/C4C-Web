@@ -12,18 +12,17 @@ import VueAnalytics from 'vue-analytics'
 import Router from 'vue-router'
 import Meta from 'vue-meta'
 
-
-
 // Routes
 import paths from './paths'
 
-function route (path, view, name) {
+function route (path, view, name, beforeEnter) {
   return {
     name: name || view,
     path,
     component: (resolve) => import(
       `@/views/${view}.vue`
-    ).then(resolve)
+    ).then(resolve),
+    beforeEnter: beforeEnter
   }
 }
 
@@ -32,7 +31,7 @@ Vue.use(Router)
 // Create a new router
 const router = new Router({
   mode: 'history',
-  routes: paths.map(path => route(path.path, path.view, path.name)).concat([
+  routes: paths.map(path => route(path.path, path.view, path.name, path.beforeEnter)).concat([
     { path: '*', redirect: '/' }
 
   ]),

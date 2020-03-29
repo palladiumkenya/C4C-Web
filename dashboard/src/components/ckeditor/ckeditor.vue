@@ -2,9 +2,9 @@
   <div id="app-editor">
     <ckeditor
       :editor="editor"
-      tag-name="textarea"
       v-model="editorData"
-      :config="editorConfig"/>
+      :config="editorConfig"
+      tag-name="textarea"/>
   </div>
 </template>
 
@@ -19,12 +19,12 @@ export default {
       editorData: '',
       editorConfig: {
       }
-    } 
+    }
   },
-  methods : {
-    
+  methods: {
+
   }
-  
+
 }
 </script>
 <style >
