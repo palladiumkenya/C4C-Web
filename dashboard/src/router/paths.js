@@ -12,8 +12,7 @@ export default [
     // Relative to /src/views
     view: 'Dashboard',
     beforeEnter: (to, from, next) => {
-      // ...
-      console.log('logged out')
+      alert("You must log in first")
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -29,24 +28,48 @@ export default [
   {
     path: '/user-profile',
     name: 'User Profile',
-    view: 'UserProfile'
+    view: 'UserProfile',
+    beforeEnter: (to, from, next) => {
+      console.log('logged out')
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
   {
     path: '/hbv-summary',
     name: 'HBV Reports',
-    view: 'HbvReports'
+    view: 'HbvReports',
+    beforeEnter: (to, from, next) => {
+      alert("You must log in first")
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
   {
     path: '/add-user',
     name: 'HCW Upload',
-    view: 'HCW_Upload'
+    view: 'HCW_Upload',
+    beforeEnter: (to, from, next) => {
+      alert("You must log in first")
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
   {
     path: '/exposure-list',
     name: 'Exposures List',
     view: 'Exposures_List',
     beforeEnter: (to, from, next) => {
-      console.log('logged out')
+      alert("You must log in first")
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -58,17 +81,41 @@ export default [
     path: '/bulk-signup',
     name: 'Bulk Signup',
     view: 'BulkSignup',
-    meta: { title: 'Upload Excel' }
+    meta: { title: 'Upload Excel' },
+    beforeEnter: (to, from, next) => {
+      alert("You must log in first")
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
   {
     path: '/feed-back',
     name: 'Feedback',
     view: 'Feedback',
+    beforeEnter: (to, from, next) => {
+      alert("You must log in first")
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
   {
     path: '/registration-reports',
     name: 'Registration Reports',
-    view: 'RegistrationReports'
+    view: 'RegistrationReports',
+    beforeEnter: (to, from, next) => {
+      alert("You must log in first")
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
 
   {
@@ -85,7 +132,15 @@ export default [
   {
     path: '/exposures',
     name: 'Exposures',
-    view: 'Exposures'
+    view: 'Exposures',
+    beforeEnter: (to, from, next) => {
+      alert("You must log in first")
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   },
   {
     path: '/all_broadcast',
@@ -138,6 +193,14 @@ export default [
     path: '/add_device',
     name: 'Add Devices',
     view: 'AddDevices',
-    meta: { title: 'Add Devices' }
+    meta: { title: 'Add Devices' },
+    beforeEnter: (to, from, next) => {
+      alert("You must log in first")
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+    }
   }
 ]

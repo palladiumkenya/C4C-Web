@@ -16,111 +16,109 @@
           title="Edit Profile"
           text="Complete your profile"
         >
-        <v-card-text>
-            <div></div>
+          <v-card-text>
+            <div/>
             <p class="display-1 text--primary">
               User Profile
             </p>
-            <div class="text--primary">
-              
-            </div>
+            <div class="text--primary"/>
           </v-card-text>
-            <v-container py-0>
-              <v-layout wrap>
-                <v-flex
-                  xs12
-                  md4
-                >
-                  <label>First Name:</label>
-                  <v-chip
+          <v-container py-0>
+            <v-layout wrap>
+              <v-flex
+                xs12
+                md4
+              >
+                <label>First Name:</label>
+                <v-chip
                   class="ma-2"
                   x-large
                 >
-                  {{user.first_name}}
+                  {{ user.first_name }}
                 </v-chip>
-                </v-flex>
-                <v-flex
-                  xs12
-                  md4
-                >
-                  <label>Surname:</label>
-                  <v-chip
+              </v-flex>
+              <v-flex
+                xs12
+                md4
+              >
+                <label>Surname:</label>
+                <v-chip
                   class="ma-2"
                   x-large>
-                  {{user.surname}}
+                  {{ user.surname }}
                 </v-chip>
-                </v-flex>
-                <v-flex
-                  xs12
-                  md4
-                >
-                  <label>Gender:</label>
-                  <v-chip
+              </v-flex>
+              <v-flex
+                xs12
+                md4
+              >
+                <label>Gender:</label>
+                <v-chip
                   class="ma-2"
                   x-large>
-                  {{user.gender}}
+                  {{ user.gender }}
                 </v-chip>
-                </v-flex>
-                <v-flex
-                  xs12
-                  md6
-                >
-                  <label>Email:</label>
-                  <v-chip
+              </v-flex>
+              <v-flex
+                xs12
+                md6
+              >
+                <label>Email:</label>
+                <v-chip
                   class="ma-2"
                   x-large
                 >
-                  {{user.email}}
+                  {{ user.email }}
                 </v-chip>
-                </v-flex>
-                <v-flex
-                  xs12
-                  md6
-                >
-                  <label>Role:</label>
-                  <v-chip
+              </v-flex>
+              <v-flex
+                xs12
+                md6
+              >
+                <label>Role:</label>
+                <v-chip
                   class="ma-2"
                   x-large
                 >
-                  {{user.role.name}}
+                  {{ user.role.name }}
                 </v-chip>
-                </v-flex>
-                <v-flex
-                  xs12
-                  md12
-                >
-                  <label>Account created on:</label>
-                  <v-chip
+              </v-flex>
+              <v-flex
+                xs12
+                md12
+              >
+                <label>Account created on:</label>
+                <v-chip
                   class="ma-2"
                   x-large
                 >
-                  {{user.created_at}}
+                  {{ user.created_at }}
                 </v-chip>
-                </v-flex>
-                <v-flex
-                  xs12
-                  md8>
-                  <label>Facility:</label>
-                  <v-chip
+              </v-flex>
+              <v-flex
+                xs12
+                md8>
+                <label>Facility:</label>
+                <v-chip
                   class="ma-2"
                   x-large
                 >
                   facility.name
                 </v-chip>
-                </v-flex>
-                <v-flex
-                  xs12
-                  text-xs-right
+              </v-flex>
+              <v-flex
+                xs12
+                text-xs-right
+              >
+                <v-btn
+                  class="mx-0 font-weight-light"
+                  color="success"
                 >
-                  <v-btn
-                    class="mx-0 font-weight-light"
-                    color="success"
-                  >
-                    Update Profile
-                  </v-btn>
-                </v-flex>
-              </v-layout>
-            </v-container>
+                  Update Profile
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container>
         </material-card>
       </v-flex>
       <v-flex
@@ -131,19 +129,19 @@
           <v-card-text>
             <h4 class="card-title font-weight-light">Profile</h4>
             <v-avatar
-            slot="offset"
-            class="mx-auto d-block"
-            size="130"
-          >
-            <v-img
-              :src="logo"
-            />
-          </v-avatar>
-            <div></div>
+              slot="offset"
+              class="mx-auto d-block"
+              size="130"
+            >
+              <v-img
+                :src="logo"
+              />
+            </v-avatar>
+            <div/>
             <p class="display-1 text--primary">
-              {{user.first_name}} {{user.surname}}
+              {{ user.first_name }} {{ user.surname }}
             </p>
-            <h6 class="category text-gray font-weight-thin mb-3">{{user.role.name}}</h6>
+            <h6 class="category text-gray font-weight-thin mb-3">{{ user.role.name }}</h6>
             <p class="card-description font-weight-light">Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye</p>
 
           </v-card-text>
@@ -157,9 +155,9 @@
 import { mapGetters } from 'vuex'
 export default {
   //
-  data (){
-    return{
-      logo: 'c4c_new.png',
+  data () {
+    return {
+      logo: 'c4c_new.png'
     }
   },
   computed: {

@@ -35,9 +35,24 @@
         <v-divider/>
         <div
           v-for="(link, i) in links"
-          :key="i">
+          :key="i"
+          dense>
           <v-list-tile
-            v-if="!link.subLinks"
+            v-if="link.text == 'Logout'"
+            :active-class="color"
+            avatar
+            class="v-list-item"
+          >
+            <v-list-tile-action>
+              <v-icon>{{ link.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title
+              @click="logout"
+              v-text="link.text"
+            />
+          </v-list-tile>
+          <v-list-tile
+            v-else-if="!link.subLinks"
             :to="link.to"
             :active-class="color"
             avatar
@@ -81,7 +96,6 @@
               </v-list-tile-action>
               <v-list-tile-title v-text="sublink.text" />
             </v-list-tile>
-
           </v-list-group>
         </div>
       </v-layout>
@@ -93,7 +107,8 @@
 // Utilities
 import {
   mapMutations,
-  mapState
+  mapState,
+  mapActions
 } from 'vuex'
 
 export default {
@@ -103,6 +118,7 @@ export default {
       default: false
     }
   },
+<<<<<<< HEAD
   data: () => ({
     logo: 'c4c_new.png',
     links: [
@@ -208,9 +224,100 @@ export default {
         text: 'Logout'
 
       }
+=======
+  data () {
+    return{
+      pre_out:'',
+      logo: 'c4c_new.png',
+      links: [
+        {
+          to: '/',
+          icon: 'mdi-view-dashboard',
+          text: 'Dashboard'
+        },
+        {
+          icon: 'mdi-account',
+          text: 'Users',
+          subLinks: [
+            {
+              text: 'Upload HCW',
+              to: '/add-user',
+              icon: 'mdi-account-plus'
+            },
+            {
+              to: '/users-list',
+              icon: 'mdi-account-box-multiple',
+              text: 'View Users'
+            }
+          ]
+        },
+        {
+          to: 'registration-reports',
+          icon: 'mdi-transcribe',
+          text: 'Registration Reports'
+        },
+        {
+          icon: 'mdi-alert-circle-outline',
+          text: 'Exposures',
+          subLinks: [
+            {
+              text: 'Exposure report',
+              to: '/exposures',
+              icon: 'mdi-chart-bar'
+            },
+            {
+              to: '/exposure-list',
+              icon: 'mdi-playlist-check',
+              text: 'Exposures List'
+            }
+          ]
+        },
+        {
 
-    ]
-  }),
+          icon: 'mdi-account-edit',
+          text: 'Immunizations',
+          subLinks: [
+            {
+              text: 'HBV Reports',
+              to: '/hbv-summary',
+              icon: 'mdi-signal-hspa-plus'
+            },
+            {
+              to: '/other-diseases',
+              icon: 'mdi-chart-line',
+              text: 'Other Diseases'
+            }
+          ]
+        },
+        {
+          to: '/broadcast',
+          icon: 'mdi-account-switch',
+          text: 'Broadcasts'
+        },
+        {
+          to: '/add_device',
+          icon: 'mdi-gamepad',
+          text: 'Devices'
+        },
+        {
+          to: '/resources',
+          icon: 'mdi-arrow-down-bold-circle',
+          text: 'Resource Center'
+        },
+        {
+          to: '/feed-back',
+          icon: 'mdi-backburger',
+          text: 'Feedback'
+        },
+        {
+          icon: 'mdi-clipboard-outline',
+          text: 'Logout',
+        }
+>>>>>>> 8ffba26ae6bdb5eecf8466ff7130c44daa720ef1
+
+      ]
+    }
+  },
   computed: {
     ...mapState('app', ['image', 'color']),
     inputValue: {
@@ -227,7 +334,19 @@ export default {
   },
 
   methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer'])
+    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
+    ...mapActions({
+      logoutAction: 'auth/signout'
+    }),
+    logout (){
+      this.logoutAction().then( ()=> {
+        this.pre_out = "Logged out!"
+        this.$router.replace({
+          name: 'login'
+        })
+      })
+    },
+    
   }
 }
 </script>

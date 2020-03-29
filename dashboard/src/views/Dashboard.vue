@@ -13,13 +13,25 @@
         md6
         lg3
       >
-        <material-stats-card
-          color="white"
-          title="Number of Registered HCWs"
-          value="34,245"
-          sub-icon="mdi-tag"
 
-        />
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#2196f3"
+            dark
+          >
+
+            <v-card-text>
+
+              <h2 align="center">{{ HCWsCount }}</h2>
+              <h5 align="center">Registered HCWs</h5>
+            </v-card-text>
+            <v-icon
+              left
+            />
+          </v-card>
+        </template>
+
       </v-flex>
       <v-flex
         sm6
@@ -28,14 +40,24 @@
         lg3
       >
 
-        <material-stats-card
-          color="white"
-          title="Number of Reported Exposures"
-          value="1800"
-          sub-icon="mdi-alert"
-          sub-icon-color="error"
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#2196f3"
+            dark
+          >
 
-        />
+            <v-card-text>
+
+              <h2 align="center">{{ facilityCount }}</h2>
+              <h5 align="center">Reported Exposures</h5>
+            </v-card-text>
+            <v-icon
+              left
+            />
+          </v-card>
+        </template>
+
       </v-flex>
       <v-flex
         sm6
@@ -43,13 +65,25 @@
         md6
         lg3
       >
-        <material-stats-card
-          color="white"
-          title="HCWs With Reported Exposures"
-          value="75"
-          sub-icon="mdi-tag"
 
-        />
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#2196f3"
+            dark
+          >
+
+            <v-card-text>
+
+              <h2 align="center">{{ exposuresCount }}</h2>
+              <h5 align="center">HCWs With Exposures</h5>
+            </v-card-text>
+            <v-icon
+              left
+            />
+          </v-card>
+        </template>
+
       </v-flex>
 
       <v-flex
@@ -58,20 +92,30 @@
         md6
         lg3
       >
-        <material-stats-card
-          color="white"
-          title="Number of Broadcast Messages"
-          value="1075"
-          sub-icon="mdi-tag"
 
-        />
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#2196f3"
+            dark
+          >
+
+            <v-card-text>
+
+              <h2 align="center">{{ resultCount }}</h2>
+              <h5 align="center">Broadcast Messages</h5>
+            </v-card-text>
+            <v-icon
+              left
+            />
+          </v-card>
+        </template>
+
       </v-flex>
 
       <!-- End Cards -->
 
       <!-- Filters -->
-
-      <!-- Start Tables -->
 
       <!-- Start Graphs -->
       <v-flex
@@ -79,28 +123,33 @@
         sm12
         lg12
       >
-        <template>
-          <section class="charts">
-            <h3>Exposures Visualization</h3>
-            <vue-highcharts :options="options" />
-          </section>
-        </template>
-
+        <!-- insert some chart here -->
+        <div id="appy">
+          exposures Id's as string  {{ getLocations }}
+        </div>
+        <h3 v-text="message"></h3>
       </v-flex>
 
       <!-- End Graphs -->
-
-      <!-- Start Maps -->
       <v-flex
+        md12
+        sm12
+        lg12
       >
+        <!-- insert some chart here -->
+        <highcharts :options="chartOptions"></highcharts>
+      </v-flex>
 
-        <template>
-          <div>
-            <highmaps :options="chartOptions"/>
-          </div>
-        </template>
+      <v-flex
+        md12
+        sm12
+        lg12
+      >
+        <!-- insert some chart here -->
 
       </v-flex>
+
+      <!-- Start Maps -->
 
       <!-- Start Tables -->
 
@@ -109,200 +158,98 @@
 </template>
 
 <script>
-
-import Filters from './views/filters.vue'
+import {Chart} from 'highcharts-vue'
+import axios from 'axios'
 export default {
   components: {
-    'dashboard-filters': Filters,
-    VueHighcharts
-  },
-  data () {
-    return {
-      dailySalesChart: {
-        data: {
-          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-          series: [
-            [12, 17, 7, 17, 23, 18, 38]
-          ]
-        },
-        options: {
-          lineSmooth: this.$chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          low: 0,
-          high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          }
-        }
-      },
-      dataCompletedTasksChart: {
-        data: {
-          labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
-          series: [
-            [230, 750, 450, 300, 280, 240, 200, 190]
-          ]
-        },
-        options: {
-          lineSmooth: this.$chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          }
-        }
-      },
-      emailsSubscriptionChart: {
-        data: {
-          labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
-          series: [
-            [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-
-          ]
-        },
-        options: {
-          axisX: {
-            showGrid: false
-          },
-          low: 0,
-          high: 1000,
-          chartPadding: {
-            top: 0,
-            right: 5,
-            bottom: 0,
-            left: 0
-          }
-        },
-        responsiveOptions: [
-          ['screen and (max-width: 640px)', {
-            seriesBarDistance: 5,
-            axisX: {
-              labelInterpolationFnc: function (value) {
-                return value[0]
-              }
-            }
-          }]
-        ]
-      },
-
-      tabs: 0,
-      list: {
-        0: false,
-        1: false,
-        2: false
-      }
-    }
-  },
-  methods: {
-    complete (index) {
-      this.list[index] = !this.list[index]
-    }
-  }
-}
-</script>
-<!-- Pie Exposure chart -->
-
-<script>
-import VueHighcharts from "vue2-highcharts";
-//import SeriesLabel from "highcharts/modules/series-label";
-import Highcharts from "highcharts";
-
-//SeriesLabel(Highcharts);
-
-const data = {
-  title: {
-    text: "Exposures Chart Analysis"
-  },
-  xAxis: {
-    categories: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-  },
-  labels: {
-    items: [
-      {
-        html: "Exposures Per Cadre",
-        style: {
-          left: "50px",
-          top: "18px",
-          color: (Highcharts.theme && Highcharts.theme.textColor) || "black"
-        }
-      }
-    ]
-  },
-  series: [
-
-    {
-      type: "column",
-      name: "Monthly Exposures",
-      data: [7, 3, 3, 9, 0, 5, 6, 2, 4, 1, 8, 0]
-    },
-    {
-
-    },
-    {
-      type: "pie",
-      name: "Number of Exposure:",
-      data: [
-        {
-          name: "Doctor",
-          y: 13,
-          color: Highcharts.getOptions().colors[0] // Jane's color
-        },
-        {
-          name: "Nurse",
-          y: 23,
-          color: Highcharts.getOptions().colors[1] // John's color
-        },
-        {
-          name: "Clinical Officer",
-          y: 19,
-          color: Highcharts.getOptions().colors[2] // Joe's color
-        }
-      ],
-      center: [100, 80],
-      size: 100,
-      showInLegend: false,
-      dataLabels: {
-        enabled: false
-      }
-    }
-  ]
-};
-export default {
-  components: {
-    VueHighcharts
+    highcharts: Chart
   },
   data() {
     return {
-      options: data
-    };
-  }
-};
-</script>
+    getLocations:[],
+    message: 'Fetching Data...',
+    chartOptions: {
+      chart: {
+        height: 300,
+        type: 'line'
+       },
+       title: {
+         text: 'Amount of visitors per day'
+        },
+        series: [{
+          name: 'Ids',
+          data: []
+        }]
+      },
+      facility_exposures: {},
+      hcw_exposures: {},
+      registered_hcw: {},
+      broadcastCount: {},
+     }
+  },
+  
+  mounted: function () {
+    this.getdata()
 
-<!-- chart scripts
+    setTimeout(function(){ 
+        this.message = 'Data Fetched';
+        this.chartOptions.series[0].data = this.getLocations
+    }.bind(this), 3000);
 
-<script>
-  import HighCharts from 'vue-highcharts';
-  import json from '../map.json'
+    axios.get('users')
+      .then(exp => {
+        // console.log(exp.data.data);
+        this.registered_hcw = exp.data.data // <--- Im thinking this is an object
+      })
 
-  export default {
-    data() {
-      return {
-        chartOptions: {
-          chart: {
-            map: json,
-          },
+    // number of broadcasts
+    axios.get('broadcasts/web/all')
+      .then(response => {
+        this.broadcastCount = response.data.data // <--- Im thinking this is an object
+      })
 
-        }
+    // hcw with exposures # mounted
+
+    axios.get('immunizations/all')
+      .then(response => {
+        this.hcw_exposures = response.data.data // <--- Im thinking this is an object
+      })
+  },
+  methods: {
+    async getdata () {
+      let resp = await  axios.get('exposures/all')
+      var i
+      console.log(resp.data)
+      for (i = 0; i < resp.data.data.length; i++) {
+        this.getLocations.push(resp.data.data[i].id)
       }
+      this.facility_exposures = resp.data.data
+      
+      return this.getLocations
     }
-  }
-</script> -->
+  },
+  computed: {
+    resultCount () {
+      return Object.keys(this.broadcastCount).length
+    },
+
+    // all facility exposures # computed
+
+    facilityCount () {
+      return Object.keys(this.facility_exposures).length
+    },
+
+    // hcws with exposures # computed
+
+    exposuresCount () {
+      return Object.keys(this.hcw_exposures).length
+    },
+    HCWsCount () {
+      return Object.keys(this.registered_hcw).length
+    },
+    datas () {
+      return this.getLocations
+    }
+  },
+}
+</script>

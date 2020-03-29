@@ -77,9 +77,9 @@ import VueHighcharts from 'vue2-highcharts'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 // SeriesLabel(Highcharts);
-exportingInit(Highcharts);
+exportingInit(Highcharts)
 const datas = 'https://jsonplaceholder.typicode.com/users'
-console.log(datas);
+console.log(datas)
 const data = {
   title: {
     text: 'Exposures Chart Analysis'
@@ -117,15 +117,15 @@ export default {
   },
   data () {
     return {
-         chartType: 'Spline',
-        chartOptions: {
-            chart: {
-                type: 'spline'
-            },
-            title: {
-                text: 'Sin chart'
-            },
+      chartType: 'Spline',
+      chartOptions: {
+        chart: {
+          type: 'spline'
         },
+        title: {
+          text: 'Sin chart'
+        }
+      },
       options: data
     }
   }

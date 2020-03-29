@@ -8,10 +8,10 @@
       justify-center
       wrap
     >
-    <v-flex
+      <v-flex
         xs12
         text-xs-right
-        >
+      >
 
         <v-btn
           class="mx-0 font-weight-light "
@@ -46,7 +46,7 @@
                 <td>{{ props.item.message }}</td>
               </tr>
             </template>
-            
+
           </v-data-table>
         </material-card>
       </v-flex>
@@ -64,7 +64,7 @@ export default {
       all_messages: [],
       headers: [
         {
-          sortable:false,
+          sortable: false,
           text: 'Cadre',
           value: 'cadre_id'
         },
@@ -87,8 +87,8 @@ export default {
           sortable: false,
           text: 'Message',
           value: 'message'
-        },
-      ],
+        }
+      ]
     }
   },
   created () {
@@ -101,7 +101,7 @@ export default {
           console.log(broadcast.data)
           this.all_messages = broadcast.data.data
         })
-        .catch(error => console.log(error.message));
+        .catch(error => console.log(error.message))
     }
   }
 }
