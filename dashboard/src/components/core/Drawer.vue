@@ -181,9 +181,21 @@ export default {
         text: 'Devices'
       },
       {
-        to: '/resources',
         icon: 'mdi-arrow-down-bold-circle',
-        text: 'Resource Center'
+        text: 'Resource Center',
+        subLinks: [
+          {
+            text: 'CMES',
+            to: '/cmes',
+            icon: 'mdi-signal-hspa-plus'
+          },
+          {
+            to: '/protocals',
+            icon: 'mdi-chart-line',
+            text: 'Protocals'
+          }
+        ]
+        
       },
       {
         to: '/feed-back',

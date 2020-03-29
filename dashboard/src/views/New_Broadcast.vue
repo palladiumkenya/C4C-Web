@@ -32,7 +32,7 @@
               <v-flex
                   xs12
                 >
-                <v-combobox
+                <v-select
                   v-model="facility"
                   :items="all_facilities"
                   item-text="name"
@@ -41,13 +41,13 @@
                   chips
                   label="Select Facility"
                   required="True"
-                ></v-combobox>
+                ></v-select>
               </v-flex>
 
               <v-flex
                   xs12
                 >
-                <v-combobox
+                <v-select
                   v-model="cadre"
                   :items="all_cadres"
                   item-text="name"
@@ -56,7 +56,7 @@
                   chips
                   label="Select Cadre"
                   required
-                ></v-combobox>
+                ></v-select>
               </v-flex>
 
               <v-flex
@@ -127,13 +127,14 @@ export default {
     postBroadcast(e) {
       e.preventDefault()
       axios.post('broadcasts/web/create', {
-        facility : this.facility,
-        cadre : this.cadre,
+        facility : this.facility.id,
+        cadre : this.cadre.id,
         message: this.message
       })
     .then((response) => {
       this.output = response.data
-      (console.log(error))
+      this.$router.push('/all_broadcast')
+        console.log('success');
     })
     .catch((error) => {
       this.output = error;

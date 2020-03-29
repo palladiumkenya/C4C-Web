@@ -104,14 +104,30 @@ export default [
   },
   
   {
-    path: '/resources',
-    name: 'Resource Center',
-    view: 'All_Resources'
+    path: '/cmes',
+    name: 'CMES',
+    view: 'All_Cmes'
   },
   {
-    path: '/add_resource',
-    name: 'All Resources',
-    view: 'New_Resource'
+    path: '/add_CME',
+    name: 'Add CME',
+    view: 'New_CME'
+  },
+  {
+    path: '/protocals',
+    name: 'Protocals',
+    view: 'All_Protocals'
+  },
+  {
+    path: '/add_protocal',
+    name: 'Add Protocal',
+    view: 'New_Protocal'
+  },
+  
+  {
+    path: '/view_resource',
+    name: 'Resource',
+    view: 'View_Resource'
   },
 
   {
