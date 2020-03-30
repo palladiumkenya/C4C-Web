@@ -81,6 +81,7 @@
           color="blue"
           title="Add a New Device"
           text="Devices List">
+          <v-layout wrap>
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
@@ -88,6 +89,9 @@
             </p>
           </v-card-text>
           <template>
+            <v-btn :loading="downloadLoading" style="margin:0 0 20px 20px;" color="primary" @click="handleDownload">
+              <v-icon left>mdi-download</v-icon>Export Excel
+            </v-btn>
             <v-data-table
               :headers="headers"
               :items="items"
@@ -113,6 +117,7 @@
               </template>
             </v-data-table>
           </template>
+          </v-layout>
         </material-card>
       </v-flex>
 
@@ -188,7 +193,11 @@ export default {
       bottom: false,
       left: false,
       right: false,
-      snackbar: false
+      snackbar: false,
+      downloadLoading: false,
+      filename: 'Devices',
+      autoWidth: true,
+      bookType: 'xlsx'
     }
   },
   created () {
@@ -243,6 +252,35 @@ export default {
           })
         this.DeviceList()
       }
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['Name', 'Safety Designed', 'Created On']
+        const filterVal = ['name','safety_designed', 'created_at']
+        const list = this.items
+        
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      console.log(jsonData)
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          console.log(jsonData)
+          return v[j]
+        }
+      }))
     },
     snack (...args) {
       this.top = false

@@ -1,6 +1,5 @@
 <template>
   <v-footer
-    v-if="this.$route.path !== '/login'"
     id="core-footer"
     absolute
     height="82"
@@ -10,7 +9,16 @@
         v-for="link in links"
         :key="link.name"
       >
+        <!-- <a
+          v-if="link.name='Home'"
+          :href="link.Link"
+          class="tertiary--text footer-links">
+          <div
+          v-if="this.$route.path !== '/login'">
+            {{ link.name }}
+          </div></a> --><!-- v-else -->
         <a
+          
           :href="link.Link"
           class="tertiary--text footer-links">{{ link.name }}</a>
       </span>
