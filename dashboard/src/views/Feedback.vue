@@ -24,7 +24,7 @@
           /><br>
           <v-data-table
             :headers="headers"
-            :items="exposures"
+            :items="feedback"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
             show-actions
@@ -34,18 +34,19 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.first_name }} {{ props.item.surname }} </td>
-                <td>{{ props.item.previous_exposures }}</td>
-                <td>{{ props.item.location }}</td>
-                <td>{{ props.item.date }}</td>
-                <td>{{ Boolean(props.item.pep_initiated) }}</td>
+                <td>{{ props.item.category }}</td>
+                <td>{{ props.item.type }}</td>
+                <td>{{ props.item.feedback }}</td>
+                <td>{{ Boolean(props.item.anonymous) }}</td>
+                <td>{{ props.item.created_at }}</td>
               </tr>
             </template>
             <template
               slot="expand"
               slot-scope="props">
               <v-card flat>
-                <v-card-text>patient hiv status: {{ props.item.patient_hiv_status }} <br> patient hbv status: {{ props.item.patient_hbv_status }} <v-spacer/> description: {{ props.item.description }}</v-card-text>
+                <v-card-text v-if="props.item.file">Files: {{ props.item.file }}</v-card-text>
+                <v-card-text v-else>No files included</v-card-text>
               </v-card>
             </template>
           </v-data-table>
@@ -77,48 +78,51 @@ export default {
         },
         {
           text: 'Feedback',
-          value: 'feedback'
+          value: 'feedback',
+          width: '500px'
         },
         {
           sortable: false,
-          text: 'File',
-          value: 'File'
-        },
-        {
           text: 'Anonymous',
           value: 'Anonymous'
+        },
+        {
+          text: 'Date',
+          value: 'date'
         }
       ],
-      exposures: []
+      feedback: []
     }
   },
   created () {
-    this.getExp()
+    this.getFeed()
   },
   methods: {
-    getExp () {
-      // axios.get('exposures/all/')
-      // .then((exp) => {
-      //   this.exposures = exp.data.data
-      //   this.link = exp.data.links.next
-      //   let last = exp.data.links.last
-      //   console.log(this.link)
-      //   this.loopT(this.link)
-      // })
-      // .catch(error => console.log(error.message));
+    getFeed () {
+        axios.get('feedback')
+        .then((exp) => {
+          this.feedback = exp.data.data
+          this.link = exp.data.links.next
+          console.log(this.link)
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message));
     },
-    async loopT (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
+    async loopT(l){
+      var i;
+      for (i = 0; i <1;) {
+        if (l!=null){
+          let response= await axios.get(l)
           l = response.data.links.next
-          this.exposures = this.exposures.concat(response.data.data)
-        } else {
-          i = 11
+          this.feedback = this.feedback.concat(response.data.data)
+        }else {
+          i=11
         }
       }
+      
+          console.log(this.feedback)
     }
   }
 }
 </script>
+
