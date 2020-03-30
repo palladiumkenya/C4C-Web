@@ -40,7 +40,7 @@
                   multiple
                   chips
                   label="Select Facility"
-                  required="True"
+                  :rules="[rules.required]"
                 ></v-select>
               </v-flex>
 
@@ -55,7 +55,7 @@
                   multiple
                   chips
                   label="Select Cadre"
-                  required
+                  :rules="[rules.required]"
                 ></v-select>
               </v-flex>
 
@@ -64,14 +64,14 @@
                 >
                 <v-textarea
                   label="Message"
-                  required="True"
+                  :rules="[rules.required]"
                   placeholder="Write here"
                   v-model="message"
                 ></v-textarea>
               </v-flex>
 
 
-                <v-btn class="mr-4 success" type="submit">submit</v-btn>
+                <v-btn class="mr-4 success" @click="alert = !alert" type="submit">submit</v-btn>
 
              </v-layout>
             </v-container>
@@ -94,8 +94,11 @@ export default {
       all_facilities : [],
       output: '',
       facility: '',
-      cadre: '',
-      message: ''
+      cadre: [],
+      message: '',
+      rules: {
+        required: value => !!value || 'Required.'
+      },
 
     }
   },
@@ -127,14 +130,14 @@ export default {
     postBroadcast(e) {
       e.preventDefault()
       axios.post('broadcasts/web/create', {
-        facility : this.facility.id,
-        cadre : this.cadre.id,
+        facility_id : this.facility.id,
+        cadres : this.cadre.id,
         message: this.message
       })
     .then((response) => {
       this.output = response.data
-      this.$router.push('/all_broadcast')
-        console.log('success');
+      //this.$router.push('/all_broadcast')
+        console.log(response);
     })
     .catch((error) => {
       this.output = error;

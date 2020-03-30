@@ -123,9 +123,8 @@ export default {
     submit () {
       this.signIn(this.form)
         .then(() => {
-          this.$router.replace({
-            name: 'Dashboard'
-          })
+          this.$router.push('/'
+          )
         })
         .catch(() => {
           console.log('failed')
