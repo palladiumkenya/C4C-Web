@@ -59,7 +59,7 @@
       </v-dialog>
 
     </v-card>
-   
+   <v-spacer> </v-spacer>
    </v-list-class>
 </v-layout>
 </v-container>

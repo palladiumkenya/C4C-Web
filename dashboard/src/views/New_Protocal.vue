@@ -16,7 +16,16 @@
           title="Create A Protocal "
           text="Kindly fill all the required fields carefully"
         >
-          <v-form @submit="postProtocal">
+        <v-alert
+            :value="alert"
+            color="pink"
+            dark
+            border="top"
+            transition="scale-transition">
+            {{output.message}}
+          </v-alert> 
+
+          <v-form v-model="valid" ref="form" v-on:submit.prevent="postProtocal">
             <v-container py-0>
               <v-layout wrap>
 
@@ -28,6 +37,7 @@
                     label="Title"
                     id="title"
                     :rules="[rules.required]"
+                    required
                     v-model="title"
                     class="purple-input"/>
                 </v-flex>
@@ -35,7 +45,7 @@
                 <v-flex
                   xs12
                 >
-                <v-autocomplete
+                <v-combobox
                   v-model="facility_id"
                   :items="all_facilities"
                   item-text="name"
@@ -46,9 +56,10 @@
                   hide-no-data
                   hide-details
                   label="Select Facility"
-                  required="True"
+                  :rules="[rules.required]"
+                  required
                   :return-object="true"
-                ></v-autocomplete>
+                ></v-combobox>
 
               </v-flex>
 
@@ -78,6 +89,8 @@
                   <v-btn
                     class="mx-0 font-weight-light"
                     color="success"
+                    :disabled="!valid"
+                    @click="validate(); alert();"
                     type="submit"
                   >
                     Submit
@@ -86,8 +99,7 @@
               </v-layout>
             </v-container>
           </v-form>
-          <strong>Output:</strong>
-           <pre> {{output}} </pre>
+           
         </material-card>
       </v-flex>
 
@@ -104,14 +116,16 @@ export default {
     return{
       loading: false,
       search: null,
+      valid:true,
       items: [],
+      alert: false,
       all_facilities: [],
       facility: 'null',
       facility_id: '',  
       title: '',
       body: '',
       files: [],
-      output: [],
+      output: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -127,6 +141,9 @@ export default {
     }, 
 
   methods: {
+    validate () {
+        this.$refs.form.validate()
+      },
 
     querySelections (v) {
         this.loading = true

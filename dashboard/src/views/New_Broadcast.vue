@@ -25,38 +25,55 @@
               Kindly fill all the required fields
             </div>
           </v-card-text>
-          <v-form @submit="postBroadcast">
+          <v-alert
+            :value="alert"
+            color="pink"
+            dark
+            border="top"
+            transition="scale-transition"
+          >
+            {{output.message}} || {{output.error}}
+          </v-alert> 
+
+          <v-form  ref="form" v-model="valid"  v-on:submit.prevent="postBroadcast">
             <v-container py-0>
               <v-layout wrap>
 
               <v-flex
                   xs12
                 >
-                <v-select
+                <v-combobox
                   v-model="facility"
                   :items="all_facilities"
                   item-text="name"
                   item-value="id"
-                  multiple
+                  :search-input.sync="search"
+                  hide-selected
                   chips
                   label="Select Facility"
                   :rules="[rules.required]"
-                ></v-select>
+                  required
+                  :return-object="true"
+                ></v-combobox>
               </v-flex>
 
               <v-flex
                   xs12
                 >
-                <v-select
-                  v-model="cadre"
+                <v-combobox
+                  v-model="cadres"
                   :items="all_cadres"
                   item-text="name"
                   item-value="id"
+                  ref="cadres"
                   multiple
                   chips
                   label="Select Cadre"
                   :rules="[rules.required]"
-                ></v-select>
+                  required
+                  
+                ></v-combobox>
+                <strong>{{ all_cadres.item }}</strong>&nbsp;
               </v-flex>
 
               <v-flex
@@ -67,17 +84,22 @@
                   :rules="[rules.required]"
                   placeholder="Write here"
                   v-model="message"
+                  required
                 ></v-textarea>
               </v-flex>
 
 
-                <v-btn class="mr-4 success" @click="alert = !alert" type="submit">submit</v-btn>
+                <v-btn 
+                class="mr-4 success"
+                :disabled="!valid"
+                 @click="validate(); alert = !alert"
+                type="submit">
+                submit</v-btn>
 
              </v-layout>
             </v-container>
           </v-form>
-          <strong>Output:</strong>
-           <pre> {{output.error}} </pre>
+          
         </material-card>
       </v-flex>
     </v-layout>
@@ -92,12 +114,15 @@ export default {
     return{
       all_cadres : [],
       all_facilities : [],
-      output: '',
+      valid: true,
+      alert: false,
+      search: null,
       facility: '',
-      cadre: [],
+      output: '',
+      cadres: [],
       message: '',
       rules: {
-        required: value => !!value || 'Required.'
+        required: value => !!value || 'This field is required.'
       },
 
     }
@@ -108,6 +133,10 @@ export default {
     },
 
   methods : {
+    validate () {
+        this.$refs.form.validate()
+      },
+
     getCadres () {
       axios.get('cadres')
     .then((cadres) => {
@@ -128,21 +157,23 @@ export default {
 
 
     postBroadcast(e) {
-      e.preventDefault()
+      e.preventDefault();
+     
       axios.post('broadcasts/web/create', {
         facility_id : this.facility.id,
-        cadres : this.cadre.id,
+        
+        cadres : this.cadres.map(item => item.id),
         message: this.message
       })
     .then((response) => {
       this.output = response.data
-      //this.$router.push('/all_broadcast')
+      this.$router.push('/all_broadcast')
         console.log(response);
     })
     .catch((error) => {
-      this.output = error;
+        console.log("error")
     })
     }
-  }
+    }
  }
 </script>
