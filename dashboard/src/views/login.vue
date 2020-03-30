@@ -1,158 +1,116 @@
 <template>
-  <v-container
-    fill-height
-    fluid
-    grid-list-xl>
-    <v-layout
-      justify-center
-      wrap
-    >
-      <v-flex
-        xs12
-        md10
-      >
-        <v-card>
-          <v-card-text>
-            <div/>
-            <p class="display-1 text--primary">
-              Login
-            </p>
-            <div class="text--primary">
-              Provide credentials
-            </div>
-          </v-card-text>
-          {{ form }}
-          <form @submit.prevent="submit">
-            <div>
-              <v-flex
-                xs12
-                md6
-              >
-                <v-text-field
-                  id="email"
-                  v-model="form.email"
-                  label="Email"
-                  type="email"
-                  name="email"/>
-              </v-flex>
-              <v-flex
-                xs12
-                md6
-              >
-                <v-text-field
-                  id="password"
-                  v-model="form.password"
-                  type="password"
-                  name="password"
-                  label="Password"/>
-              </v-flex>
-
-              <div>
-                <v-btn
-                  type="submit"
-                  color="success">
-                  Login
-                </v-btn>
-                {{  }}
-              </div>
-            </div>
-          </form>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <v-snackbar
-      :color="color"
-      :bottom="bottom"
-      :top="top"
-      :left="left"
-      :right="right"
-      v-model="snackbar"
-      dark
-    >
-      <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div>{{  }}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-    </v-snackbar>
-  </v-container>
+  <v-app id="login" class="log">
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+          <v-flex xs12 sm8 md4 lg4>
+            <v-card class="elevation-1 pa-3">
+              <v-card-text>
+                <div class="layout column align-center">
+                  <v-img :src="logo" width="180" height="180"/>
+                  <h2 class="flex my-4 clo">Login</h2>
+                </div>
+                <form>
+                  <v-text-field
+                    append-icon="mdi-account"
+                    name="email"
+                    label="Email"
+                    type="text"
+                    v-model="form.email"
+                    :error="error"
+                    :rules="[rules.required]"/>
+                  <v-text-field
+                    :type="hidePassword ? 'password' : 'text'"
+                    :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
+                    name="password"
+                    label="Password"
+                    id="password"
+                    :rules="[rules.required]"
+                    v-model="form.password"
+                    :error="error"
+                    @click:append="hidePassword = !hidePassword"/>
+                </form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn block color="success" @click.prevent="submit" :loading="loading">Login</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+      <v-snackbar
+        :color="'#f55a4e'"
+        v-model="showResult"
+        :timeout="2000"
+        top>
+        {{ result }}
+      </v-snackbar>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 export default {
-  name: 'Login',
-  components: {
-
-  },
-  data () {
+  data() {
     return {
+      logo: 'c4c_new.png',
+      loading: false,
       form: {
         email: '',
         password: '',
       },
-      output: '',
-      pre_out: '',
-      color: null,
-      colors: [
-        'success'
-      ],
-      top: true,
-      bottom: false,
-      left: false,
-      right: false,
-      snackbar: false
+      hidePassword: true,
+      error: false,
+      showResult: false,
+      result: '',
+      rules: {
+        required: value => !!value || 'Required.'
+      }
     }
   },
-  created () {
-    this.checkLO()
-  },
+
   methods: {
     ...mapActions({
       signIn: 'auth/signIn'
-    }
-    ),
-    submit () {
-      this.signIn(this.form)
-        .then(() => {
-          this.$router.push('/'
-          )
-        })
-        .catch(() => {
-          console.log('failed')
-        })
-    },
-    checkLO () {
-      //if (message){
-        this.snack('middle','center')
-      //}
-    },
-    snack (...args) {
-      this.top = false
-      this.bottom = false
-      this.left = false
-      this.right = false
+    }),
+    submit() {
+      const vm = this;
 
-      for (const loc of args) {
-        this[loc] = true
+      if (!vm.form.email || !vm.form.password) {
+
+        vm.result = "Email and Password can't be empty.";
+        vm.showResult = true;
+
+        return;
       }
-      this.color = this.colors[0]
 
-      this.snackbar = true
+      this.signIn(this.form)
+      .then(() => {
+        this.$router.replace({
+          name: 'Dashboard'
+        })
+      })
+      .catch(() => {
+        console.log('failed')
+        vm.error = true;
+        vm.result = "Email or Password is incorrect.";
+        vm.showResult = true;
+      })
     }
-    
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="css">
+  #login {
+    height: 50%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    z-index: 0;
+  }
 </style>

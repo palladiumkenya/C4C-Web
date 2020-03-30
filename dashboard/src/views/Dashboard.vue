@@ -126,6 +126,7 @@
         <!-- insert some chart here -->
         <div id="appy">
           exposures Id's as string  {{ getLocations }}
+          {{ getLocationsNumber}}
         </div>
         <h3 v-text="message"></h3>
       </v-flex>
@@ -167,19 +168,22 @@ export default {
   data() {
     return {
     getLocations:[],
+      getLocationsNumber:[],
     message: 'Fetching Data...',
     chartOptions: {
       chart: {
         height: 300,
-        type: 'line'
+        type: 'column'
        },
        title: {
          text: 'Amount of visitors per day'
         },
         series: [{
-          name: 'Ids',
+          name: [],
+          colorByPoint: true,
           data: []
-        }]
+        }
+        ]
       },
       facility_exposures: {},
       hcw_exposures: {},
@@ -187,13 +191,15 @@ export default {
       broadcastCount: {},
      }
   },
-  
+
   mounted: function () {
     this.getdata()
 
-    setTimeout(function(){ 
+    setTimeout(function(){
         this.message = 'Data Fetched';
-        this.chartOptions.series[0].data = this.getLocations
+        this.chartOptions.series[0].name = this.getLocations
+        this.chartOptions.series[0].data = this.getLocationsNumber
+   //   this.chartOptions.xAxis.categories = this.getLocations
     }.bind(this), 3000);
 
     axios.get('users')
@@ -201,6 +207,7 @@ export default {
         // console.log(exp.data.data);
         this.registered_hcw = exp.data.data // <--- Im thinking this is an object
       })
+
 
     // number of broadcasts
     axios.get('broadcasts/web/all')
@@ -218,13 +225,15 @@ export default {
   methods: {
     async getdata () {
       let resp = await  axios.get('exposures/all')
-      var i
-      console.log(resp.data)
+      var i, x;
+      console.log(resp.data.data)
       for (i = 0; i < resp.data.data.length; i++) {
-        this.getLocations.push(resp.data.data[i].id)
+        this.getLocationsNumber.push(resp.data.data.length);
+        this.getLocations.push(resp.data.data[i].type);
+       // x += resp.data.data[i].type + "";
       }
       this.facility_exposures = resp.data.data
-      
+      return  this.getLocationsNumber
       return this.getLocations
     }
   },
@@ -246,9 +255,6 @@ export default {
     },
     HCWsCount () {
       return Object.keys(this.registered_hcw).length
-    },
-    datas () {
-      return this.getLocations
     }
   },
 }
