@@ -14,7 +14,7 @@
                   <v-text-field
                     append-icon="mdi-account"
                     name="email"
-                    label="Email"
+                    placeholder="Email"
                     type="text"
                     v-model="form.email"
                     :error="error"
@@ -23,7 +23,7 @@
                     :type="hidePassword ? 'password' : 'text'"
                     :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
                     name="password"
-                    label="Password"
+                    placeholder="Password"
                     id="password"
                     :rules="[rules.required]"
                     v-model="form.password"
