@@ -118,113 +118,6 @@ export default {
       default: false
     }
   },
-<<<<<<< HEAD
-  data: () => ({
-    logo: 'c4c_new.png',
-    links: [
-      {
-        to: '/',
-        icon: 'mdi-view-dashboard',
-        text: 'Dashboard'
-      },
-      {
-        icon: 'mdi-account',
-        text: 'Users',
-        subLinks: [
-          {
-            text: 'Upload HCW',
-            to: '/add-user',
-            icon: 'mdi-account-plus'
-          },
-          {
-            to: '/users_list',
-            icon: 'mdi-account-box-multiple',
-            text: 'View Users'
-          },
-          {
-            to: '/hcw_list',
-            icon: 'mdi-account-box',
-            text: 'View Health Care Workers'
-          }
-        ]
-      },
-      {
-        to: 'registration-reports',
-        icon: 'mdi-transcribe',
-        text: 'Registration Reports'
-      },
-      {
-        icon: 'mdi-alert-circle-outline',
-        text: 'Exposures',
-        subLinks: [
-          {
-            text: 'Exposure report',
-            to: '/exposures',
-            icon: 'mdi-chart-bar'
-          },
-          {
-            to: '/exposure-list',
-            icon: 'mdi-playlist-check',
-            text: 'Exposures List'
-          }
-        ]
-      },
-      {
-
-        icon: 'mdi-account-edit',
-        text: 'Immunizations',
-        subLinks: [
-          {
-            text: 'HBV Reports',
-            to: '/hbv-summary',
-            icon: 'mdi-signal-hspa-plus'
-          },
-          {
-            to: '/other-diseases',
-            icon: 'mdi-chart-line',
-            text: 'Other Diseases'
-          }
-        ]
-      },
-      {
-        to: '/all_broadcast',
-        icon: 'mdi-account-switch',
-        text: 'Broadcasts'
-      },
-      {
-        to: '/add_device',
-        icon: 'mdi-gamepad',
-        text: 'Devices'
-      },
-      {
-        icon: 'mdi-arrow-down-bold-circle',
-        text: 'Resource Center',
-        subLinks: [
-          {
-            text: 'CMES',
-            to: '/cmes',
-            icon: 'mdi-signal-hspa-plus'
-          },
-          {
-            to: '/protocals',
-            icon: 'mdi-chart-line',
-            text: 'Protocals'
-          }
-        ]
-        
-      },
-      {
-        to: '/feed-back',
-        icon: 'mdi-backburger',
-        text: 'Feedback'
-      },
-      {
-        to: '/logout',
-        icon: 'mdi-clipboard-outline',
-        text: 'Logout'
-
-      }
-=======
   data () {
     return{
       pre_out:'',
@@ -313,7 +206,6 @@ export default {
           icon: 'mdi-clipboard-outline',
           text: 'Logout',
         }
->>>>>>> 8ffba26ae6bdb5eecf8466ff7130c44daa720ef1
 
       ]
     }

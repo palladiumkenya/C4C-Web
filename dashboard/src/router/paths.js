@@ -14,6 +14,7 @@ export default [
     beforeEnter: (to, from, next) => {
       alert("You must log in first")
       if (!store.getters['auth/authenticated']) {
+        console.log(store.getters['auth/authenticated'])
         return next({
           name: 'login'
         })
