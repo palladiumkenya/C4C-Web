@@ -82,41 +82,45 @@
           title="Add a New Device"
           text="Devices List">
           <v-layout wrap>
-          <v-card-text>
-            <div/>
-            <p class="display-1 text--primary">
-              Devices List
-            </p>
-          </v-card-text>
-          <template>
-            <v-btn :loading="downloadLoading" style="margin:0 0 20px 20px;" color="primary" @click="handleDownload">
-              <v-icon left>mdi-download</v-icon>Export Excel
-            </v-btn>
-            <v-data-table
-              :headers="headers"
-              :items="items"
-              :loading="true"
-              :rows-per-page-items="rowsPerPageItems"
-              class="elevation-1"
-            ><template
-              slot="headerCell"
-              slot-scope="{ header }"
-            >
-              <span
-                class="subheading text--darken-3"
-                v-text="header.text"
-              />
-            </template>
-              <template
-                slot="items"
-                slot-scope="{ item }"
+            <v-card-text>
+              <div/>
+              <p class="display-1 text--primary">
+                Devices List
+              </p>
+              <v-btn
+                :loading="downloadLoading"
+                style="margin:0 0 20px 20px;"
+                color="primary"
+                @click="handleDownload">
+                <v-icon left>mdi-download</v-icon>Export Excel
+              </v-btn>
+            </v-card-text>
+            <template>
+              <v-data-table
+                :headers="headers"
+                :items="items"
+                :loading="true"
+                :rows-per-page-items="rowsPerPageItems"
+                class="elevation-1"
+              ><template
+                slot="headerCell"
+                slot-scope="{ header }"
               >
-                <td>{{ item.name }}</td>
-                <td>{{ Boolean(item.safety_designed) }}</td>
-                <td>{{ item.created_at }}</td>
+                <span
+                  class="subheading text--darken-3"
+                  v-text="header.text"
+                />
               </template>
-            </v-data-table>
-          </template>
+                <template
+                  slot="items"
+                  slot-scope="{ item }"
+                >
+                  <td>{{ item.name }}</td>
+                  <td>{{ Boolean(item.safety_designed) }}</td>
+                  <td>{{ item.created_at }}</td>
+                </template>
+              </v-data-table>
+            </template>
           </v-layout>
         </material-card>
       </v-flex>
@@ -253,13 +257,13 @@ export default {
         this.DeviceList()
       }
     },
-    handleDownload() {
+    handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['Name', 'Safety Designed', 'Created On']
-        const filterVal = ['name','safety_designed', 'created_at']
+        const filterVal = ['name', 'safety_designed', 'created_at']
         const list = this.items
-        
+
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
           header: tHeader,
@@ -271,7 +275,7 @@ export default {
         this.downloadLoading = false
       })
     },
-    formatJson(filterVal, jsonData) {
+    formatJson (filterVal, jsonData) {
       console.log(jsonData)
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {

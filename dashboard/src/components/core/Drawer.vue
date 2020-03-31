@@ -119,8 +119,8 @@ export default {
     }
   },
   data () {
-    return{
-      pre_out:'',
+    return {
+      pre_out: '',
       logo: 'c4c_new.png',
       links: [
         {
@@ -204,7 +204,7 @@ export default {
         },
         {
           icon: 'mdi-clipboard-outline',
-          text: 'Logout',
+          text: 'Logout'
         }
 
       ]
@@ -230,15 +230,15 @@ export default {
     ...mapActions({
       logoutAction: 'auth/signout'
     }),
-    logout (){
-      this.logoutAction().then( ()=> {
-        this.pre_out = "Logged out!"
+    logout () {
+      this.logoutAction().then(() => {
+        this.pre_out = 'Logged out!'
         this.$router.replace({
           name: 'login'
         })
       })
-    },
-    
+    }
+
   }
 }
 </script>

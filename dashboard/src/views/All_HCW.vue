@@ -27,14 +27,14 @@
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.first_name }}</td>
                 <td>{{ props.item.surname }}</td>
-                <td>{{ props.item.facility.name}}</td>
-                <td>{{ props.item.facility.county}}</td>
+                <td>{{ props.item.facility.name }}</td>
+                <td>{{ props.item.facility.county }}</td>
                 <td>{{ props.item.department }}</td>
                 <td>{{ props.item.cadre.name }}</td>
                 <td>{{ props.item.dob }}</td>
               </tr>
             </template>
-            
+
           </v-data-table>
         </material-card>
       </v-flex>
@@ -52,7 +52,7 @@ export default {
       all_hcws: [],
       headers: [
         {
-          sortable:false,
+          sortable: false,
           text: 'First Name',
           value: 'first_name'
         },
@@ -85,8 +85,8 @@ export default {
           sortable: false,
           text: 'Date Of Birth',
           value: 'dob'
-        },
-      ],
+        }
+      ]
     }
   },
   created () {
@@ -94,12 +94,12 @@ export default {
   },
   methods: {
     getHCW () {
-        axios.get('hcw')
+      axios.get('hcw')
         .then((workers) => {
           console.log(workers.data)
           this.all_hcws = workers.data.data
         })
-        .catch(error => console.log(error.message));
+        .catch(error => console.log(error.message))
     }
   }
 }

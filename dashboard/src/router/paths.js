@@ -12,7 +12,7 @@ export default [
     // Relative to /src/views
     view: 'Dashboard',
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         console.log(store.getters['auth/authenticated'])
         return next({
@@ -44,7 +44,7 @@ export default [
     name: 'HBV Reports',
     view: 'HbvReports',
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -57,7 +57,7 @@ export default [
     name: 'HCW Upload',
     view: 'HCW_Upload',
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -70,7 +70,7 @@ export default [
     name: 'Exposures List',
     view: 'Exposures_List',
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -84,7 +84,7 @@ export default [
     view: 'BulkSignup',
     meta: { title: 'Upload Excel' },
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -97,7 +97,7 @@ export default [
     name: 'Feedback',
     view: 'Feedback',
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -110,7 +110,7 @@ export default [
     name: 'Registration Reports',
     view: 'RegistrationReports',
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -135,7 +135,7 @@ export default [
     name: 'Exposures',
     view: 'Exposures',
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
@@ -158,7 +158,7 @@ export default [
     name: 'New Broadcast',
     view: 'New_Broadcast'
   },
-  
+
   {
     path: '/cmes',
     name: 'CMES',
@@ -179,7 +179,7 @@ export default [
     name: 'Add Protocal',
     view: 'New_Protocal'
   },
-  
+
   {
     path: '/view_resource',
     name: 'Resource',
@@ -196,7 +196,7 @@ export default [
     view: 'AddDevices',
     meta: { title: 'Add Devices' },
     beforeEnter: (to, from, next) => {
-      alert("You must log in first")
+      alert('You must log in first')
       if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'

@@ -1,39 +1,56 @@
 <template>
-  <v-app id="login" class="log">
+  <v-app
+    id="login"
+    class="log">
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-          <v-flex xs12 sm8 md4 lg4>
+      <v-container
+        fluid
+        fill-height>
+        <v-layout
+          align-center
+          justify-center>
+          <v-flex
+            xs12
+            sm8
+            md4
+            lg4>
             <v-card class="elevation-1 pa-3">
               <v-card-text>
                 <div class="layout column align-center">
-                  <v-img :src="logo" width="180" height="180"/>
+                  <v-img
+                    :src="logo"
+                    width="180"
+                    height="180"/>
                   <h2 class="flex my-4 clo">Login</h2>
                 </div>
                 <form>
                   <v-text-field
+                    v-model="form.email"
+                    :error="error"
+                    :rules="[rules.required]"
                     append-icon="mdi-account"
                     name="email"
                     label="Email"
-                    type="text"
-                    v-model="form.email"
-                    :error="error"
-                    :rules="[rules.required]"/>
+                    type="text"/>
                   <v-text-field
+                    id="password"
                     :type="hidePassword ? 'password' : 'text'"
                     :append-icon="hidePassword ? 'mdi-eye-off' : 'mdi-eye'"
-                    name="password"
-                    label="Password"
-                    id="password"
                     :rules="[rules.required]"
                     v-model="form.password"
                     :error="error"
+                    name="password"
+                    label="Password"
                     @click:append="hidePassword = !hidePassword"/>
                 </form>
               </v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn block color="success" @click.prevent="submit" :loading="loading">Login</v-btn>
+                <v-spacer/>
+                <v-btn
+                  :loading="loading"
+                  block
+                  color="success"
+                  @click.prevent="submit">Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -53,13 +70,13 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       logo: 'c4c_new.png',
       loading: false,
       form: {
         email: '',
-        password: '',
+        password: ''
       },
       hidePassword: true,
       error: false,
@@ -75,29 +92,28 @@ export default {
     ...mapActions({
       signIn: 'auth/signIn'
     }),
-    submit() {
-      const vm = this;
+    submit () {
+      const vm = this
 
       if (!vm.form.email || !vm.form.password) {
+        vm.result = "Email and Password can't be empty."
+        vm.showResult = true
 
-        vm.result = "Email and Password can't be empty.";
-        vm.showResult = true;
-
-        return;
+        return
       }
 
       this.signIn(this.form)
-      .then(() => {
-        this.$router.replace({
-          name: 'Dashboard'
+        .then(() => {
+          this.$router.replace({
+            name: 'Dashboard'
+          })
         })
-      })
-      .catch(() => {
-        console.log('failed')
-        vm.error = true;
-        vm.result = "Email or Password is incorrect.";
-        vm.showResult = true;
-      })
+        .catch(() => {
+          console.log('failed')
+          vm.error = true
+          vm.result = 'Email or Password is incorrect.'
+          vm.showResult = true
+        })
     }
   }
 }

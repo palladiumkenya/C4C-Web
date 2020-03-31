@@ -25,30 +25,30 @@
                   md12
                 >
                   <v-text-field
-                    label="Title"
                     id="title"
                     :rules="[rules.required]"
                     v-model="title"
+                    label="Title"
                     class="purple-input"/>
                 </v-flex>
 
                 <v-flex xs12>
-                    <v-textarea
-                    label="Write Here"
+                  <v-textarea
+                    id="body"
                     v-model="body"
                     :rules="[rules.required]"
-                    id="body"
+                    label="Write Here"
                     rows="12"
-                  ></v-textarea>
+                  />
                 </v-flex>
 
                 <v-flex xs12 >
                   <input
-                   type="file"
-                   id="image_file" 
-                   ref="files" 
-                   multiple 
-                   v-on:change="handleFiles()"/>
+                    id="image_file"
+                    ref="files"
+                    type="file"
+                    multiple
+                    @change="handleFiles()">
                 </v-flex>
 
                 <v-flex
@@ -77,9 +77,9 @@
 import axios from 'axios'
 
 export default {
-  
+
   data () {
-    return{
+    return {
       title: '',
       body: '',
       files: [],
@@ -90,68 +90,66 @@ export default {
   },
 
   methods: {
-    handleFiles() {
-    let uploadedFiles = this.$refs.files.files;
+    handleFiles () {
+      let uploadedFiles = this.$refs.files.files
 
-    for(var i = 0; i < uploadedFiles.length; i++) {
-        this.files.push(uploadedFiles[i]);
-    }
-    this.getImagePreviews();
+      for (var i = 0; i < uploadedFiles.length; i++) {
+        this.files.push(uploadedFiles[i])
+      }
+      this.getImagePreviews()
     },
 
-    getImagePreviews(){
-    for( let i = 0; i < this.files.length; i++ ){
-        if ( /\.(jpe?g|png|gif)$/i.test( this.files[i].name ) ) {
-            let reader = new FileReader();
-            reader.addEventListener("load", function(){
-                this.$refs['preview'+parseInt(i)][0].src = reader.result;
-            }.bind(this), false);
-            reader.readAsDataURL( this.files[i] );
-        }else{
-            this.$nextTick(function(){
-                this.$refs['preview'+parseInt(i)][0].src = '/img/generic.png';
-            });
+    getImagePreviews () {
+      for (let i = 0; i < this.files.length; i++) {
+        if (/\.(jpe?g|png|gif)$/i.test(this.files[i].name)) {
+          let reader = new FileReader()
+          reader.addEventListener('load', function () {
+            this.$refs['preview' + parseInt(i)][0].src = reader.result
+          }.bind(this), false)
+          reader.readAsDataURL(this.files[i])
+        } else {
+          this.$nextTick(function () {
+            this.$refs['preview' + parseInt(i)][0].src = '/img/generic.png'
+          })
         }
-    }
-  },
+      }
+    },
 
-  removeFile( key ){
-    this.files.splice( key, 1 );
-    this.getImagePreviews();
-  },
+    removeFile (key) {
+      this.files.splice(key, 1)
+      this.getImagePreviews()
+    },
 
-  postCME (e) {
-    e.preventDefault();
-    for( let i = 0; i < this.files.length; i++ ){
-        if(this.files[i].id) {
-            continue;
+    postCME (e) {
+      e.preventDefault()
+      for (let i = 0; i < this.files.length; i++) {
+        if (this.files[i].id) {
+          continue
         }
-      
-    let allData = new FormData();
-    // dict of all elements
-    allData.append('image_file', this.files[i]);
-    allData.append("title", this.title);
-    allData.append("body", this.body);
 
-    let currentObj = this
-    
-    axios.post('resources/cmes/create',
-      allData, {
-        headers: {
-        "content-type": "multipart/form-data"}
-      })
-    .then(function(data) {
-        
-        this.$router.push('/cmes')
-        console.log('success');
-    }.bind(this)).catch(function(data) {
-        console.log('error');
-        });
+        let allData = new FormData()
+        // dict of all elements
+        allData.append('image_file', this.files[i])
+        allData.append('title', this.title)
+        allData.append('body', this.body)
+
+        let currentObj = this
+
+        axios.post('resources/cmes/create',
+          allData, {
+            headers: {
+              'content-type': 'multipart/form-data' }
+          })
+          .then(function (data) {
+            this.$router.push('/cmes')
+            console.log('success')
+          }.bind(this)).catch(function (data) {
+            console.log('error')
+          })
+      }
     }
   }
 }
-}
-
 
 </script>
 <style>
@@ -162,6 +160,5 @@ export default {
     display: flex;
     flex-flow: column nowrap;
 }
-
 
 </style>

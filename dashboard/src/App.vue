@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div
-    v-if="this.$route.path !== '/login'">
+      v-if="this.$route.path !== '/login'">
       <core-toolbar />
 
       <core-drawer />

@@ -18,7 +18,7 @@
             {{ link.name }}
           </div></a> --><!-- v-else -->
         <a
-          
+
           :href="link.Link"
           class="tertiary--text footer-links">{{ link.name }}</a>
       </span>

@@ -96,7 +96,7 @@ export default {
   },
   methods: {
     getBroadcast () {
-        axios.get('broadcasts/web/all')
+      axios.get('broadcasts/web/all')
         .then((broadcast) => {
           console.log(broadcast.data)
           this.all_messages = broadcast.data.data

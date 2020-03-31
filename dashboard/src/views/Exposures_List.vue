@@ -15,29 +15,32 @@
           color="green"
           title="Broadcast Messages"
         >
-        <v-container py-0>
-              <v-layout wrap>
-        <v-flex
-        xs12
-        md8>
-          <v-text-field
-            
-            v-model="search"
-            append-icon="mdi-search-web"
-            label="Search"
-            single-line
-            hide-details
-          />
-        </v-flex>
-        <v-flex
-        xs12
-        md4>
-          <v-btn :loading="downloadLoading" color="primary" @click="handleDownload">
-            <v-icon left>mdi-download</v-icon>Export Excel
-          </v-btn>
-        </v-flex>
-              </v-layout>
-        </v-container><br>
+          <v-container py-0>
+            <v-layout wrap>
+              <v-flex
+                xs12
+                md8>
+                <v-text-field
+
+                  v-model="search"
+                  append-icon="mdi-search-web"
+                  label="Search"
+                  single-line
+                  hide-details
+                />
+              </v-flex>
+              <v-flex
+                xs12
+                md4>
+                <v-btn
+                  :loading="downloadLoading"
+                  color="primary"
+                  @click="handleDownload">
+                  <v-icon left>mdi-download</v-icon>Export Excel
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container><br>
           <v-data-table
             :headers="headers"
             :items="exposures"
@@ -79,6 +82,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -118,6 +122,11 @@ export default {
       bookType: 'xlsx'
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   created () {
     this.getExp()
   },
@@ -141,13 +150,14 @@ export default {
         } else {
           i = 11
         }
+        console.log(this.exposures)
       }
     },
-    handleDownload() {
+    handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['Name', 'First Name', 'Surname', 'Location', 'Date']
-        const filterVal = ['id','first_name', 'surname', 'location', 'date']
+        const filterVal = ['id', 'first_name', 'surname', 'location', 'date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -160,7 +170,7 @@ export default {
         this.downloadLoading = false
       })
     },
-    formatJson(filterVal, jsonData) {
+    formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
@@ -168,7 +178,7 @@ export default {
           return v[j]
         }
       }))
-    },
+    }
   }
 }
 </script>

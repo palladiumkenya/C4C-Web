@@ -19,6 +19,9 @@
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
 
+            <highcharts
+              ref="pieChart"
+              :options="pieOptions"/>
             <v-flex
               md12
               sm12
@@ -51,7 +54,7 @@
 
               <template>
                 <section class="charts">
-                  <vue-highcharts :options="options" />
+                  <highcharts :options="options" />
                 </section>
               </template>
 
@@ -73,9 +76,12 @@
 </template>
 
 <script>
-import VueHighcharts from 'vue2-highcharts'
+import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
+import axios from 'axios'
+import { mapGetters } from 'vuex'
+
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
 const datas = 'https://jsonplaceholder.typicode.com/users'
@@ -111,9 +117,13 @@ const data = {
 }
 
 export default {
-
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   components: {
-    VueHighcharts
+    highcharts: Chart
   },
   data () {
     return {
@@ -126,7 +136,90 @@ export default {
           text: 'Sin chart'
         }
       },
-      options: data
+      options: data,
+      pieOptions: {
+        chart: {
+          type: 'pie',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+          text: 'Exposures'
+        },
+        subtitle: {
+          text: 'by location'
+        },
+        plotOptions: {
+          pie: {
+            innerSize: 100,
+            depth: 45
+          }
+        },
+        series: [
+          {
+            name: 'Exposures Count',
+            data: []
+          },
+        ]
+      },
+      cadreDoc: 0,
+      s: [],
+      locations: [],
+      seriesdata: [],
+      seriesname: ['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified']
+
+    }
+  },
+  created ()  {
+    this.getExp()
+  },
+  methods: {
+    getDep(){
+      var count = 0;
+      for(var v in this.seriesname){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesname[v])
+        this.seriesdata.push(this.getNum(this.seriesname[v]))
+        count += this.getNum(this.seriesname[v])
+        this.locations.push(this.seriesdata)
+      }
+      this.pieOptions.series[0].data = this.locations
+      console.log(count)
+    },
+    getExp () {
+      axios.get('exposures/all/')
+      .then((exp) => {
+        this.s = exp.data.data
+        this.link = exp.data.links.next
+        this.loopT(this.link)
+      })
+      .catch(error => console.log(error.message))
+    },
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.s = this.s.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+      this.getDep()
+    },
+    getNum(name){
+      //console.log(this.s)
+      var count = 0
+      for(var x in this.s){
+        console.log(this.s[x].location)
+        if (this.s[x].location === name){
+          count++
+        }
+      }
+      return count
     }
   }
 }

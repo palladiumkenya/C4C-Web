@@ -99,30 +99,29 @@ export default {
   },
   methods: {
     getFeed () {
-        axios.get('feedback')
+      axios.get('feedback')
         .then((exp) => {
           this.feedback = exp.data.data
           this.link = exp.data.links.next
           console.log(this.link)
           this.loopT(this.link)
         })
-        .catch(error => console.log(error.message));
+        .catch(error => console.log(error.message))
     },
-    async loopT(l){
-      var i;
-      for (i = 0; i <1;) {
-        if (l!=null){
-          let response= await axios.get(l)
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
           l = response.data.links.next
           this.feedback = this.feedback.concat(response.data.data)
-        }else {
-          i=11
+        } else {
+          i = 11
         }
       }
-      
-          console.log(this.feedback)
+
+      console.log(this.feedback)
     }
   }
 }
 </script>
-
