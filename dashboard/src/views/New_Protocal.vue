@@ -16,13 +16,23 @@
           title="Create A Protocal "
           text="Kindly fill all the required fields carefully"
         >
+        <v-card-text>
+            <div></div>
+            <p class="display-1 text--primary">
+              Add A New Protocal
+            </p>
+            <div class="text--primary">
+              Kindly fill all the required fields
+            </div>
+          </v-card-text>
+
         <v-alert
             :value="alert"
-            color="pink"
+            type="error"
             dark
             border="top"
             transition="scale-transition">
-            {{output.message}}
+            {{output.message}} {{output.error}}
           </v-alert> 
 
           <v-form v-model="valid" ref="form" v-on:submit.prevent="postProtocal">
@@ -218,10 +228,11 @@ export default {
         "content-type": "multipart/form-data"}
       })
     .then(function(data) {
-        console.log(data)
+        alert("Data Added Successfully")
         this.$router.push('/protocals')
         console.log('success');
     }.bind(this)).catch(function(data) {
+        alert("Something went wrong, please retry")
         console.log('error');
         });
     }

@@ -11,15 +11,24 @@
       <v-flex
         md12
       >
-        <material-card
-          color="green"
-          title="Broadcast Messages"
-        >
+      <v-card>
+      <v-card-title>
+      All Users
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+
           <v-data-table
             :headers="headers"
             :items="all_users"
+            :search="search"
             :rows-per-page-items="rowsPerPageItems"
-            :dark="true"
             item-key="id"
           >
             <template
@@ -33,9 +42,16 @@
                 <td>{{ props.item.gender }}</td>
               </tr>
             </template>
-
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+            
           </v-data-table>
-        </material-card>
+      </v-card>
       </v-flex>
 
     </v-layout>

@@ -25,13 +25,24 @@
       <v-flex
         md12
       >
-        <material-card
-          color="green"
-          title="Broadcast Messages"
-        >
+        <v-card>
+          <v-card-title>
+            Broadcast History
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-card-title>
+
           <v-data-table
             :headers="headers"
             :items="all_messages"
+            :search="search"
+            :rows-per-page-items="rowsPerPageItems"
             show-actions
             item-key="id"
           >
@@ -46,9 +57,15 @@
                 <td>{{ props.item.message }}</td>
               </tr>
             </template>
-
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
           </v-data-table>
-        </material-card>
+        </v-card>
       </v-flex>
 
     </v-layout>
@@ -62,6 +79,8 @@ export default {
     return {
       output: [],
       all_messages: [],
+      search: '',
+      rowsPerPageItems: [50,250,500],
       headers: [
         {
           sortable: false,
@@ -100,8 +119,21 @@ export default {
         .then((broadcast) => {
           console.log(broadcast.data)
           this.all_messages = broadcast.data.data
+          this.loopT(broadcast.data.links.next)
         })
         .catch(error => console.log(error.message))
+    },
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = broadcast.data.links.next
+          this.all_messages = this.all_messages.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
     }
   }
 }

@@ -16,7 +16,26 @@
           title="Create A Resource For Continuous Medical Education "
           text="Kindly fill all the required fields carefully"
         >
-          <v-form @submit="postCME">
+         <v-card-text>
+            <div></div>
+            <p class="display-1 text--primary">
+              Add Continuous Medical Education Content
+            </p>
+            <div class="text--primary">
+              Kindly fill all the required fields
+            </div>
+          </v-card-text>
+          <v-alert
+            :value="alert"
+            color="pink"
+            dark
+            border="top"
+            transition="scale-transition"
+          >
+            {{output.message}} {{output.error}}
+          </v-alert>
+
+          <v-form v-model="valid" ref="form" v-on:submit.prevent="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -28,6 +47,7 @@
                     label="Title"
                     id="title"
                     :rules="[rules.required]"
+                    required
                     v-model="title"
                     class="purple-input"/>
                 </v-flex>
@@ -37,6 +57,7 @@
                     label="Write Here"
                     v-model="body"
                     :rules="[rules.required]"
+                    required
                     id="body"
                     rows="12"
                   ></v-textarea>
@@ -57,6 +78,8 @@
                 >
                   <v-btn
                     class="mx-0 font-weight-light"
+                    :disabled="!valid"
+                    @click="validate(); alert = !alert;   "
                     color="success"
                     type="submit"
                   >
@@ -80,6 +103,9 @@ export default {
   
   data () {
     return{
+      alert: false,
+      valid: true,
+      output: '',
       title: '',
       body: '',
       files: [],
@@ -90,6 +116,11 @@ export default {
   },
 
   methods: {
+
+    validate () {
+        this.$refs.form.validate()
+      },
+
     handleFiles() {
     let uploadedFiles = this.$refs.files.files;
 
@@ -141,10 +172,11 @@ export default {
         "content-type": "multipart/form-data"}
       })
     .then(function(data) {
-        
-        this.$router.push('/cmes')
-        console.log('success');
+      alert("Data Added Successfully")
+      this.$router.push('/cmes');
+      console.log('success');
     }.bind(this)).catch(function(data) {
+        alert("Something went wrong, please retry")
         console.log('error');
         });
     }

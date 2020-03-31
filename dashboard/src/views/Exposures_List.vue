@@ -11,17 +11,19 @@
       <v-flex
         md12
       >
-        <material-card
-          color="green"
-          title="Broadcast Messages"
-        >
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-search-web"
-            label="Search"
-            single-line
-            hide-details
-          /><br>
+      <v-card>
+      <v-card-title>
+      Exposures
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+     </v-card-title>
+          
           <v-data-table
             :headers="headers"
             :items="exposures"
@@ -49,12 +51,12 @@
             <v-alert
               slot="no-results"
               :value="true"
-              color="error"
+              color="success"
               icon="mdi-emoticon-sad">
               Your search for "{{ search }}" found no results.
             </v-alert>
           </v-data-table>
-        </material-card>
+      </v-card>
       </v-flex>
 
     </v-layout>

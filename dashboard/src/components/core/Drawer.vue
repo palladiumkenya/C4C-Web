@@ -142,7 +142,7 @@ export default {
           },
           {
             to: '/hcw_list',
-            icon: 'mdi-account-box',
+            icon: 'mdi-account-group',
             text: 'View Health Care Workers'
           }
         ]
@@ -202,11 +202,11 @@ export default {
           {
             text: 'CMES',
             to: '/cmes',
-            icon: 'mdi-signal-hspa-plus'
+            icon: 'mdi-archive'
           },
           {
             to: '/protocals',
-            icon: 'mdi-chart-line',
+            icon: 'mdi-animation',
             text: 'Protocals'
           }
         ] 

@@ -32,7 +32,7 @@
             border="top"
             transition="scale-transition"
           >
-            {{output.message}} || {{output.error}}
+            {{output.message}} {{output.error}}
           </v-alert> 
 
           <v-form  ref="form" v-model="valid"  v-on:submit.prevent="postBroadcast">

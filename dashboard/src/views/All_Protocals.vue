@@ -15,13 +15,13 @@
    </v-flex>
 
 
-   <v-list-class xs12 sm6 md6 lg4 dense v-for="result in results" :key="result.id">
+   <v-list class xs12 sm6 md6 lg4 dense v-for="result in results" :key="result.id">
 
     <v-card
       min-width="900"
       max-width="900"
       style=padding-bottom  
-      class="mx-auto flex"
+      class="mx-auto"
     >
       <v-card-title class="headline">{{result.title}}</v-card-title>
       
@@ -59,8 +59,9 @@
       </v-dialog>
 
     </v-card>
+   
+   </v-list>
    <v-spacer> </v-spacer>
-   </v-list-class>
 </v-layout>
 </v-container>
 </template>
