@@ -25,13 +25,23 @@
       <v-flex
         md12
       >
-        <material-card
-          color="green"
-          title="Broadcast Messages"
-        >
+        <v-card>
+          <v-card-title>
+          Broadcast History
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+
+        </v-card-title>
           <v-data-table
             :headers="headers"
             :items="all_messages"
+            :search="search"
             show-actions
             item-key="id"
           >
@@ -46,9 +56,16 @@
                 <td>{{ props.item.message }}</td>
               </tr>
             </template>
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
 
           </v-data-table>
-        </material-card>
+        </v-card>
       </v-flex>
 
     </v-layout>

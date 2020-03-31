@@ -16,7 +16,26 @@
           title="Create A Resource For Continuous Medical Education "
           text="Kindly fill all the required fields carefully"
         >
-          <v-form @submit="postCME">
+         <v-card-text>
+            <div></div>
+            <p class="display-1 text--primary">
+              Add Continuous Medical Education Content
+            </p>
+            <div class="text--primary">
+              Kindly fill all the required fields
+            </div>
+          </v-card-text>
+          <v-alert
+            :value="alert"
+            color="pink"
+            dark
+            border="top"
+            transition="scale-transition"
+          >
+            {{output.message}} {{output.error}}
+          </v-alert>
+
+          <v-form v-model="valid" ref="form" v-on:submit.prevent="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -27,6 +46,7 @@
                   <v-text-field
                     id="title"
                     :rules="[rules.required]"
+                    required
                     v-model="title"
                     label="Title"
                     class="purple-input"/>
@@ -37,7 +57,7 @@
                     id="body"
                     v-model="body"
                     :rules="[rules.required]"
-                    label="Write Here"
+                    required
                     rows="12"
                   />
                 </v-flex>
@@ -57,6 +77,8 @@
                 >
                   <v-btn
                     class="mx-0 font-weight-light"
+                    :disabled="!valid"
+                    @click="validate(); alert = !alert;   "
                     color="success"
                     type="submit"
                   >
@@ -79,7 +101,10 @@ import axios from 'axios'
 export default {
 
   data () {
-    return {
+    return{
+      alert: false,
+      valid: true,
+      output: '',
       title: '',
       body: '',
       files: [],
@@ -90,8 +115,13 @@ export default {
   },
 
   methods: {
-    handleFiles () {
-      let uploadedFiles = this.$refs.files.files
+
+    validate () {
+        this.$refs.form.validate()
+      },
+
+    handleFiles() {
+    let uploadedFiles = this.$refs.files.files;
 
       for (var i = 0; i < uploadedFiles.length; i++) {
         this.files.push(uploadedFiles[i])
@@ -126,29 +156,31 @@ export default {
         if (this.files[i].id) {
           continue
         }
+      
+    let allData = new FormData();
+    // dict of all elements
+    allData.append('image_file', this.files[i]);
+    allData.append("title", this.title);
+    allData.append("body", this.body);
 
-        let allData = new FormData()
-        // dict of all elements
-        allData.append('image_file', this.files[i])
-        allData.append('title', this.title)
-        allData.append('body', this.body)
-
-        let currentObj = this
-
-        axios.post('resources/cmes/create',
-          allData, {
-            headers: {
-              'content-type': 'multipart/form-data' }
-          })
-          .then(function (data) {
-            this.$router.push('/cmes')
-            console.log('success')
-          }.bind(this)).catch(function (data) {
-            console.log('error')
-          })
-      }
+    let currentObj = this
+    
+    axios.post('resources/cmes/create',
+      allData, {
+        headers: {
+        "content-type": "multipart/form-data"}
+      })
+    .then(function(data) {
+      alert("Data Added Successfully")
+      this.$router.push('/cmes');
+      console.log('success');
+    }.bind(this)).catch(function(data) {
+        alert("Something went wrong, please retry")
+        console.log('error');
+        });
     }
   }
+}
 }
 
 </script>

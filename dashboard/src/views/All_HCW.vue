@@ -11,13 +11,25 @@
       <v-flex
         md12
       >
-        <material-card
-          color="green"
-          title="Health Care Workers"
-        >
+      
+      <v-card>
+        <v-card-title>
+          Health Care Workers
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+
           <v-data-table
             :headers="headers"
             :items="all_hcws"
+            :rows-per-page-items="rowsPerPageItems"
+            :search="search"
             show-actions
             item-key="id"
           >
@@ -34,9 +46,16 @@
                 <td>{{ props.item.dob }}</td>
               </tr>
             </template>
-
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+            
           </v-data-table>
-        </material-card>
+      </v-card>
       </v-flex>
 
     </v-layout>
@@ -50,6 +69,7 @@ export default {
     return {
       output: [],
       all_hcws: [],
+      rowsPerPageItems: [50, 250,500],
       headers: [
         {
           sortable: false,
@@ -98,8 +118,21 @@ export default {
         .then((workers) => {
           console.log(workers.data)
           this.all_hcws = workers.data.data
+          this.loopT(workers.data.links.next)
         })
-        .catch(error => console.log(error.message))
+        .catch(error => console.log(error.message));
+    },
+     async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.all_hcws = this.all_hcws.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
     }
   }
 }

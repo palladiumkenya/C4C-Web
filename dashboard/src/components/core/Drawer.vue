@@ -206,10 +206,9 @@ export default {
           icon: 'mdi-clipboard-outline',
           text: 'Logout'
         }
-
       ]
     }
-  },
+  },  
   computed: {
     ...mapState('app', ['image', 'color']),
     inputValue: {

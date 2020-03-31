@@ -25,18 +25,20 @@
         lg4
         dense>
 
-        <v-card
-          min-width="900"
-          max-width="900"
-          style="padding-bottom"
-          class="mx-auto flex"
-        >
-          <v-card-title class="headline">{{ result.title }}</v-card-title>
+   <v-list class xs12 sm6 md6 lg4 dense v-for="result in results" :key="result.id">
 
-          <v-card-actions>
-            <v-card-text class="text--primary">
-              <div><span> Created On: </span> {{ result.created_at }}</div>
-            </v-card-text>
+    <v-card
+      min-width="900"
+      max-width="900"
+      style=padding-bottom  
+      class="mx-auto"
+    >
+      <v-card-title class="headline">{{result.title}}</v-card-title>
+      
+       <v-card-actions> 
+        <v-card-text class="text--primary">
+        <div><span> Created On: </span> {{result.created_at}}</div>
+        </v-card-text> 
 
             <v-card-text class="text--primary">
               <div><span> Facility: </span> {{ result.facility_id }}</div>

@@ -191,6 +191,10 @@ export default [
     view: 'Notifications'
   },
   {
+    path: '/icons',
+    view: 'Icons'
+  },
+  {
     path: '/add_device',
     name: 'Add Devices',
     view: 'AddDevices',

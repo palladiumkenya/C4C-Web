@@ -25,60 +25,84 @@
               Kindly fill all the required fields
             </div>
           </v-card-text>
-          <v-form @submit="postBroadcast">
+          <v-alert
+            :value="alert"
+            color="pink"
+            dark
+            border="top"
+            transition="scale-transition"
+          >
+            {{output.message}} {{output.error}}
+          </v-alert> 
+
+          <v-form  ref="form" v-model="valid"  v-on:submit.prevent="postBroadcast">
             <v-container py-0>
               <v-layout wrap>
 
                 <v-flex
                   xs12
                 >
-                  <v-select
-                    v-model="facility"
-                    :items="all_facilities"
-                    item-text="name"
-                    item-value="id"
-                    multiple
-                    chips
-                    label="Select Facility"
-                    required="True"
-                  />
-                </v-flex>
+                <v-combobox
+                  v-model="facility"
+                  :items="all_facilities"
+                  item-text="name"
+                  item-value="id"
+                  :search-input.sync="search"
+                  hide-selected
+                  chips
+                  label="Select Facility"
+                  :rules="[rules.required]"
+                  required
+                  :return-object="true"
+                ></v-combobox>
+              </v-flex>
 
                 <v-flex
                   xs12
                 >
-                  <v-select
-                    v-model="cadre"
-                    :items="all_cadres"
-                    item-text="name"
-                    item-value="id"
-                    multiple
-                    chips
-                    label="Select Cadre"
-                    required
-                  />
-                </v-flex>
+                <v-combobox
+                  v-model="cadres"
+                  :items="all_cadres"
+                  item-text="name"
+                  item-value="id"
+                  ref="cadres"
+                  multiple
+                  chips
+                  label="Select Cadre"
+                  :rules="[rules.required]"
+                  required
+                  
+                ></v-combobox>
+                <strong>{{ all_cadres.item }}</strong>&nbsp;
+              </v-flex>
 
                 <v-flex
                   xs12
                 >
-                  <v-textarea
-                    v-model="message"
-                    label="Message"
-                    required="True"
-                    placeholder="Write here"
-                  />
-                </v-flex>
+                <v-textarea
+                  label="Message"
+                  :rules="[rules.required]"
+                  placeholder="Write here"
+                  v-model="message"
+                  required
+                ></v-textarea>
+              </v-flex>
 
                 <v-btn
                   class="mr-4 success"
                   type="submit">submit</v-btn>
 
-              </v-layout>
+                <v-btn 
+                class="mr-4 success"
+                :disabled="!valid"
+                 @click="validate(); alert = !alert"
+                type="submit">
+                submit</v-btn>
+
+             </v-layout>
             </v-container>
           </v-form>
-          <strong>Output:</strong>
-          <pre> {{ output.error }} </pre>
+          
         </material-card>
       </v-flex>
     </v-layout>
@@ -90,13 +114,19 @@ import axios from 'axios'
 
 export default {
   data () {
-    return {
-      all_cadres: [],
-      all_facilities: [],
-      output: '',
+    return{
+      all_cadres : [],
+      all_facilities : [],
+      valid: true,
+      alert: false,
+      search: null,
       facility: '',
-      cadre: '',
-      message: ''
+      output: '',
+      cadres: [],
+      message: '',
+      rules: {
+        required: value => !!value || 'This field is required.'
+      },
 
     }
   },
@@ -105,7 +135,11 @@ export default {
     this.getFacilities()
   },
 
-  methods: {
+  methods : {
+    validate () {
+        this.$refs.form.validate()
+      },
+
     getCadres () {
       axios.get('cadres')
         .then((cadres) => {
@@ -124,22 +158,25 @@ export default {
         .catch(error => console.log(error.message))
     },
 
-    postBroadcast (e) {
-      e.preventDefault()
+
+    postBroadcast(e) {
+      e.preventDefault();
+     
       axios.post('broadcasts/web/create', {
-        facility: this.facility.id,
-        cadre: this.cadre.id,
+        facility_id : this.facility.id,
+        
+        cadres : this.cadres.map(item => item.id),
         message: this.message
       })
-        .then((response) => {
-          this.output = response.data
-          this.$router.push('/all_broadcast')
-          console.log('success')
-        })
-        .catch((error) => {
-          this.output = error
-        })
+    .then((response) => {
+      this.output = response.data
+      this.$router.push('/all_broadcast')
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log("error")
+    })
     }
-  }
-}
+    }
+ }
 </script>

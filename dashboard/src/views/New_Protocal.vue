@@ -16,7 +16,26 @@
           title="Create A Protocal "
           text="Kindly fill all the required fields carefully"
         >
-          <v-form @submit="postProtocal">
+        <v-card-text>
+            <div></div>
+            <p class="display-1 text--primary">
+              Add A New Protocal
+            </p>
+            <div class="text--primary">
+              Kindly fill all the required fields
+            </div>
+          </v-card-text>
+
+        <v-alert
+            :value="alert"
+            type="error"
+            dark
+            border="top"
+            transition="scale-transition">
+            {{output.message}} {{output.error}}
+          </v-alert> 
+
+          <v-form v-model="valid" ref="form" v-on:submit.prevent="postProtocal">
             <v-container py-0>
               <v-layout wrap>
 
@@ -27,6 +46,7 @@
                   <v-text-field
                     id="title"
                     :rules="[rules.required]"
+                    required
                     v-model="title"
                     label="Title"
                     class="purple-input"/>
@@ -35,22 +55,23 @@
                 <v-flex
                   xs12
                 >
-                  <v-autocomplete
-                    v-model="facility_id"
-                    :items="all_facilities"
-                    :loading="loading"
-                    :search-input.sync="search"
-                    :return-object="true"
-                    item-text="name"
-                    item-value="id"
-                    cache-items
-                    hide-no-data
-                    hide-details
-                    label="Select Facility"
-                    required="True"
-                  />
+                <v-combobox
+                  v-model="facility_id"
+                  :items="all_facilities"
+                  item-text="name"
+                  item-value="id"
+                  :loading="loading"
+                  :search-input.sync="search"
+                  cache-items
+                  hide-no-data
+                  hide-details
+                  label="Select Facility"
+                  :rules="[rules.required]"
+                  required
+                  :return-object="true"
+                ></v-combobox>
 
-                </v-flex>
+              </v-flex>
 
                 <v-flex xs12>
                   <v-textarea
@@ -78,6 +99,8 @@
                   <v-btn
                     class="mx-0 font-weight-light"
                     color="success"
+                    :disabled="!valid"
+                    @click="validate(); alert();"
                     type="submit"
                   >
                     Submit
@@ -86,8 +109,7 @@
               </v-layout>
             </v-container>
           </v-form>
-          <strong>Output:</strong>
-          <pre> {{ output }} </pre>
+           
         </material-card>
       </v-flex>
 
@@ -104,14 +126,16 @@ export default {
     return {
       loading: false,
       search: null,
+      valid:true,
       items: [],
+      alert: false,
       all_facilities: [],
       facility: 'null',
       facility_id: '',
       title: '',
       body: '',
       files: [],
-      output: [],
+      output: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -127,6 +151,9 @@ export default {
   },
 
   methods: {
+    validate () {
+        this.$refs.form.validate()
+      },
 
     querySelections (v) {
       this.loading = true
@@ -184,31 +211,33 @@ export default {
         if (this.files[i].id) {
           continue
         }
+      
+    let allData = new FormData();
+    // dict of all elements
+    allData.append('image_file', this.files[i]);
+    allData.append("title", this.title);
+    allData.append("body", this.body);
+    allData.append("facility_id", this.facility_id.id);
 
-        let allData = new FormData()
-        // dict of all elements
-        allData.append('image_file', this.files[i])
-        allData.append('title', this.title)
-        allData.append('body', this.body)
-        allData.append('facility_id', this.facility_id.id)
 
-        let currentObj = this
-
-        axios.post('resources/protocols/create',
-          allData, {
-            headers: {
-              'content-type': 'multipart/form-data' }
-          })
-          .then(function (data) {
-            console.log(data)
-            this.$router.push('/protocals')
-            console.log('success')
-          }.bind(this)).catch(function (data) {
-            console.log('error')
-          })
-      }
+    let currentObj = this
+    
+    axios.post('resources/protocols/create',
+      allData, {
+        headers: {
+        "content-type": "multipart/form-data"}
+      })
+    .then(function(data) {
+        alert("Data Added Successfully")
+        this.$router.push('/protocals')
+        console.log('success');
+    }.bind(this)).catch(function(data) {
+        alert("Something went wrong, please retry")
+        console.log('error');
+        });
     }
   }
+}
 }
 
 </script>

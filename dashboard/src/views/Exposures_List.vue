@@ -68,12 +68,12 @@
             <v-alert
               slot="no-results"
               :value="true"
-              color="error"
+              color="success"
               icon="mdi-emoticon-sad">
               Your search for "{{ search }}" found no results.
             </v-alert>
           </v-data-table>
-        </material-card>
+      </v-card>
       </v-flex>
 
     </v-layout>
