@@ -111,7 +111,11 @@ export default {
           value: 'pep_initiated'
         }
       ],
-      exposures: []
+      exposures: [],
+      downloadLoading: false,
+      filename: 'Exposures',
+      autoWidth: true,
+      bookType: 'xlsx'
     }
   },
   created () {
@@ -123,7 +127,6 @@ export default {
         .then((exp) => {
           this.exposures = exp.data.data
           this.link = exp.data.links.next
-          console.log(exp.data.data)
           this.loopT(this.link)
         })
         .catch(error => console.log(error.message))
@@ -143,10 +146,9 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Name', 'Safety Designed', 'Created On']
-        const filterVal = ['name','safety_designed', 'created_at']
-        const list = this.items
-        
+        const tHeader = ['Name', 'First Name', 'Surname', 'Location', 'Date']
+        const filterVal = ['id','first_name', 'surname', 'location', 'date']
+        const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
           header: tHeader,
@@ -159,12 +161,10 @@ export default {
       })
     },
     formatJson(filterVal, jsonData) {
-      console.log(jsonData)
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
         } else {
-          console.log(jsonData)
           return v[j]
         }
       }))
