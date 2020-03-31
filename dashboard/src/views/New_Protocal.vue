@@ -51,28 +51,17 @@
                     label="Title"
                     class="purple-input"/>
                 </v-flex>
-
                 <v-flex
-                  xs12
+                xs12
+                md8>
+                <label>Facility:</label>
+                <v-chip
+                  class="ma-2"
+                  x-large
                 >
-                <v-combobox
-                  v-model="facility_id"
-                  :items="all_facilities"
-                  item-text="name"
-                  item-value="id"
-                  :loading="loading"
-                  :search-input.sync="search"
-                  cache-items
-                  hide-no-data
-                  hide-details
-                  label="Select Facility"
-                  :rules="[rules.required]"
-                  required
-                  :return-object="true"
-                ></v-combobox>
-
+                  {{user.hcw.facility.name}}
+                </v-chip>
               </v-flex>
-
                 <v-flex xs12>
                   <v-textarea
                     id="body"
@@ -119,6 +108,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
 
@@ -149,7 +139,11 @@ export default {
   created () {
     this.getFacilities()
   },
-
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   methods: {
     validate () {
         this.$refs.form.validate()
@@ -217,7 +211,7 @@ export default {
     allData.append('image_file', this.files[i]);
     allData.append("title", this.title);
     allData.append("body", this.body);
-    allData.append("facility_id", this.facility_id.id);
+    allData.append("facility_id", this.user.hcw.facility.id);
 
 
     let currentObj = this

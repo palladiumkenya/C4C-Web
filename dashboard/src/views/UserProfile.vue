@@ -99,11 +99,12 @@
                 xs12
                 md8>
                 <label>Facility:</label>
+                {{user}}
                 <v-chip
                   class="ma-2"
                   x-large
                 >
-                  facility.name
+                  {{user.hcw.facility.name}}
                 </v-chip>
               </v-flex>
               <v-flex
