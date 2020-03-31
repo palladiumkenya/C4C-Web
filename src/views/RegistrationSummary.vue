@@ -1,3 +1,0 @@
-<template>
-  <core-DatePicker/>
-</template>
