@@ -186,7 +186,6 @@ export default {
         this.locations.push(this.seriesdata)
       }
       this.pieOptions.series[0].data = this.locations
-      console.log(count)
     },
     getExp () {
       axios.get('exposures/all/')
@@ -211,10 +210,8 @@ export default {
       this.getDep()
     },
     getNum(name){
-      //console.log(this.s)
       var count = 0
       for(var x in this.s){
-        console.log(this.s[x].location)
         if (this.s[x].location === name){
           count++
         }

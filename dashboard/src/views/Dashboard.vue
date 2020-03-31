@@ -138,7 +138,7 @@
         lg12
       >
         <!-- insert some chart here -->
-        <highcharts :options="chartOptions"/>
+        <highcharts :options="chartOptions" ref="barChart"/>
       </v-flex>
 
       <v-flex
@@ -167,24 +167,86 @@ export default {
   },
   data () {
     return {
-    getLocations:[],
-      getLocationsNumber:[],
-    message: 'Fetching Data...',
     chartOptions: {
+      xAxis: {
+        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
+        title: {
+          text: null
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: "No. of Exposures",
+          align: "high"
+        },
+        labels: {
+          overflow: "justify"
+        }
+      },
       chart: {
-        height: 300,
+        height: 700,
         type: 'column'
        },
        title: {
-         text: 'Amount of visitors per day'
+         text: 'Number of exposures'
         },
         series: [{
-          name: [],
-          colorByPoint: true,
+          name: ['Prick'],
+          data: []
+        },
+        {
+          name: ['Spill'],
+          data: []
+        },
+        {
+          name: ['Bite'],
+          data: []
+        },
+        {
+          name: ['Cut'],
+          data: []
+        },
+        {
+          name: ['fluid spill'],
+          data: []
+        },
+        {
+          name: ['Human Bite'],
+          data: []
+        },
+        {
+          name: ['Needle prick'],
+          data: []
+        },
+        {
+          name: ['Needle stick injury'],
+          data: []
+        },
+        {
+          name: ['Non-intact skin'],
+          data: []
+        },
+        {
+          name: ['Not Specified'],
+          data: []
+        },
+        {
+          name: ['Other'],
+          data: []
+        },
+        {
+          name: ['Splash on mucosa'],
+          data: []
+        },
+        {
+          name: ['Etc'],
           data: []
         }
         ]
       },
+      seriesdata: [],
+      s: [],
       facility_exposures: {},
       hcw_exposures: {},
       registered_hcw: {},
@@ -216,14 +278,7 @@ export default {
   },
 
   mounted: function () {
-    this.getdata()
-
-    setTimeout(function(){
-        this.message = 'Data Fetched';
-        this.chartOptions.series[0].name = this.getLocations
-        this.chartOptions.series[0].data = this.getLocationsNumber
-   //   this.chartOptions.xAxis.categories = this.getLocations
-    }.bind(this), 3000);
+    this.getExp()
 
     axios.get('users')
       .then(exp => {
@@ -246,18 +301,53 @@ export default {
       })
   },
   methods: {
-    async getdata () {
-      let resp = await  axios.get('exposures/all')
-      var i, x;
-      console.log(resp.data.data)
-      for (i = 0; i < resp.data.data.length; i++) {
-        this.getLocationsNumber.push(resp.data.data.length);
-        this.getLocations.push(resp.data.data[i].type);
-       // x += resp.data.data[i].type + "";
+    getDep(){
+      var count = 0;
+      for(var i in this.chartOptions.series){
+        this.seriesdata = []
+        for(var v in this.chartOptions.xAxis.categories){
+          this.seriesdata.push(this.getNum(this.chartOptions.xAxis.categories[v], this.chartOptions.series[i].name[0]))
+          count += this.getNum(this.chartOptions.xAxis.categories[v], this.chartOptions.series[i].name[0])
+          
+        }
+        this.chartOptions.series[i].data = this.seriesdata
+        console.log(this.seriesdata)
       }
-      this.facility_exposures = resp.data.data
-      return  this.getLocationsNumber
-      return this.getLocations
+      
+      console.log(count)
+    },
+    getExp () {
+      axios.get('exposures/all/')
+      .then((exp) => {
+        this.s = exp.data.data
+        this.link = exp.data.links.next
+        this.loopT(this.link)
+      })
+      .catch(error => console.log(error.message))
+    },
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.s = this.s.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+      this.getDep()
+    },
+    getNum(loc, type){
+      var count = 0
+      for(var x in this.s){
+        //console.log(this.s[x].type)
+        if (this.s[x].location === loc && this.s[x].type === type){
+          console.log(this.s[x].type)
+          count++
+        }
+      }
+      return count
     }
   },
   computed: {
