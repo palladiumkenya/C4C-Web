@@ -166,7 +166,6 @@ export default {
           ]
         },
         {
-
           icon: 'mdi-account-edit',
           text: 'Immunizations',
           subLinks: [
@@ -193,9 +192,14 @@ export default {
           text: 'Devices'
         },
         {
-          to: '/resources',
+          to: '/cmes',
           icon: 'mdi-arrow-down-bold-circle',
           text: 'Resource Center'
+        },
+        {
+          to: '/protocals',
+          icon: 'mdi-home-automation',
+          text: 'Protocols'
         },
         {
           to: '/feed-back',

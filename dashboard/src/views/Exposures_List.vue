@@ -23,7 +23,7 @@
                 <v-text-field
 
                   v-model="search"
-                  append-icon="mdi-search-web"
+                  append-icon="mdi-magnify"
                   label="Search"
                   single-line
                   hide-details
