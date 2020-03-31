@@ -25,7 +25,7 @@
         lg4
         dense>
 
-   <v-list class xs12 sm6 md6 lg4 dense v-for="result in results" :key="result.id">
+    <v-list class xs12 sm6 md6 lg4 dense v-for="result in results" :key="result.id">
 
     <v-card
       min-width="900"
@@ -76,7 +76,7 @@
           </v-dialog>
 
         </v-card>
-
+    </v-list>
       </v-list-class>
     </v-layout>
   </v-container>

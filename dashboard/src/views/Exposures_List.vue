@@ -73,7 +73,7 @@
               Your search for "{{ search }}" found no results.
             </v-alert>
           </v-data-table>
-      </v-card>
+        </material-card>
       </v-flex>
 
     </v-layout>
