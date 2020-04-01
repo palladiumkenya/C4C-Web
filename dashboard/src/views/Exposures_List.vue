@@ -23,7 +23,7 @@
                 <v-text-field
 
                   v-model="search"
-                  append-icon="mdi-magnify"
+                  append-icon="mdi-search-web"
                   label="Search"
                   single-line
                   hide-details
@@ -51,7 +51,7 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.id }} </td>
+                <td>{{ props.item.first_name }} {{ props.item.surname }} </td>
                 <td>{{ props.item.previous_exposures }}</td>
                 <td>{{ props.item.location }}</td>
                 <td>{{ props.item.date }}</td>
@@ -92,8 +92,8 @@ export default {
       output: [],
       headers: [
         {
-          text: 'ID',
-          value: 'id'
+          text: 'Name',
+          value: 'name'
         },
         {
           sortable: false,

@@ -171,6 +171,7 @@ export default {
           ]
         },
         {
+
           icon: 'mdi-account-edit',
           text: 'Immunizations',
           subLinks: [
@@ -212,15 +213,10 @@ export default {
             },
             {
               to: '/covid19',
-              icon: 'mdi-alert-decagram',
-              text: 'COVID 19'
+              icon: 'mdi-animation',
+              text: 'COVID 19 Resources'
             }
           ]
-        },
-        {
-          to: '/protocals',
-          icon: 'mdi-home-automation',
-          text: 'Protocols'
         },
         {
           to: '/feed-back',

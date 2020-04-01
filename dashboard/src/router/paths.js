@@ -191,14 +191,7 @@ export default [
     view: 'Notifications'
   },
   {
-    path: '/covid19',
-    name: 'COVID 19 Resources',
-    view: 'Covid'
-  },
-
-  {
     path: '/icons',
-    name: 'icons',
     view: 'Icons'
   },
   {

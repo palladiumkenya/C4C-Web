@@ -88,6 +88,10 @@
                 ></v-textarea>
               </v-flex>
 
+                <v-btn
+                  class="mr-4 success"
+                  type="submit">submit</v-btn>
+
                 <v-btn 
                 class="mr-4 success"
                 :disabled="!valid"
