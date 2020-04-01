@@ -212,6 +212,9 @@ export default {
     allData.append("title", this.title);
     allData.append("body", this.body);
     allData.append("facility_id", this.user.hcw.facility.id);
+
+
+    let currentObj = this
     
     axios.post('resources/protocols/create',
       allData, {

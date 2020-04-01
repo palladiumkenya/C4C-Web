@@ -139,8 +139,13 @@ export default {
             },
             {
               to: '/users_list',
-              icon: 'mdi-account-box-multiple',
+              icon: 'mdi-account-multiple-plus',
               text: 'View Users'
+            },
+            {
+              to: '/hcw_list',
+              icon: 'mdi-account-group',
+              text: 'Health Care Workers'
             }
           ]
         },
@@ -166,6 +171,7 @@ export default {
           ]
         },
         {
+
           icon: 'mdi-account-edit',
           text: 'Immunizations',
           subLinks: [
@@ -192,14 +198,25 @@ export default {
           text: 'Devices'
         },
         {
-          to: '/cmes',
+          text: 'Resource Center',
           icon: 'mdi-arrow-down-bold-circle',
-          text: 'Resource Center'
-        },
-        {
-          to: '/protocals',
-          icon: 'mdi-home-automation',
-          text: 'Protocols'
+          subLinks: [
+            {
+              text: 'CME',
+              to: '/cmes',
+              icon: 'mdi-animation'
+            },
+            {
+              to: '/protocals',
+              icon: 'mdi-archive',
+              text: 'Protocals'
+            },
+            {
+              to: '/covid19',
+              icon: 'mdi-animation',
+              text: 'COVID 19 Resources'
+            }
+          ]
         },
         {
           to: '/feed-back',
