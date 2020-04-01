@@ -308,12 +308,12 @@ export default {
         for(var v in this.chartOptions.xAxis.categories){
           this.seriesdata.push(this.getNum(this.chartOptions.xAxis.categories[v], this.chartOptions.series[i].name[0]))
           count += this.getNum(this.chartOptions.xAxis.categories[v], this.chartOptions.series[i].name[0])
-          
+
         }
         this.chartOptions.series[i].data = this.seriesdata
         console.log(this.seriesdata)
       }
-      
+
       console.log(count)
     },
     getExp () {
