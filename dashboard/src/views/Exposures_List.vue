@@ -15,13 +15,18 @@
           color="green"
           title="Broadcast Messages"
         >
+          <v-card-text>
+            <div/>
+            <p class="display-1 text--primary">
+              List of Exposures
+            </p>
+          </v-card-text>
           <v-container py-0>
             <v-layout wrap>
               <v-flex
                 xs12
-                md8>
+                md10>
                 <v-text-field
-
                   v-model="search"
                   append-icon="mdi-magnify"
                   label="Search"
@@ -31,7 +36,7 @@
               </v-flex>
               <v-flex
                 xs12
-                md4>
+                md2>
                 <v-btn
                   :loading="downloadLoading"
                   color="primary"
@@ -51,7 +56,8 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.first_name }} {{ props.item.surname }} </td>
+                <td>{{ props.item.first_name }}</td>
+                <td>{{ props.item.surname }}</td>
                 <td>{{ props.item.previous_exposures }}</td>
                 <td>{{ props.item.location }}</td>
                 <td>{{ props.item.date }}</td>
@@ -92,8 +98,12 @@ export default {
       output: [],
       headers: [
         {
-          text: 'Name',
-          value: 'name'
+          text: 'First name',
+          value: 'first_name'
+        },
+        {
+          text: 'Surname',
+          value: 'surname'
         },
         {
           sortable: false,
@@ -101,12 +111,10 @@ export default {
           value: 'previous_exposures'
         },
         {
-          sortable: false,
           text: 'Location',
           value: 'location'
         },
         {
-          sortable: false,
           text: 'Date',
           value: 'Date'
         },

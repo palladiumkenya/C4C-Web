@@ -4,7 +4,7 @@
 ##VUE##
   
 .DS_Store
-dashboard/node_modules/
+#dashboard/node_modules/
 /dist/
 
 # local env files

@@ -99,7 +99,6 @@
                 xs12
                 md8>
                 <label>Facility:</label>
-                {{user}}
                 <v-chip
                   class="ma-2"
                   x-large
@@ -143,7 +142,7 @@
               {{ user.first_name }} {{ user.surname }}
             </p>
             <h6 class="category text-gray font-weight-thin mb-3">{{ user.role.name }}</h6>
-            <p class="card-description font-weight-light">Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye</p>
+            <p class="card-description font-weight-light">Don't be scared of the truth because we need to restart the human foundation in truth</p>
 
           </v-card-text>
         </material-card>
