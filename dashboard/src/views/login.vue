@@ -21,7 +21,7 @@
                     :src="logo"
                     width="180"
                     height="180"/>
-                  <h2 class="flex my-4 clo">Login</h2>
+                  <h3 class="flex my-4 clo">Care for the Carer Login</h3>
                 </div>
                 <form>
                   <v-text-field
@@ -43,9 +43,9 @@
                     label="Password"
                     @click:append="hidePassword = !hidePassword"/>
                 </form>
+                <a href="/forgot_password" style="color: black">Forgot Your Password?</a>
               </v-card-text>
               <v-card-actions>
-                <v-spacer/>
                 <v-btn
                   :loading="loading"
                   block

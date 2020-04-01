@@ -130,7 +130,11 @@ export default [
     name: 'HCW List',
     view: 'All_HCW'
   },
-
+  {
+    path: '/forgot_password',
+    name: 'Forgot Password',
+    view: 'ForgotPassword'
+  },
   {
     path: '/exposures',
     name: 'Exposures',

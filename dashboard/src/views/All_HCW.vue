@@ -67,7 +67,6 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      search: '',
       output: [],
       all_hcws: [],
       rowsPerPageItems: [50, 250,500],

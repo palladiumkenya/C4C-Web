@@ -28,7 +28,7 @@
                 md10>
                 <v-text-field
                   v-model="search"
-                  append-icon="mdi-magnify"
+                  append-icon="mdi-search-web"
                   label="Search"
                   single-line
                   hide-details
