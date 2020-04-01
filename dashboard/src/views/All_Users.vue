@@ -49,7 +49,7 @@
               icon="mdi-emoticon-sad">
               Your search for "{{ search }}" found no results.
             </v-alert>
-            
+
           </v-data-table>
       </v-card>
       </v-flex>

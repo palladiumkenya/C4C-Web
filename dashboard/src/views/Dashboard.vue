@@ -8,106 +8,73 @@
 
       <!-- Start Cards -->
       <v-flex
-        sm6
-        xs12
-        md6
-        lg3
+        sm3
+        xs8
+        md4
+        lg2
       >
 
         <template>
           <v-card
             class="mx-auto"
-            color="#2196f3"
+            color="#4B9FD2"
             dark
           >
 
             <v-card-text>
-
-              <h2 align="center">{{ HCWsCount }}</h2>
-              <h5 align="center">Registered HCWs</h5>
+<v-icon class="mr-1" >mdi-account-group</v-icon>
+              <h2 align="center">{{ usersCount }}</h2>
+              <h5 align="center">Registered Health Care Workers</h5>
             </v-card-text>
-            <v-icon
-              left
-            />
           </v-card>
         </template>
 
       </v-flex>
+
       <v-flex
-        sm6
-        xs12
-        md6
-        lg3
+        sm3
+        xs8
+        md4
+        lg2
       >
 
         <template>
           <v-card
             class="mx-auto"
-            color="#2196f3"
+            color="#4B9FD2"
             dark
           >
 
             <v-card-text>
-
-              <h2 align="center">{{ facilityCount }}</h2>
+<v-icon class="mr-1">mdi-file-chart</v-icon>
+              <h2 align="center">{{ exposuresCount }}</h2>
               <h5 align="center">Reported Exposures</h5>
             </v-card-text>
-            <v-icon
-              left
-            />
-          </v-card>
-        </template>
-
-      </v-flex>
-      <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#2196f3"
-            dark
-          >
-
-            <v-card-text>
-
-              <h2 align="center">{{ exposuresCount }}</h2>
-              <h5 align="center">HCWs With Exposures</h5>
-            </v-card-text>
-            <v-icon
-              left
-            />
           </v-card>
         </template>
 
       </v-flex>
 
+
       <v-flex
-        sm6
-        xs12
-        md6
-        lg3
+        sm3
+        xs8
+        md4
+        lg2
       >
 
         <template>
           <v-card
             class="mx-auto"
-            color="#2196f3"
+            color="#4B9FD2"
             dark
           >
 
             <v-card-text>
-
-              <h2 align="center">{{ resultCount }}</h2>
-              <h5 align="center">Broadcast Messages</h5>
+<v-icon class="mr-1">mdi-message</v-icon>
+              <h2 align="center">{{ broadcastsCount }}</h2>
+              <h5 align="center">Broadcast Messages Sent</h5>
             </v-card-text>
-            <v-icon
-              left
-            />
           </v-card>
         </template>
 
@@ -124,10 +91,7 @@
         lg12
       >
         <!-- insert some chart here -->
-        <div id="appy">
-          exposures Id's as string  {{ getLocations }}
-          {{ getLocationsNumber}}
-        </div>
+
         <h3 v-text="message"/>
       </v-flex>
 
@@ -171,7 +135,7 @@ export default {
       xAxis: {
         categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
         title: {
-          text: null
+          text: 'Location of Exposure'
         }
       },
       yAxis: {
@@ -247,38 +211,15 @@ export default {
       },
       seriesdata: [],
       s: [],
-      facility_exposures: {},
-      hcw_exposures: {},
-      registered_hcw: {},
-      broadcastCount: {}
-    }
-  },
-  computed: {
-    resultCount () {
-      return Object.keys(this.broadcastCount).length
-    },
-
-    // all facility exposures # computed
-
-    facilityCount () {
-      return Object.keys(this.facility_exposures).length
-    },
-
-    // hcws with exposures # computed
-
-    exposuresCount () {
-      return Object.keys(this.hcw_exposures).length
-    },
-    HCWsCount () {
-      return Object.keys(this.registered_hcw).length
-    },
-    datas () {
-      return this.getLocations
+      u: [],
+      b: []
     }
   },
 
   mounted: function () {
-    this.getExp()
+    this.getExp();
+            this.getUsers();
+            this.getBroadcasts();
 
     axios.get('users')
       .then(exp => {
@@ -325,6 +266,48 @@ export default {
       })
       .catch(error => console.log(error.message))
     },
+    getUsers () {
+      axios.get('users')
+      .then((users) => {
+        this.u = users.data.data
+        this.link = users.data.links.next
+        this.loopU(this.link)
+      })
+      .catch(error => console.log(error.message))
+    },
+     getBroadcasts () {
+      axios.get('broadcasts/web/all')
+      .then((users) => {
+        this.b = users.data.data
+        this.link = users.data.links.next
+        this.loopB(this.link)
+      })
+      .catch(error => console.log(error.message))
+    },
+    async loopB (lo) {
+      var i
+      for (i = 0; i < 1;) {
+        if (lo != null) {
+          let response = await axios.get(lo)
+          lo = response.data.links.next
+          this.b = this.b.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+    },
+    async loopU (li) {
+      var i
+      for (i = 0; i < 1;) {
+        if (li != null) {
+          let response = await axios.get(li)
+          li = response.data.links.next
+          this.u = this.u.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+    },
     async loopT (l) {
       var i
       for (i = 0; i < 1;) {
@@ -344,6 +327,7 @@ export default {
         //console.log(this.s[x].type)
         if (this.s[x].location === loc && this.s[x].type === type){
           console.log(this.s[x].type)
+          console.log(this.u.length)
           count++
         }
       }
@@ -351,23 +335,20 @@ export default {
     }
   },
   computed: {
-    resultCount () {
-      return Object.keys(this.broadcastCount).length
+    broadcastsCount () {
+      return Object.keys(this.b).length
     },
 
     // all facility exposures # computed
 
-    facilityCount () {
-      return Object.keys(this.facility_exposures).length
+    usersCount () {
+      return Object.keys(this.u).length
     },
 
     // hcws with exposures # computed
 
     exposuresCount () {
-      return Object.keys(this.hcw_exposures).length
-    },
-    HCWsCount () {
-      return Object.keys(this.registered_hcw).length
+      return Object.keys(this.s).length
     }
   }
 }
