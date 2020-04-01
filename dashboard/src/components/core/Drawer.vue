@@ -139,8 +139,13 @@ export default {
             },
             {
               to: '/users_list',
-              icon: 'mdi-account-box-multiple',
+              icon: 'mdi-account-multiple-plus',
               text: 'View Users'
+            },
+            {
+              to: '/hcw_list',
+              icon: 'mdi-account-group',
+              text: 'Health Care Workers'
             }
           ]
         },
@@ -193,9 +198,25 @@ export default {
           text: 'Devices'
         },
         {
-          to: '/resources',
+          text: 'Resource Center',
           icon: 'mdi-arrow-down-bold-circle',
-          text: 'Resource Center'
+          subLinks: [
+            {
+              text: 'CME',
+              to: '/cmes',
+              icon: 'mdi-animation'
+            },
+            {
+              to: '/protocals',
+              icon: 'mdi-archive',
+              text: 'Protocals'
+            },
+            {
+              to: '/covid19',
+              icon: 'mdi-alert-decagram',
+              text: 'COVID 19'
+            }
+          ]
         },
         {
           to: '/feed-back',
