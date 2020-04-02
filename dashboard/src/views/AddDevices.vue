@@ -249,6 +249,7 @@ export default {
             this.output = response.data
             this.resp = Boolean(response.data.success)
             this.snack('top', 'center')
+            this.DeviceList()
           })
           .catch((error) => {
             this.output = error

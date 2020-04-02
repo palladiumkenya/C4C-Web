@@ -133,7 +133,7 @@ export default {
     return {
     chartOptions: {
       xAxis: {
-        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
+        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laundry','OP/MCH','Other','Not Specified'],
         title: {
           text: 'Location of Exposure'
         }
