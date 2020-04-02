@@ -212,8 +212,8 @@ export default {
               text: 'Protocals'
             },
             {
-              to: '/covid19',
-              icon: 'mdi-animation',
+              to: '/covid19_resources',
+              icon: 'mdi-alert-decagram',
               text: 'COVID 19 Resources'
             }
           ]

@@ -184,11 +184,16 @@ export default [
     name: 'Add Protocal',
     view: 'New_Protocal'
   },
+  {
+    path: '/add_protocal',
+    name: 'Add Protocal',
+    view: 'New_Protocal'
+  },
 
   {
-    path: '/view_resource',
-    name: 'Resource',
-    view: 'View_Resource'
+    path: '/covid19_resources',
+    name: 'COVID19 Resources',
+    view: 'Covid'
   },
 
   {

@@ -2,19 +2,16 @@
     <v-container
     fill-height
     fluid
-    grid-list-xl
   >
 
   <v-layout
       justify-center
       wrap
     >
-    
-    <div class="entry-content">
-    		<div class="ead-preview"><div class="ead-document" style="position:relative;padding-top:40%;"><iframe src="//view.officeapps.live.com/op/embed.aspx?src=https%3A%2F%2Fwww.nnak.or.ke%2Fwp-content%2Fuploads%2F2020%2F03%2FCOVID-19-PRESENTATION-1.pptx" title="Embedded Document" style="width:100%; height:100%; border: none; position: absolute;left:0;top:0;"></iframe></div></div>
+    <h2><span style="color: #000080;">WHAT YOU NEED TO KNOW ABOUT COVID-19</span></h2>
 
-        <div class="container">
-        <h2><strong><span style="color: #000080;">WHAT YOU NEED TO KNOW ABOUT COVID-19</span></strong></h2>
+    <div class="entry-content">
+    		<!-- <div class="ead-preview"><div class="ead-document" style="position:relative;padding-top:40%;"><iframe src="//view.officeapps.live.com/op/embed.aspx?src=https%3A%2F%2Fwww.nnak.or.ke%2Fwp-content%2Fuploads%2F2020%2F03%2FCOVID-19-PRESENTATION-1.pptx" title="Embedded Document" style="width:100%; height:100%; border: none; position: absolute;left:0;top:0;"></iframe></div></div> -->
         <p><span style="color: #000080;"><b>What is COVID-19?</b></span></p>
         <p>COVID-19 is a disease caused by a new strain of coronavirus. ‘CO’ stands for corona, ‘VI’ for virus, and ‘D’ for disease.</p>
         <p>Formerly, this disease was referred to as ‘2019 novel coronavirus’ or ‘2019-nCoV.’ The COVID-19 virus is a new virus linked to the same family of viruses as Severe Acute Respiratory Syndrome (SARS) and some types of common cold.</p>
@@ -70,7 +67,7 @@
         <p>Step 4: Rinse thoroughly with running water</p>
         <p>Step 5: Dry hands with a clean, dry cloth, single-use towel or hand drier as available</p>
         <p>Click here to read how NNAs are taking lead in the fight against COVID-19</p>
-        </div>
+        
         </div><!-- .entry-content -->
   </v-layout>
     </v-container>

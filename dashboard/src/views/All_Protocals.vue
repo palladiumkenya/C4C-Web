@@ -40,10 +40,6 @@
         <div><span> Created On: </span> {{result.created_at}}</div>
         </v-card-text> 
 
-            <v-card-text class="text--primary">
-              <div><span> Facility: </span> {{ result.facility_id }}</div>
-            </v-card-text>
-
             <v-btn
               color="orange"
               @click.stop="dialog = true">

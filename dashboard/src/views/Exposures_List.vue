@@ -56,8 +56,7 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.first_name }}</td>
-                <td>{{ props.item.surname }}</td>
+                <td>{{ props.item.id }}</td>
                 <td>{{ props.item.previous_exposures }}</td>
                 <td>{{ props.item.location }}</td>
                 <td>{{ props.item.date }}</td>
@@ -98,12 +97,8 @@ export default {
       output: [],
       headers: [
         {
-          text: 'First name',
-          value: 'first_name'
-        },
-        {
-          text: 'Surname',
-          value: 'surname'
+          text: 'ID',
+          value: 'id'
         },
         {
           sortable: false,
