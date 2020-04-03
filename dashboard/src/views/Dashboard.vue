@@ -92,7 +92,6 @@
       >
         <!-- insert some chart here -->
 
-        <h3 v-text="message"/>
       </v-flex>
 
       <!-- End Graphs -->
@@ -252,10 +251,8 @@ export default {
 
         }
         this.chartOptions.series[i].data = this.seriesdata
-        console.log(this.seriesdata)
       }
 
-      console.log(count)
     },
     getExp () {
       axios.get('exposures/all/')
@@ -326,8 +323,6 @@ export default {
       for(var x in this.s){
         //console.log(this.s[x].type)
         if (this.s[x].location === loc && this.s[x].type === type){
-          console.log(this.s[x].type)
-          console.log(this.u.length)
           count++
         }
       }

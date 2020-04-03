@@ -203,29 +203,28 @@ export default {
           continue
         }
       
-    let allData = new FormData();
-    // dict of all elements
-    allData.append('image_file', this.files[i]);
-    allData.append("title", this.title);
-    allData.append("body", this.body);
-    allData.append("facility_id", this.user.hcw.facility.id);
+      let allData = new FormData();
+      // dict of all elements
+      allData.append('image_file', this.files[i]);
+      allData.append("title", this.title);
+      allData.append("body", this.body);
+      allData.append("facility_id", this.user.hcw.facility.id);
 
-
-    let currentObj = this
-    
-    axios.post('resources/protocols/create',
-      allData, {
-        headers: {
-        "content-type": "multipart/form-data"}
-      })
-    .then(function(data) {
-        alert("Data Added Successfully")
-        this.$router.push('/protocals')
-        console.log('success');
-    }.bind(this)).catch(function(data) {
+      let currentObj = this
+      
+      axios.post('resources/protocols/create',
+        allData, {
+          headers: {
+          "content-type": "multipart/form-data"}
+        })
+      .then(function(data) {
+          alert("Data Added Successfully")
+          this.$router.push('/protocals')
+          console.log('success');
+      }.bind(this)).catch(function(data) {
         alert("Something went wrong, please retry")
         console.log('error');
-        });
+      });
     }
   }
 }

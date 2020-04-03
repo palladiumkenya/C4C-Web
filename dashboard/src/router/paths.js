@@ -185,9 +185,9 @@ export default [
     view: 'New_Protocal'
   },
   {
-    path: '/add_protocal',
-    name: 'Add Protocal',
-    view: 'New_Protocal'
+    path: '/departments',
+    name: 'Departments',
+    view: 'AddDepartments'
   },
 
   {

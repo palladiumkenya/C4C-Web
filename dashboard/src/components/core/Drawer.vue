@@ -193,9 +193,20 @@ export default {
           text: 'Broadcasts'
         },
         {
-          to: '/add_device',
-          icon: 'mdi-gamepad',
-          text: 'Devices'
+          text: 'Manage Facility',
+          icon: 'mdi-settings',
+          subLinks:  [
+          {
+            to: '/add_device',
+            icon: 'mdi-gamepad',
+            text: 'Devices'
+          },
+          {
+            to: '/departments',
+            icon: 'mdi-file-tree',
+            text: 'Departments'
+          },
+          ]
         },
         {
           text: 'Resource Center',
