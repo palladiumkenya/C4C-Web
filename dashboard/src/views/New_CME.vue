@@ -32,7 +32,7 @@
             border="top"
             transition="scale-transition"
           >
-            {{output.message}} {{output.error}}
+            {{output.message}} {{output.error}} {{output}}
           </v-alert>
 
           <v-form v-model="valid" ref="form" v-on:submit.prevent="postCME">
@@ -173,33 +173,17 @@ export default {
 
     postCME (e) {
       e.preventDefault()
-      let docsData = new FormData();
 
-    //iterating over any file sent over appending the files
+      let allData = new FormData();
+       //iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i];
-        docsData.append('files[' + i +']', file);
-        }
+        allData.append('cme_files[' + i +']', file);
+        allData.append('image_file', this.file);
+        allData.append("title", this.title);
+        allData.append("body", this.body);
 
-        axios.post('/', 
-          docsData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }).then(function(){
-            console.log('Success')
-          }).catch(function(){
-            console.log('Failed')
-          })
-
-          let allData = new FormData();
-          // dict of all elements
-          allData.append('image_file', this.file);
-          allData.append("title", this.title);
-          allData.append("body", this.body);
-
-          let currentObj = this
+        let currentObj = this
           
           axios.post('resources/cmes/create',
             allData, {
@@ -207,16 +191,17 @@ export default {
               "content-type": "multipart/form-data"}
             })
           .then(function(data) {
-            alert("Data Added Successfully")
             this.$router.push('/cmes');
-            console.log('success');
+              alert("Data Added Successfully")
+                console.log('success');
           }.bind(this)).catch(function(data) {
-              alert("Something went wrong, please retry")
-              console.log('error');
-              });
-    },  
+                  alert("Something went wrong, please retry")
+                  console.log('error');
+            });
+      }   
     }
   }
+}; 
 
 </script>
 <style>

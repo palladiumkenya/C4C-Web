@@ -31,11 +31,11 @@
 
           >
             <v-img
-              :src="result.file"
+              :src="result.file || 'sunshine.jpg' "
               class="white--text align-end"
               height="200px"
-            />
-
+             />
+ 
             <v-card-title>{{ result.title }}</v-card-title>
 
             <v-card-text class="text--primary">
@@ -69,8 +69,9 @@
                 </v-btn>
                 <v-toolbar-title> {{ result.title }}</v-toolbar-title>
               </v-toolbar>
-
+              <v-card-text height="500px"> Download PDF Documents : {{ result.files[result.files.length -1] }}</v-card-text>
               <v-card-text height="500px">{{ result.body }}</v-card-text>
+              
             </v-card>
           </v-dialog>
 
@@ -93,7 +94,10 @@ export default {
   created () {
     this.getResources()
   },
+
   methods: {
+
+
     getResources () {
       axios.get('resources/cmes')
         .then((resources) => {

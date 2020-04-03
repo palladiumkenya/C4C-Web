@@ -198,18 +198,17 @@ export default {
 
     postProtocal (e) {
       e.preventDefault()
-      for (let i = 0; i < this.files.length; i++) {
-        if (this.files[i].id) {
-          continue
-        }
       
     let allData = new FormData();
-    // dict of all elements
+
+    for (var i = 0; i < this.files.length; i++) {
+    let file = this.files[i];
+
+    allData.append('protocal_files[' + i +']', file);
     allData.append('image_file', this.files[i]);
     allData.append("title", this.title);
     allData.append("body", this.body);
     allData.append("facility_id", this.user.hcw.facility.id);
-
 
     let currentObj = this
     
