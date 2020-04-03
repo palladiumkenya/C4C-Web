@@ -7,7 +7,7 @@
     floating
     persistent
     mobile-break-point="991"
-    width="260"
+    width="270"
   >
     <v-img
       :src="image"
@@ -231,7 +231,7 @@ export default {
         },
         {
           to: '/feed-back',
-          icon: 'mdi-backburger',
+          icon: 'mdi-bullhorn',
           text: 'Feedback'
         },
         {
