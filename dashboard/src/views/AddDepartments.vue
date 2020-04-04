@@ -13,36 +13,36 @@
       >
         <material-card
           color="green"
-          title="Add a New Device"
+          title=""
           text="Kindly fill all the required fields"
         >
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Add A New Device
+              Add A New Department
             </p>
             <div class="text--primary">
               Kindly fill all the required fields
             </div>
           </v-card-text>
-          <v-form @submit="AddDevice">
+          <v-form @submit="AddDepartment">
             <v-container py-0>
               <v-layout wrap>
                 <v-flex
                   xs12
-                  md3
+                  md5
                 >
-                  <v-combobox
-                    v-model="facility_id"
-                    :rules="[rules.required]"
-                    :items="facilities"
-                    label="Facility"
-                    class="purple-input"
-                  />
+                  <label>Facility:</label>
+                  <v-chip
+                    class="ma-2"
+                    x-large
+                  >
+                    {{user.hcw.facility.name}}
+                  </v-chip>
                 </v-flex>
                 <v-flex
                   xs12
-                  md6
+                  md7
                 >
                   <v-text-field
                     v-model="name"
@@ -54,9 +54,7 @@
                   xs12
                   md3
                 >
-                  <v-switch
-                    v-model="switch1"
-                    :label="`Safety Engineered?  ${switch1.toString()}`"/>
+                  
                 </v-flex>
 
                 <v-flex
@@ -79,13 +77,13 @@
 
         <material-card
           color="blue"
-          title="Add a New Device"
-          text="Devices List">
+          title=""
+          text="List">
           <v-layout wrap>
             <v-card-text>
               <div/>
               <p class="display-1 text--primary">
-                Devices List
+                Department List
               </p>
               <v-btn
                 :loading="downloadLoading"
@@ -115,8 +113,7 @@
                   slot="items"
                   slot-scope="{ item }"
                 >
-                  <td>{{ item.name }}</td>
-                  <td>{{ Boolean(item.safety_designed) }}</td>
+                  <td>{{ item.department_name }}</td>
                   <td>{{ item.created_at }}</td>
                 </template>
               </v-data-table>
@@ -154,25 +151,18 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   //
   data () {
     return {
       rowsPerPageItems: [50, 250, 500],
-      switch1: true,
       name: '',
-      facility_id: '',
-      facilities: [],
       headers: [
         {
           sortable: false,
           text: 'Name',
-          value: 'name'
-        },
-        {
-          sortable: false,
-          text: 'Safety Design',
-          value: 'safety_designed'
+          value: 'department_name'
         },
         {
           sortable: false,
@@ -181,7 +171,6 @@ export default {
         }
       ],
       items: [],
-      facilities_all: [],
       rules: {
         required: value => !!value || 'Required.'
       },
@@ -199,70 +188,64 @@ export default {
       right: false,
       snackbar: false,
       downloadLoading: false,
-      filename: 'Devices',
+      filename: 'Departments',
       autoWidth: true,
       bookType: 'xlsx'
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   created () {
-    this.DeviceList()
-    this.Facilities()
+    this.DepartmentList()
   },
   methods: {
     checkData () {
-      if (this.facility_id == '') {
-        this.pre_out = 'Pick facilty to proceed'
+      if (this.user.hcw.facility.id == '') {
+        this.pre_out = 'User not attached to a facility'
         this.snack('top', 'center')
         return false
       } else if (this.name == '') {
-        this.pre_out = 'Provide device name to proceed'
+        this.pre_out = 'Provide department name to proceed'
         this.snack('top', 'center')
         return false
       } else { return true }
     },
-    Facilities () {
-      axios.get('facilities')
-        .then((resp) => {
-          this.facilities_all = resp.data.data
-          for (var k in resp.data.data) {
-            this.facilities.push(this.facilities_all[k].name)
-          }
-        })
-    },
-    DeviceList () {
-      axios.get('devices/all/')
+    DepartmentList () {
+      axios.get(`facility_departments/${this.user.hcw.facility.id}`)
         .then((exp) => {
           this.items = exp.data.data
-          console.log(exp.data)
         })
         .catch(error => console.log(error.message))
     },
-    AddDevice (e) {
+    AddDepartment (e) {
       e.preventDefault()
+      let id = this.user.hcw.facility.id
       if (this.checkData()) {
-        axios.post('devices/create', {
-          facility_id: this.facilities_all[this.facilities.indexOf(this.facility_id)].id,
-          name: this.name,
-          safety_designed: this.switch1
+        axios.post('facilities/department/add', {
+          facility_id: id,
+          department_name: this.name
         })
-        .then((response) => {
-          this.output = response.data
-          this.resp = Boolean(response.data.success)
-          this.snack('top', 'center')
-          this.items = []
-          this.DeviceList()
-        })
-        .catch((error) => {
-          this.output = error
-          this.snack('top', 'center')
-        })
+          .then((response) => {
+            this.output = response.data
+            this.resp = Boolean(response.data.success)
+            this.snack('top', 'center')
+            this.items = []
+            this.DepartmentList()
+          })
+          .catch((error) => {
+            this.output = error
+            this.snack('top', 'center')
+          })
       }
     },
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Name', 'Safety Designed', 'Created On']
-        const filterVal = ['name', 'safety_designed', 'created_at']
+        const tHeader = ['Name', 'Created On']
+        const filterVal = ['department_name', 'created_at']
         const list = this.items
 
         const data = this.formatJson(filterVal, list)

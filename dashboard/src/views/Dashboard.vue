@@ -91,7 +91,6 @@
       >
         <!-- insert some chart here -->
 
-        <h3 v-text="message"/>
       </v-flex>
 
       <!-- End Graphs -->
@@ -132,7 +131,7 @@ export default {
     return {
     chartOptions: {
       xAxis: {
-        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
+        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laundry','OP/MCH','Other','Not Specified'],
         title: {
           text: 'Location of Exposure'
         }
@@ -238,10 +237,8 @@ export default {
 
         }
         this.chartOptions.series[i].data = this.seriesdata
-        console.log(this.seriesdata)
       }
 
-      console.log(count)
     },
     getExp () {
       axios.get('exposures/all/')
@@ -312,7 +309,10 @@ export default {
       for(var x in this.s){
         //console.log(this.s[x].type)
         if (this.s[x].location === loc && this.s[x].type === type){
+<<<<<<< HEAD
           console.log(this.s[x].type)
+=======
+>>>>>>> refs/remotes/origin/develop
           count++
         }
       }

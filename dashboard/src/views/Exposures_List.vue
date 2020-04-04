@@ -56,9 +56,11 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.first_name }}</td>
-                <td>{{ props.item.surname }}</td>
+                <td>{{ props.item.id }}</td>
+                <td>{{ props.item.cadre.name }}</td>
                 <td>{{ props.item.previous_exposures }}</td>
+                <td>{{ props.item.type }}</td>
+                <td>{{ props.item.device }}</td>
                 <td>{{ props.item.location }}</td>
                 <td>{{ props.item.date }}</td>
                 <td>{{ Boolean(props.item.pep_initiated) }}</td>
@@ -98,17 +100,26 @@ export default {
       output: [],
       headers: [
         {
-          text: 'First name',
-          value: 'first_name'
+          text: 'ID',
+          value: 'id'
         },
         {
-          text: 'Surname',
-          value: 'surname'
+          text: 'Cadre',
+          value: 'cadre.name'
         },
         {
           sortable: false,
           text: 'Previous exposures',
           value: 'previous_exposures'
+        },
+        {
+          sortable: false,
+          text: 'Type',
+          value: 'type'
+        },
+        {
+          text: 'Device',
+          value: 'device'
         },
         {
           text: 'Location',
@@ -158,14 +169,14 @@ export default {
         } else {
           i = 11
         }
-        console.log(this.exposures)
       }
+        console.log(this.exposures)
     },
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Name', 'First Name', 'Surname', 'Location', 'Date']
-        const filterVal = ['id', 'first_name', 'surname', 'location', 'date']
+        const tHeader = ['Cadre', 'Previous Exposures', 'Type', 'Location', 'Date']
+        const filterVal = [ 'cadre', 'previous_exposures', 'type', 'location', 'date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -180,8 +191,9 @@ export default {
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
+        
+        if (j === 'cadre') {
+          return v[j].name
         } else {
           return v[j]
         }
