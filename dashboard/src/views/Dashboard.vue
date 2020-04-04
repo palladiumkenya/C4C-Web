@@ -309,10 +309,10 @@ export default {
       for(var x in this.s){
         //console.log(this.s[x].type)
         if (this.s[x].location === loc && this.s[x].type === type){
-<<<<<<< HEAD
+
           console.log(this.s[x].type)
-=======
->>>>>>> refs/remotes/origin/develop
+
+ refs/remotes/origin/develop
           count++
         }
       }
