@@ -55,7 +55,6 @@
 
       </v-flex>
 
-
       <v-flex
         sm3
         xs8
@@ -221,19 +220,6 @@ export default {
             this.getUsers();
             this.getBroadcasts();
 
-    axios.get('users')
-      .then(exp => {
-        // console.log(exp.data.data);
-        this.registered_hcw = exp.data.data // <--- Im thinking this is an object
-      })
-
-
-    // number of broadcasts
-    axios.get('broadcasts/web/all')
-      .then(response => {
-        this.broadcastCount = response.data.data // <--- Im thinking this is an object
-      })
-
     // hcw with exposures # mounted
 
     axios.get('immunizations/all')
@@ -327,7 +313,6 @@ export default {
         //console.log(this.s[x].type)
         if (this.s[x].location === loc && this.s[x].type === type){
           console.log(this.s[x].type)
-          console.log(this.u.length)
           count++
         }
       }
