@@ -9,13 +9,10 @@
     >
       <v-flex
         xs12
-        md10
+        md11
       >
-        <material-card
-          color="green"
-          title="Create A Protocal "
-          text="Kindly fill all the required fields carefully"
-        >
+        <v-card>
+
         <v-card-text>
             <div></div>
             <p class="display-1 text--primary">
@@ -73,12 +70,27 @@
                 </v-flex>
 
                 <v-flex xs12 >
+                  
+                <label for="document">Upload Image:</label>
                   <input
-                    id="image_file"
-                    ref="files"
+                    id="file"
+                    ref="file"
+                    accept="image/*"
                     type="file"
-                    multiple
-                    @change="handleFiles()">
+                    @change="handleImageChange()">
+
+                <img v-bind:src="imagePreview" v-show="showPreview"/> 
+                </v-flex>
+
+                <v-flex>
+                    <label for="document">Upload Documents:</label>
+                    <input
+                      id="image_file"
+                      hint="Add image" persistent-hint
+                      ref="files"
+                      type="file"
+                      multiple
+                      @change="handleFiles()">
                 </v-flex>
 
                 <v-flex
@@ -99,7 +111,7 @@
             </v-container>
           </v-form>
            
-        </material-card>
+        </v-card>
       </v-flex>
 
     </v-layout>
@@ -114,8 +126,6 @@ export default {
 
   data () {
     return {
-      loading: false,
-      search: null,
       valid:true,
       items: [],
       alert: false,
@@ -124,16 +134,14 @@ export default {
       facility_id: '',
       title: '',
       body: '',
+      file: '',
+      showPreview: false,
+      imagePreview: '',
       files: [],
       output: '',
       rules: {
         required: value => !!value || 'Required.'
       }
-    }
-  },
-  watch: {
-    search (val) {
-      val && val !== this.select && this.querySelections(val)
     }
   },
   created () {
@@ -149,17 +157,6 @@ export default {
         this.$refs.form.validate()
       },
 
-    querySelections (v) {
-      this.loading = true
-      // Simulated ajax query
-      setTimeout(() => {
-        this.items = this.facilities.filter(e => {
-          return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
-        })
-        this.loading = false
-      }, 500)
-    },
-
     handleFiles () {
       let uploadedFiles = this.$refs.files.files
 
@@ -169,25 +166,25 @@ export default {
       this.getImagePreviews()
     },
 
-    getImagePreviews () {
-      for (let i = 0; i < this.files.length; i++) {
-        if (/\.(jpe?g|png|gif)$/i.test(this.files[i].name)) {
-          let reader = new FileReader()
-          reader.addEventListener('load', function () {
-            this.$refs['preview' + parseInt(i)][0].src = reader.result
-          }.bind(this), false)
-          reader.readAsDataURL(this.files[i])
-        } else {
-          this.$nextTick(function () {
-            this.$refs['preview' + parseInt(i)][0].src = '/img/generic.png'
-          })
+    handleImageChange(e) {
+      this.file = this.$refs.file.files[0];
+
+      let reader = new FileReader();
+
+      reader.addEventListener("load", function(){
+        this.showPreview = true;
+        this.imagePreview = reader.result;
+      }.bind(this), false);
+
+      if(this.file){
+        if ( /\.(jpe?g|png|gif)$/i.test(this.file.name)) {
+            reader.readAsDataURL(this.file);
         }
       }
     },
 
     removeFile (key) {
       this.files.splice(key, 1)
-      this.getImagePreviews()
     },
 
     getFacilities () {
@@ -206,29 +203,28 @@ export default {
           continue
         }
       
-    let allData = new FormData();
-    // dict of all elements
-    allData.append('image_file', this.files[i]);
-    allData.append("title", this.title);
-    allData.append("body", this.body);
-    allData.append("facility_id", this.user.hcw.facility.id);
+      let allData = new FormData();
+      // dict of all elements
+      allData.append('image_file', this.files[i]);
+      allData.append("title", this.title);
+      allData.append("body", this.body);
+      allData.append("facility_id", this.user.hcw.facility.id);
 
-
-    let currentObj = this
-    
-    axios.post('resources/protocols/create',
-      allData, {
-        headers: {
-        "content-type": "multipart/form-data"}
-      })
-    .then(function(data) {
-        alert("Data Added Successfully")
-        this.$router.push('/protocals')
-        console.log('success');
-    }.bind(this)).catch(function(data) {
+      let currentObj = this
+      
+      axios.post('resources/protocols/create',
+        allData, {
+          headers: {
+          "content-type": "multipart/form-data"}
+        })
+      .then(function(data) {
+          alert("Data Added Successfully")
+          this.$router.push('/protocals')
+          console.log('success');
+      }.bind(this)).catch(function(data) {
         alert("Something went wrong, please retry")
         console.log('error');
-        });
+      });
     }
   }
 }

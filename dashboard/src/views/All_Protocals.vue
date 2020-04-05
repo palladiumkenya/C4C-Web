@@ -25,7 +25,7 @@
         lg4
         dense>
 
-    <v-list class xs12 sm6 md6 lg4 dense v-for="result in results" :key="result.id">
+    <v-list class xs12 sm6 md6 lg4 dense >
 
     <v-card
       min-width="900"
@@ -39,10 +39,6 @@
         <v-card-text class="text--primary">
         <div><span> Created On: </span> {{result.created_at}}</div>
         </v-card-text> 
-
-            <v-card-text class="text--primary">
-              <div><span> Facility: </span> {{ result.facility_id }}</div>
-            </v-card-text>
 
             <v-btn
               color="orange"
