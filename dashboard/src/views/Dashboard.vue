@@ -84,21 +84,28 @@
       <!-- Filters -->
 
       <!-- Start Graphs -->
-      <v-flex
+      <v-card>
+     <v-tabs
+      color="teal lighten-5"
+      centered
+    >
+      <v-tab>Summary Report</v-tab>
+      <v-tab>Report By Location</v-tab>
+      <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Month</v-tab>
+      <v-tab>Report By Age</v-tab>
+      <v-tab>Report By Gender</v-tab>
+      <v-tab>Report By Verification</v-tab>
+        <v-tab-item
+        v-for="n in 7"
+        :key="n">
+        <v-container fluid>
+          <v-card-text v-if="n==1">
+ <v-flex
         md12
         sm12
         lg12
-      >
-        <!-- insert some chart here -->
-
-      </v-flex>
-
-      <!-- End Graphs -->
-      <v-flex
-        md12
-        sm12
-        lg12
-      >
+      >{{location}}{{usersl}}
         <!-- insert some chart here -->
         <highcharts
           ref="barChart"
@@ -115,6 +122,28 @@
           ref="columnChart"
           :options="RegistrationsChartOptions"/>
       </v-flex>
+          </v-card-text>
+          <v-card-text v-if="n==2">
+          </v-card-text>
+          <v-card-text v-if="n==3">
+          </v-card-text>
+          <v-card-text v-if="n==4">
+          </v-card-text>
+          <v-card-text v-if="n==5">
+          </v-card-text>
+          <v-card-text v-if="n==6">
+          </v-card-text>
+          <v-card-text v-if="n==7">
+          </v-card-text>
+        </v-container>
+        </v-tab-item>
+
+
+     </v-tabs>
+
+</v-card>
+      <!-- End Graphs -->
+
 
       <!-- Start Maps -->
 
@@ -263,10 +292,13 @@ export default {
       seriesdata: [],
       s: [],
       userz: [],
+      usersl: [],
       u: 0,
       b: 0,
       month: [],
+      location: [],
       seriesnames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+      seriesnamel: ['MALE', 'FEMALE','Mombasa', 'Kakamega', 'Nairobi', 'Kajiado', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir', 'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga', 'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu'],
       scount: 0
     }
   },
@@ -288,11 +320,12 @@ export default {
     }
   },
 
-  mounted: function () {
+  created () {
     this.getExp()
     this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
+
 
     // hcw with exposures # mounted
 
@@ -334,6 +367,8 @@ export default {
       axios.get('users')
       .then((exp) => {
         this.userz = exp.data.data
+        this.userl = exp.data.data
+        console.log(exp.data.data[5].hcw.facility.county)
         this.link = exp.data.links.next
         this.loopT(this.link)
       })
@@ -359,6 +394,18 @@ export default {
       }
       this.RegistrationsChartOptions.series[0].data = this.month
     },
+    getLocations(){
+      var counter = 0;
+      for(var va in this.seriesnamel){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnamel[va])
+        this.seriesdata.push(this.getNuml(this.seriesnamel[va]))
+        counter += this.getNuml(this.seriesnamel[va])
+        this.location.push(this.seriesdata)
+        console.log(this.seriesdata)
+      }
+      //this.LocationsChartOptions.series[0].data = this.location
+    },
 
     async loopT (l) {
       var i
@@ -368,12 +415,14 @@ export default {
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
           this.userz = this.userz.concat(response.data.data)
+        //  this.userl = this.userl.concat(response.data.data)
         } else {
           i = 11
         }
       }
       this.getDep()
       this.getRegistrations()
+      this.getLocations()
     },
     getNum (loc, type) {
       var count = 0
@@ -393,6 +442,15 @@ export default {
         if (moment(this.userz[xo].created_at).format().substr(5,2) === name){
           counter++
         }
+      }
+      return counter
+    },
+    getNuml(name){
+      var counter = 0
+      for(var xo in this.userl){
+        if (this.userz[xo].gender === name){
+          counter++
+        console.log(this.userl[xo])}
       }
       return counter
     }
