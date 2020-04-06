@@ -10,8 +10,8 @@
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
-          @click="$router.push('add_CME')"
-        >
+          @click="$router.push('add_CME')">
+        
           Add A New CME
         </v-btn>
       </v-flex>
@@ -42,15 +42,21 @@
               <div><span>Created On: </span>{{ result.created_at }}</div>
             </v-card-text>
 
+            <router-link :to="{ name: 'view_CME', params: {id : result.id } }"> more </router-link>
+
+
             <v-btn
               :style="{left: '50%', transform:'translateX(-50%)'}"
               color="orange"
-              @click.stop="dialog = true">
+              @click="$router.push('/view_CME/${result.id}')">
+
               View More
             </v-btn>
+
+
           </v-card>
 
-          <v-dialog
+          <!-- <v-dialog
             v-model="dialog"
             fullscreen
             hide-overlay
@@ -69,11 +75,13 @@
                 </v-btn>
                 <v-toolbar-title> {{ result.title }}</v-toolbar-title>
               </v-toolbar>
-              <v-card-text height="500px"> Download PDF Documents : {{ result.files[result.files.length -1] }}</v-card-text>
+              <v-list v-for="file in result.files" >
+              <v-card-text height="500px"> Download Documents :<a :href=" file "> {{ file }} </a> </v-card-text>
+              </v-list>
               <v-card-text height="500px">{{ result.body }}</v-card-text>
               
             </v-card>
-          </v-dialog>
+          </v-dialog> -->
 
         </template>
       </v-flex>

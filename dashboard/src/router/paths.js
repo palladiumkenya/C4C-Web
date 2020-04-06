@@ -175,6 +175,11 @@ export default [
     view: 'New_CME'
   },
   {
+    path: '/view_CME/:id',
+    name: 'View CME',
+    view: 'View_CME'
+  },
+  {
     path: '/protocals',
     name: 'Protocals',
     view: 'All_Protocals'

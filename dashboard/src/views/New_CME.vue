@@ -27,7 +27,7 @@
           </v-card-text>
           <v-alert
             :value="alert"
-            color="pink"
+            type="info"
             dark
             border="top"
             transition="scale-transition"
@@ -195,7 +195,7 @@ export default {
               alert("Data Added Successfully")
                 console.log('success');
           }.bind(this)).catch(function(data) {
-                  alert("Something went wrong, please retry")
+              alert("Something went wrong, please retry")
                   console.log('error');
             });
       }   
