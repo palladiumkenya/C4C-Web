@@ -312,7 +312,6 @@ export default {
 
           console.log(this.s[x].type)
 
- refs/remotes/origin/develop
           count++
         }
       }
