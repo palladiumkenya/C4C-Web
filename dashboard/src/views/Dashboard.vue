@@ -284,18 +284,6 @@ export default {
         .catch(error => console.log(error.message))
     },
 
-    async loopU (li) {
-      var i
-      for (i = 0; i < 1;) {
-        if (li != null) {
-          let response = await axios.get(li)
-          li = response.data.links.next
-          this.u = this.u.concat(response.data.data)
-        } else {
-          i = 11
-        }
-      }
-    },
     async loopT (l) {
       var i
       for (i = 0; i < 1;) {
