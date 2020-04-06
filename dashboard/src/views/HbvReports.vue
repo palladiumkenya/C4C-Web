@@ -111,11 +111,7 @@ created ()  {
   },
   methods: {
     getImmunizations() {
-      axios.get('immunizations/all/', {
-    params: {
-      disease_id: 1
-    }
-  })
+      axios.get('immunizations/all?disease_id=1')
               .then((exp) => {
                 console.log(exp)
                 this.s = exp.data.data

@@ -109,9 +109,11 @@
         md12
         sm12
         lg12
-      >
+      >{{month}}
         <!-- insert some chart here -->
-
+         <highcharts
+          ref="columnChart"
+          :options="RegistrationsChartOptions"/>
       </v-flex>
 
       <!-- Start Maps -->
@@ -125,12 +127,61 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
+import Highcharts from "highcharts";
+import moment from "moment";
 export default {
   components: {
     highcharts: Chart
   },
   data () {
     return {
+
+
+      RegistrationsChartOptions: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+    text: 'registrations by Month'
+  },
+        subtitle: {
+        //  text: 'by Type'
+        },
+  xAxis: {
+    //
+     categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+   // categories:  ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
+
+  },
+  labels: {
+    items: [
+      {
+        html: '',
+        style: {
+          left: '50px',
+          top: '18px',
+          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+        }
+      }
+    ]
+  },
+  series: [
+
+    {
+      //type: 'column',
+      colorByPoint: true,
+      name: ['Registrations'],
+      data: []
+    }
+
+  ]
+      },
+
+
       chartOptions: {
         xAxis: {
           categories: ['Lab', 'Ward', 'Theatre', 'Pharmacy', 'Corridors', 'Medical ward', 'Emergency Room', 'Surgical ward', 'Maternity', 'Dental clinic', 'Laundry', 'OP/MCH', 'Other', 'Not Specified'],
@@ -211,8 +262,11 @@ export default {
       },
       seriesdata: [],
       s: [],
+      userz: [],
       u: 0,
       b: 0,
+      month: [],
+      seriesnames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
       scount: 0
     }
   },
@@ -238,6 +292,7 @@ export default {
     this.getExp()
     this.getUsers()
     this.getBroadcasts()
+    this.getAllUsers()
 
     // hcw with exposures # mounted
 
@@ -275,6 +330,15 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+     getAllUsers() {
+      axios.get('users')
+      .then((exp) => {
+        this.userz = exp.data.data
+        this.link = exp.data.links.next
+        this.loopT(this.link)
+      })
+      .catch(error => console.log(error.message))
+    },
     getBroadcasts () {
       axios.get('broadcasts/web/all')
         .then((users) => {
@@ -284,6 +348,18 @@ export default {
         .catch(error => console.log(error.message))
     },
 
+      getRegistrations(){
+      var counter = 0;
+      for(var va in this.seriesnames){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnames[va])
+        this.seriesdata.push(this.getNums(this.seriesnames[va]))
+        counter += this.getNums(this.seriesnames[va])
+        this.month.push(this.seriesdata)
+      }
+      this.RegistrationsChartOptions.series[0].data = this.month
+    },
+
     async loopT (l) {
       var i
       for (i = 0; i < 1;) {
@@ -291,11 +367,13 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
+          this.userz = this.userz.concat(response.data.data)
         } else {
           i = 11
         }
       }
       this.getDep()
+      this.getRegistrations()
     },
     getNum (loc, type) {
       var count = 0
@@ -308,6 +386,15 @@ export default {
         }
       }
       return count
+    },
+    getNums(name){
+      var counter = 0
+      for(var xo in this.userz){
+        if (moment(this.userz[xo].created_at).format().substr(5,2) === name){
+          counter++
+        }
+      }
+      return counter
     }
   }
 }
