@@ -245,17 +245,17 @@ export default {
           name: this.name,
           safety_designed: this.switch1
         })
-        .then((response) => {
-          this.output = response.data
-          this.resp = Boolean(response.data.success)
-          this.snack('top', 'center')
-          this.items = []
-          this.DeviceList()
-        })
-        .catch((error) => {
-          this.output = error
-          this.snack('top', 'center')
-        })
+          .then((response) => {
+            this.output = response.data
+            this.resp = Boolean(response.data.success)
+            this.snack('top', 'center')
+            this.items = []
+            this.DeviceList()
+          })
+          .catch((error) => {
+            this.output = error
+            this.snack('top', 'center')
+          })
       }
     },
     handleDownload () {

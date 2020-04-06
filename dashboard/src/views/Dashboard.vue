@@ -22,7 +22,7 @@
           >
 
             <v-card-text>
-<v-icon class="mr-1" >mdi-account-group</v-icon>
+              <v-icon class="mr-1" >mdi-account-group</v-icon>
               <h2 align="center">{{ usersCount }}</h2>
               <h5 align="center">Registered Health Care Workers</h5>
             </v-card-text>
@@ -46,7 +46,7 @@
           >
 
             <v-card-text>
-<v-icon class="mr-1">mdi-file-chart</v-icon>
+              <v-icon class="mr-1">mdi-file-chart</v-icon>
               <h2 align="center">{{ exposuresCount }}</h2>
               <h5 align="center">Reported Exposures</h5>
             </v-card-text>
@@ -70,7 +70,7 @@
           >
 
             <v-card-text>
-<v-icon class="mr-1">mdi-message</v-icon>
+              <v-icon class="mr-1">mdi-message</v-icon>
               <h2 align="center">{{ broadcastsCount }}</h2>
               <h5 align="center">Broadcast Messages Sent</h5>
             </v-card-text>
@@ -100,7 +100,9 @@
         lg12
       >
         <!-- insert some chart here -->
-        <highcharts :options="chartOptions" ref="barChart"/>
+        <highcharts
+          ref="barChart"
+          :options="chartOptions"/>
       </v-flex>
 
       <v-flex
@@ -129,29 +131,29 @@ export default {
   },
   data () {
     return {
-    chartOptions: {
-      xAxis: {
-        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laundry','OP/MCH','Other','Not Specified'],
-        title: {
-          text: 'Location of Exposure'
-        }
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: "No. of Exposures",
-          align: "high"
+      chartOptions: {
+        xAxis: {
+          categories: ['Lab', 'Ward', 'Theatre', 'Pharmacy', 'Corridors', 'Medical ward', 'Emergency Room', 'Surgical ward', 'Maternity', 'Dental clinic', 'Laundry', 'OP/MCH', 'Other', 'Not Specified'],
+          title: {
+            text: 'Location of Exposure'
+          }
         },
-        labels: {
-          overflow: "justify"
-        }
-      },
-      chart: {
-        height: 700,
-        type: 'column'
-       },
-       title: {
-         text: 'Number of exposures'
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify'
+          }
+        },
+        chart: {
+          height: 700,
+          type: 'column'
+        },
+        title: {
+          text: 'Number of exposures'
         },
         series: [{
           name: ['Prick'],
@@ -209,15 +211,33 @@ export default {
       },
       seriesdata: [],
       s: [],
-      u: [],
-      b: []
+      u: 0,
+      b: 0,
+      scount: 0
+    }
+  },
+  computed: {
+    broadcastsCount () {
+      return this.b
+    },
+
+    // all facility exposures # computed
+
+    usersCount () {
+      return this.u
+    },
+
+    // hcws with exposures # computed
+
+    exposuresCount () {
+      return this.scount
     }
   },
 
   mounted: function () {
-    this.getExp();
-            this.getUsers();
-            this.getBroadcasts();
+    this.getExp()
+    this.getUsers()
+    this.getBroadcasts()
 
     // hcw with exposures # mounted
 
@@ -227,58 +247,43 @@ export default {
       })
   },
   methods: {
-    getDep(){
-      var count = 0;
-      for(var i in this.chartOptions.series){
+    getDep () {
+      var count = 0
+      for (var i in this.chartOptions.series) {
         this.seriesdata = []
-        for(var v in this.chartOptions.xAxis.categories){
+        for (var v in this.chartOptions.xAxis.categories) {
           this.seriesdata.push(this.getNum(this.chartOptions.xAxis.categories[v], this.chartOptions.series[i].name[0]))
           count += this.getNum(this.chartOptions.xAxis.categories[v], this.chartOptions.series[i].name[0])
-
         }
         this.chartOptions.series[i].data = this.seriesdata
       }
-
     },
     getExp () {
       axios.get('exposures/all/')
-      .then((exp) => {
-        this.s = exp.data.data
-        this.link = exp.data.links.next
-        this.loopT(this.link)
-      })
-      .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.scount = exp.data.meta.total
+          this.s = exp.data.data
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
     getUsers () {
       axios.get('users')
-      .then((users) => {
-        this.u = users.data.data
-        this.link = users.data.links.next
-        this.loopU(this.link)
-      })
-      .catch(error => console.log(error.message))
+        .then((users) => {
+          this.u = users.data.meta.total
+        })
+        .catch(error => console.log(error.message))
     },
-     getBroadcasts () {
+    getBroadcasts () {
       axios.get('broadcasts/web/all')
-      .then((users) => {
-        this.b = users.data.data
-        this.link = users.data.links.next
-        this.loopB(this.link)
-      })
-      .catch(error => console.log(error.message))
+        .then((users) => {
+          //console.log(users.data.meta.total)
+          this.b = users.data.meta.total
+        })
+        .catch(error => console.log(error.message))
     },
-    async loopB (lo) {
-      var i
-      for (i = 0; i < 1;) {
-        if (lo != null) {
-          let response = await axios.get(lo)
-          lo = response.data.links.next
-          this.b = this.b.concat(response.data.data)
-        } else {
-          i = 11
-        }
-      }
-    },
+
     async loopU (li) {
       var i
       for (i = 0; i < 1;) {
@@ -304,36 +309,17 @@ export default {
       }
       this.getDep()
     },
-    getNum(loc, type){
+    getNum (loc, type) {
       var count = 0
-      for(var x in this.s){
-        //console.log(this.s[x].type)
-        if (this.s[x].location === loc && this.s[x].type === type){
-
-          console.log(this.s[x].type)
-
- refs/remotes/origin/develop
+      for (var x in this.s) {
+        // console.log(this.s[x].type)
+        if (this.s[x].location === loc && this.s[x].type === type) {
+          //console.log(this.s[x].type)
+          //refs / remotes / origin / develop
           count++
         }
       }
       return count
-    }
-  },
-  computed: {
-    broadcastsCount () {
-      return Object.keys(this.b).length
-    },
-
-    // all facility exposures # computed
-
-    usersCount () {
-      return Object.keys(this.u).length
-    },
-
-    // hcws with exposures # computed
-
-    exposuresCount () {
-      return Object.keys(this.s).length
     }
   }
 }
