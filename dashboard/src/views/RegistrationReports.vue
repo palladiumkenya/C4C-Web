@@ -33,7 +33,15 @@
           <v-card-text v-if="n==2">This is the second tab</v-card-text>
           <v-card-text v-if="n==3">
             <template>
-
+              <h3>{{mess}}</h3>
+              <div
+              v-if="value" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+              </div>
               <highcharts :options="barOptions" ref="barChart"/>
             </template>
           </v-card-text>
@@ -74,7 +82,6 @@ const data = {
     ]
   },
   series: [
-
     {
       type: 'column',
       name: 'Monthly Exposures',
@@ -119,6 +126,7 @@ export default {
   },
   data () {
     return {
+      value: true,
       barOptions: {
         xAxis: {
           categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above','undefined'],
@@ -149,7 +157,7 @@ export default {
           },
         ]
       },
-      seriesdata: [],
+      mess: 'Fetching Data.....',
       s: [],
       u: [],
       b: [],
@@ -162,7 +170,7 @@ export default {
   },
   methods: {
     getUsers () {
-      axios.get('hcw/facility/9831')
+      axios.get('hcw')
       .then((exp) => {
         this.s = exp.data.data
         //console.log(exp.data)
@@ -197,6 +205,8 @@ export default {
         data.push(this.getAgeNum(i))
       }
       this.barOptions.series[0].data = data
+      this.mess = 'Data fetched'
+      this.value = false
     },
     getAgeNum (cat) {
       var count = 0
