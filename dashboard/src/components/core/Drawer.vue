@@ -195,17 +195,17 @@ export default {
         {
           text: 'Manage Facility',
           icon: 'mdi-settings',
-          subLinks:  [
-          {
-            to: '/add_device',
-            icon: 'mdi-gamepad',
-            text: 'Devices'
-          },
-          {
-            to: '/departments',
-            icon: 'mdi-file-tree',
-            text: 'Departments'
-          },
+          subLinks: [
+            {
+              to: '/add_device',
+              icon: 'mdi-gamepad',
+              text: 'Devices'
+            },
+            {
+              to: '/departments',
+              icon: 'mdi-file-tree',
+              text: 'Departments'
+            }
           ]
         },
         {
@@ -240,7 +240,7 @@ export default {
         }
       ]
     }
-  },  
+  },
   computed: {
     ...mapState('app', ['image', 'color']),
     inputValue: {

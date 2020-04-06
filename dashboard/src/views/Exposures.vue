@@ -25,7 +25,7 @@
               sm12
               lg12
             >
-
+{{hours}}
               <select>
                 <option>County</option>
                 <option>Nairobi</option>
@@ -69,7 +69,9 @@
           <v-card-text v-if="n==6">
 
           </v-card-text>
-          <v-card-text v-if="n==7">This is the Third tab</v-card-text>
+          <v-card-text v-if="n==7">
+              <highcharts :options="barOptionsHour" ref="columnChart"/>
+          </v-card-text>
           <v-card-text v-if="n==8">This is the Third tab</v-card-text>
           <v-card-text v-if="n==9">This is the Third tab</v-card-text>
         </v-container>
@@ -85,6 +87,7 @@ import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -101,7 +104,53 @@ export default {
   },
   data () {
     return {
-      barOptionsTime: {
+      barOptionsHour: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+    text: 'Exposures By Hours'
+  },
+        subtitle: {
+         // text: 'by Cadre'
+        },
+  xAxis: {
+    //
+    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      categories: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
+
+
+  },
+  labels: {
+    items: [
+      {
+        html: '',
+        style: {
+          left: '50px',
+          top: '18px',
+          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+        }
+      }
+    ]
+  },
+  series: [
+
+    {
+      //type: 'column',
+      colorByPoint: true,
+        name: 'Exposures',
+      data: []
+    }
+
+  ]
+      },
+
+
+        barOptionsTime: {
         chart: {
           type: 'column',
           options3d: {
@@ -272,13 +321,17 @@ export default {
       type: [],
       cadre: [],
       date: [],
+      gender: [],
+      hours: [],
       seriesdata: [],
       seriesname: ['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
       seriesdatas: [],
       seriesnames: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified'],
       seriesdatac: [],
       seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
-      seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      seriesnameg: ['Male', 'Female'],
+      seriesnameh: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
     }
   },
   created ()  {
@@ -326,16 +379,35 @@ export default {
         this.seriesdata.push(this.getNumt(this.seriesnamet[vac]))
         counter += this.getNumt(this.seriesnamet[vac])
         this.date.push(this.seriesdata)
-        console.log(this.seriesdata)
       }
       this.barOptionsTime.series[0].data = this.date
+    },
+     getGender(){
+      var counter = 0;
+      for(var vac in this.seriesnameg){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnameg[vac])
+        this.seriesdata.push(this.getNumg(this.seriesnameg[vac]))
+        counter += this.getNumg(this.seriesnameg[vac])
+        this.gender.push(this.seriesdata)
+      }
+     // this.barOptionsGender.series[0].data = this.gender
+    },
+     getHour(){
+      var counter = 0;
+      for(var vac in this.seriesnameh){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnameh[vac])
+        this.seriesdata.push(this.getNumh(this.seriesnameh[vac]))
+        counter += this.getNumh(this.seriesnameh[vac])
+        this.hours.push(this.seriesdata)
+      }
+      this.barOptionsHour.series[0].data = this.hours
     },
     getExp () {
       axios.get('exposures/all/')
       .then((exp) => {
         this.s = exp.data.data
-        console.log(this.s)
-        console.log(this.s[0].date.slice(0,3))
         this.link = exp.data.links.next
         this.loopT(this.link)
       })
@@ -356,6 +428,8 @@ export default {
       this.getTypes()
       this.getCadre()
       this.getTime()
+      this.getGender()
+      this.getHour()
     },
     getNum(name){
       var count = 0
@@ -388,7 +462,27 @@ export default {
       var counter = 0
       for(var xt in this.s){
         if (this.s[xt].date.slice(0,3) === name){
-          console.log(this.s[xt].date.slice(0,3))
+          counter++
+        }
+      }
+      return counter
+    },
+    getNumg(name){
+      var counter = 0
+      for(var xg in this.s){
+        /*if (this.s[xg].id === name){
+          console.log(this.s[xg].id)
+          counter++
+        }*/
+      }
+      return counter
+    },
+    getNumh(name){
+      var counter = 0
+      for(var xh in this.s){
+        if (moment(this.s[xh].created_at).format().substr(11,2) === name){
+            console.log('l')
+//console.log(moment(this.s[xh].created_at).format('LT'))
           counter++
         }
       }

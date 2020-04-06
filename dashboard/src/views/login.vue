@@ -109,7 +109,7 @@ export default {
           })
         })
         .catch(() => {
-          console.log('failed')
+          //console.log('failed')
           vm.error = true
           vm.result = 'Email or Password is incorrect.'
           vm.showResult = true

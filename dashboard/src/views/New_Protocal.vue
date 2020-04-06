@@ -13,8 +13,8 @@
       >
         <v-card>
 
-        <v-card-text>
-            <div></div>
+          <v-card-text>
+            <div/>
             <p class="display-1 text--primary">
               Add A New Protocal
             </p>
@@ -23,16 +23,19 @@
             </div>
           </v-card-text>
 
-        <v-alert
+          <v-alert
             :value="alert"
             type="error"
             dark
             border="top"
             transition="scale-transition">
-            {{output.message}} {{output.error}}
-          </v-alert> 
+            {{ output.message }} {{ output.error }}
+          </v-alert>
 
-          <v-form v-model="valid" ref="form" v-on:submit.prevent="postProtocal">
+          <v-form
+            ref="form"
+            v-model="valid"
+            @submit.prevent="postProtocal">
             <v-container py-0>
               <v-layout wrap>
 
@@ -43,22 +46,22 @@
                   <v-text-field
                     id="title"
                     :rules="[rules.required]"
-                    required
                     v-model="title"
+                    required
                     label="Title"
                     class="purple-input"/>
                 </v-flex>
                 <v-flex
-                xs12
-                md8>
-                <label>Facility:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large
-                >
-                  {{user.hcw.facility.name}}
-                </v-chip>
-              </v-flex>
+                  xs12
+                  md8>
+                  <label>Facility:</label>
+                  <v-chip
+                    class="ma-2"
+                    x-large
+                  >
+                    {{ user.hcw.facility.name }}
+                  </v-chip>
+                </v-flex>
                 <v-flex xs12>
                   <v-textarea
                     id="body"
@@ -70,8 +73,8 @@
                 </v-flex>
 
                 <v-flex xs12 >
-                  
-                <label for="document">Upload Image:</label>
+
+                  <label for="document">Upload Image:</label>
                   <input
                     id="file"
                     ref="file"
@@ -79,18 +82,21 @@
                     type="file"
                     @change="handleImageChange()">
 
-                <img v-bind:src="imagePreview" v-show="showPreview"/> 
+                  <img
+                    v-show="showPreview"
+                    :src="imagePreview">
                 </v-flex>
 
                 <v-flex>
-                    <label for="document">Upload Documents:</label>
-                    <input
-                      id="image_file"
-                      hint="Add image" persistent-hint
-                      ref="files"
-                      type="file"
-                      multiple
-                      @change="handleFiles()">
+                  <label for="document">Upload Documents:</label>
+                  <input
+                    id="image_file"
+                    ref="files"
+                    hint="Add image"
+                    persistent-hint
+                    type="file"
+                    multiple
+                    @change="handleFiles()">
                 </v-flex>
 
                 <v-flex
@@ -98,11 +104,11 @@
                   text-xs-right
                 >
                   <v-btn
+                    :disabled="!valid"
                     class="mx-0 font-weight-light"
                     color="success"
-                    :disabled="!valid"
-                    @click="validate(); alert();"
                     type="submit"
+                    @click="validate(); alert();"
                   >
                     Submit
                   </v-btn>
@@ -110,7 +116,7 @@
               </v-layout>
             </v-container>
           </v-form>
-           
+
         </v-card>
       </v-flex>
 
@@ -126,7 +132,7 @@ export default {
 
   data () {
     return {
-      valid:true,
+      valid: true,
       items: [],
       alert: false,
       all_facilities: [],
@@ -144,18 +150,18 @@ export default {
       }
     }
   },
-  created () {
-    this.getFacilities()
-  },
   computed: {
     ...mapGetters({
       user: 'auth/user'
     })
   },
+  created () {
+    this.getFacilities()
+  },
   methods: {
     validate () {
-        this.$refs.form.validate()
-      },
+      this.$refs.form.validate()
+    },
 
     handleFiles () {
       let uploadedFiles = this.$refs.files.files
@@ -166,19 +172,19 @@ export default {
       this.getImagePreviews()
     },
 
-    handleImageChange(e) {
-      this.file = this.$refs.file.files[0];
+    handleImageChange (e) {
+      this.file = this.$refs.file.files[0]
 
-      let reader = new FileReader();
+      let reader = new FileReader()
 
-      reader.addEventListener("load", function(){
-        this.showPreview = true;
-        this.imagePreview = reader.result;
-      }.bind(this), false);
+      reader.addEventListener('load', function () {
+        this.showPreview = true
+        this.imagePreview = reader.result
+      }.bind(this), false)
 
-      if(this.file){
-        if ( /\.(jpe?g|png|gif)$/i.test(this.file.name)) {
-            reader.readAsDataURL(this.file);
+      if (this.file) {
+        if (/\.(jpe?g|png|gif)$/i.test(this.file.name)) {
+          reader.readAsDataURL(this.file)
         }
       }
     },
@@ -227,7 +233,6 @@ export default {
       });
     }
   }
-}
 }
 
 </script>

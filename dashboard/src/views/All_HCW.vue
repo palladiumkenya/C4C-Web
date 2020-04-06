@@ -11,19 +11,19 @@
       <v-flex
         md12
       >
-      
-      <v-card>
-        <v-card-title>
-          Health Care Workers
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
+
+        <v-card>
+          <v-card-title>
+            Health Care Workers
+            <v-spacer/>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            />
+          </v-card-title>
 
           <v-data-table
             :headers="headers"
@@ -53,9 +53,9 @@
               icon="mdi-emoticon-sad">
               Your search for "{{ search }}" found no results.
             </v-alert>
-            
+
           </v-data-table>
-      </v-card>
+        </v-card>
       </v-flex>
 
     </v-layout>
@@ -69,7 +69,7 @@ export default {
     return {
       output: [],
       all_hcws: [],
-      rowsPerPageItems: [50, 250,500],
+      rowsPerPageItems: [50, 250, 500],
       headers: [
         {
           sortable: false,
@@ -120,9 +120,9 @@ export default {
           this.all_hcws = workers.data.data
           this.loopT(workers.data.links.next)
         })
-        .catch(error => console.log(error.message));
+        .catch(error => console.log(error.message))
     },
-     async loopT (l) {
+    async loopT (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {

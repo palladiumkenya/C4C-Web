@@ -28,14 +28,14 @@
         <v-card>
           <v-card-title>
             Broadcast History
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <v-text-field
               v-model="search"
               append-icon="mdi-magnify"
               label="Search"
               single-line
               hide-details
-            ></v-text-field>
+            />
           </v-card-title>
 
           <v-data-table
@@ -80,7 +80,7 @@ export default {
       output: [],
       all_messages: [],
       search: '',
-      rowsPerPageItems: [50,250,500],
+      rowsPerPageItems: [50, 250, 500],
       headers: [
         {
           sortable: false,

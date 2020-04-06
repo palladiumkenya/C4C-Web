@@ -4,7 +4,7 @@ export default{
   namespaced: true,
   state: {
     token: null,
-    user: null
+    user: {}
   },
   getters: {
     authenticated (state) {
@@ -42,9 +42,15 @@ export default{
 
       try {
         let response = await axios.get('auth/user')
-
-        commit('SET_USER', response.data.data)
+        if(response.data.data === undefined){
+          console.log('failed')
+          commit('SET_USER', null)
+          commit('SET_TOKEN', null)
+        } else {
+          commit('SET_USER', response.data.data)
+        }
       } catch (e) {
+        console.log('failed')
         commit('SET_USER', null)
         commit('SET_TOKEN', null)
       }

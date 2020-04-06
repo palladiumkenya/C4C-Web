@@ -148,6 +148,7 @@ export default {
   },
   created () {
     this.getExp()
+    console.log(`data ${this.user}`)
   },
   methods: {
     getExp () {
@@ -170,7 +171,7 @@ export default {
           i = 11
         }
       }
-        console.log(this.exposures)
+      console.log(this.exposures)
     },
     handleDownload () {
       this.downloadLoading = true
@@ -191,7 +192,6 @@ export default {
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        
         if (j === 'cadre') {
           return v[j].name
         } else {
