@@ -7,7 +7,7 @@
     floating
     persistent
     mobile-break-point="991"
-    width="260"
+    width="270"
   >
     <v-img
       :src="image"
@@ -193,9 +193,20 @@ export default {
           text: 'Broadcasts'
         },
         {
-          to: '/add_device',
-          icon: 'mdi-gamepad',
-          text: 'Devices'
+          text: 'Manage Facility',
+          icon: 'mdi-settings',
+          subLinks:  [
+          {
+            to: '/add_device',
+            icon: 'mdi-gamepad',
+            text: 'Devices'
+          },
+          {
+            to: '/departments',
+            icon: 'mdi-file-tree',
+            text: 'Departments'
+          },
+          ]
         },
         {
           text: 'Resource Center',
@@ -220,7 +231,7 @@ export default {
         },
         {
           to: '/feed-back',
-          icon: 'mdi-backburger',
+          icon: 'mdi-bullhorn',
           text: 'Feedback'
         },
         {

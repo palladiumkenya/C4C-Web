@@ -55,7 +55,6 @@
 
       </v-flex>
 
-
       <v-flex
         sm3
         xs8
@@ -92,7 +91,6 @@
       >
         <!-- insert some chart here -->
 
-        <h3 v-text="message"/>
       </v-flex>
 
       <!-- End Graphs -->
@@ -133,7 +131,7 @@ export default {
     return {
     chartOptions: {
       xAxis: {
-        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
+        categories:['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laundry','OP/MCH','Other','Not Specified'],
         title: {
           text: 'Location of Exposure'
         }
@@ -221,19 +219,6 @@ export default {
             this.getUsers();
             this.getBroadcasts();
 
-    axios.get('users')
-      .then(exp => {
-        // console.log(exp.data.data);
-        this.registered_hcw = exp.data.data // <--- Im thinking this is an object
-      })
-
-
-    // number of broadcasts
-    axios.get('broadcasts/web/all')
-      .then(response => {
-        this.broadcastCount = response.data.data // <--- Im thinking this is an object
-      })
-
     // hcw with exposures # mounted
 
     axios.get('immunizations/all')
@@ -252,10 +237,8 @@ export default {
 
         }
         this.chartOptions.series[i].data = this.seriesdata
-        console.log(this.seriesdata)
       }
 
-      console.log(count)
     },
     getExp () {
       axios.get('exposures/all/')
@@ -326,8 +309,10 @@ export default {
       for(var x in this.s){
         //console.log(this.s[x].type)
         if (this.s[x].location === loc && this.s[x].type === type){
+
           console.log(this.s[x].type)
-          console.log(this.u.length)
+
+ refs/remotes/origin/develop
           count++
         }
       }

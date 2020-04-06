@@ -224,7 +224,7 @@ export default {
     }.bind(this)).catch(function(data) {
         alert("Something went wrong, please retry")
         console.log('error');
-        });
+      });
     }
   }
 }

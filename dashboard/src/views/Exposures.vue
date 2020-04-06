@@ -5,11 +5,11 @@
       centered
     >
       <v-tab>Summary Report</v-tab>
-      <v-tab>Report By Cadre</v-tab>
-      <v-tab>Report By Age</v-tab>
       <v-tab>Report By Type</v-tab>
-      <v-tab>Report By Time</v-tab>
       <v-tab>Report By Location</v-tab>
+      <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Month</v-tab>
+      <v-tab>Report By Age</v-tab>
       <v-tab>Report By Hours</v-tab>
       <v-tab>Report By Gender</v-tab>
       <v-tab-item
@@ -19,9 +19,7 @@
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
 
-            <highcharts
-              ref="pieChart"
-              :options="pieOptions"/>
+
             <v-flex
               md12
               sm12
@@ -52,19 +50,25 @@
                 <option>Partner</option>
               </select>
 
-              <template>
-                <section class="charts">
-                  <highcharts :options="options" />
-                </section>
-              </template>
-
             </v-flex>
           </v-card-text>
-          <v-card-text v-if="n==2">This is the second tab</v-card-text>
-          <v-card-text v-if="n==3">This is the Third tab</v-card-text>
-          <v-card-text v-if="n==4">This is the Third tab</v-card-text>
-          <v-card-text v-if="n==5">This is the Third tab</v-card-text>
-          <v-card-text v-if="n==6">This is the Third tab</v-card-text>
+          <v-card-text v-if="n==2">
+             <highcharts :options="barOptions" ref="columnChart"/>
+          </v-card-text>
+          <v-card-text v-if="n==3">
+             <highcharts
+              ref="pieChart"
+              :options="pieOptions"/>
+          </v-card-text>
+          <v-card-text v-if="n==4">
+             <highcharts :options="barOptionsCadre" ref="columnChart"/>
+          </v-card-text>
+          <v-card-text v-if="n==5">
+            <highcharts :options="barOptionsTime" ref="columnChart"/>
+          </v-card-text>
+          <v-card-text v-if="n==6">
+
+          </v-card-text>
           <v-card-text v-if="n==7">This is the Third tab</v-card-text>
           <v-card-text v-if="n==8">This is the Third tab</v-card-text>
           <v-card-text v-if="n==9">This is the Third tab</v-card-text>
@@ -84,14 +88,39 @@ import { mapGetters } from 'vuex'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
-const datas = 'https://jsonplaceholder.typicode.com/users'
-console.log(datas)
-const data = {
-  title: {
-    text: 'Exposures Chart Analysis'
+
+
+export default {
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
+  components: {
+    highcharts: Chart
+  },
+  data () {
+    return {
+      barOptionsTime: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+    text: 'Exposures By Month'
+  },
+        subtitle: {
+         // text: 'by Cadre'
+        },
   xAxis: {
-    categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    //
+    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+
   },
   labels: {
     items: [
@@ -108,35 +137,108 @@ const data = {
   series: [
 
     {
-      type: 'column',
-      name: 'Monthly Exposures',
-      data: [7, 3, 3, 9, 0, 5, 6, 2, 4, 1, 8, 0]
+      //type: 'column',
+      colorByPoint: true,
+        name: 'Exposures',
+      data: []
     }
 
   ]
-}
+      },
 
-export default {
-  computed: {
-    ...mapGetters({
-      user: 'auth/user'
-    })
-  },
-  components: {
-    highcharts: Chart
-  },
-  data () {
-    return {
-      chartType: 'Spline',
-      chartOptions: {
+
+
+      barOptionsCadre: {
         chart: {
-          type: 'spline'
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
         },
         title: {
-          text: 'Sin chart'
+    text: 'Exposures By Cadres'
+  },
+        subtitle: {
+         // text: 'by Cadre'
+        },
+  xAxis: {
+    //
+    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
+
+
+  },
+  labels: {
+    items: [
+      {
+        html: '',
+        style: {
+          left: '50px',
+          top: '18px',
+          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
         }
+      }
+    ]
+  },
+  series: [
+
+    {
+      //type: 'column',
+      colorByPoint: true,
+      name: 'Exposure Cadres',
+      data: []
+    }
+
+  ]
       },
-      options: data,
+
+
+
+      barOptions: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+    text: 'Exposures By Types'
+  },
+        subtitle: {
+        //  text: 'by Type'
+        },
+  xAxis: {
+    //
+    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    categories:  ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
+
+  },
+  labels: {
+    items: [
+      {
+        html: '',
+        style: {
+          left: '50px',
+          top: '18px',
+          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+        }
+      }
+    ]
+  },
+  series: [
+
+    {
+      //type: 'column',
+      colorByPoint: true,
+      name: ['Exposure types'],
+      data: []
+    }
+
+  ]
+      },
+
       pieOptions: {
         chart: {
           type: 'pie',
@@ -146,10 +248,10 @@ export default {
           }
         },
         title: {
-          text: 'Exposures'
+          text: 'Exposures By Location in Facility'
         },
         subtitle: {
-          text: 'by location'
+        //  text: 'by location'
         },
         plotOptions: {
           pie: {
@@ -167,9 +269,16 @@ export default {
       cadreDoc: 0,
       s: [],
       locations: [],
+      type: [],
+      cadre: [],
+      date: [],
       seriesdata: [],
-      seriesname: ['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified']
-
+      seriesname: ['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
+      seriesdatas: [],
+      seriesnames: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified'],
+      seriesdatac: [],
+      seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+      seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     }
   },
   created ()  {
@@ -187,10 +296,46 @@ export default {
       }
       this.pieOptions.series[0].data = this.locations
     },
+     getTypes(){
+      var counter = 0;
+      for(var va in this.seriesnames){
+        this.seriesdatas=[]
+        this.seriesdatas.push(this.seriesnames[va])
+        this.seriesdatas.push(this.getNums(this.seriesnames[va]))
+        counter += this.getNums(this.seriesnames[va])
+        this.type.push(this.seriesdatas)
+      }
+      this.barOptions.series[0].data = this.type
+    },
+    getCadre(){
+      var counter = 0;
+      for(var vac in this.seriesnamec){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnamec[vac])
+        this.seriesdata.push(this.getNumc(this.seriesnamec[vac]))
+        counter += this.getNumc(this.seriesnamec[vac])
+        this.cadre.push(this.seriesdata)
+      }
+      this.barOptionsCadre.series[0].data = this.cadre
+    },
+    getTime(){
+      var counter = 0;
+      for(var vac in this.seriesnamet){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnamet[vac])
+        this.seriesdata.push(this.getNumt(this.seriesnamet[vac]))
+        counter += this.getNumt(this.seriesnamet[vac])
+        this.date.push(this.seriesdata)
+        console.log(this.seriesdata)
+      }
+      this.barOptionsTime.series[0].data = this.date
+    },
     getExp () {
       axios.get('exposures/all/')
       .then((exp) => {
         this.s = exp.data.data
+        console.log(this.s)
+        console.log(this.s[0].date.slice(0,3))
         this.link = exp.data.links.next
         this.loopT(this.link)
       })
@@ -208,6 +353,9 @@ export default {
         }
       }
       this.getDep()
+      this.getTypes()
+      this.getCadre()
+      this.getTime()
     },
     getNum(name){
       var count = 0
@@ -217,6 +365,34 @@ export default {
         }
       }
       return count
+    },
+    getNums(name){
+      var counter = 0
+      for(var xo in this.s){
+        if (this.s[xo].type === name){
+          counter++
+        }
+      }
+      return counter
+    },
+    getNumc(name){
+      var counter = 0
+      for(var xc in this.s){
+        if (this.s[xc].cadre.name === name){
+          counter++
+        }
+      }
+      return counter
+    },
+    getNumt(name){
+      var counter = 0
+      for(var xt in this.s){
+        if (this.s[xt].date.slice(0,3) === name){
+          console.log(this.s[xt].date.slice(0,3))
+          counter++
+        }
+      }
+      return counter
     }
   }
 }
