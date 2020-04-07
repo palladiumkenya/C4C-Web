@@ -25,54 +25,60 @@
         lg4
         dense>
 
-    <v-list class xs12 sm6 md6 lg4 dense >
+        <v-list
+          class
+          xs12
+          sm6
+          md6
+          lg4
+          dense >
 
-    <v-card
-      min-width="900"
-      max-width="900"
-      style=padding-bottom  
-      class="mx-auto"
-    >
-      <v-card-title class="headline">{{result.title}}</v-card-title>
-      
-       <v-card-actions> 
-        <v-card-text class="text--primary">
-        <div><span> Created On: </span> {{result.created_at}}</div>
-        </v-card-text> 
+          <v-card
+            min-width="900"
+            max-width="900"
+            style="padding-bottom"
+            class="mx-auto"
+          >
+            <v-card-title class="headline">{{ result.title }}</v-card-title>
 
-            <v-btn
-              color="orange"
-              @click.stop="dialog = true">
-              View More
-            </v-btn>
-          </v-card-actions>
+            <v-card-actions>
+              <v-card-text class="text--primary">
+                <div><span> Created On: </span> {{ result.created_at }}</div>
+              </v-card-text>
 
-          <v-dialog
-            v-model="dialog"
-            fullscreen
-            hide-overlay
-            transition="dialog-bottom-transition"
-            scrollable
-            max-width="90%">
-            <v-card>
-              <v-toolbar
-                dark
-                color="primary">
-                <v-btn
-                  icon
+              <v-btn
+                color="orange"
+                @click.stop="dialog = true">
+                View More
+              </v-btn>
+            </v-card-actions>
+
+            <v-dialog
+              v-model="dialog"
+              fullscreen
+              hide-overlay
+              transition="dialog-bottom-transition"
+              scrollable
+              max-width="90%">
+              <v-card>
+                <v-toolbar
                   dark
-                  @click="dialog = false">
-                  <v-icon>mdi-close</v-icon>
-                </v-btn>
-                <v-toolbar-title> {{ result.title }}</v-toolbar-title>
-              </v-toolbar>
+                  color="primary">
+                  <v-btn
+                    icon
+                    dark
+                    @click="dialog = false">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                  <v-toolbar-title> {{ result.title }}</v-toolbar-title>
+                </v-toolbar>
 
-              <v-card-text height="500px">{{ result.body }}</v-card-text>
-            </v-card>
-          </v-dialog>
+                <v-card-text height="500px">{{ result.body }}</v-card-text>
+              </v-card>
+            </v-dialog>
 
-        </v-card>
-    </v-list>
+          </v-card>
+        </v-list>
       </v-list-class>
     </v-layout>
   </v-container>

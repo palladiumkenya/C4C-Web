@@ -27,17 +27,17 @@
       >
         <v-card>
           <v-card-title>
-          Broadcast History
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
+            Broadcast History
+            <v-spacer/>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            />
 
-        </v-card-title>
+          </v-card-title>
           <v-data-table
             :headers="headers"
             :items="all_messages"
