@@ -130,7 +130,7 @@ import { mapGetters } from 'vuex'
 
 export default {
 
-  data() {
+  data () {
     return {
       valid: true,
       items: [],
@@ -155,15 +155,15 @@ export default {
       user: 'auth/user'
     })
   },
-  created() {
+  created () {
     this.getFacilities()
   },
   methods: {
-    validate() {
+    validate () {
       this.$refs.form.validate()
     },
 
-    handleFiles() {
+    handleFiles () {
       let uploadedFiles = this.$refs.files.files
 
       for (var i = 0; i < uploadedFiles.length; i++) {
@@ -172,7 +172,7 @@ export default {
       this.getImagePreviews()
     },
 
-    handleImageChange(e) {
+    handleImageChange (e) {
       this.file = this.$refs.file.files[0]
 
       let reader = new FileReader()
@@ -189,49 +189,49 @@ export default {
       }
     },
 
-    removeFile(key) {
+    removeFile (key) {
       this.files.splice(key, 1)
     },
 
-    getFacilities() {
+    getFacilities () {
       axios.get('facilities')
-              .then((facilities) => {
-                console.log(facilities.data)
-                this.all_facilities = facilities.data.data
-              })
-              .catch(error => console.log(error.message))
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
     },
 
-    postProtocal(e) {
+    postProtocal (e) {
       e.preventDefault()
 
-      let allData = new FormData();
+      let allData = new FormData()
 
       for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i];
+        let file = this.files[i]
 
-        allData.append('protocal_files[' + i + ']', file);
-        allData.append('image_file', this.files[i]);
-        allData.append("title", this.title);
-        allData.append("body", this.body);
-        allData.append("facility_id", this.user.hcw.facility.id);
+        allData.append('protocal_files[' + i + ']', file)
+        allData.append('image_file', this.files[i])
+        allData.append('title', this.title)
+        allData.append('body', this.body)
+        allData.append('facility_id', this.user.hcw.facility.id)
 
         let currentObj = this
 
         axios.post('resources/protocols/create',
-                allData, {
-                  headers: {
-                    "content-type": "multipart/form-data"
-                  }
-                })
-                .then(function (data) {
-                  alert("Data Added Successfully")
-                  this.$router.push('/protocals')
-                  console.log('success');
-                }.bind(this)).catch(function (data) {
-          alert("Something went wrong, please retry")
-          console.log('error');
-        });
+          allData, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          })
+          .then(function (data) {
+            alert('Data Added Successfully')
+            this.$router.push('/protocals')
+            console.log('success')
+          }.bind(this)).catch(function (data) {
+            alert('Something went wrong, please retry')
+            console.log('error')
+          })
       }
     }
   }

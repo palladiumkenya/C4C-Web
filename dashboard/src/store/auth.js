@@ -42,7 +42,7 @@ export default{
 
       try {
         let response = await axios.get('auth/user')
-        if(response.data.data === undefined){
+        if (response.data.data === undefined) {
           console.log('failed')
           commit('SET_USER', null)
           commit('SET_TOKEN', null)

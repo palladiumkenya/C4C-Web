@@ -19,13 +19,12 @@
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
 
-
             <v-flex
               md12
               sm12
               lg12
             >
-{{hours}}
+              {{ hours }}
               <select>
                 <option>County</option>
                 <option>Nairobi</option>
@@ -53,24 +52,30 @@
             </v-flex>
           </v-card-text>
           <v-card-text v-if="n==2">
-             <highcharts :options="barOptions" ref="columnChart"/>
+            <highcharts
+              ref="columnChart"
+              :options="barOptions"/>
           </v-card-text>
           <v-card-text v-if="n==3">
-             <highcharts
+            <highcharts
               ref="pieChart"
               :options="pieOptions"/>
           </v-card-text>
           <v-card-text v-if="n==4">
-             <highcharts :options="barOptionsCadre" ref="columnChart"/>
+            <highcharts
+              ref="columnChart"
+              :options="barOptionsCadre"/>
           </v-card-text>
           <v-card-text v-if="n==5">
-            <highcharts :options="barOptionsTime" ref="columnChart"/>
+            <highcharts
+              ref="columnChart"
+              :options="barOptionsTime"/>
           </v-card-text>
-          <v-card-text v-if="n==6">
-
-          </v-card-text>
+          <v-card-text v-if="n==6"/>
           <v-card-text v-if="n==7">
-              <highcharts :options="barOptionsHour" ref="columnChart"/>
+            <highcharts
+              ref="columnChart"
+              :options="barOptionsHour"/>
           </v-card-text>
           <v-card-text v-if="n==8">This is the Third tab</v-card-text>
           <v-card-text v-if="n==9">This is the Third tab</v-card-text>
@@ -92,7 +97,6 @@ import moment from 'moment'
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
 
-
 export default {
   computed: {
     ...mapGetters({
@@ -113,44 +117,42 @@ export default {
           }
         },
         title: {
-    text: 'Exposures By Hours'
-  },
-        subtitle: {
-         // text: 'by Cadre'
+          text: 'Exposures By Hours'
         },
-  xAxis: {
-    //
-    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-      categories: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
+        subtitle: {
+          // text: 'by Cadre'
+        },
+        xAxis: {
+          //
+          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+          categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
 
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
 
-  },
-  labels: {
-    items: [
-      {
-        html: '',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
-  series: [
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: 'Exposures',
+            data: []
+          }
 
-    {
-      //type: 'column',
-      colorByPoint: true,
-        name: 'Exposures',
-      data: []
-    }
-
-  ]
+        ]
       },
 
-
-        barOptionsTime: {
+      barOptionsTime: {
         chart: {
           type: 'column',
           options3d: {
@@ -159,43 +161,40 @@ export default {
           }
         },
         title: {
-    text: 'Exposures By Month'
-  },
-        subtitle: {
-         // text: 'by Cadre'
+          text: 'Exposures By Month'
         },
-  xAxis: {
-    //
-    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        subtitle: {
+          // text: 'by Cadre'
+        },
+        xAxis: {
+          //
+          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
 
-  },
-  labels: {
-    items: [
-      {
-        html: '',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
-  series: [
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: 'Exposures',
+            data: []
+          }
 
-    {
-      //type: 'column',
-      colorByPoint: true,
-        name: 'Exposures',
-      data: []
-    }
-
-  ]
+        ]
       },
-
-
 
       barOptionsCadre: {
         chart: {
@@ -206,43 +205,40 @@ export default {
           }
         },
         title: {
-    text: 'Exposures By Cadres'
-  },
-        subtitle: {
-         // text: 'by Cadre'
+          text: 'Exposures By Cadres'
         },
-  xAxis: {
-    //
-    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
+        subtitle: {
+          // text: 'by Cadre'
+        },
+        xAxis: {
+          //
+          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+          categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
 
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
 
-  },
-  labels: {
-    items: [
-      {
-        html: '',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
-  series: [
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: 'Exposure Cadres',
+            data: []
+          }
 
-    {
-      //type: 'column',
-      colorByPoint: true,
-      name: 'Exposure Cadres',
-      data: []
-    }
-
-  ]
+        ]
       },
-
-
 
       barOptions: {
         chart: {
@@ -253,39 +249,39 @@ export default {
           }
         },
         title: {
-    text: 'Exposures By Types'
-  },
+          text: 'Exposures By Types'
+        },
         subtitle: {
         //  text: 'by Type'
         },
-  xAxis: {
-    //
-    // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    categories:  ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
+        xAxis: {
+          //
+          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+          categories: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
 
-  },
-  labels: {
-    items: [
-      {
-        html: '',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
-  series: [
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
 
-    {
-      //type: 'column',
-      colorByPoint: true,
-      name: ['Exposure types'],
-      data: []
-    }
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: ['Exposure types'],
+            data: []
+          }
 
-  ]
+        ]
       },
 
       pieOptions: {
@@ -312,7 +308,7 @@ export default {
           {
             name: 'Exposures Count',
             data: []
-          },
+          }
         ]
       },
       cadreDoc: 0,
@@ -324,24 +320,24 @@ export default {
       gender: [],
       hours: [],
       seriesdata: [],
-      seriesname: ['Lab','Ward','Theatre','Pharmacy','Corridors','Medical ward','Emergency Room','Surgical ward','Maternity','Dental clinic','Laboratory','Laundry','OP/MCH','Other','Not Specified'],
+      seriesname: ['Lab', 'Ward', 'Theatre', 'Pharmacy', 'Corridors', 'Medical ward', 'Emergency Room', 'Surgical ward', 'Maternity', 'Dental clinic', 'Laboratory', 'Laundry', 'OP/MCH', 'Other', 'Not Specified'],
       seriesdatas: [],
       seriesnames: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified'],
       seriesdatac: [],
       seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
       seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       seriesnameg: ['Male', 'Female'],
-      seriesnameh: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
+      seriesnameh: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
     }
   },
-  created ()  {
+  created () {
     this.getExp()
   },
   methods: {
-    getDep(){
-      var count = 0;
-      for(var v in this.seriesname){
-        this.seriesdata=[]
+    getDep () {
+      var count = 0
+      for (var v in this.seriesname) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesname[v])
         this.seriesdata.push(this.getNum(this.seriesname[v]))
         count += this.getNum(this.seriesname[v])
@@ -349,10 +345,10 @@ export default {
       }
       this.pieOptions.series[0].data = this.locations
     },
-     getTypes(){
-      var counter = 0;
-      for(var va in this.seriesnames){
-        this.seriesdatas=[]
+    getTypes () {
+      var counter = 0
+      for (var va in this.seriesnames) {
+        this.seriesdatas = []
         this.seriesdatas.push(this.seriesnames[va])
         this.seriesdatas.push(this.getNums(this.seriesnames[va]))
         counter += this.getNums(this.seriesnames[va])
@@ -360,10 +356,10 @@ export default {
       }
       this.barOptions.series[0].data = this.type
     },
-    getCadre(){
-      var counter = 0;
-      for(var vac in this.seriesnamec){
-        this.seriesdata=[]
+    getCadre () {
+      var counter = 0
+      for (var vac in this.seriesnamec) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesnamec[vac])
         this.seriesdata.push(this.getNumc(this.seriesnamec[vac]))
         counter += this.getNumc(this.seriesnamec[vac])
@@ -371,10 +367,10 @@ export default {
       }
       this.barOptionsCadre.series[0].data = this.cadre
     },
-    getTime(){
-      var counter = 0;
-      for(var vac in this.seriesnamet){
-        this.seriesdata=[]
+    getTime () {
+      var counter = 0
+      for (var vac in this.seriesnamet) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesnamet[vac])
         this.seriesdata.push(this.getNumt(this.seriesnamet[vac]))
         counter += this.getNumt(this.seriesnamet[vac])
@@ -382,21 +378,21 @@ export default {
       }
       this.barOptionsTime.series[0].data = this.date
     },
-     getGender(){
-      var counter = 0;
-      for(var vac in this.seriesnameg){
-        this.seriesdata=[]
+    getGender () {
+      var counter = 0
+      for (var vac in this.seriesnameg) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesnameg[vac])
         this.seriesdata.push(this.getNumg(this.seriesnameg[vac]))
         counter += this.getNumg(this.seriesnameg[vac])
         this.gender.push(this.seriesdata)
       }
-     // this.barOptionsGender.series[0].data = this.gender
+      // this.barOptionsGender.series[0].data = this.gender
     },
-     getHour(){
-      var counter = 0;
-      for(var vac in this.seriesnameh){
-        this.seriesdata=[]
+    getHour () {
+      var counter = 0
+      for (var vac in this.seriesnameh) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesnameh[vac])
         this.seriesdata.push(this.getNumh(this.seriesnameh[vac]))
         counter += this.getNumh(this.seriesnameh[vac])
@@ -406,12 +402,12 @@ export default {
     },
     getExp () {
       axios.get('exposures/all/')
-      .then((exp) => {
-        this.s = exp.data.data
-        this.link = exp.data.links.next
-        this.loopT(this.link)
-      })
-      .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.s = exp.data.data
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
     async loopT (l) {
       var i
@@ -431,58 +427,58 @@ export default {
       this.getGender()
       this.getHour()
     },
-    getNum(name){
+    getNum (name) {
       var count = 0
-      for(var x in this.s){
-        if (this.s[x].location === name){
+      for (var x in this.s) {
+        if (this.s[x].location === name) {
           count++
         }
       }
       return count
     },
-    getNums(name){
+    getNums (name) {
       var counter = 0
-      for(var xo in this.s){
-        if (this.s[xo].type === name){
+      for (var xo in this.s) {
+        if (this.s[xo].type === name) {
           counter++
         }
       }
       return counter
     },
-    getNumc(name){
+    getNumc (name) {
       var counter = 0
-      for(var xc in this.s){
-        if (this.s[xc].cadre.name === name){
+      for (var xc in this.s) {
+        if (this.s[xc].cadre.name === name) {
           counter++
         }
       }
       return counter
     },
-    getNumt(name){
+    getNumt (name) {
       var counter = 0
-      for(var xt in this.s){
-        if (this.s[xt].date.slice(0,3) === name){
+      for (var xt in this.s) {
+        if (this.s[xt].date.slice(0, 3) === name) {
           counter++
         }
       }
       return counter
     },
-    getNumg(name){
+    getNumg (name) {
       var counter = 0
-      for(var xg in this.s){
-        /*if (this.s[xg].id === name){
+      for (var xg in this.s) {
+        /* if (this.s[xg].id === name){
           console.log(this.s[xg].id)
           counter++
-        }*/
+        } */
       }
       return counter
     },
-    getNumh(name){
+    getNumh (name) {
       var counter = 0
-      for(var xh in this.s){
-        if (moment(this.s[xh].created_at).format().substr(11,2) === name){
-            console.log('l')
-//console.log(moment(this.s[xh].created_at).format('LT'))
+      for (var xh in this.s) {
+        if (moment(this.s[xh].created_at).format().substr(11, 2) === name) {
+          console.log('l')
+          // console.log(moment(this.s[xh].created_at).format('LT'))
           counter++
         }
       }

@@ -20,8 +20,10 @@
               sm12
               lg12
             >
-              {{hbvs}}
-             <highcharts :options="barOptionsHBV" ref="columnChart"/>
+              {{ hbvs }}
+              <highcharts
+                ref="columnChart"
+                :options="barOptionsHBV"/>
 
             </v-flex>
           </v-card-text>
@@ -34,7 +36,6 @@
 
 </template>
 
-
 <script>
 import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
@@ -46,7 +47,6 @@ import moment from 'moment'
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
 
-
 export default {
   computed: {
     ...mapGetters({
@@ -56,7 +56,7 @@ export default {
   components: {
     highcharts: Chart
   },
-  data() {
+  data () {
     return {
       barOptionsHBV: {
         chart: {
@@ -77,7 +77,6 @@ export default {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
           //  categories: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
 
-
         },
         labels: {
           items: [
@@ -94,7 +93,7 @@ export default {
         series: [
 
           {
-            //type: 'column',
+            // type: 'column',
             colorByPoint: true,
             name: 'HBV Immunizations',
             data: []
@@ -106,22 +105,22 @@ export default {
       hbvs: []
     }
   },
-created ()  {
+  created () {
     this.getImmunizations()
   },
   methods: {
-    getImmunizations() {
+    getImmunizations () {
       axios.get('immunizations/all?disease_id=1')
-              .then((exp) => {
-                console.log(exp)
-                this.s = exp.data.data
-                this.link = exp.data.links.next
-                this.loopT(this.link)
-              })
-              .catch(error => console.log(error.message))
+        .then((exp) => {
+          console.log(exp)
+          this.s = exp.data.data
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
-    getHBV() {
-      var counter = 0;
+    getHBV () {
+      var counter = 0
       for (var vac in this.seriesname) {
         this.seriesdata = []
         this.seriesdata.push(this.seriesname[vac])
@@ -132,7 +131,7 @@ created ()  {
       }
       this.barOptionsHBV.series[0].data = this.hbvs
     },
-    getNum(name) {
+    getNum (name) {
       var counter = 0
       for (var xo in this.s) {
         if (this.s[xo].date.slice(0, 3) === name) {
@@ -141,7 +140,7 @@ created ()  {
       }
       return counter
     },
-    async loopT(l) {
+    async loopT (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {

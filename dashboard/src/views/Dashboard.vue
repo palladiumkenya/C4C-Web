@@ -85,65 +85,57 @@
 
       <!-- Start Graphs -->
       <v-card>
-     <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Summary Report</v-tab>
-      <v-tab>Report By Location</v-tab>
-      <v-tab>Report By Cadre</v-tab>
-      <v-tab>Report By Month</v-tab>
-      <v-tab>Report By Age</v-tab>
-      <v-tab>Report By Gender</v-tab>
-      <v-tab>Report By Verification</v-tab>
-        <v-tab-item
-        v-for="n in 7"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n==1">
- <v-flex
-        md12
-        sm12
-        lg12
-      >{{location}}{{usersl}}
-        <!-- insert some chart here -->
-        <highcharts
-          ref="barChart"
-          :options="chartOptions"/>
-      </v-flex>
+        <v-tabs
+          color="teal lighten-5"
+          centered
+        >
+          <v-tab>Summary Report</v-tab>
+          <v-tab>Report By Location</v-tab>
+          <v-tab>Report By Cadre</v-tab>
+          <v-tab>Report By Month</v-tab>
+          <v-tab>Report By Age</v-tab>
+          <v-tab>Report By Gender</v-tab>
+          <v-tab>Report By Verification</v-tab>
+          <v-tab-item
+            v-for="n in 7"
+            :key="n">
+            <v-container fluid>
+              <v-card-text v-if="n==1">
+                <v-flex
+                  md12
+                  sm12
+                  lg12
+                >{{ location }}{{ usersl }}
+                  <!-- insert some chart here -->
+                  <highcharts
+                    ref="barChart"
+                    :options="chartOptions"/>
+                </v-flex>
 
-      <v-flex
-        md12
-        sm12
-        lg12
-      >{{month}}
-        <!-- insert some chart here -->
-         <highcharts
-          ref="columnChart"
-          :options="RegistrationsChartOptions"/>
-      </v-flex>
-          </v-card-text>
-          <v-card-text v-if="n==2">
-          </v-card-text>
-          <v-card-text v-if="n==3">
-          </v-card-text>
-          <v-card-text v-if="n==4">
-          </v-card-text>
-          <v-card-text v-if="n==5">
-          </v-card-text>
-          <v-card-text v-if="n==6">
-          </v-card-text>
-          <v-card-text v-if="n==7">
-          </v-card-text>
-        </v-container>
-        </v-tab-item>
+                <v-flex
+                  md12
+                  sm12
+                  lg12
+                >{{ month }}
+                  <!-- insert some chart here -->
+                  <highcharts
+                    ref="columnChart"
+                    :options="RegistrationsChartOptions"/>
+                </v-flex>
+              </v-card-text>
+              <v-card-text v-if="n==2"/>
+              <v-card-text v-if="n==3"/>
+              <v-card-text v-if="n==4"/>
+              <v-card-text v-if="n==5"/>
+              <v-card-text v-if="n==6"/>
+              <v-card-text v-if="n==7"/>
+            </v-container>
+          </v-tab-item>
 
+        </v-tabs>
 
-     </v-tabs>
-
-</v-card>
+      </v-card>
       <!-- End Graphs -->
-
 
       <!-- Start Maps -->
 
@@ -156,15 +148,14 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
-import Highcharts from "highcharts";
-import moment from "moment";
+import Highcharts from 'highcharts'
+import moment from 'moment'
 export default {
   components: {
     highcharts: Chart
   },
   data () {
     return {
-
 
       RegistrationsChartOptions: {
         chart: {
@@ -175,41 +166,40 @@ export default {
           }
         },
         title: {
-    text: 'registrations by Month'
-  },
+          text: 'registrations by Month'
+        },
         subtitle: {
         //  text: 'by Type'
         },
-  xAxis: {
-    //
-     categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-   // categories:  ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
+        xAxis: {
+          //
+          categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+          // categories:  ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
 
-  },
-  labels: {
-    items: [
-      {
-        html: '',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
-  series: [
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
 
-    {
-      //type: 'column',
-      colorByPoint: true,
-      name: ['Registrations'],
-      data: []
-    }
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: ['Registrations'],
+            data: []
+          }
 
-  ]
+        ]
       },
-
 
       chartOptions: {
         xAxis: {
@@ -298,7 +288,7 @@ export default {
       month: [],
       location: [],
       seriesnames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-      seriesnamel: ['MALE', 'FEMALE','Mombasa', 'Kakamega', 'Nairobi', 'Kajiado', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir', 'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga', 'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu'],
+      seriesnamel: ['MALE', 'FEMALE', 'Mombasa', 'Kakamega', 'Nairobi', 'Kajiado', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir', 'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga', 'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu'],
       scount: 0
     }
   },
@@ -325,7 +315,6 @@ export default {
     this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
-
 
     // hcw with exposures # mounted
 
@@ -363,30 +352,30 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-     getAllUsers() {
+    getAllUsers () {
       axios.get('users')
-      .then((exp) => {
-        this.userz = exp.data.data
-        this.userl = exp.data.data
-        console.log(exp.data.data[5].hcw.facility.county)
-        this.link = exp.data.links.next
-        this.loopT(this.link)
-      })
-      .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.userz = exp.data.data
+          this.userl = exp.data.data
+          console.log(exp.data.data[5].hcw.facility.county)
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
     getBroadcasts () {
       axios.get('broadcasts/web/all')
         .then((users) => {
-          //console.log(users.data.meta.total)
+          // console.log(users.data.meta.total)
           this.b = users.data.meta.total
         })
         .catch(error => console.log(error.message))
     },
 
-      getRegistrations(){
-      var counter = 0;
-      for(var va in this.seriesnames){
-        this.seriesdata=[]
+    getRegistrations () {
+      var counter = 0
+      for (var va in this.seriesnames) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesnames[va])
         this.seriesdata.push(this.getNums(this.seriesnames[va]))
         counter += this.getNums(this.seriesnames[va])
@@ -394,17 +383,17 @@ export default {
       }
       this.RegistrationsChartOptions.series[0].data = this.month
     },
-    getLocations(){
-      var counter = 0;
-      for(var va in this.seriesnamel){
-        this.seriesdata=[]
+    getLocations () {
+      var counter = 0
+      for (var va in this.seriesnamel) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesnamel[va])
         this.seriesdata.push(this.getNuml(this.seriesnamel[va]))
         counter += this.getNuml(this.seriesnamel[va])
         this.location.push(this.seriesdata)
         console.log(this.seriesdata)
       }
-      //this.LocationsChartOptions.series[0].data = this.location
+      // this.LocationsChartOptions.series[0].data = this.location
     },
 
     async loopT (l) {
@@ -429,28 +418,29 @@ export default {
       for (var x in this.s) {
         // console.log(this.s[x].type)
         if (this.s[x].location === loc && this.s[x].type === type) {
-          //console.log(this.s[x].type)
-          //refs / remotes / origin / develop
+          // console.log(this.s[x].type)
+          // refs / remotes / origin / develop
           count++
         }
       }
       return count
     },
-    getNums(name){
+    getNums (name) {
       var counter = 0
-      for(var xo in this.userz){
-        if (moment(this.userz[xo].created_at).format().substr(5,2) === name){
+      for (var xo in this.userz) {
+        if (moment(this.userz[xo].created_at).format().substr(5, 2) === name) {
           counter++
         }
       }
       return counter
     },
-    getNuml(name){
+    getNuml (name) {
       var counter = 0
-      for(var xo in this.userl){
-        if (this.userz[xo].gender === name){
+      for (var xo in this.userl) {
+        if (this.userz[xo].gender === name) {
           counter++
-        console.log(this.userl[xo])}
+          console.log(this.userl[xo])
+        }
       }
       return counter
     }

@@ -78,6 +78,19 @@ export default [
     }
   },
   {
+    path: '/checkin',
+    name: 'Checkin',
+    view: 'Checkin',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
     path: '/bulk-signup',
     name: 'Bulk Signup',
     view: 'BulkSignup',

@@ -32,11 +32,8 @@
             border="top"
             transition="scale-transition"
           >
-<<<<<<< HEAD
-            {{output.message}} {{output.error}} {{output}}
-=======
+
             {{ output.message }} {{ output.error }}
->>>>>>> a2ff7661b9e623359c379bed5a03d2103a84cd3c
           </v-alert>
 
           <v-form
@@ -188,34 +185,34 @@ export default {
     postCME (e) {
       e.preventDefault()
 
-      let allData = new FormData();
-       //iterating over any file sent over appending the files
+      let allData = new FormData()
+      // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i];
-        allData.append('cme_files[' + i +']', file);
-        allData.append('image_file', this.file);
-        allData.append("title", this.title);
-        allData.append("body", this.body);
+        let file = this.files[i]
+        allData.append('cme_files[' + i + ']', file)
+        allData.append('image_file', this.file)
+        allData.append('title', this.title)
+        allData.append('body', this.body)
 
         let currentObj = this
-          
-          axios.post('resources/cmes/create',
-            allData, {
-              headers: {
-              "content-type": "multipart/form-data"}
-            })
-          .then(function(data) {
-            this.$router.push('/cmes');
-              alert("Data Added Successfully")
-                console.log('success');
-          }.bind(this)).catch(function(data) {
-              alert("Something went wrong, please retry")
-                  console.log('error');
-            });
-      }   
+
+        axios.post('resources/cmes/create',
+          allData, {
+            headers: {
+              'content-type': 'multipart/form-data' }
+          })
+          .then(function (data) {
+            this.$router.push('/cmes')
+            alert('Data Added Successfully')
+            console.log('success')
+          }.bind(this)).catch(function (data) {
+            alert('Something went wrong, please retry')
+            console.log('error')
+          })
+      }
     }
   }
-}; 
+}
 
 </script>
 <style>

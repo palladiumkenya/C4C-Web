@@ -43,7 +43,9 @@
                     label="Password"
                     @click:append="hidePassword = !hidePassword"/>
                 </form>
-                <a href="/forgot_password" style="color: black">Forgot Your Password?</a>
+                <a
+                  href="/forgot_password"
+                  style="color: black">Forgot Your Password?</a>
               </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -109,7 +111,7 @@ export default {
           })
         })
         .catch(() => {
-          //console.log('failed')
+          // console.log('failed')
           vm.error = true
           vm.result = 'Email or Password is incorrect.'
           vm.showResult = true

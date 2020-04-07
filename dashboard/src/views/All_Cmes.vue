@@ -11,7 +11,7 @@
           class="mx-0 font-weight-light "
           color="success"
           @click="$router.push('add_CME')">
-        
+
           Add A New CME
         </v-btn>
       </v-flex>
@@ -34,8 +34,8 @@
               :src="result.file || 'sunshine.jpg' "
               class="white--text align-end"
               height="200px"
-             />
- 
+            />
+
             <v-card-title>{{ result.title }}</v-card-title>
 
             <v-card-text class="text--primary">
@@ -44,7 +44,6 @@
 
             <router-link :to="{ name: 'view_CME', params: {id : result.id } }"> more </router-link>
 
-
             <v-btn
               :style="{left: '50%', transform:'translateX(-50%)'}"
               color="orange"
@@ -52,7 +51,6 @@
 
               View More
             </v-btn>
-
 
           </v-card>
 
@@ -79,7 +77,7 @@
               <v-card-text height="500px"> Download Documents :<a :href=" file "> {{ file }} </a> </v-card-text>
               </v-list>
               <v-card-text height="500px">{{ result.body }}</v-card-text>
-              
+
             </v-card>
           </v-dialog> -->
 
@@ -104,7 +102,6 @@ export default {
   },
 
   methods: {
-
 
     getResources () {
       axios.get('resources/cmes')
