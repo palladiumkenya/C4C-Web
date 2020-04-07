@@ -223,7 +223,7 @@ export default {
 
     axios.get('immunizations/all')
       .then(response => {
-        this.hcw_exposures = response.data.data // <--- Im thinking this is an object
+        this.hcw_exposures = response.data.data
       })
   },
   methods: {

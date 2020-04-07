@@ -88,7 +88,7 @@ export default {
       console.log(count)
     },
     getExp () {
-      axios.get('hcw')
+      axios.get('exposures/all/')
       .then((exp) => {
         this.s = exp.data.data
         this.link = exp.data.links.next
@@ -113,8 +113,8 @@ export default {
      getNum(dob){
       var count = 0
       for(var x in this.s){
-        if (this.s[x].dob === dob){
-          console.log(this.s[x].dob)
+        if (this.s[x].location === dob){
+          console.log(this.s[x].location)
           console.log(this.u.length)
           count++
         }

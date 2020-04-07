@@ -36,11 +36,11 @@ export default {
           }
         },
         title: {
-    text: 'Registration By Cadres'
+    text: 'Registration By Gender'
   },
 
   xAxis: {
-    categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
+    categories: ['Male', 'Female']
 
 
   },
@@ -59,9 +59,9 @@ export default {
   series: [
 
     {
-      //type: 'column',
+
       colorByPoint: true,
-      name: 'Cadre by Number',
+      name: 'Gender',
       data: []
     }
 
@@ -72,7 +72,7 @@ export default {
       s: [],
        cadre: [],
         seriesdatac: [],
-      seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+      seriesnamec: ['Male', 'Female'],
 
     }
   },
@@ -97,7 +97,7 @@ export default {
       .then((exp) => {
         this.s = exp.data.data
         console.log(this.s)
-        console.log(this.s[0].date.slice(0,3))
+        //console.log(this.s[0].date.slice(0,3))
         this.link = exp.data.links.next
         this.loopT(this.link)
       })
@@ -123,7 +123,7 @@ export default {
     getNumc(name){
       var counter = 0
       for(var xc in this.s){
-        if (this.s[xc].cadre.name === name){
+        if (this.s[xc].gender === name){
           counter++
         }
       }
