@@ -14,7 +14,7 @@
           >  
 
             <v-card-title>{{ result.title }}</v-card-title>
-            <v-list v-for="file in result.files" >
+            <v-list v-for="file in result.files" :key="file" >
               <v-card-text height="500px"> Download Documents :<a :href=" file "> {{ file }} </a> </v-card-text>
               </v-list>
               <v-card-text height="500px">{{ result.body }}</v-card-text> 

@@ -30,7 +30,20 @@
 
             </v-flex>
           </v-card-text>
-          <v-card-text v-if="n==2">This is the second tab</v-card-text>
+          <v-card-text v-if="n==2">
+            <template>
+              <h3>{{mess1}}</h3>
+              <div
+              v-if="value1" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+              </div>
+              <highcharts :options="cadrOptions" ref="barChart"/>
+            </template>
+          </v-card-text>
           <v-card-text v-if="n==3">
             <template>
               <h3>{{mess}}</h3>
@@ -45,7 +58,20 @@
               <highcharts :options="barOptions" ref="barChart"/>
             </template>
           </v-card-text>
-          <v-card-text v-if="n==4">This is the 4th tab</v-card-text>
+          <v-card-text v-if="n==4">
+            <template>
+              <h3>{{mess1}}</h3>
+              <div
+              v-if="value1" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+              </div>
+              <highcharts :options="gendOptions" ref="barChart"/>
+            </template>
+          </v-card-text>
         </v-container>
       </v-tab-item>
     </v-tabs>
@@ -127,6 +153,7 @@ export default {
   data () {
     return {
       value: true,
+      value1: true,
       barOptions: {
         xAxis: {
           categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above','undefined'],
@@ -137,11 +164,18 @@ export default {
         yAxis: {
           min: 0,
           title: {
-              text: "No. of Ages",
+              text: "Health Care Workers",
               align: "high"
           },
           labels: {
               overflow: "justify"
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
           }
         },
         chart: {
@@ -157,10 +191,83 @@ export default {
           },
         ]
       },
+      gendOptions: {
+        xAxis: {
+          categories: ['MALE', 'FEMALE', 'UNDEFINED'],
+          title: {
+            text: 'Gender'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+              text: "Health Care Workers",
+              align: "high"
+          },
+          labels: {
+              overflow: "justify"
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Registration by Gender'
+        },
+        series: [
+          {
+            name: "Numbers",
+            data: []
+          },
+        ]
+      },
+      cadrOptions: {
+        xAxis: {
+          categories: ['Doctor', 'Clinical officer', 'Nurse', 'Student', 'Laboratory Technologist','Cleaner','Waste Handler','VCT Counsellor','Other-Specify'],
+          title: {
+            text: 'Cadre'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+              text: "Health Care Workers",
+              align: "high"
+          },
+          labels: {
+              overflow: "justify"
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Registration by Cadre'
+        },
+        series: [
+          {
+            name: "Numbers",
+            data: []
+          },
+        ]
+      },
+      mess1: 'Fetching Data.....',
       mess: 'Fetching Data.....',
       s: [],
-      u: [],
-      b: [],
       options: data
     }
   },
@@ -170,7 +277,7 @@ export default {
   },
   methods: {
     getUsers () {
-      axios.get('hcw')
+      axios.get('hcw')//facility/9831
       .then((exp) => {
         this.s = exp.data.data
         //console.log(exp.data)
@@ -195,54 +302,78 @@ export default {
           i = 11
         }
       }
+      console.log(this.s)
       this.getAgeData()
     },
     getAgeData () {
       //
       var data = []
       for (var i in this.barOptions.xAxis.categories){
-        console.log(this.barOptions.xAxis.categories[i])
         data.push(this.getAgeNum(i))
       }
       this.barOptions.series[0].data = data
       this.mess = 'Data fetched'
       this.value = false
+      
+      data = []
+      for (var i in this.gendOptions.xAxis.categories){
+        data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
+      }
+      this.gendOptions.series[0].data = data
+      this.mess1 = 'Data fetched'
+      this.value1 = false
+
+      data = []
+      for (var i in this.cadrOptions.xAxis.categories){
+        data.push(this.getCadre(this.cadrOptions.xAxis.categories[i]))
+      }
+      this.cadrOptions.series[0].data = data
+      this.mess1 = 'Data fetched'
+      this.value1 = false
     },
     getAgeNum (cat) {
       var count = 0
-      var co = 0
       for (var x in this.s){
         var date =new Date(this.s[x].dob)
         var diff_ms = Date.now() - date.getTime();
         var age_dt = new Date(diff_ms);
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
-        //console.log(age)
         if(age<26 && cat == 0){
-          // console.log(this.s[x].dob)
           count++
         } else if (age>25 && age <= 35 && cat == 1){
-          // console.log(this.s[x].dob)
           count++
         } else if (age>35 && age <= 45 && cat == 2){
-          // console.log(this.s[x].dob)
           count++
         } else if (age>45 && age <= 55 && cat == 3){
-          // console.log(this.s[x].dob)
           count++
         } else if (age>55 && age <= 65 && cat == 4){
-          // console.log(this.s[x].dob)
           count++
         } else if (age > 65&& cat == 5){
-          // console.log(this.s[x].dob)
           count++
         } else {
           count
         }
       }
       return count
-    } 
-
-
+    },
+    getGend (cat) {
+      var count = 0
+      for (var x in this.s){
+        if (this.s[x].gender === cat){
+          count++
+        }
+      }
+      return count
+    },
+    getCadre (cat) {
+      var count = 0
+      for (var x in this.s){
+        if (this.s[x].cadre.name === cat) {
+          count++
+        }
+      }
+      return count
+    }
 
   }
 }
