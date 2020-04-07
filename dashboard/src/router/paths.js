@@ -198,7 +198,11 @@ export default [
     name: 'COVID19 Resources',
     view: 'Covid'
   },
-
+  {
+    path: '/new_covid19_resources',
+    name: 'COVID19 Resource',
+    view: 'New_COVID'
+  },
   {
     path: '/notifications',
     view: 'Notifications'

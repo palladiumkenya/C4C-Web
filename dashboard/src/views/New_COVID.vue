@@ -25,6 +25,15 @@
               Kindly fill all the required fields
             </div>
           </v-card-text>
+          <v-alert
+            :value="alert"
+            type="info"
+            dark
+            border="top"
+            transition="scale-transition"
+          >
+            {{output.message}} {{output.error}} {{output}}
+          </v-alert>
 
           <v-form
             ref="form"
@@ -99,7 +108,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validate();  "
+                    @click="validate(); alert = !alert; "
                   >
                     Submit
                   </v-btn>
@@ -116,9 +125,9 @@
 
 <script>
 import axios from 'axios'
-import swal from 'sweetalert2'
 
 export default {
+
   data () {
     return {
       alert: false,
@@ -191,21 +200,13 @@ export default {
               headers: {
               "content-type": "multipart/form-data"}
             })
-          .then(function(data) { 
-              this.$router.push('/cmes');
-              swal({  
-              icon: 'success',
-              title: 'Success',
-              text: 'You will be redirected shortly!'
-              })
-              console.log('success');
+          .then(function(data) {
+            this.$router.push('/cmes');
+              alert("Data Added Successfully")
+                console.log('success');
           }.bind(this)).catch(function(data) {
-            swal({
-              icon: 'error',
-              title: 'Oooops...',
-              text: 'Something went wrong!'
-            })
-            console.log('error');
+              alert("Something went wrong, please retry")
+                  console.log('error');
             });
       }   
     }
