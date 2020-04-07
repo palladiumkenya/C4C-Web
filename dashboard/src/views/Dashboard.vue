@@ -85,56 +85,66 @@
 
       <!-- Start Graphs -->
       <v-card>
-        <v-tabs
-          color="teal lighten-5"
-          centered
-        >
-          <v-tab>Summary Report</v-tab>
-          <v-tab>Report By Location</v-tab>
-          <v-tab>Report By Cadre</v-tab>
-          <v-tab>Report By Month</v-tab>
-          <v-tab>Report By Age</v-tab>
-          <v-tab>Report By Gender</v-tab>
-          <v-tab>Report By Verification</v-tab>
-          <v-tab-item
-            v-for="n in 7"
-            :key="n">
-            <v-container fluid>
-              <v-card-text v-if="n==1">
-                <v-flex
-                  md12
-                  sm12
-                  lg12
-                >{{ location }}{{ usersl }}
-                  <!-- insert some chart here -->
-                  <highcharts
-                    ref="barChart"
-                    :options="chartOptions"/>
-                </v-flex>
+     <v-tabs
+      color="teal lighten-5"
+      centered
+    >
+      <v-tab>Summary Report</v-tab>
+      <v-tab>Report By Location</v-tab>
+      <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Year</v-tab>
+      <v-tab>Report By Age</v-tab>
+      <v-tab>Report By Gender</v-tab>
+      <v-tab>Report By Verification</v-tab>
+        <v-tab-item
+        v-for="n in 7"
+        :key="n">
+        <v-container fluid>
+          <v-card-text v-if="n==1">
+        <v-flex
+        md12
+        sm12
+        lg12
+      >{{location}}
+        <!-- insert some chart here -->
+        <highcharts
+          ref="barChart"
+          :options="chartOptions"/>
+      </v-flex>
 
-                <v-flex
-                  md12
-                  sm12
-                  lg12
-                >{{ month }}
-                  <!-- insert some chart here -->
-                  <highcharts
-                    ref="columnChart"
-                    :options="RegistrationsChartOptions"/>
-                </v-flex>
-              </v-card-text>
-              <v-card-text v-if="n==2"/>
-              <v-card-text v-if="n==3"/>
-              <v-card-text v-if="n==4"/>
-              <v-card-text v-if="n==5"/>
-              <v-card-text v-if="n==6"/>
-              <v-card-text v-if="n==7"/>
-            </v-container>
-          </v-tab-item>
+      <v-flex
+        md12
+        sm12
+        lg12
+      >
+        <!-- insert some chart here -->
+         <highcharts
+          ref="lineChart"
+          :options="RegistrationsChartOptions"/>
+      </v-flex>
+          </v-card-text>
+          <v-card-text v-if="n==2">
+          </v-card-text>
+          <v-card-text v-if="n==3">
+          </v-card-text>
+          <v-card-text v-if="n==4">
+          </v-card-text>
+          <v-card-text v-if="n==5">
+          </v-card-text>
+          <v-card-text v-if="n==6">
+               <highcharts
+          ref="pieChart"
+          :options="GenderChartOptions"/>
+          </v-card-text>
+          <v-card-text v-if="n==7">
+          </v-card-text>
+        </v-container>
+        </v-tab-item>
 
-        </v-tabs>
 
-      </v-card>
+     </v-tabs>
+
+</v-card>
       <!-- End Graphs -->
 
       <!-- Start Maps -->
@@ -157,9 +167,39 @@ export default {
   data () {
     return {
 
+         GenderChartOptions: {
+        chart: {
+          type: 'pie',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+          text: 'Exposures By Location in Facility'
+        },
+        subtitle: {
+        //  text: 'by location'
+        },
+        plotOptions: {
+          pie: {
+            innerSize: 100,
+            depth: 45
+          }
+        },
+        series: [
+          {
+            name: 'Exposures Count',
+            data: []
+          },
+        ]
+      },
+
+
+
       RegistrationsChartOptions: {
         chart: {
-          type: 'column',
+          type: 'line',
           options3d: {
             enabled: true,
             alpha: 45
@@ -171,10 +211,10 @@ export default {
         subtitle: {
         //  text: 'by Type'
         },
-        xAxis: {
-          //
-          categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-          // categories:  ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
+  xAxis: {
+    //
+    // categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+     categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
         },
         labels: {
@@ -286,9 +326,11 @@ export default {
       u: 0,
       b: 0,
       month: [],
+      gender: [],
       location: [],
       seriesnames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-      seriesnamel: ['MALE', 'FEMALE', 'Mombasa', 'Kakamega', 'Nairobi', 'Kajiado', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir', 'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga', 'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu'],
+      seriesnamel: ['Mombasa', 'Kakamega', 'Nairobi', 'Kajiado', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir', 'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga', 'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu'],
+      seriesnameg: ['MALE', 'FEMALE'],
       scount: 0
     }
   },
@@ -354,14 +396,13 @@ export default {
     },
     getAllUsers () {
       axios.get('users')
-        .then((exp) => {
-          this.userz = exp.data.data
-          this.userl = exp.data.data
-          console.log(exp.data.data[5].hcw.facility.county)
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
+      .then((exp) => {
+        this.userz = exp.data.data
+        console.log(exp.data.data)
+        this.link = exp.data.links.next
+        this.loopG(this.link)
+      })
+      .catch(error => console.log(error.message))
     },
     getBroadcasts () {
       axios.get('broadcasts/web/all')
@@ -391,9 +432,19 @@ export default {
         this.seriesdata.push(this.getNuml(this.seriesnamel[va]))
         counter += this.getNuml(this.seriesnamel[va])
         this.location.push(this.seriesdata)
-        console.log(this.seriesdata)
       }
       // this.LocationsChartOptions.series[0].data = this.location
+    },
+      getGender(){
+      var counter = 0;
+      for(var va in this.seriesnameg){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnameg[va])
+        this.seriesdata.push(this.getNumg(this.seriesnameg[va]))
+        counter += this.getNumg(this.seriesnameg[va])
+        this.gender.push(this.seriesdata)
+      }
+      this.GenderChartOptions.series[0].data = this.gender
     },
 
     async loopT (l) {
@@ -403,15 +454,31 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
-          this.userz = this.userz.concat(response.data.data)
+         // this.userz = this.userz.concat(response.data.data)
         //  this.userl = this.userl.concat(response.data.data)
         } else {
           i = 11
         }
       }
       this.getDep()
-      this.getRegistrations()
+
+
+    },
+       async loopG (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.userz = this.userz.concat(response.data.data)
+        //  this.userl = this.userl.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+  this.getRegistrations()
       this.getLocations()
+      this.getGender()
     },
     getNum (loc, type) {
       var count = 0
@@ -436,10 +503,18 @@ export default {
     },
     getNuml (name) {
       var counter = 0
-      for (var xo in this.userl) {
-        if (this.userz[xo].gender === name) {
+      for(var xo in this.userz.hcw.facility.county){
+        if (this.userz.hcw.facility.county[xo] === name){
           counter++
-          console.log(this.userl[xo])
+       }
+      }
+      return counter
+    },
+    getNumg(name){
+      var counter = 0
+      for(var xo in this.userz){
+        if (this.userz[xo].gender === name){
+          counter++
         }
       }
       return counter

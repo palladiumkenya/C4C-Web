@@ -107,17 +107,18 @@ export default {
   },
   created () {
     this.getImmunizations()
+  this.getDuplicateUsers()
   },
   methods: {
-    getImmunizations () {
-      axios.get('immunizations/all?disease_id=1')
-        .then((exp) => {
-          console.log(exp)
-          this.s = exp.data.data
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
+    getImmunizations() {
+      axios.get('immunizations/all/disease/1')
+              .then((exp) => {
+                console.log(exp)
+                this.s = exp.data.data
+                this.link = exp.data.links.next
+                this.loopT(this.link)
+              })
+              .catch(error => console.log(error.message))
     },
     getHBV () {
       var counter = 0
@@ -127,7 +128,6 @@ export default {
         this.seriesdata.push(this.getNum(this.seriesname[vac]))
         counter += this.getNum(this.seriesname[vac])
         this.hbvs.push(this.seriesdata)
-        console.log(this.seriesdata)
       }
       this.barOptionsHBV.series[0].data = this.hbvs
     },
@@ -140,7 +140,19 @@ export default {
       }
       return counter
     },
-    async loopT (l) {
+    getDuplicateUsers() {
+      var count = {};
+      var myarrat = [];
+      for (var xo in this.s) {
+        myarrat.push(this.s[xo].user_id)
+
+      myarrat.forEach(function (xo) {
+        count[xo] = (count[xo] || 0) + 1
+      });
+      console.log(count)
+    }
+    },
+    async loopT(l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {

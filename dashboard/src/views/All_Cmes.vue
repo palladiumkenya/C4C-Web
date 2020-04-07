@@ -42,45 +42,15 @@
               <div><span>Created On: </span>{{ result.created_at }}</div>
             </v-card-text>
 
-            <router-link :to="{ name: 'view_CME', params: {id : result.id } }"> more </router-link>
-
             <v-btn
               :style="{left: '50%', transform:'translateX(-50%)'}"
               color="orange"
-              @click="$router.push('/view_CME/${result.id}')">
+              @click="$router.push({ name : 'View CME', params: {id: result.id } })"> 
 
               View More
             </v-btn>
 
           </v-card>
-
-          <!-- <v-dialog
-            v-model="dialog"
-            fullscreen
-            hide-overlay
-            transition="dialog-bottom-transition"
-            scrollable
-            max-width="90%">
-            <v-card>
-              <v-toolbar
-                dark
-                color="primary">
-                <v-btn
-                  icon
-                  dark
-                  @click="dialog = false">
-                  <v-icon>mdi-close</v-icon>
-                </v-btn>
-                <v-toolbar-title> {{ result.title }}</v-toolbar-title>
-              </v-toolbar>
-              <v-list v-for="file in result.files" >
-              <v-card-text height="500px"> Download Documents :<a :href=" file "> {{ file }} </a> </v-card-text>
-              </v-list>
-              <v-card-text height="500px">{{ result.body }}</v-card-text>
-
-            </v-card>
-          </v-dialog> -->
-
         </template>
       </v-flex>
     </v-layout>
@@ -102,7 +72,6 @@ export default {
   },
 
   methods: {
-
     getResources () {
       axios.get('resources/cmes')
         .then((resources) => {
