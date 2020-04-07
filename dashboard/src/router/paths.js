@@ -51,6 +51,19 @@ export default [
       next()
     }
   },
+     {
+    path: '/other-diseases',
+    name: 'Other Diseases',
+    view: 'OtherDiseases',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
   {
     path: '/add-user',
     name: 'HCW Upload',
