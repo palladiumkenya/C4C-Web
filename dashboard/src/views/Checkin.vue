@@ -167,7 +167,7 @@ export default {
   },
   methods: {
     getChec () {
-      axios.get('check_in/history/facility/9837')
+      axios.get('check_in/history/facility/9833')
         .then((exp) => {
           this.users = exp.data.data
           this.link = exp.data.links.next

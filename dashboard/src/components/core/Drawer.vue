@@ -205,6 +205,16 @@ export default {
               to: '/departments',
               icon: 'mdi-file-tree',
               text: 'Departments'
+            },
+            {
+              to: '/checkin',
+              icon: 'mdi-crosshairs-gps',
+              text: 'Checkin'
+            },
+            {
+              to: '/facility-admin',
+              icon: 'mdi-lock-pattern',
+              text: 'Facility Admins'
             }
           ]
         },

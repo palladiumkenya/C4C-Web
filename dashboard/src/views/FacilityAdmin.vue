@@ -11,15 +11,11 @@
         xs12
         md10
       >
-        <material-card
-          color="green"
-          title="Add a New Device"
-          text="Kindly fill all the required fields"
-        >
+        <material-card>
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Add A New Device
+              Add A New Admin
             </p>
             <div class="text--primary">
               Kindly fill all the required fields
@@ -30,7 +26,7 @@
               <v-layout wrap>
                 <v-flex
                   xs12
-                  md3
+                  md4
                 >
                   <v-combobox
                     v-model="facility_id"
@@ -42,23 +38,16 @@
                 </v-flex>
                 <v-flex
                   xs12
-                  md6
+                  md8
                 >
-                  <v-text-field
+                  <v-combobox
                     v-model="name"
                     :rules="[rules.required]"
+                    :items="admins"
+                    item-value=""
                     label="Name"
                     class="green-input"/>
                 </v-flex>
-                <v-flex
-                  xs12
-                  md3
-                >
-                  <v-switch
-                    v-model="switch1"
-                    :label="`Safety Engineered?  ${switch1.toString()}`"/>
-                </v-flex>
-
                 <v-flex
                   xs12
                   md6
@@ -77,15 +66,12 @@
           </v-form>
         </material-card> <br>
 
-        <material-card
-          color="blue"
-          title="Add a New Device"
-          text="Devices List">
+        <material-card>
           <v-layout wrap>
             <v-card-text>
               <div/>
               <p class="display-1 text--primary">
-                Devices List
+                Admins List
               </p>
               <v-btn
                 :loading="downloadLoading"
@@ -94,8 +80,17 @@
                 @click="handleDownload">
                 <v-icon left>mdi-download</v-icon>Export Excel
               </v-btn>
+              <v-combobox
+                v-model="facility_id"
+                :rules="[rules.required]"
+                :items="facilities"
+                label="Facility"
+                class="purple-input"
+              />
             </v-card-text>
+            
             <template>
+              
               <v-data-table
                 :headers="headers"
                 :items="items"
@@ -161,19 +156,24 @@ export default {
       rowsPerPageItems: [50, 250, 500],
       switch1: true,
       name: '',
-      users: [],
+      all_users: [],
       facility_id: '',
       facilities: [],
       headers: [
         {
           sortable: false,
-          text: 'Name',
-          value: 'name'
+          text: 'First Name',
+          value: 'first_name'
         },
         {
           sortable: false,
-          text: 'Safety Design',
-          value: 'safety_designed'
+          text: 'Surname',
+          value: 'surname'
+        },
+        {
+          sortable: false,
+          text: 'Email',
+          value: 'email'
         },
         {
           sortable: false,
@@ -183,6 +183,7 @@ export default {
       ],
       items: [],
       facilities_all: [],
+      admins: [],
       rules: {
         required: value => !!value || 'Required.'
       },
@@ -206,7 +207,6 @@ export default {
     }
   },
   created () {
-    this.DeviceList()
     this.Facilities()
     this.Admins()
   },
@@ -227,7 +227,11 @@ export default {
         .then((users) => {
           console.log(users.data)
           this.all_users = users.data.data
-          this.loopT(users.data.links.next)
+          //if (users.data.links.next){
+            //this.loopT(users.data.links.next)
+          //} else {
+            this.FilterAdmns()
+          //}
         })
         .catch(error => console.log(error.message))
     },
@@ -242,16 +246,19 @@ export default {
           i = 11
         }
       }
+      this.FilterAdmns()
       console.log("done")
     },
     FilterAdmns () {
-      console.log("in")
-      for (var a in this.users) {
-        
-        if (this.users[a].role_id == 2){
-          console.log(this.users[a])
+      for (var a in this.all_users) {
+        if (this.all_users[a].role_id == 4){
+          var p = new Object()
+          p.text = this.all_users[a].first_name+" "+this.all_users[a].surname+" "+this.all_users[a].email
+          p.value = this.all_users[a]
+          this.admins.push(p)
         }
       }
+    console.log(this.admins)
     },
     Facilities () {
       axios.get('facilities')
@@ -260,22 +267,25 @@ export default {
           for (var k in resp.data.data) {
             this.facilities.push(this.facilities_all[k].name)
           }
-        })
+        })  
+      //this.DeviceList()
     },
+    
     DeviceList () {
-      axios.get('devices/all/')
+      axios.get(`facility_admin/${this.facilities_all[this.facilities.indexOf(this.facility_id)].id}`)
         .then((exp) => {
           this.items = exp.data.data
           console.log(exp.data)
         })
         .catch(error => console.log(error.message))
     },
+    
     AddDevice (e) {
       e.preventDefault()
       if (this.checkData()) {
         axios.post('facility_admin/assign', {
           facility_id: this.facilities_all[this.facilities.indexOf(this.facility_id)].id,
-          user_id: ""
+          user_id: this.name.value.id
         })
           .then((response) => {
             this.output = response.data
