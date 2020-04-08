@@ -25,15 +25,6 @@
               Kindly fill all the required fields
             </div>
           </v-card-text>
-          <v-alert
-            :value="alert"
-            color="pink"
-            dark
-            border="top"
-            transition="scale-transition"
-          >
-            {{ output.message }} {{ output.error }}
-          </v-alert>
 
           <v-form
             ref="form"
@@ -92,17 +83,23 @@
                 </v-flex>
 
                 <v-btn
-                  class="mr-4 success"
-                  type="submit">submit</v-btn>
-
-                <v-btn
                   :disabled="!valid"
                   class="mr-4 success"
                   type="submit"
-                  @click="validate(); alert = !alert">
+                  @click="validate(); snackbar.show= true ">
                   submit</v-btn>
 
               </v-layout>
+               <v-snackbar
+                v-model="snackbar.show"
+                :color="snackbar.color"
+                :timeout="9000"
+                top
+              >
+                {{ snackbar.message }}
+            
+              </v-snackbar>
+
             </v-container>
           </v-form>
 
@@ -121,7 +118,11 @@ export default {
       all_cadres: [],
       all_facilities: [],
       valid: true,
-      alert: false,
+     snackbar:{
+        show: false,
+        message: null,
+        color: null
+      } , 
       search: null,
       facility: '',
       output: '',
@@ -170,14 +171,21 @@ export default {
         cadres: this.cadres.map(item => item.id),
         message: this.message
       })
-        .then((response) => {
-          this.output = response.data
-          this.$router.push('/all_broadcast')
-          console.log(response)
+        .then(() => {
+          this.snackbar = {
+            message : 'Data Saved Successfully',
+            color : 'success',
+            show: true
+          }
+          this.$router.push('/broadcast')
         })
-        .catch((error) => {
-          console.log('error')
-        })
+        .catch(error => {
+          this.snackbar = {
+            message : 'Error, please try again',
+            color : 'error',
+            show: true
+          }
+      })
     }
   }
 }

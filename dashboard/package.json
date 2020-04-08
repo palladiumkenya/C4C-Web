@@ -31,6 +31,7 @@
         "vue-highcharts": "^0.1.0",
         "vue-meta": "1.5.2",
         "vue-simple-alert": "^1.1.1",
+        "vue-sweetalert2": "^3.0.3",
         "vue2-daterange-picker": "^0.4.6",
         "vue2-highcharts": "^1.2.5",
         "vue2-leaflet": "^2.5.2",

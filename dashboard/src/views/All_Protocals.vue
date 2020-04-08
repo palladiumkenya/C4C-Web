@@ -16,7 +16,7 @@
         </v-btn>
       </v-flex>
 
-      <v-list-class
+      <v-list-item
         v-for="result in results"
         :key="result.id"
         xs12
@@ -48,38 +48,15 @@
 
               <v-btn
                 color="orange"
-                @click.stop="dialog = true">
+                @click="$router.push({ name: 'View Protocal', params: {id: result.id} })">
                 View More
               </v-btn>
             </v-card-actions>
 
-            <v-dialog
-              v-model="dialog"
-              fullscreen
-              hide-overlay
-              transition="dialog-bottom-transition"
-              scrollable
-              max-width="90%">
-              <v-card>
-                <v-toolbar
-                  dark
-                  color="primary">
-                  <v-btn
-                    icon
-                    dark
-                    @click="dialog = false">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title> {{ result.title }}</v-toolbar-title>
-                </v-toolbar>
-
-                <v-card-text height="500px">{{ result.body }}</v-card-text>
-              </v-card>
-            </v-dialog>
 
           </v-card>
         </v-list>
-      </v-list-class>
+      </v-list-item>
     </v-layout>
   </v-container>
 </template>
@@ -91,6 +68,7 @@ export default {
   data () {
     return {
       results: [],
+      result: [],
       dialog: false
     }
   },

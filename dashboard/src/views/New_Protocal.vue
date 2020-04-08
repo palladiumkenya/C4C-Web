@@ -23,15 +23,6 @@
             </div>
           </v-card-text>
 
-          <v-alert
-            :value="alert"
-            type="error"
-            dark
-            border="top"
-            transition="scale-transition">
-            {{ output.message }} {{ output.error }}
-          </v-alert>
-
           <v-form
             ref="form"
             v-model="valid"
@@ -121,6 +112,16 @@
       </v-flex>
 
     </v-layout>
+
+    <v-snackbar
+      v-model="snackbar"
+      :color="'#f55a4e'"
+      :timeout="9000"
+      top
+    >
+      {{ result }}
+   
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -134,7 +135,10 @@ export default {
     return {
       valid: true,
       items: [],
-      alert: false,
+      snackbar: false,
+      result: '',
+      error: false,
+      success: false,
       all_facilities: [],
       facility: 'null',
       facility_id: '',
@@ -205,6 +209,8 @@ export default {
     postProtocal (e) {
       e.preventDefault()
 
+      const vm = this
+
       let allData = new FormData()
 
       for (var i = 0; i < this.files.length; i++) {
@@ -224,12 +230,17 @@ export default {
               'content-type': 'multipart/form-data'
             }
           })
-          .then(function (data) {
-            alert('Data Added Successfully')
+          .then(() => {
+            vm.success = true
+            vm.result = 'Data Saved Successfully'
+            vm.snackbar = true
             this.$router.push('/protocals')
             console.log('success')
-          }.bind(this)).catch(function (data) {
-            alert('Something went wrong, please retry')
+            
+          }).catch( () => {
+            vm.error = true
+            vm.result = 'Error, please retry'
+            vm.snackbar = true
             console.log('error')
           })
       }

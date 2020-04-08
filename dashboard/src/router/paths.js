@@ -183,6 +183,11 @@ export default [
     view: 'Broadcast_Facility'
   },
   {
+    path: '/new_bulk_broadcast',
+    name: 'Broadcast Facility',
+    view: 'Bulk_Broadcast'
+  },
+  {
     path: '/new_broadcast',
     name: 'New Broadcast',
     view: 'New_Broadcast'
@@ -204,6 +209,11 @@ export default [
     view: 'View_CME'
   },
   {
+    path: '/view_Protocal/:id',
+    name: 'View Protocal',
+    view: 'View_Protocal'
+  },
+  {
     path: '/protocals',
     name: 'Protocals',
     view: 'All_Protocals'
@@ -222,7 +232,7 @@ export default [
   {
     path: '/covid19_resources',
     name: 'COVID19 Resources',
-    view: 'Covid'
+    view: 'Covid',
   },
   {
     path: '/new_covid19_resources',
