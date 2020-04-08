@@ -59,6 +59,16 @@
                 <td>{{ props.item.id }}</td>
                 <td>{{ props.item.user_id }}</td>
                 <td>{{ props.item.created_at }}</td>
+                <td>
+                  <v-btn
+                    type="submit"
+                    :loading="downloadLoading"
+                    :disabled="Boolean(props.item.approved)"
+                    color="secondary"
+                    @click.prevent="approvCh(props.item.id)">
+                    Approve<v-icon right>mdi-check</v-icon>
+                  </v-btn>
+                </td>
               </tr>
             </template>
             <template
@@ -86,6 +96,13 @@
         </material-card>
       </v-flex>
     </v-layout>
+    <v-snackbar
+      :color="'#f55a4e'"
+      v-model="showResult"
+      :timeout="2000"
+      top>
+      {{ result }}
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -125,8 +142,14 @@ export default {
           text: 'Date',
           value: 'Date'
         },
+        {
+          text: 'Approve',
+          value: 'approve'
+        }
       ],
       users: [],
+      result: '',
+      showResult: false,
       downloadLoading: false,
       filename: 'Checkins',
       autoWidth: true,
@@ -139,12 +162,12 @@ export default {
     })
   },
   created () {
-    this.getExp()
+    this.getChec()
     console.log(`data ${this.user}`)
   },
   methods: {
-    getExp () {
-      axios.get('check_in/history/facility/9833')
+    getChec () {
+      axios.get('check_in/history/facility/9837')
         .then((exp) => {
           this.users = exp.data.data
           this.link = exp.data.links.next
@@ -164,6 +187,23 @@ export default {
         }
       }
       console.log(this.users)
+    },
+    approvCh (check_id) {
+      console.log(check_id)
+      axios.post('check_in/approve',{
+        check_in_id: check_id
+      })
+      .then((r)=>{
+        this.result = r.data
+        this.showResult = true
+        this.users =[]
+        this.getChec()
+      })
+      .catch(() => {
+        this.error = true
+        this.result = 'Email or Password is incorrect.'
+        this.showResult = true
+      })
     },
     LatLng (lat, lng) {
       return L.latLng(lat, lng)
