@@ -99,7 +99,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validate();  "
+                    @click="validate(); snackbar.show= true "
                   >
                     Submit
                   </v-btn>
@@ -111,17 +111,29 @@
       </v-flex>
 
     </v-layout>
+    <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="9000"
+      top
+    >
+      {{ snackbar.message }}
+   
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
-import axios from 'axios'
-import swal from 'sweetalert2'
+import axios from 'axios' 
 
 export default {
   data () {
     return {
-      alert: false,
+      snackbar:{
+        show: false,
+        message: null,
+        color: null
+      } , 
       valid: true,
       output: '',
       title: '',
@@ -171,7 +183,7 @@ export default {
     removeFile (key) {
       this.files.splice(key, 1)
     },
-
+    
     postCME (e) {
       e.preventDefault()
 
@@ -184,30 +196,28 @@ export default {
         allData.append('title', this.title)
         allData.append('body', this.body)
 
-        let currentObj = this
           
           axios.post('resources/cmes/create',
             allData, {
               headers: {
               "content-type": "multipart/form-data"}
             })
-          .then(function(data) { 
-              this.$router.push('/cmes');
-              swal({  
-              icon: 'success',
-              title: 'Success',
-              text: 'You will be redirected shortly!'
-              })
-              console.log('success');
-          }.bind(this)).catch(function(data) {
-            swal({
-              icon: 'error',
-              title: 'Oooops...',
-              text: 'Something went wrong!'
-            })
-            console.log('error');
-            });
-      }   
+            .then(() => {
+            this.snackbar = {
+              message : 'Data Saved Successfully',
+              color : 'success',
+              show: true
+            }
+            this.$router.push('/cmes')
+          })
+          .catch(error => {
+            this.snackbar = {
+              message : 'Error, please try again',
+              color : '#f55a4e',
+              show: true
+            }
+          })
+      }
     }
   }
 }
