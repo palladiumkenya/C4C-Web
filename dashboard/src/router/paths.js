@@ -91,6 +91,19 @@ export default [
     }
   },
   {
+    path: '/facility-admin',
+    name: 'Facilit Admin',
+    view: 'FacilityAdmin',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
     path: '/checkin',
     name: 'Checkin',
     view: 'Checkin',
