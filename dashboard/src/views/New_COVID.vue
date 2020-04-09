@@ -11,31 +11,34 @@
         xs12
         md11
       >
-        <v-card>
-
+        <material-card
+          color="green"
+          title="Create A Resource For Continuous Medical Education "
+          text="Kindly fill all the required fields carefully"
+        >
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Add A New Protocal
+              Add Continuous Medical Education Content
             </p>
             <div class="text--primary">
               Kindly fill all the required fields
             </div>
           </v-card-text>
-
           <v-alert
             :value="alert"
-            type="error"
+            type="info"
             dark
             border="top"
-            transition="scale-transition">
-            {{ output.message }} {{ output.error }}
+            transition="scale-transition"
+          >
+            {{output.message}} {{output.error}} {{output}}
           </v-alert>
 
           <v-form
             ref="form"
             v-model="valid"
-            @submit.prevent="postProtocal">
+            @submit.prevent="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -51,29 +54,19 @@
                     label="Title"
                     class="purple-input"/>
                 </v-flex>
-                <v-flex
-                  xs12
-                  md8>
-                  <label>Facility:</label>
-                  <v-chip
-                    class="ma-2"
-                    x-large
-                  >
-                    {{ user.hcw.facility.name }}
-                  </v-chip>
-                </v-flex>
+
                 <v-flex xs12>
                   <v-textarea
                     id="body"
                     v-model="body"
                     :rules="[rules.required]"
-                    label="Write Here"
+                    placeholder="Write here"
+                    required
                     rows="12"
                   />
                 </v-flex>
 
                 <v-flex xs12 >
-
                   <label for="document">Upload Image:</label>
                   <input
                     id="file"
@@ -87,16 +80,23 @@
                     :src="imagePreview">
                 </v-flex>
 
-                <v-flex>
+                <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
-                    id="image_file"
+                    id="files"
                     ref="files"
-                    hint="Add image"
-                    persistent-hint
                     type="file"
                     multiple
                     @change="handleFiles()">
+
+                  <v-card
+                    v-for="(file, key) in files"
+                    :key="file.id"
+                    class="file-listing">{{ file.name }}
+                    <span
+                      class="remove-file"
+                      @click="removeFile(key)"> Remove </span> </v-card>
+
                 </v-flex>
 
                 <v-flex
@@ -108,7 +108,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validate(); alert();"
+                    @click="validate(); alert = !alert; "
                   >
                     Submit
                   </v-btn>
@@ -116,8 +116,7 @@
               </v-layout>
             </v-container>
           </v-form>
-
-        </v-card>
+        </material-card>
       </v-flex>
 
     </v-layout>
@@ -126,50 +125,30 @@
 
 <script>
 import axios from 'axios'
-import { mapGetters } from 'vuex'
 
 export default {
 
   data () {
     return {
-      valid: true,
-      items: [],
       alert: false,
-      all_facilities: [],
-      facility: 'null',
-      facility_id: '',
+      valid: true,
+      output: '',
       title: '',
       body: '',
       file: '',
       showPreview: false,
       imagePreview: '',
       files: [],
-      output: '',
       rules: {
         required: value => !!value || 'Required.'
       }
     }
   },
-  computed: {
-    ...mapGetters({
-      user: 'auth/user'
-    })
-  },
-  created () {
-    this.getFacilities()
-  },
+
   methods: {
+
     validate () {
       this.$refs.form.validate()
-    },
-
-    handleFiles () {
-      let uploadedFiles = this.$refs.files.files
-
-      for (var i = 0; i < uploadedFiles.length; i++) {
-        this.files.push(uploadedFiles[i])
-      }
-      this.getImagePreviews()
     },
 
     handleImageChange (e) {
@@ -189,53 +168,50 @@ export default {
       }
     },
 
+    handleFiles () {
+      let uploadedFiles = this.$refs.files.files
+
+      // add uploaded files to an array
+      for (var i = 0; i < uploadedFiles.length; i++) {
+        this.files.push(uploadedFiles[i])
+      }
+    },
+
     removeFile (key) {
       this.files.splice(key, 1)
     },
 
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          console.log(facilities.data)
-          this.all_facilities = facilities.data.data
-        })
-        .catch(error => console.log(error.message))
-    },
-
-    postProtocal (e) {
+    postCME (e) {
       e.preventDefault()
 
-      let allData = new FormData()
-
+      let allData = new FormData();
+       //iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i]
-
-        allData.append('protocal_files[' + i + ']', file)
-        allData.append('image_file', this.files[i])
-        allData.append('title', this.title)
-        allData.append('body', this.body)
-        allData.append('facility_id', this.user.hcw.facility.id)
+        let file = this.files[i];
+        allData.append('cme_files[' + i +']', file);
+        allData.append('image_file', this.file);
+        allData.append("title", this.title);
+        allData.append("body", this.body);
 
         let currentObj = this
-
-        axios.post('resources/protocols/create',
-          allData, {
-            headers: {
-              'content-type': 'multipart/form-data'
-            }
-          })
-          .then(function (data) {
-            alert('Data Added Successfully')
-            this.$router.push('/protocals')
-            console.log('success')
-          }.bind(this)).catch(function (data) {
-            alert('Something went wrong, please retry')
-            console.log('error')
-          })
-      }
+          
+          axios.post('resources/cmes/create',
+            allData, {
+              headers: {
+              "content-type": "multipart/form-data"}
+            })
+          .then(function(data) {
+            this.$router.push('/cmes');
+              alert("Data Added Successfully")
+                console.log('success');
+          }.bind(this)).catch(function(data) {
+              alert("Something went wrong, please retry")
+                  console.log('error');
+            });
+      }   
     }
   }
-}
+}; 
 
 </script>
 <style>
@@ -245,6 +221,10 @@ export default {
     min-height: 300px;
     display: flex;
     flex-flow: column nowrap;
+}
+span.remove-file{
+  color:red;
+  cursor: pointer;
 }
 
 </style>

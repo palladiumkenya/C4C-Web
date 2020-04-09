@@ -51,6 +51,19 @@ export default [
       next()
     }
   },
+     {
+    path: '/other-diseases',
+    name: 'Other Diseases',
+    view: 'OtherDiseases',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
   {
     path: '/add-user',
     name: 'HCW Upload',
@@ -68,6 +81,19 @@ export default [
     path: '/exposure-list',
     name: 'Exposures List',
     view: 'Exposures_List',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
+    path: '/checkin',
+    name: 'Checkin',
+    view: 'Checkin',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -198,7 +224,11 @@ export default [
     name: 'COVID19 Resources',
     view: 'Covid'
   },
-
+  {
+    path: '/new_covid19_resources',
+    name: 'COVID19 Resource',
+    view: 'New_COVID'
+  },
   {
     path: '/notifications',
     view: 'Notifications'

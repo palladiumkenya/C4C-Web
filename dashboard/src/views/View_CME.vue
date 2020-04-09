@@ -8,14 +8,12 @@
           fullscreen
           hide-overlay
           scrollable
-          max-width="90%"  
-          v-for="result in result.results"
-          :key="result.id"
+          min-width="90%"  
           >  
-
-            <v-card-title>{{ result.title }}</v-card-title>
-            <v-list v-for="file in result.files" :key="file" >
-              <v-card-text height="500px"> Download Documents :<a :href=" file "> {{ file }} </a> </v-card-text>
+ 
+            <v-card-title class="headline"> {{ result.title }} </v-card-title>
+            <v-list v-for="file in result.files" >
+              <v-card-text height="500px"> Download Documents :<a :href=" file.link " target="_blank" > {{ file.file_name }} </a> </v-card-text>
               </v-list>
               <v-card-text height="500px">{{ result.body }}</v-card-text> 
               
@@ -28,28 +26,29 @@
 import axios from 'axios'
 
 export default {
+
   data () {
     return {
       result:[],
-      results: [],
-      dialog: false
+      results: []
     }
   },
   created () {
-    this.getResources()
+    this.getResource()
+
   },
 
   methods: {
-
-
-    getResources () {
-      axios.get('resources/cmes')
-        .then((resources) => {
-          console.log(resources.data)
-          this.results = resources.data.data
+    getResource () {
+      var id = this.$route.params.id;
+      axios.get('resources/cmes/' +id)
+        .then((resource) => {
+          console.log(resource.data)
+          this.result = resource.data.data
         })
         .catch(error => console.log(error.message))
     }
+    
   }
 }
 </script>

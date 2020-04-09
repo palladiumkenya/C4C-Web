@@ -25,19 +25,6 @@
               Kindly fill all the required fields
             </div>
           </v-card-text>
-          <v-alert
-            :value="alert"
-            type="info"
-            dark
-            border="top"
-            transition="scale-transition"
-          >
-<<<<<<< HEAD
-            {{output.message}} {{output.error}} {{output}}
-=======
-            {{ output.message }} {{ output.error }}
->>>>>>> a2ff7661b9e623359c379bed5a03d2103a84cd3c
-          </v-alert>
 
           <v-form
             ref="form"
@@ -112,7 +99,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validate(); alert = !alert; "
+                    @click="validate();  "
                   >
                     Submit
                   </v-btn>
@@ -129,9 +116,9 @@
 
 <script>
 import axios from 'axios'
+import swal from 'sweetalert2'
 
 export default {
-
   data () {
     return {
       alert: false,
@@ -188,14 +175,14 @@ export default {
     postCME (e) {
       e.preventDefault()
 
-      let allData = new FormData();
-       //iterating over any file sent over appending the files
+      let allData = new FormData()
+      // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i];
-        allData.append('cme_files[' + i +']', file);
-        allData.append('image_file', this.file);
-        allData.append("title", this.title);
-        allData.append("body", this.body);
+        let file = this.files[i]
+        allData.append('cme_files[' + i + ']', file)
+        allData.append('image_file', this.file)
+        allData.append('title', this.title)
+        allData.append('body', this.body)
 
         let currentObj = this
           
@@ -204,18 +191,26 @@ export default {
               headers: {
               "content-type": "multipart/form-data"}
             })
-          .then(function(data) {
-            this.$router.push('/cmes');
-              alert("Data Added Successfully")
-                console.log('success');
+          .then(function(data) { 
+              this.$router.push('/cmes');
+              swal({  
+              icon: 'success',
+              title: 'Success',
+              text: 'You will be redirected shortly!'
+              })
+              console.log('success');
           }.bind(this)).catch(function(data) {
-              alert("Something went wrong, please retry")
-                  console.log('error');
+            swal({
+              icon: 'error',
+              title: 'Oooops...',
+              text: 'Something went wrong!'
+            })
+            console.log('error');
             });
       }   
     }
   }
-}; 
+}
 
 </script>
 <style>

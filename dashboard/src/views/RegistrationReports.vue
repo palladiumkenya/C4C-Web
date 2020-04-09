@@ -105,6 +105,43 @@ export default {
       value1: true,
       value2: true,
 
+       monthOptions: {
+        xAxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Undefined'],
+          title: {
+              text: 'Monthly Registration'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+              text: "Health Care Workers",
+              align: "high"
+          },
+          labels: {
+              overflow: "justify"
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Monthly Registration'
+        },
+        series: [
+          {
+            name: "Numbers",
+            data: []
+          },
+        ]
+      },
       barOptions: {
         xAxis: {
           categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above','undefined'],

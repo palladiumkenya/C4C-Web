@@ -1,3 +1,6 @@
+import { Icon } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
 import Vue from 'vue'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
@@ -10,6 +13,7 @@ import { sync } from 'vuex-router-sync'
 
 import VuetifyDaterangePicker from 'vuetify-daterange-picker'
 import 'vuetify-daterange-picker/dist/vuetify-daterange-picker.css'
+import VueSimpleAlert from 'vue-simple-alert'
 
 // Application imports
 import App from './App'
@@ -21,6 +25,14 @@ require('@/store/subscriber')
 
 axios.defaults.baseURL = 'http://c4ctest.mhealthkenya.org/api'
 Vue.use(VuetifyDaterangePicker)
+Vue.use(VueSimpleAlert)
+
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 // Sync store with router
 sync(store, router)
