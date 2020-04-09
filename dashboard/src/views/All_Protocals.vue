@@ -68,8 +68,6 @@ export default {
   data () {
     return {
       results: [],
-      result: [],
-      dialog: false
     }
   },
   created () {

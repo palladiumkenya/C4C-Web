@@ -1,4 +1,5 @@
 <template>
+<div id="ScrollableDiv">
   <v-container
     fill-height
     fluid
@@ -23,10 +24,7 @@
             </div>
           </v-card-text>
 
-          <v-form
-            ref="form"
-            v-model="valid"
-            @submit.prevent="postProtocal">
+          <v-form @submit="postProtocal">
             <v-container py-0>
               <v-layout wrap>
 
@@ -54,19 +52,14 @@
                   </v-chip>
                 </v-flex>
                 <v-flex xs12>
-                  <v-textarea
-                    id="body"
-                    v-model="body"
-                    :rules="[rules.required]"
-                    label="Write Here"
-                    rows="12"
-                  />
+                    <ckeditor :editor="editor" id="editorData" v-model="editorData"></ckeditor>
                 </v-flex>
 
                 <v-flex xs12 >
 
                   <label for="document">Upload Image:</label>
                   <input
+                    value="file"
                     id="file"
                     ref="file"
                     accept="image/*"
@@ -81,13 +74,20 @@
                 <v-flex>
                   <label for="document">Upload Documents:</label>
                   <input
-                    id="image_file"
+                    value="files"
+                    id="files"
                     ref="files"
-                    hint="Add image"
-                    persistent-hint
                     type="file"
                     multiple
                     @change="handleFiles()">
+
+                    <v-card
+                    v-for="(file, key) in files"
+                    :key="file.id"
+                    class="file-listing">{{ file.name }}
+                    <span
+                      class="remove-file"
+                      @click="removeFile(key)"> Remove </span> </v-card>
                 </v-flex>
 
                 <v-flex
@@ -95,11 +95,9 @@
                   text-xs-right
                 >
                   <v-btn
-                    :disabled="!valid"
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validate(); alert();"
                   >
                     Submit
                   </v-btn>
@@ -114,36 +112,61 @@
     </v-layout>
 
     <v-snackbar
+      :color="color"
+      :bottom="bottom"
+      :top="top"
+      :left="left"
+      :right="right"
       v-model="snackbar"
-      :color="'#f55a4e'"
-      :timeout="9000"
-      top
-    >
-      {{ result }}
-   
+      dark
+      >
+      <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.message }}<br> {{ output.errors }} </div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
     </v-snackbar>
+    
   </v-container>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
 
   data () {
     return {
-      valid: true,
+      editor: ClassicEditor,
+      editorData: '',
+      editorConfig: { },
       items: [],
+      color: null,
+      colors: [
+        'success',
+        'error'
+      ],
+      top: true,
+      bottom: false,
+      left: false,
+      right: false,
       snackbar: false,
       result: '',
-      error: false,
-      success: false,
       all_facilities: [],
       facility: 'null',
       facility_id: '',
       title: '',
-      body: '',
       file: '',
       showPreview: false,
       imagePreview: '',
@@ -154,6 +177,7 @@ export default {
       }
     }
   },
+
   computed: {
     ...mapGetters({
       user: 'auth/user'
@@ -163,9 +187,26 @@ export default {
     this.getFacilities()
   },
   methods: {
-    validate () {
-      this.$refs.form.validate()
-    },
+    validateData () {
+      if (this.title == '') {
+        this.pre_out = 'Enter your title to proceed'
+        this.snack('top', 'center')
+        return false
+      } else if (this.editorData == '') {
+        this.pre_out = 'Provide the text to proceed'
+        this.snack('top', 'center')
+        return false
+      } else if (this.file == '') {
+        this.pre_out = 'Provide an image'
+        this.snack('top', 'center')
+        return false
+      } else if (this.files == []) {
+        this.pre_out = 'Attach documents'
+        this.snack('top', 'center')
+        return false
+      }      
+      else { return true }
+    },  
 
     handleFiles () {
       let uploadedFiles = this.$refs.files.files
@@ -173,7 +214,6 @@ export default {
       for (var i = 0; i < uploadedFiles.length; i++) {
         this.files.push(uploadedFiles[i])
       }
-      this.getImagePreviews()
     },
 
     handleImageChange (e) {
@@ -207,55 +247,66 @@ export default {
     },
 
     postProtocal (e) {
-      e.preventDefault()
+      e.preventDefault();
 
-      const vm = this
-
-      let allData = new FormData()
+      let formData = new FormData()
 
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('protocal_files[' + i + ']', file)
-        allData.append('image_file', this.files[i])
-        allData.append('title', this.title)
-        allData.append('body', this.body)
-        allData.append('facility_id', this.user.hcw.facility.id)
+        formData.append('protocal_files[' + i + ']', file)
+        formData.append('image_file', this.files[i])
+        formData.append('title', this.title)
+        formData.append('body', this.body)
+        formData.append('facility_id', this.user.hcw.facility.id)
 
-        let currentObj = this
+      }
 
-        axios.post('resources/protocols/create',
-          allData, {
+       if (this.validateData()) {
+       axios.post('resources/protocols/create',
+          formData, {
             headers: {
               'content-type': 'multipart/form-data'
             }
           })
-          .then(() => {
-            vm.success = true
-            vm.result = 'Data Saved Successfully'
-            vm.snackbar = true
-            this.$router.push('/protocals')
-            console.log('success')
-            
-          }).catch( () => {
-            vm.error = true
-            vm.result = 'Error, please retry'
-            vm.snackbar = true
-            console.log('error')
-          })
+         .then((response) => {
+           console.log(response)
+          this.output = response.data
+          this.resp = Boolean(response.data.success)
+          this.snack('top', 'center')
+          this.$router.push('/protocals')
+
+        })
+        .catch(error => {
+          this.output = error
+          this.snack('top', 'center')
+        })
+      } 
+    },
+      snack (...args) {
+        this.top = false
+        this.bottom = false
+        this.left = false
+        this.right = false
+
+        for (const loc of args) {
+          this[loc] = true
+        }
+        if (this.resp) {
+          this.color = this.colors[0]
+        } else {
+          this.color = this.colors[1]
+        }
+        this.snackbar = true
+      }
       }
     }
-  }
-}
 
 </script>
 <style>
-.document-editor {
-    border: 1px solid var(--ck-color-base-border);
-    border-radius: var(--ck-border-radius);
-    min-height: 300px;
-    display: flex;
-    flex-flow: column nowrap;
+span.remove-file{
+  color:red;
+  cursor: pointer;
 }
 
 </style>

@@ -29,7 +29,7 @@ export default {
 </script>
 <style >
 .ck-editor__editable_inline {
-    min-height: 200px !important;
+    min-height: 250px !important;
 }
 
 </style>
