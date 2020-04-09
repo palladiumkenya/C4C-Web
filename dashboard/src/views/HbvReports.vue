@@ -1,37 +1,12 @@
 
 <template>
   <v-card>
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Full Dose</v-tab>
-      <v-tab>Partial Dose</v-tab>
-      <v-tab>No Dose</v-tab>
-      <v-tab-item
-        v-for="n in 3"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n==1">
-            <!-- Start Graphs -->
-
-            <v-flex
-              md12
-              sm12
-              lg12
-            >
-              {{ hbvs }}
+<h3></h3>
               <highcharts
                 ref="columnChart"
                 :options="barOptionsHBV"/>
 
-            </v-flex>
-          </v-card-text>
-          <v-card-text v-if="n==2">Partial Dose list</v-card-text>
-          <v-card-text v-if="n==3">No dose list</v-card-text>
-        </v-container>
-      </v-tab-item>
-    </v-tabs>
+
   </v-card>
 
 </template>
@@ -74,7 +49,7 @@ export default {
         },
         xAxis: {
           //
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          categories: ['Dose 3', 'Dose 2', 'Dose 1']
           //  categories: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
 
         },
@@ -91,7 +66,6 @@ export default {
           ]
         },
         series: [
-
           {
             // type: 'column',
             colorByPoint: true,
@@ -101,7 +75,7 @@ export default {
 
         ]
       },
-      seriesname: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      seriesname: ['Jan', 'Feb', 'Mar'],
       hbvs: []
     }
   },
@@ -122,23 +96,40 @@ export default {
     },
     getHBV () {
       var counter = 0
+      this.seriesdata = []
       for (var vac in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNum(this.seriesname[vac]))
-        counter += this.getNum(this.seriesname[vac])
-        this.hbvs.push(this.seriesdata)
+        this.seriesdata.push(this.getNum(vac))
+        console.log(this.seriesdata)
       }
-      this.barOptionsHBV.series[0].data = this.hbvs
+      this.barOptionsHBV.series[0].data = this.seriesdata
     },
     getNum (name) {
-      var counter = 0
-      for (var xo in this.s) {
-        if (this.s[xo].date.slice(0, 3) === name) {
-          counter++
+      var a = [], b = [], c= [], prev, count = 0
+      var arr = this.s
+      arr.sort()
+      for ( var i = 0; i < arr.length; i++ ) {
+          if ( arr[i].user_id !== prev ) {
+              a.push(arr[i].user_id)
+              b.push(1)
+          } else {
+              b[b.length-1]++
+          }
+          prev = arr[i].user_id
+      }
+      console.log(a +"\n "+ b)
+      for (var u in b){
+        if (b[u] === 3 && name == 0){
+          count++
+        } else if (name == 2 ){
+          count++
+        } else if(name == 1){
+          count++
+        } else {
+          count
         }
       }
-      return counter
+      console.log(count)
+      return count
     },
     getDuplicateUsers() {
       var count = {};

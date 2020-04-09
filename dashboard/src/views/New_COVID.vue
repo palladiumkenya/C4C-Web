@@ -25,15 +25,6 @@
               Kindly fill all the required fields
             </div>
           </v-card-text>
-          <v-alert
-            :value="alert"
-            type="info"
-            dark
-            border="top"
-            transition="scale-transition"
-          >
-            {{output.message}} {{output.error}} {{output}}
-          </v-alert>
 
           <v-form
             ref="form"
@@ -108,8 +99,8 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validate(); alert = !alert; "
-                  >
+                    @click="validate(); snackbar.show=true">
+          
                     Submit
                   </v-btn>
                 </v-flex>
@@ -120,6 +111,16 @@
       </v-flex>
 
     </v-layout>
+
+     <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="9000"
+      top
+    >
+      {{ snackbar.message }}
+   
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -130,7 +131,11 @@ export default {
 
   data () {
     return {
-      alert: false,
+      snackbar:{
+        show: false,
+        message: null,
+        color: null
+      } , 
       valid: true,
       output: '',
       title: '',
@@ -193,21 +198,28 @@ export default {
         allData.append("title", this.title);
         allData.append("body", this.body);
 
-        let currentObj = this
           
           axios.post('resources/cmes/create',
             allData, {
               headers: {
               "content-type": "multipart/form-data"}
             })
-          .then(function(data) {
-            this.$router.push('/cmes');
-              alert("Data Added Successfully")
-                console.log('success');
-          }.bind(this)).catch(function(data) {
-              alert("Something went wrong, please retry")
-                  console.log('error');
-            });
+          .then(() => {
+          this.snackbar = {
+            message : 'Data Saved Successfully',
+            color : 'success',
+            show: true
+          }
+          this.$router.push('/broadcast')
+        })
+        .catch(error => {
+          this.snackbar = {
+            message : 'Error, please try again',
+            color : '#f55a4e',
+            show: true
+          }
+      })
+          
       }   
     }
   }

@@ -12,6 +12,13 @@
         xs12
         text-xs-right
       >
+        <v-btn
+          class="mx-0 font-weight-light "
+          color="success"
+          @click="$router.push('new_bulk_broadcast')"
+        >
+          Send A Bulk Broadcast
+        </v-btn>
 
         <v-btn
           class="mx-0 font-weight-light "
@@ -40,6 +47,7 @@
           </v-card-title>
           <v-data-table
             :headers="headers"
+            :rows-per-page-items="rowsPerPageItems"
             :items="all_messages"
             :search="search"
             show-actions
@@ -78,7 +86,9 @@ export default {
   data () {
     return {
       output: [],
+      rowsPerPageItems: [50, 250, 500],
       all_messages: [],
+      search: '',
       headers: [
         {
           sortable: false,
@@ -120,6 +130,18 @@ export default {
         })
         .catch(error => console.log(error.message))
     }
-  }
+  },
+   async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.all_messages = this.all_messages.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+    }
 }
 </script>

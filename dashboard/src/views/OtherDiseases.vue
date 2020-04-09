@@ -22,9 +22,6 @@
               lg12
             >
 
-{{measles}}
-<br>
-              {{influenza}}
                   <h3>Miseasles Summary</h3>
                   <highcharts :options="MeaslesChartOptions"
                    ref="columnChart"/>
