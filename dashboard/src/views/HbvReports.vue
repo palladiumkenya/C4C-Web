@@ -1,37 +1,12 @@
 
 <template>
   <v-card>
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Full Dose</v-tab>
-      <v-tab>Partial Dose</v-tab>
-      <v-tab>No Dose</v-tab>
-      <v-tab-item
-        v-for="n in 3"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n==1">
-            <!-- Start Graphs -->
-
-            <v-flex
-              md12
-              sm12
-              lg12
-            >
-              {{ hbvs }}
+<h3></h3>
               <highcharts
                 ref="columnChart"
                 :options="barOptionsHBV"/>
 
-            </v-flex>
-          </v-card-text>
-          <v-card-text v-if="n==2">Partial Dose list</v-card-text>
-          <v-card-text v-if="n==3">No dose list</v-card-text>
-        </v-container>
-      </v-tab-item>
-    </v-tabs>
+
   </v-card>
 
 </template>
@@ -74,7 +49,7 @@ export default {
         },
         xAxis: {
           //
-          categories: ['Full', 'Partial', 'None']
+          categories: ['Dose 3', 'Dose 2', 'Dose 1']
           //  categories: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
 
         },
@@ -129,7 +104,7 @@ export default {
       this.barOptionsHBV.series[0].data = this.seriesdata
     },
     getNum (name) {
-      var a = [], b = [], prev, count = 0
+      var a = [], b = [], c= [], prev, count = 0
       var arr = this.s
       arr.sort()
       for ( var i = 0; i < arr.length; i++ ) {
@@ -145,7 +120,9 @@ export default {
       for (var u in b){
         if (b[u] === 3 && name == 0){
           count++
-        } else if (name == 1 && b[u] != 3){
+        } else if (name == 2 ){
+          count++
+        } else if(name == 1){
           count++
         } else {
           count

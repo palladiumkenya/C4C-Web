@@ -1,4 +1,3 @@
-
 <template>
   <v-card>
     <v-tabs
@@ -21,61 +20,61 @@
               sm12
               lg12
             >
-              <template>
-                <section class="charts">
-                  <h3>Registration Visualization</h3>
-                  <vue-highcharts :options="options" />
-                </section>
-              </template>
+               <template>
+              <h3>{{mess2}}</h3>
+              <div
+              v-if="value2" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+              </div>
+              <highcharts :options="monthOptions" ref="barChart"/>
+            </template>
 
             </v-flex>
           </v-card-text>
           <v-card-text v-if="n==2">
             <template>
-              <h3>{{ mess1 }}</h3>
+              <h3>{{mess1}}</h3>
               <div
-                v-if="value1" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
+              v-if="value1" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
               </div>
-              <highcharts
-                ref="barChart"
-                :options="cadrOptions"/>
+              <highcharts :options="cadrOptions" ref="barChart"/>
             </template>
           </v-card-text>
           <v-card-text v-if="n==3">
             <template>
-              <h3>{{ mess }}</h3>
+              <h3>{{mess}}</h3>
               <div
-                v-if="value" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
+              v-if="value" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
               </div>
-              <highcharts
-                ref="barChart"
-                :options="barOptions"/>
+              <highcharts :options="barOptions" ref="barChart"/>
             </template>
           </v-card-text>
           <v-card-text v-if="n==4">
             <template>
-              <h3>{{ mess1 }}</h3>
+              <h3>{{mess1}}</h3>
               <div
-                v-if="value1" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
+              v-if="value1" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
               </div>
-              <highcharts
-                ref="barChart"
-                :options="gendOptions"/>
+              <highcharts :options="gendOptions" ref="barChart"/>
             </template>
           </v-card-text>
         </v-container>
@@ -94,63 +93,7 @@ import Highcharts from 'highcharts'
 
 // SeriesLabel(Highcharts);
 
-const data = {
-  title: {
-    text: 'Exposures Chart Analysis'
-  },
-  xAxis: {
-    categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-  },
-  labels: {
-    items: [
-      {
-        html: 'Exposures Per Cadre',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
-  series: [
-    {
-      type: 'column',
-      name: 'Monthly Exposures',
-      data: [7, 3, 3, 9, 0, 5, 6, 2, 4, 1, 8, 0]
-    },
-    {
 
-    },
-    {
-      type: 'pie',
-      name: 'Number of Exposure:',
-      data: [
-        {
-          name: 'Doctor',
-          y: 13,
-          color: Highcharts.getOptions().colors[0] // Jane's color
-        },
-        {
-          name: 'Nurse',
-          y: 23,
-          color: Highcharts.getOptions().colors[1] // John's color
-        },
-        {
-          name: 'Clinical Officer',
-          y: 19,
-          color: Highcharts.getOptions().colors[2] // Joe's color
-        }
-      ],
-      center: [100, 80],
-      size: 100,
-      showInLegend: false,
-      dataLabels: {
-        enabled: false
-      }
-    }
-  ]
-}
 export default {
   components: {
     highcharts: Chart,
@@ -160,21 +103,60 @@ export default {
     return {
       value: true,
       value1: true,
-      barOptions: {
+      value2: true,
+
+       monthOptions: {
         xAxis: {
-          categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Undefined'],
           title: {
-            text: 'Age Groups'
+              text: 'Monthly Registration'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
-            align: 'high'
+              text: "Health Care Workers",
+              align: "high"
           },
           labels: {
-            overflow: 'justify'
+              overflow: "justify"
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Monthly Registration'
+        },
+        series: [
+          {
+            name: "Numbers",
+            data: []
+          },
+        ]
+      },
+      barOptions: {
+        xAxis: {
+          categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above','undefined'],
+          title: {
+              text: 'Age Groups'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+              text: "Health Care Workers",
+              align: "high"
+          },
+          labels: {
+              overflow: "justify"
           }
         },
         plotOptions: {
@@ -192,9 +174,9 @@ export default {
         },
         series: [
           {
-            name: 'Numbers',
+            name: "Numbers",
             data: []
-          }
+          },
         ]
       },
       gendOptions: {
@@ -207,11 +189,11 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
-            align: 'high'
+              text: "Health Care Workers",
+              align: "high"
           },
           labels: {
-            overflow: 'justify'
+              overflow: "justify"
           }
         },
         plotOptions: {
@@ -229,14 +211,14 @@ export default {
         },
         series: [
           {
-            name: 'Numbers',
+            name: "Numbers",
             data: []
-          }
+          },
         ]
       },
       cadrOptions: {
         xAxis: {
-          categories: ['Doctor', 'Clinical officer', 'Nurse', 'Student', 'Laboratory Technologist', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+          categories: ['Doctor', 'Clinical officer', 'Nurse', 'Student', 'Laboratory Technologist','Cleaner','Waste Handler','VCT Counsellor','Other-Specify'],
           title: {
             text: 'Cadre'
           }
@@ -244,11 +226,11 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
-            align: 'high'
+              text: "Health Care Workers",
+              align: "high"
           },
           labels: {
-            overflow: 'justify'
+              overflow: "justify"
           }
         },
         plotOptions: {
@@ -266,36 +248,39 @@ export default {
         },
         series: [
           {
-            name: 'Numbers',
+            name: "Numbers",
             data: []
-          }
+          },
         ]
       },
       mess1: 'Fetching Data.....',
       mess: 'Fetching Data.....',
+      mess2: 'Fetching Data.....',
       s: [],
-      options: data
+     // date: [],
+      //options: data
+      //seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     }
   },
 
-  created () {
+  created ()  {
     this.getUsers()
   },
   methods: {
     getUsers () {
-      axios.get('hcw')// facility/9831
-        .then((exp) => {
-          this.s = exp.data.data
-          // console.log(exp.data)
-          if (exp.data.links.next != null) {
-            this.link = exp.data.links.next
-            this.loopT(this.link)
-          } else {
-            console.log('mm')
-            this.getAgeData()
-          }
-        })
-        .catch(error => console.log(error.message))
+      axios.get('hcw')//facility/9831
+      .then((exp) => {
+        this.s = exp.data.data
+        //console.log(exp.data)
+        if (exp.data.links.next != null){
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        }else {
+          console.log('mm')
+          this.getAgeData()
+        }
+      })
+      .catch(error => console.log(error.message))
     },
     async loopT (l) {
       var i
@@ -310,11 +295,14 @@ export default {
       }
       console.log(this.s)
       this.getAgeData()
+       //this.getTime()
     },
+
+
     getAgeData () {
       //
       var data = []
-      for (var i in this.barOptions.xAxis.categories) {
+      for (var i in this.barOptions.xAxis.categories){
         data.push(this.getAgeNum(i))
       }
       this.barOptions.series[0].data = data
@@ -322,7 +310,7 @@ export default {
       this.value = false
 
       data = []
-      for (var i in this.gendOptions.xAxis.categories) {
+      for (var i in this.gendOptions.xAxis.categories){
         data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
       }
       this.gendOptions.series[0].data = data
@@ -330,31 +318,32 @@ export default {
       this.value1 = false
 
       data = []
-      for (var i in this.cadrOptions.xAxis.categories) {
+      for (var i in this.cadrOptions.xAxis.categories){
         data.push(this.getCadre(this.cadrOptions.xAxis.categories[i]))
       }
       this.cadrOptions.series[0].data = data
       this.mess1 = 'Data fetched'
       this.value1 = false
+
     },
     getAgeNum (cat) {
       var count = 0
-      for (var x in this.s) {
-        var date = new Date(this.s[x].dob)
-        var diff_ms = Date.now() - date.getTime()
-        var age_dt = new Date(diff_ms)
+      for (var x in this.s){
+        var date =new Date(this.s[x].dob)
+        var diff_ms = Date.now() - date.getTime();
+        var age_dt = new Date(diff_ms);
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
-        if (age < 26 && cat == 0) {
+        if(age<26 && cat == 0){
           count++
-        } else if (age > 25 && age <= 35 && cat == 1) {
+        } else if (age>25 && age <= 35 && cat == 1){
           count++
-        } else if (age > 35 && age <= 45 && cat == 2) {
+        } else if (age>35 && age <= 45 && cat == 2){
           count++
-        } else if (age > 45 && age <= 55 && cat == 3) {
+        } else if (age>45 && age <= 55 && cat == 3){
           count++
-        } else if (age > 55 && age <= 65 && cat == 4) {
+        } else if (age>55 && age <= 65 && cat == 4){
           count++
-        } else if (age > 65 && cat == 5) {
+        } else if (age > 65&& cat == 5){
           count++
         } else {
           count
@@ -364,8 +353,8 @@ export default {
     },
     getGend (cat) {
       var count = 0
-      for (var x in this.s) {
-        if (this.s[x].gender === cat) {
+      for (var x in this.s){
+        if (this.s[x].gender === cat){
           count++
         }
       }
@@ -373,13 +362,13 @@ export default {
     },
     getCadre (cat) {
       var count = 0
-      for (var x in this.s) {
+      for (var x in this.s){
         if (this.s[x].cadre.name === cat) {
           count++
         }
       }
       return count
-    }
+    },
 
   }
 }

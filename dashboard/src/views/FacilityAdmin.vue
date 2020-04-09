@@ -32,6 +32,7 @@
                     v-model="facility_id"
                     :rules="[rules.required]"
                     :items="facilities"
+                    item-value=""
                     label="Facility"
                     class="purple-input"
                   />
@@ -87,6 +88,10 @@
                 label="Facility"
                 class="purple-input"
               />
+               <v-btn
+                color="secondary"
+                @click="DeviceList">View List
+              </v-btn>
             </v-card-text>
             
             <template>
@@ -110,8 +115,9 @@
                   slot="items"
                   slot-scope="{ item }"
                 >
-                  <td>{{ item.name }}</td>
-                  <td>{{ Boolean(item.safety_designed) }}</td>
+                  <td>{{ item.first_name }}</td>
+                  <td>{{ item.surname }}</td>
+                  <td>{{ item.email }}</td>
                   <td>{{ item.created_at }}</td>
                 </template>
               </v-data-table>
@@ -247,7 +253,6 @@ export default {
         }
       }
       this.FilterAdmns()
-      console.log("done")
     },
     FilterAdmns () {
       for (var a in this.all_users) {
@@ -258,33 +263,39 @@ export default {
           this.admins.push(p)
         }
       }
-    console.log(this.admins)
     },
     Facilities () {
       axios.get('facilities')
         .then((resp) => {
           this.facilities_all = resp.data.data
-          for (var k in resp.data.data) {
-            this.facilities.push(this.facilities_all[k].name)
+          for (var k in this.facilities_all) {
+            var p = new Object()
+            p.text = this.facilities_all[k].name
+            p.value = this.facilities_all[k]
+            this.facilities.push(p)
           }
         })  
-      //this.DeviceList()
+      
     },
     
     DeviceList () {
-      axios.get(`facility_admin/${this.facilities_all[this.facilities.indexOf(this.facility_id)].id}`)
-        .then((exp) => {
-          this.items = exp.data.data
-          console.log(exp.data)
-        })
-        .catch(error => console.log(error.message))
+      //setTimeout(function () {
+        axios.get(`facility_admin/${this.facility_id.value.id}`)
+          .then((exp) => {
+            this.items = exp.data.data
+            console.log(exp.data)
+            console.log(this.facility_id.value.id)
+          })
+          .catch(error => console.log(error.message))  
+      //}, 1000);
     },
     
     AddDevice (e) {
       e.preventDefault()
       if (this.checkData()) {
+        //console.log(this.facility_id.value.id)
         axios.post('facility_admin/assign', {
-          facility_id: this.facilities_all[this.facilities.indexOf(this.facility_id)].id,
+          facility_id: this.facility_id.value.id,
           user_id: this.name.value.id
         })
           .then((response) => {

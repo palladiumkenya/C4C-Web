@@ -260,6 +260,10 @@ export default [
     path: '/icons',
     view: 'Icons'
   },
+      {
+    path: '/exposure_by_cadre',
+    view: 'Exposure_by_cadre'
+  },
   {
     path: '/add_device',
     name: 'Add Devices',
