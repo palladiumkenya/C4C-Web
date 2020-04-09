@@ -67,6 +67,24 @@
               :options="barOptionsCadre"/>
           </v-card-text>
           <v-card-text v-if="n==5">
+
+            <highcharts :options="barOptionsTime" ref="columnChart"/>
+          </v-card-text>
+          <v-card-text v-if="n==6">
+              <template>
+              <h3>{{mess}}</h3>
+              <div
+              v-if="value" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+              </div>
+              <highcharts :options="barOptionsAge" ref="barChart"/>
+            </template>
+
+
             <highcharts
               ref="columnChart"
               :options="barOptionsTime"/>
@@ -77,7 +95,22 @@
               ref="columnChart"
               :options="barOptionsHour"/>
           </v-card-text>
-          <v-card-text v-if="n==8">This is the Third tab</v-card-text>
+          <v-card-text v-if="n==8">
+
+                     <template>
+              <h3>{{mess1}}</h3>
+              <div
+              v-if="value1" >
+              <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+              </div>
+              <highcharts :options="gendOptions" ref="barChart"/>
+            </template>
+
+          </v-card-text>
           <v-card-text v-if="n==9">This is the Third tab</v-card-text>
         </v-container>
       </v-tab-item>
@@ -93,6 +126,7 @@ import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import Exposure_by_time from "./Exposure_by_time";
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -104,10 +138,91 @@ export default {
     })
   },
   components: {
+      Exposure_by_time,
     highcharts: Chart
   },
   data () {
     return {
+
+        value: true,
+        value1: true,
+
+        gendOptions: {
+        xAxis: {
+          categories: ['MALE', 'FEMALE', 'UNDEFINED'],
+          title: {
+            text: 'Gender'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+              text: "Health Care Workers",
+              align: "high"
+          },
+          labels: {
+              overflow: "justify"
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Exposure by Gender'
+        },
+        series: [
+          {
+            name: "Numbers",
+            data: []
+          },
+        ]
+      },
+
+            barOptionsAge: {
+                xAxis: {
+                    categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
+                    title: {
+                        text: 'Age Groups'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: "Health Care Workers",
+                        align: "high"
+                    },
+                    labels: {
+                        overflow: "justify"
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Exposures by Age'
+                },
+                series: [
+                    {
+                        name: "Numbers",
+                        data: []
+                    },
+                ]
+            },
+
       barOptionsHour: {
         chart: {
           type: 'column',
@@ -311,12 +426,16 @@ export default {
           }
         ]
       },
+
       cadreDoc: 0,
       s: [],
       locations: [],
+        hcw: [],
       type: [],
       cadre: [],
+        dob:[],
       date: [],
+        users: [],
       gender: [],
       hours: [],
       seriesdata: [],
@@ -332,6 +451,7 @@ export default {
   },
   created () {
     this.getExp()
+      // this.getExpo()
   },
   methods: {
     getDep () {
@@ -400,8 +520,20 @@ export default {
       }
       this.barOptionsHour.series[0].data = this.hours
     },
+
+
     getExp () {
       axios.get('exposures/all/')
+      .then((exp) => {
+        this.s = exp.data.data
+          if(exp.data.links.next !=null) {
+              this.link = exp.data.links.next
+              this.loopT(this.link)
+          }else{
+              this.getAgeData()
+          }
+      })
+      .catch(error => console.log(error.message))
         .then((exp) => {
           this.s = exp.data.data
           this.link = exp.data.links.next
@@ -409,6 +541,7 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+
     async loopT (l) {
       var i
       for (i = 0; i < 1;) {
@@ -424,8 +557,61 @@ export default {
       this.getTypes()
       this.getCadre()
       this.getTime()
-      this.getGender()
       this.getHour()
+      this.getAgeData()
+    },
+
+      getAgeData () {
+
+       //
+      var data = []
+      for (var i in this.barOptionsAge.xAxis.categories){
+        data.push(this.getAgeNum(i))
+      }
+      this.barOptionsAge.series[0].data = data
+     this.value = false
+
+
+      data = []
+      for (var i in this.gendOptions.xAxis.categories){
+        data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
+      }
+      this.gendOptions.series[0].data = data
+      this.value1 = false
+    },
+    getAgeNum (cat) {
+      var count = 0
+      for (var x in this.s){
+        var date =new Date(this.s[x].dob)
+        var diff_ms = Date.now() - date.getTime();
+        var age_dt = new Date(diff_ms);
+        var age = Math.abs(age_dt.getUTCFullYear() - 1970)
+        if(age<26 && cat == 0){
+          count++
+        } else if (age>25 && age <= 35 && cat == 1){
+          count++
+        } else if (age>35 && age <= 45 && cat == 2){
+          count++
+        } else if (age>45 && age <= 55 && cat == 3){
+          count++
+        } else if (age>55 && age <= 65 && cat == 4){
+          count++
+        } else if (age > 65&& cat == 5){
+          count++
+        } else {
+          count
+        }
+      }
+      return count
+    },
+      getGend (cat) {
+      var count = 0
+      for (var x in this.s){
+        if (this.s[x].gender === cat){
+          count++
+        }
+      }
+      return count
     },
     getNum (name) {
       var count = 0
