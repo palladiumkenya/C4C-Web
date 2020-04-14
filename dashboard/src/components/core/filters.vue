@@ -193,12 +193,24 @@ export default {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
             this.all_counties = facilities.data.data
+            if (facilities.data.links.next !=null){
+                this.link = facilities.data,links.next
+                this.loopT(this.link)
+
+            }
         })
         .catch(error => console.log(error.message))
     },
-      get () {
-         axios.get()
-      }
+     getCounty (name){
+         var count =0
+         for(var c in this.facilities){
+             if(this.facilities(c).county === name){
+                 count ++
+             }
+
+         }
+            return counter
+     }
   }
 }
 </script>

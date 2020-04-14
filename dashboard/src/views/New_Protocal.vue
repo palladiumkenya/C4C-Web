@@ -126,7 +126,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div> {{ output.message }}<br> {{ output.errors }} </div>
+      <div> {{pre_out}} {{ output.message }}<br> {{ output.errors }} </div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -172,6 +172,7 @@ export default {
       imagePreview: '',
       files: [],
       output: '',
+      pre_out: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -193,18 +194,18 @@ export default {
         this.snack('top', 'center')
         return false
       } else if (this.editorData == '') {
-        this.pre_out = 'Provide the text to proceed'
+        this.pre_out = 'Provide the information to proceed'
         this.snack('top', 'center')
         return false
       } else if (this.file == '') {
-        this.pre_out = 'Provide an image'
+        this.pre_out = 'You will be redirected shortly'
         this.snack('top', 'center')
-        return false
-      } else if (this.files == []) {
-        this.pre_out = 'Attach documents'
+        return true
+      }  else if (this.files== '') {
+        this.pre_out = 'You will be redirected shortly'
         this.snack('top', 'center')
-        return false
-      }      
+        return true
+      }       
       else { return true }
     },  
 
@@ -249,25 +250,25 @@ export default {
     postProtocal (e) {
       e.preventDefault();
 
-      let formData = new FormData()
+      let allData = new FormData()
 
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        formData.append('protocal_files[' + i + ']', file)
-        formData.append('image_file', this.files[i])
-        formData.append('title', this.title)
-        formData.append('body', this.body)
-        formData.append('facility_id', this.user.hcw.facility.id)
-
-      }
+        allData.append('protocal_files[' + i + ']', file)
+      }  
+        allData.append('image_file', this.file)
+        allData.append('title', this.title)
+        allData.append('body', this.editorData)
+        allData.append('facility_id', this.user.hcw.facility.id)
 
        if (this.validateData()) {
-       axios.post('resources/protocols/create',
-          formData, {
-            headers: {
-              'content-type': 'multipart/form-data'
-            }
+       axios({
+          method: "POST",
+          url : 'resources/protocols/create',
+          data: allData,
+          headers: {
+              'content-type': 'multipart/form-data; boundary=${form._boundary'}
           })
          .then((response) => {
            console.log(response)
@@ -279,6 +280,7 @@ export default {
         })
         .catch(error => {
           this.output = error
+          console.log(error)
           this.snack('top', 'center')
         })
       } 
