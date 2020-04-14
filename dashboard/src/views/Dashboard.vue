@@ -105,7 +105,7 @@
         md12
         sm12
         lg12
-      >{{location}}
+      >{{exposure_location}}
         <!-- insert some chart here -->
         <highcharts
           ref="barChart"
@@ -327,7 +327,8 @@ export default {
       b: 0,
       month: [],
       gender: [],
-      location: [],
+      exposure_location: [],
+        exposure_type: [],
       seriesnames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
       seriesnamel: ['Mombasa', 'Kakamega', 'Nairobi', 'Kajiado', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir', 'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga', 'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu'],
       seriesnameg: ['MALE', 'FEMALE'],
@@ -382,6 +383,7 @@ export default {
         .then((exp) => {
           this.scount = exp.data.meta.total
           this.s = exp.data.data
+            console.log(exp.data.data)
           this.link = exp.data.links.next
           this.loopT(this.link)
         })
@@ -431,7 +433,7 @@ export default {
         this.seriesdata.push(this.seriesnamel[va])
         this.seriesdata.push(this.getNuml(this.seriesnamel[va]))
         counter += this.getNuml(this.seriesnamel[va])
-        this.location.push(this.seriesdata)
+        this.exposure_location.push(this.seriesdata)
       }
       // this.LocationsChartOptions.series[0].data = this.location
     },
@@ -484,7 +486,7 @@ export default {
       var count = 0
       for (var x in this.s) {
         // console.log(this.s[x].type)
-        if (this.s[x].location === loc && this.s[x].type === type) {
+        if (this.s[x].exposure_location === loc && this.s[x].exposure_type === type) {
           // console.log(this.s[x].type)
           // refs / remotes / origin / develop
           count++

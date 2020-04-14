@@ -5,61 +5,25 @@
     <v-layout wrap>
       <v-flex
         md6
-        lg4
+        lg2
       >
 
         <template>
-
-          <v-container fluid>
-            <v-select
-              v-model="selectedFruits"
-              :items="fruits"
-              label="Select Cadre"
-              multiple
-            >
-              <template v-slot:prepend-item>
-                <v-list-item
-                  ripple
-                  @click="toggle"
+ <v-flex
+                  xs12
                 >
-                  <v-list-item-action>
-                    <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title>Select All</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider class="mt-2"/>
-
-              </template>
-              <template v-slot:append-item>
-                <v-divider class="mb-2"/>
-                <v-list-item disabled>
-                  <v-list-item-avatar color="grey lighten-3">
-                    <v-icon>mdi-food-apple</v-icon>
-                  </v-list-item-avatar>
-
-                  <v-list-item-content v-if="likesAllFruit">
-                    <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
-                  </v-list-item-content>
-
-                  <v-list-item-content v-else-if="likesSomeFruit">
-                    <v-list-item-title>Fruit Count</v-list-item-title>
-                    <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
-                  </v-list-item-content>
-
-                  <v-list-item-content v-else>
-                    <v-list-item-title>
-                      How could you not like fruit?
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      Go ahead, make a selection above!
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-select>
-          </v-container>
+                  <v-combobox
+                    v-model="county"
+                    :items="all_counties"
+                    :search-input.sync="search"
+                    item-text="county"
+                    item-value="id"
+                    multiple
+                    chips
+                    label="Select County"
+                    required
+                  />
+                </v-flex>
 
         </template>
 
@@ -69,59 +33,25 @@
 
       <v-flex
         md6
-        lg4
+        lg3
       >
 
         <template>
-          <v-container fluid>
-            <v-select
-              v-model="selectedFruits"
-              :items="fruits"
-              label="Select Gender"
-              multiple
-            >
-              <template v-slot:prepend-item>
-                <v-list-item
-                  ripple
-                  @click="toggle"
+     <v-flex
+                  xs12
                 >
-                  <v-list-item-action>
-                    <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title>Select All</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider class="mt-2"/>
-              </template>
-              <template v-slot:append-item>
-                <v-divider class="mb-2"/>
-                <v-list-item disabled>
-                  <v-list-item-avatar color="grey lighten-3">
-                    <v-icon>mdi-food-apple</v-icon>
-                  </v-list-item-avatar>
-
-                  <v-list-item-content v-if="likesAllFruit">
-                    <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
-                  </v-list-item-content>
-
-                  <v-list-item-content v-else-if="likesSomeFruit">
-                    <v-list-item-title>Fruit Count</v-list-item-title>
-                    <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
-                  </v-list-item-content>
-
-                  <v-list-item-content v-else>
-                    <v-list-item-title>
-                      How could you not like fruit?
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      Go ahead, make a selection above!
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-select>
-          </v-container>
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    :search-input.sync="search"
+                    item-text="sub_county"
+                    item-value="id"
+                    multiple
+                    chips
+                    label="Select Sub-County"
+                    required
+                  />
+                </v-flex>
         </template>
 
       </v-flex>
@@ -129,59 +59,76 @@
       <!-- third select -->
       <v-flex
         md6
-        lg4
+        lg2
       >
 
         <template>
-          <v-container fluid>
-            <v-select
-              v-model="selectedFruits"
-              :items="fruits"
-              label="Select Age Group"
-              multiple
-            >
-              <template v-slot:prepend-item>
-                <v-list-item
-                  ripple
-                  @click="toggle"
+    <v-flex
+                  xs12
                 >
-                  <v-list-item-action>
-                    <v-icon :color="selectedFruits.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title>Select All</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider class="mt-2"/>
-              </template>
-              <template v-slot:append-item>
-                <v-divider class="mb-2"/>
-                <v-list-item disabled>
-                  <v-list-item-avatar color="grey lighten-3">
-                    <v-icon>mdi-food-apple</v-icon>
-                  </v-list-item-avatar>
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    :search-input.sync="search"
+                    item-text="partner"
+                    item-value="id"
+                    multiple
+                    chips
+                    label="Select Partner"
+                    required
+                  />
+                </v-flex>
+        </template>
 
-                  <v-list-item-content v-if="likesAllFruit">
-                    <v-list-item-title>Holy smokes, someone call the fruit police!</v-list-item-title>
-                  </v-list-item-content>
+      </v-flex>
 
-                  <v-list-item-content v-else-if="likesSomeFruit">
-                    <v-list-item-title>Fruit Count</v-list-item-title>
-                    <v-list-item-subtitle>{{ selectedFruits.length }}</v-list-item-subtitle>
-                  </v-list-item-content>
+      <v-flex
+        md6
+        lg2
+      >
 
-                  <v-list-item-content v-else>
-                    <v-list-item-title>
-                      How could you not like fruit?
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      Go ahead, make a selection above!
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-select>
-          </v-container>
+        <template>
+         <v-flex
+                  xs12
+                >
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    :search-input.sync="search"
+                    item-text="name"
+                    item-value="id"
+                    multiple
+                    chips
+                    label="Select Facility Level"
+                    required
+                  />
+                </v-flex>
+        </template>
+
+      </v-flex>
+
+      <v-flex
+        md6
+        lg3
+      >
+
+        <template>
+          <v-flex
+                  xs12
+                >
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    :search-input.sync="search"
+                    item-text="name"
+                    item-value="id"
+                    multiple
+                    chips
+                    label="Select Facility"
+                    required
+                  />
+                </v-flex>
+
         </template>
 
       </v-flex>
@@ -217,44 +164,41 @@
       </template>
 
     </v-layout>
-  </v-container
-  >
+  </v-container>
 
 </template>
 
 <script>
+  import axios from 'axios'
+  import {mapGetters, mapState} from 'vuex'
 export default {
-  data: () => ({
-    fruits: [
+  data () {
+      return {
+          facility: '',
+          county: '',
+          all_counties: [],
+          all_facilities: []
+      }
+  },
 
-    ],
-    selectedFruits: []
-  }),
+  created() {
+    this.getFacilities ()
 
-  computed: {
-    likesAllFruit () {
-      return this.selectedFruits.length === this.fruits.length
-    },
-    likesSomeFruit () {
-      return this.selectedFruits.length > 0 && !this.likesAllFruit
-    },
-    icon () {
-      if (this.likesAllFruit) return 'mdi-close-box'
-      if (this.likesSomeFruit) return 'mdi-minus-box'
-      return 'mdi-checkbox-blank-outline'
-    }
   },
 
   methods: {
-    toggle () {
-      this.$nextTick(() => {
-        if (this.likesAllFruit) {
-          this.selectedFruits = []
-        } else {
-          this.selectedFruits = this.fruits.slice()
-        }
-      })
-    }
+     getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+            this.all_counties = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+      get () {
+         axios.get()
+      }
   }
 }
 </script>

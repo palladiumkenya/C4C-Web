@@ -18,36 +18,16 @@
         <v-container fluid>
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
+              <core-filters/>
 
             <v-flex
               md12
               sm12
               lg12
             >
-              {{ hours }}
-              <select>
-                <option>County</option>
-                <option>Nairobi</option>
-                <option>Mombasa</option>
-                <option>Kisumu</option>
-                <option>Lamu</option>
-                <option>Kwale</option>
-              </select>
-
-              &nbsp;
-              <select>
-                <option>Sub-county</option>
-                <option/>
-              </select>
-              &nbsp;&nbsp;&nbsp;
-              <select>
-                <option>Facility</option>
-                <option/>
-              </select>
-              &nbsp;&nbsp;&nbsp;
-              <select>
-                <option>Partner</option>
-              </select>
+                <highcharts
+              ref="columnChart"
+              :options="barOptionsTime"/>
 
             </v-flex>
           </v-card-text>
@@ -84,12 +64,7 @@
               <highcharts :options="barOptionsAge" ref="barChart"/>
             </template>
 
-
-            <highcharts
-              ref="columnChart"
-              :options="barOptionsTime"/>
           </v-card-text>
-          <v-card-text v-if="n==6"/>
           <v-card-text v-if="n==7">
             <highcharts
               ref="columnChart"
@@ -124,18 +99,22 @@ import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
-import { mapGetters } from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 import moment from 'moment'
 import Exposure_by_time from "./Exposure_by_time";
+ import json from '../map.json'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
 
 export default {
+
   computed: {
+
     ...mapGetters({
       user: 'auth/user'
-    })
+    }),
+
   },
   components: {
       Exposure_by_time,
@@ -146,6 +125,55 @@ export default {
 
         value: true,
         value1: true,
+
+        barOptionsSummary: {
+            chart: {
+                type: 'column',
+                options3d: {
+                    enabled: true,
+                    alpha: 45
+                }
+            },
+            title: {
+                text: 'Total Health Care Worker Exposure Trends'
+            },
+            subtitle: {
+                // text: 'by Cadre'
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: "No. of Exposed Health Care Workers",
+                    align: "high"
+                },
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+                },
+                labels: {
+                    items: [
+                        {
+                            html: '',
+                            style: {
+                                left: '50px',
+                                top: '18px',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                            }
+                        }
+                    ]
+                },
+                series: [
+
+                    {
+                        // type: 'column',
+                        colorByPoint: true,
+                        name: 'Exposures',
+                        data: []
+                    }
+
+                ]
+            }
+        },
 
         gendOptions: {
         xAxis: {
@@ -161,7 +189,17 @@ export default {
               align: "high"
           },
           labels: {
-              overflow: "justify"
+              overflow: "justify",
+               items: [
+                        {
+                          html: '',
+                          style: {
+                            left: '50px',
+                            top: '18px',
+                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                          }
+                        }
+                      ]
           }
         },
         plotOptions: {
@@ -179,6 +217,7 @@ export default {
         },
         series: [
           {
+            colorByPoint: true,
             name: "Numbers",
             data: []
           },
@@ -187,7 +226,7 @@ export default {
 
             barOptionsAge: {
                 xAxis: {
-                    categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
+                    categories: ['18 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
                     title: {
                         text: 'Age Groups'
                     }
@@ -199,7 +238,17 @@ export default {
                         align: "high"
                     },
                     labels: {
-                        overflow: "justify"
+                        overflow: "justify",
+                      items: [
+                        {
+                          html: '',
+                          style: {
+                            left: '50px',
+                            top: '18px',
+                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                          }
+                        }
+                      ]
                     }
                 },
                 plotOptions: {
@@ -217,6 +266,7 @@ export default {
                 },
                 series: [
                     {
+                      colorByPoint: true,
                         name: "Numbers",
                         data: []
                     },
@@ -441,11 +491,13 @@ export default {
       seriesdata: [],
       seriesname: ['Lab', 'Ward', 'Theatre', 'Pharmacy', 'Corridors', 'Medical ward', 'Emergency Room', 'Surgical ward', 'Maternity', 'Dental clinic', 'Laboratory', 'Laundry', 'OP/MCH', 'Other', 'Not Specified'],
       seriesdatas: [],
+        seriesdatam: [],
       seriesnames: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified'],
       seriesdatac: [],
       seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
       seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      seriesnameg: ['Male', 'Female'],
+        seriesdatasum: [],
+            seriesnamesum: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       seriesnameh: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
     }
   },
@@ -454,6 +506,17 @@ export default {
       // this.getExpo()
   },
   methods: {
+          getSum () {
+      var counter = 0
+      for (var vac in this.seriesnamesum) {
+        this.seriesdatasum = []
+        this.seriesdatasum.push(this.seriesnamesum[vac])
+        this.seriesdatasum.push(this.getNumsum(this.seriesnamesum[vac]))
+        counter += this.getNumsum(this.seriesnamesum[vac])
+        this.date.push(this.seriesdatasum)
+      }
+      this.barOptionsSummary.series[0].data = this.date
+    },
     getDep () {
       var count = 0
       for (var v in this.seriesname) {
@@ -490,25 +553,15 @@ export default {
     getTime () {
       var counter = 0
       for (var vac in this.seriesnamet) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesnamet[vac])
-        this.seriesdata.push(this.getNumt(this.seriesnamet[vac]))
+        this.seriesdatam = []
+        this.seriesdatam.push(this.seriesnamet[vac])
+        this.seriesdatam.push(this.getNumt(this.seriesnamet[vac]))
         counter += this.getNumt(this.seriesnamet[vac])
-        this.date.push(this.seriesdata)
+        this.date.push(this.seriesdatam)
       }
       this.barOptionsTime.series[0].data = this.date
     },
-    getGender () {
-      var counter = 0
-      for (var vac in this.seriesnameg) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesnameg[vac])
-        this.seriesdata.push(this.getNumg(this.seriesnameg[vac]))
-        counter += this.getNumg(this.seriesnameg[vac])
-        this.gender.push(this.seriesdata)
-      }
-      // this.barOptionsGender.series[0].data = this.gender
-    },
+
     getHour () {
       var counter = 0
       for (var vac in this.seriesnameh) {
@@ -559,6 +612,7 @@ export default {
       this.getTime()
       this.getHour()
       this.getAgeData()
+        this.getSum()
     },
 
       getAgeData () {
@@ -644,6 +698,16 @@ export default {
       var counter = 0
       for (var xt in this.s) {
         if (this.s[xt].date.slice(0, 3) === name) {
+          counter++
+        }
+      }
+      return counter
+    },
+
+      getNumsum (name) {
+      var counter = 0
+      for (var xsum in this.s) {
+        if (this.s[xsum].date.slice(0, 3) === name) {
           counter++
         }
       }

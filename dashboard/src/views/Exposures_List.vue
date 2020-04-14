@@ -57,12 +57,14 @@
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.id }}</td>
-                <td>{{ props.item.cadre.name }}</td>
+                <td>{{ props.item.cadre }}</td>
                 <td>{{ props.item.previous_exposures }}</td>
-                <td>{{ props.item.type }}</td>
-                <td>{{ props.item.device }}</td>
-                <td>{{ props.item.location }}</td>
-                <td>{{ props.item.date }}</td>
+                <td>{{ props.item.exposure_type }}</td>
+                <td>{{ props.item.device_used }}</td>
+                <td>{{ props.item.exposure_location }}</td>
+                <td>{{ props.item.result_of }}</td>
+                <td>{{ props.item.exposure_description }}</td>
+                <td>{{ props.item.exposure_date }}</td>
                 <td>{{ Boolean(props.item.pep_initiated) }}</td>
               </tr>
             </template>
@@ -105,7 +107,7 @@ export default {
         },
         {
           text: 'Cadre',
-          value: 'cadre.name'
+          value: 'cadre'
         },
         {
           sortable: false,
@@ -115,19 +117,28 @@ export default {
         {
           sortable: false,
           text: 'Type',
-          value: 'type'
+          value: 'exposure_type'
         },
         {
           text: 'Device',
-          value: 'device'
+          value: 'device_used'
         },
         {
           text: 'Location',
-          value: 'location'
+          value: 'exposure_location'
         },
         {
+          text: 'Result',
+          value: 'result_of'
+        },
+        {
+          text: 'Description',
+          value: 'exposure_description'
+        },
+
+        {
           text: 'Date',
-          value: 'Date'
+          value: 'exposure_date'
         },
         {
           text: 'Pep Initiated',
@@ -176,8 +187,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Cadre', 'Previous Exposures', 'Type', 'Location', 'Date']
-        const filterVal = [ 'cadre', 'previous_exposures', 'type', 'location', 'date']
+        const tHeader = ['Cadre', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Date']
+        const filterVal = [ 'cadre', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'exposure_date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
