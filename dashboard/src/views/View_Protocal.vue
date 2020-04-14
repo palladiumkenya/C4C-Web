@@ -4,23 +4,23 @@
       row
       wrap
       >          
-        <v-card
+          <v-card
           fullscreen
-          hide-overlay
           scrollable
           min-width="90%"  
           >  
-        
-        <v-card-title class="headline"> {{ result.title }} </v-card-title>
-        <v-list v-for="file in result.files" >
-        <v-card-text height="500px"> Download Documents :<a :href=" file.link " target="_blank" > {{ file.file_name }} </a> </v-card-text>
-        </v-list>
-        <v-card-text height="500px">{{ result.body }}</v-card-text> 
+
+            <v-card-title class="headline"> {{ result.title }} </v-card-title>
+            <v-list v-for="file in result.files" :key="file" >
+              <v-card-text height="500px"> Download Documents :<a :href=" file.link " target="_blank" > {{ file.file_name }} </a> </v-card-text>
+              </v-list>
+              <v-card-text height="500px" v-html="result.body">{{ result.body }}</v-card-text> 
               
-          </v-card>
+            </v-card>
         </v-layout>
     </v-container>    
-</template> 
+</template>  
+
 <script>
 import axios from 'axios'
 
@@ -29,6 +29,7 @@ export default {
   data () {
     return {
       result:[],
+      results: []
     }
   },
   created () {
@@ -39,7 +40,7 @@ export default {
   methods: {
     getProtocal () {
       var id = this.$route.params.id;
-      axios.get('' +id)
+      axios.get('resources/protocols/details/' +id)
         .then((protocal) => {
           console.log(protocal.data)
           this.result = protocal.data.data
@@ -50,4 +51,3 @@ export default {
   }
 }
 </script>
-             

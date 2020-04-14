@@ -10,9 +10,9 @@
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
-          @click="$router.push('add_CME')">
+          @click="$router.push('new_covid19_resources')">
 
-          Add A New CME
+          Add A New COVID 19 Resource
         </v-btn>
       </v-flex>
 
@@ -64,6 +64,7 @@ export default {
   data () {
     return {
       results: [],
+      dialog: false
     }
   },
   created () {

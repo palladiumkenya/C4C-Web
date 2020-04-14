@@ -92,10 +92,10 @@
       <v-tab>Summary Report</v-tab>
       <v-tab>Report By Location</v-tab>
       <v-tab>Report By Cadre</v-tab>
-      <v-tab>Report By Year</v-tab>
+      <v-tab>Report By Month</v-tab>
       <v-tab>Report By Age</v-tab>
       <v-tab>Report By Gender</v-tab>
-      <v-tab>Report By Verification</v-tab>
+      <v-tab>Report By Profile</v-tab>
         <v-tab-item
         v-for="n in 7"
         :key="n">
@@ -105,7 +105,9 @@
         md12
         sm12
         lg12
+
       >{{exposure_location}}
+
         <!-- insert some chart here -->
         <highcharts
           ref="barChart"
@@ -118,25 +120,37 @@
         lg12
       >
         <!-- insert some chart here -->
-         <highcharts
-          ref="lineChart"
-          :options="RegistrationsChartOptions"/>
       </v-flex>
           </v-card-text>
           <v-card-text v-if="n==2">
+              <highcharts
+          ref="columnChart"
+          :options="LocationsChartOptions"/>
           </v-card-text>
           <v-card-text v-if="n==3">
+               <highcharts
+          ref="columnChart"
+          :options="CadreChartOptions"/>
           </v-card-text>
           <v-card-text v-if="n==4">
+              <highcharts
+          ref="lineChart"
+          :options="RegistrationsChartOptions"/>
           </v-card-text>
           <v-card-text v-if="n==5">
+              <highcharts
+          ref="columnChart"
+          :options="AgeChartOptions"/>
           </v-card-text>
           <v-card-text v-if="n==6">
                <highcharts
           ref="pieChart"
           :options="GenderChartOptions"/>
           </v-card-text>
-          <v-card-text v-if="n==7">
+          <v-card-text v-if="n==7">{{profile}}
+              <highcharts
+          ref="columnChart"
+          :options="ProfileChartOptions"/>
           </v-card-text>
         </v-container>
         </v-tab-item>
@@ -166,6 +180,184 @@ export default {
   },
   data () {
     return {
+        AgeChartOptions: {
+        xAxis: {
+          categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
+          title: {
+            text: 'Age Groups'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'Health Care Workers',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify'
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Registration by Age'
+        },
+        series: [
+          {
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+
+        ProfileChartOptions: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+          text: 'Profiles completed'
+        },
+        subtitle: {
+        //  text: 'by Type'
+        },
+  xAxis: {
+    //
+    // categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+     categories: ['Incomplete', 'Complete'],
+
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
+
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: ['Registrations'],
+            data: []
+          }
+
+        ]
+      },
+
+        CadreChartOptions: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+          text: 'registrations by Cadre'
+        },
+        subtitle: {
+        //  text: 'by Type'
+        },
+  xAxis: {
+    //
+    // categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+     categories: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor',
+        'Other-Specify'],
+
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
+
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: ['Registrations'],
+            data: []
+          }
+
+        ]
+      },
+
+
+        LocationsChartOptions: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+          text: 'registrations by Location'
+        },
+        subtitle: {
+        //  text: 'by Type'
+        },
+  xAxis: {
+    //
+    // categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+     categories: ['Mombasa', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir',
+         'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga',
+         'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu', 'Trans-Nzoia', 'Uasin Gishu', 'Elgeyo Marakwet', 'Nandi', 'Baringo',
+         'Laikipia', 'Nakuru', 'Narok', 'Kajiado', 'Kericho', 'Bomet', 'Kakamega', 'Vihiga', 'Bungoma', 'Busia', 'Siaya', 'Kisumu', 'Homa Bay',
+         'Migori', 'Kisii', 'Nyamira', 'Nairobi' ]
+
+
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
+
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: ['Registrations'],
+            data: []
+          }
+
+        ]
+      },
+
 
          GenderChartOptions: {
         chart: {
@@ -327,11 +519,26 @@ export default {
       b: 0,
       month: [],
       gender: [],
+
       exposure_location: [],
         exposure_type: [],
+
+      location: [],
+      cadre: [],
+      profile: [],
+      age: [],
+
       seriesnames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-      seriesnamel: ['Mombasa', 'Kakamega', 'Nairobi', 'Kajiado', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir', 'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga', 'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu'],
+      seriesnamel: ['Mombasa', 'Kwale', 'Kilifi', 'Tana River', 'Lamu', 'Taita Taveta', 'Garissa', 'Wajir',
+         'Mandera', 'Marsabit', 'Isiolo', 'Meru', 'Tharaka Nithi', 'Embu', 'Kitui', 'Machakos', 'Makueni', 'Nyandarua', 'Nyeri', 'Kirinyaga',
+         'Murang\'a', 'Kiambu', 'Turkana', 'West Pokot', 'Samburu', 'Trans-Nzoia', 'Uasin Gishu', 'Elgeyo Marakwet', 'Nandi', 'Baringo',
+         'Laikipia', 'Nakuru', 'Narok', 'Kajiado', 'Kericho', 'Bomet', 'Kakamega', 'Vihiga', 'Bungoma', 'Busia', 'Siaya', 'Kisumu', 'Homa Bay',
+         'Migori', 'Kisii', 'Nyamira', 'Nairobi' ],
       seriesnameg: ['MALE', 'FEMALE'],
+        seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor',
+        'Other-Specify'],
+        seriesnamea: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
+        seriesnamep: [ 0, 1],
       scount: 0
     }
   },
@@ -359,12 +566,6 @@ export default {
     this.getBroadcasts()
     this.getAllUsers()
 
-    // hcw with exposures # mounted
-
-    axios.get('immunizations/all')
-      .then(response => {
-        this.hcw_exposures = response.data.data // <--- Im thinking this is an object
-      })
   },
   methods: {
     getDep () {
@@ -435,7 +636,7 @@ export default {
         counter += this.getNuml(this.seriesnamel[va])
         this.exposure_location.push(this.seriesdata)
       }
-      // this.LocationsChartOptions.series[0].data = this.location
+       this.LocationsChartOptions.series[0].data = this.location
     },
       getGender(){
       var counter = 0;
@@ -447,6 +648,39 @@ export default {
         this.gender.push(this.seriesdata)
       }
       this.GenderChartOptions.series[0].data = this.gender
+    },
+      getCadre(){
+      var counter = 0;
+      for(var va in this.seriesnamec){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnamec[va])
+        this.seriesdata.push(this.getNumc(this.seriesnamec[va]))
+        counter += this.getNumc(this.seriesnamec[va])
+        this.cadre.push(this.seriesdata)
+      }
+      this.CadreChartOptions.series[0].data = this.cadre
+    },
+      getAges(){
+      var counter = 0;
+      for(var va in this.seriesnamea){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnamea[va])
+        this.seriesdata.push(this.getNuma(this.seriesnamea[va]))
+        counter += this.getNuma(this.seriesnamea[va])
+        this.age.push(this.seriesdata)
+      }
+      this.AgeChartOptions.series[0].data = this.age
+    },
+       getProfile(){
+      var counter = 0;
+      for(var va in this.seriesnamep){
+        this.seriesdata=[]
+        this.seriesdata.push(this.seriesnamep[va])
+        this.seriesdata.push(this.getNump(this.seriesnamep[va]))
+        counter += this.getNump(this.seriesnamep[va])
+        this.profile.push(this.seriesdata)
+      }
+      this.ProfileChartOptions.series[0].data = this.profile
     },
 
     async loopT (l) {
@@ -481,6 +715,9 @@ export default {
   this.getRegistrations()
       this.getLocations()
       this.getGender()
+           this.getCadre()
+           this.getAges()
+           this.getProfile()
     },
     getNum (loc, type) {
       var count = 0
@@ -505,8 +742,8 @@ export default {
     },
     getNuml (name) {
       var counter = 0
-      for(var xo in this.userz.hcw.facility.county){
-        if (this.userz.hcw.facility.county[xo] === name){
+      for(var xo in this.userz){
+        if (this.userz[xo].county === name){
           counter++
        }
       }
@@ -516,6 +753,34 @@ export default {
       var counter = 0
       for(var xo in this.userz){
         if (this.userz[xo].gender === name){
+          counter++
+        }
+      }
+      return counter
+    },
+    getNumc(name){
+      var counter = 0
+      for(var xo in this.userz){
+        if (this.userz[xo].cadre === name){
+          counter++
+        }
+      }
+      return counter
+    },
+    getNuma(name){
+      var counter = 0
+      for(var xo in this.userz){
+        if (this.userz[xo].dob === name){
+          counter++
+        }
+      }
+      return counter
+    },
+    getNump(name){
+      var counter = 0
+      for(var xo in this.userz){
+        if (this.userz[xo].profile_complete === name){
+            console.log(this.userz[xo].profile_complete)
           counter++
         }
       }

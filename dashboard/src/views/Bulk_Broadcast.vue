@@ -61,7 +61,7 @@
                   :disabled="!valid"
                   class="mr-4 success"
                   type="submit"
-                  @click="validate(); snackbar.show = true">
+                  @click="validate();">
                   submit</v-btn>
 
               </v-layout>
@@ -73,17 +73,27 @@
     </v-layout>
 
       <v-snackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="9000"
-      top>
-      {{ snackbar.message }}
-
-      <v-btn
+      :color="color"
+      :bottom="bottom"
+      :top="top"
+      :left="left"
+      :right="right"
+      v-model="snackbar"
       dark
-      text
-      @click="snackbar = false"/>
-
+      >
+      <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.message }}<br> {{ output.errors }}  </div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
     </v-snackbar>
 
   </v-container>
@@ -93,14 +103,19 @@
 import axios from 'axios'
 
 export default {
-  data: () => {
+  data () {
     return {
       valid: true,
-      snackbar:{
-        show: false,
-        message: null,
-        color: null
-      } , 
+      color: null,
+      colors: [
+        'success',
+        'error'
+      ],
+      top: true,
+      bottom: false,
+      left: false,
+      right: false,
+      snackbar: false,
       output: '',
       phoneNumbers: [],
       message: '',
@@ -123,22 +138,33 @@ export default {
         phone_numbers: this.phoneNumbers,
         message: this.message
       })
-        .then(() => {
-          this.snackbar = {
-            message : 'Data Saved Successfully',
-            color : 'success',
-            show: true
-          }
+        .then((response) => {
+          this.output = response.data
+          this.resp = Boolean(response.data.success)
+          this.snack('top', 'center')
           this.$router.push('/broadcast')
         })
         .catch(error => {
-          this.snackbar = {
-            message : 'Error, please try again',
-            color : 'error',
-            show: true
-          }
+          this.output = error
+          this.snack('top', 'center')
       })
-  }
+    },
+      snack (...args) {
+        this.top = false
+        this.bottom = false
+        this.left = false
+        this.right = false
+
+        for (const loc of args) {
+          this[loc] = true
+        }
+        if (this.resp) {
+          this.color = this.colors[0]
+        } else {
+          this.color = this.colors[1]
+        }
+        this.snackbar = true
+      }
 }
 }
 </script>

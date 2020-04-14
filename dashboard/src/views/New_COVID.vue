@@ -1,4 +1,6 @@
 <template>
+<div>
+>
   <v-container
     fill-height
     fluid
@@ -26,10 +28,7 @@
             </div>
           </v-card-text>
 
-          <v-form
-            ref="form"
-            v-model="valid"
-            @submit.prevent="postCME">
+          <v-form @submit="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -47,14 +46,15 @@
                 </v-flex>
 
                 <v-flex xs12>
-                  <v-textarea
-                    id="body"
-                    v-model="body"
+                    <ckeditor
+                    :editor="editor"
+                    v-model="editorData"
+                    id="editorData" 
                     :rules="[rules.required]"
                     placeholder="Write here"
                     required
-                    rows="12"
-                  />
+                    :config="editorConfig">
+                    </ckeditor>
                 </v-flex>
 
                 <v-flex xs12 >
@@ -95,12 +95,10 @@
                   text-xs-right
                 >
                   <v-btn
-                    :disabled="!valid"
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validate(); snackbar.show=true">
-          
+                  >
                     Submit
                   </v-btn>
                 </v-flex>
@@ -111,35 +109,64 @@
       </v-flex>
 
     </v-layout>
-
-     <v-snackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="9000"
-      top
-    >
-      {{ snackbar.message }}
-   
+    <v-snackbar
+      :color="color"
+      :bottom="bottom"
+      :top="top"
+      :left="left"
+      :right="right"
+      v-model="snackbar"
+      dark
+      >
+      <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{pre_out}} <br> {{ output.message }}<br> {{ output.errors }} </div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
     </v-snackbar>
+
   </v-container>
+</div> 
 </template>
 
 <script>
-import axios from 'axios'
+
+import axios from 'axios' 
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 export default {
-
   data () {
     return {
-      snackbar:{
-        show: false,
-        message: null,
-        color: null
-      } , 
-      valid: true,
+      editor: ClassicEditor,
+      editorData: '',
+      editorConfig: {
+            // The configuration of the editor.
+      },
+
+      color: null,
+      colors: [
+        'success',
+        'error'
+      ],
+      top: true,
+      bottom: false,
+      left: false,
+      right: false,
+      snackbar: false,
+      result: '',
+      resp: false,
       output: '',
+      pre_out: '',
       title: '',
-      body: '',
       file: '',
       showPreview: false,
       imagePreview: '',
@@ -152,8 +179,20 @@ export default {
 
   methods: {
 
-    validate () {
-      this.$refs.form.validate()
+    validateData () {
+      if (this.title == '') {
+        this.pre_out = 'Select a title to proceed'
+        this.snack('top', 'center')
+        return false
+      } else if (this.editorData == '') {
+        this.pre_out = 'Fill in the text area to proceed'
+        this.snack('top', 'center')
+        return false
+      } else if (this.file == '') {
+        this.pre_out = 'Add image to proceed'
+        this.snack('top', 'center')
+        return false
+      } else { return true }
     },
 
     handleImageChange (e) {
@@ -185,52 +224,67 @@ export default {
     removeFile (key) {
       this.files.splice(key, 1)
     },
-
+    
     postCME (e) {
       e.preventDefault()
-
-      let allData = new FormData();
-       //iterating over any file sent over appending the files
+      
+      let formData = new FormData();
+      
+      // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i];
-        allData.append('cme_files[' + i +']', file);
-        allData.append('image_file', this.file);
-        allData.append("title", this.title);
-        allData.append("body", this.body);
 
-          
-          axios.post('resources/cmes/create',
-            allData, {
+        formData.append('cme_files[' + i + ']', file);
+        formData.append('image_file', this.file);
+        formData.append('title', this.title);
+        formData.append('body', this.editorData);
+      }
+      
+      if (this.validateData()) {
+        axios.post('resources/cmes/create',
+            formData, {
               headers: {
-              "content-type": "multipart/form-data"}
+              "content-type": "multipart/form-data"
+            }
+            }).then((response) => {
+            this.output = response.data
+            console.log(response)
+            this.resp = Boolean(response.data.success)
+            this.snack('top', 'center')
+              this.$router.push('/cmes')
             })
-          .then(() => {
-          this.snackbar = {
-            message : 'Data Saved Successfully',
-            color : 'success',
-            show: true
-          }
-          this.$router.push('/broadcast')
-        })
-        .catch(error => {
-          this.snackbar = {
-            message : 'Error, please try again',
-            color : '#f55a4e',
-            show: true
-          }
-      })
-          
-      }   
-    }
+          .catch(error => {
+            this.output = error
+            console.log(error)
+            this.snack('top', 'center')
+          })
+       }
+    },
+    snack (...args) {
+        this.top = false
+        this.bottom = false
+        this.left = false
+        this.right = false
+
+        for (const loc of args) {
+          this[loc] = true
+        }
+        if (this.resp) {
+          this.color = this.colors[0]
+        } else {
+          this.color = this.colors[1]
+        }
+        this.snackbar = true
+      }
   }
-}; 
+}
 
 </script>
 <style>
 .document-editor {
     border: 1px solid var(--ck-color-base-border);
     border-radius: var(--ck-border-radius);
-    min-height: 300px;
+    min-height: 400px;
     display: flex;
     flex-flow: column nowrap;
 }

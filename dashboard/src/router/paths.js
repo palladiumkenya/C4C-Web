@@ -245,11 +245,11 @@ export default [
   {
     path: '/covid19_resources',
     name: 'COVID19 Resources',
-    view: 'Covid',
+    view: 'All_Covid',
   },
   {
     path: '/new_covid19_resources',
-    name: 'COVID19 Resource',
+    name: 'New COVID19 Resource',
     view: 'New_COVID'
   },
   {
