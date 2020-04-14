@@ -174,6 +174,7 @@ import { Chart } from 'highcharts-vue'
 import axios from 'axios'
 import Highcharts from 'highcharts'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     highcharts: Chart
@@ -557,15 +558,23 @@ export default {
 
     exposuresCount () {
       return this.scount
-    }
+    },
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
-
+  
   created () {
+    if (this.user === null){
+      alert("Not admin")
+      this.$router.replace({
+        name: 'login'
+      })
+    }
     this.getExp()
     this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
-
   },
   methods: {
     getDep () {
@@ -580,6 +589,7 @@ export default {
       }
     },
     getExp () {
+
       axios.get('exposures/all/')
         .then((exp) => {
           this.scount = exp.data.meta.total

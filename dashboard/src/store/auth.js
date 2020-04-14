@@ -39,13 +39,19 @@ export default{
       if (!state.token) {
         return
       }
-
       try {
         let response = await axios.get('auth/user')
-        if (response.data.data === undefined) {
-          console.log('failed')
-          commit('SET_USER', null)
-          commit('SET_TOKEN', null)
+        // if (response.data.data === undefined) {
+        //   console.log('failed')
+        //   commit('SET_USER', null)
+        //   commit('SET_TOKEN', null)
+        // } else 
+        if (response.data.data.role_id != 3) {
+            commit('SET_USER', response.data.data)
+        } else if (response.data.data.role_id === 3) {
+            console.log('failed 3')
+            commit('SET_USER', null)
+            commit('SET_TOKEN', null)
         } else {
           commit('SET_USER', response.data.data)
         }

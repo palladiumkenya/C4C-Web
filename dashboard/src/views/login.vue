@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -89,7 +89,11 @@ export default {
       }
     }
   },
-
+    computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   methods: {
     ...mapActions({
       signIn: 'auth/signIn'
@@ -106,9 +110,15 @@ export default {
 
       this.signIn(this.form)
         .then(() => {
-          this.$router.replace({
-            name: 'Dashboard'
-          })
+          // if(this.user != null){
+            this.$router.replace({
+              name: 'Dashboard'
+            })
+          // } else {
+          //   vm.error = true
+          //   vm.result = 'Not an admin. Please check your email.'
+          //   vm.showResult = true
+          // }
         })
         .catch(() => {
           // console.log('failed')

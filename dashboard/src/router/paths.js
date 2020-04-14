@@ -11,14 +11,14 @@ export default [
     name: 'Dashboard',
     // Relative to /src/views
     view: 'Dashboard',
-    beforeEnter: (to, from, next) => {
-      if (!store.getters['auth/authenticated']) {
-        return next({
-          name: 'login'
-        })
-      }
-      next()
-    }
+    // beforeEnter: (to, from, next) => {
+    //   if (!store.getters['auth/authenticated']) {
+    //     return next({
+    //       name: 'login'
+    //     })
+    //   }
+    //   next()
+    // }
   },
   {
     path: '/login',
@@ -205,7 +205,6 @@ export default [
     name: 'New Broadcast',
     view: 'New_Broadcast'
   },
-
   {
     path: '/cmes',
     name: 'CMES',
@@ -264,18 +263,18 @@ export default [
     path: '/exposure_by_cadre',
     view: 'Exposure_by_cadre'
   },
-  {
-    path: '/add_device',
-    name: 'Add Devices',
-    view: 'AddDevices',
-    meta: { title: 'Add Devices' },
-    beforeEnter: (to, from, next) => {
-      if (!store.getters['auth/authenticated']) {
-        return next({
-          name: 'login'
-        })
-      }
-      next()
-    }
-  }
+  // {
+  //   path: '/add_device',
+  //   name: 'Add Devices',
+  //   view: 'AddDevices',
+  //   meta: { title: 'Add Devices' },
+  //   beforeEnter: (to, from, next) => {
+  //     if (!store.getters['auth/authenticated']) {
+  //       return next({
+  //         name: 'login'
+  //       })
+  //     }
+  //     next()
+  //   }
+  // }
 ]

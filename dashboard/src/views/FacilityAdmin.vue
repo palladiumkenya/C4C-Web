@@ -233,11 +233,11 @@ export default {
         .then((users) => {
           console.log(users.data)
           this.all_users = users.data.data
-          //if (users.data.links.next){
-            //this.loopT(users.data.links.next)
-          //} else {
+          if (users.data.links.next){
+            this.loopT(users.data.links.next)
+          } else {
             this.FilterAdmns()
-          //}
+          }
         })
         .catch(error => console.log(error.message))
     },
@@ -247,7 +247,7 @@ export default {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
-          this.users = this.users.concat(response.data.data)
+          this.all_users = this.all_users.concat(response.data.data)
         } else {
           i = 11
         }
