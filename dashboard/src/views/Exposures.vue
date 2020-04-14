@@ -26,14 +26,14 @@
               lg12
             >
                 <highcharts
-              ref="columnChart"
+              ref="barChart"
               :options="barOptionsTime"/>
 
             </v-flex>
           </v-card-text>
           <v-card-text v-if="n==2">
             <highcharts
-              ref="columnChart"
+              ref="barChart"
               :options="barOptions"/>
           </v-card-text>
           <v-card-text v-if="n==3">
@@ -42,13 +42,15 @@
               :options="pieOptions"/>
           </v-card-text>
           <v-card-text v-if="n==4">
-            <highcharts
-              ref="columnChart"
-              :options="barOptionsCadre"/>
+              <div
+              v-if="valuec" >
+
+              </div>
+            <highcharts :options="barOptionsCadre" ref="barChart"/>
           </v-card-text>
           <v-card-text v-if="n==5">
 
-            <highcharts :options="barOptionsTime" ref="columnChart"/>
+            <highcharts :options="barOptionsTime" ref="barChart"/>
           </v-card-text>
           <v-card-text v-if="n==6">
               <template>
@@ -67,7 +69,7 @@
           </v-card-text>
           <v-card-text v-if="n==7">
             <highcharts
-              ref="columnChart"
+              ref="barChart"
               :options="barOptionsHour"/>
           </v-card-text>
           <v-card-text v-if="n==8">
@@ -125,6 +127,7 @@ export default {
 
         value: true,
         value1: true,
+        valuec: true,
 
         barOptionsSummary: {
             chart: {
@@ -273,181 +276,205 @@ export default {
                 ]
             },
 
-      barOptionsHour: {
-        chart: {
-          type: 'column',
-          options3d: {
-            enabled: true,
-            alpha: 45
-          }
-        },
-        title: {
-          text: 'Exposures By Hours'
-        },
-        subtitle: {
-          // text: 'by Cadre'
-        },
-        xAxis: {
-          //
-          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-          categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
+        //stats
+         barOptionsHour: {
+                xAxis: {
+                    categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ],
+                      title: {
+                        text: 'Hours Range'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: "Health Care Workers",
+                        align: "high"
+                    },
+                    labels: {
+                        overflow: "justify",
+                      items: [
+                        {
+                          html: '',
+                          style: {
+                            left: '50px',
+                            top: '18px',
+                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                          }
+                        }
+                      ]
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Exposures by Hours'
+                },
+                series: [
+                    {
+                      colorByPoint: true,
+                        name: "Numbers",
+                        data: []
+                    },
+                ]
+            },
 
-        },
-        labels: {
-          items: [
-            {
-              html: '',
-              style: {
-                left: '50px',
-                top: '18px',
-                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-              }
-            }
-          ]
-        },
-        series: [
+        //ends
 
-          {
-            // type: 'column',
-            colorByPoint: true,
-            name: 'Exposures',
-            data: []
-          }
+          barOptionsTime: {
+                xAxis: {
+                   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                      title: {
+                        text: 'Months Range'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: "Health Care Workers",
+                        align: "high"
+                    },
+                    labels: {
+                        overflow: "justify",
+                      items: [
+                        {
+                          html: '',
+                          style: {
+                            left: '50px',
+                            top: '18px',
+                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                          }
+                        }
+                      ]
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Exposures by Months'
+                },
+                series: [
+                    {
+                      colorByPoint: true,
+                        name: "Numbers",
+                        data: []
+                    },
+                ]
+            },
 
-        ]
-      },
+         barOptionsCadre: {
+                xAxis: {
+                   categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+                      title: {
+                        text: 'Cadre'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: "Health Care Workers",
+                        align: "high"
+                    },
+                    labels: {
+                        overflow: "justify",
+                      items: [
+                        {
+                          html: '',
+                          style: {
+                            left: '50px',
+                            top: '18px',
+                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                          }
+                        }
+                      ]
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Exposures by Cadre'
+                },
+                series: [
+                    {
+                      colorByPoint: true,
+                        name: "Numbers",
+                        data: []
+                    },
+                ]
+            },
 
-      barOptionsTime: {
-        chart: {
-          type: 'column',
-          options3d: {
-            enabled: true,
-            alpha: 45
-          }
-        },
-        title: {
-          text: 'Exposures By Month'
-        },
-        subtitle: {
-          // text: 'by Cadre'
-        },
-        xAxis: {
-          //
-          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+         barOptions: {
+                xAxis: {
+                   categories: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified'],
+                     title: {
+                        text: 'Exposure Type'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: "Health Care Workers",
+                        align: "high"
+                    },
+                    labels: {
+                        overflow: "justify",
+                      items: [
+                        {
+                          html: '',
+                          style: {
+                            left: '50px',
+                            top: '18px',
+                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                          }
+                        }
+                      ]
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Exposures by Type'
+                },
+                series: [
+                    {
+                      colorByPoint: true,
+                        name: "Numbers",
+                        data: []
+                    },
+                ]
+            },
 
-        },
-        labels: {
-          items: [
-            {
-              html: '',
-              style: {
-                left: '50px',
-                top: '18px',
-                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-              }
-            }
-          ]
-        },
-        series: [
-
-          {
-            // type: 'column',
-            colorByPoint: true,
-            name: 'Exposures',
-            data: []
-          }
-
-        ]
-      },
-
-      barOptionsCadre: {
-        chart: {
-          type: 'column',
-          options3d: {
-            enabled: true,
-            alpha: 45
-          }
-        },
-        title: {
-          text: 'Exposures By Cadres'
-        },
-        subtitle: {
-          // text: 'by Cadre'
-        },
-        xAxis: {
-          //
-          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-          categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
-
-        },
-        labels: {
-          items: [
-            {
-              html: '',
-              style: {
-                left: '50px',
-                top: '18px',
-                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-              }
-            }
-          ]
-        },
-        series: [
-
-          {
-            // type: 'column',
-            colorByPoint: true,
-            name: 'Exposure Cadres',
-            data: []
-          }
-
-        ]
-      },
-
-      barOptions: {
-        chart: {
-          type: 'column',
-          options3d: {
-            enabled: true,
-            alpha: 45
-          }
-        },
-        title: {
-          text: 'Exposures By Types'
-        },
-        subtitle: {
-        //  text: 'by Type'
-        },
-        xAxis: {
-          //
-          // categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-          categories: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified']
-
-        },
-        labels: {
-          items: [
-            {
-              html: '',
-              style: {
-                left: '50px',
-                top: '18px',
-                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-              }
-            }
-          ]
-        },
-        series: [
-
-          {
-            // type: 'column',
-            colorByPoint: true,
-            name: ['Exposure types'],
-            data: []
-          }
-
-        ]
-      },
 
       pieOptions: {
         chart: {
@@ -488,18 +515,8 @@ export default {
         users: [],
       gender: [],
       hours: [],
-      seriesdata: [],
-      seriesname: ['Lab', 'Ward', 'Theatre', 'Pharmacy', 'Corridors', 'Medical ward', 'Emergency Room', 'Surgical ward', 'Maternity', 'Dental clinic', 'Laboratory', 'Laundry', 'OP/MCH', 'Other', 'Not Specified'],
-      seriesdatas: [],
-        seriesdatam: [],
-      seriesnames: ['Prick', 'Cut', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified'],
-      seriesdatac: [],
-      seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
-      seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        seriesdatasum: [],
-            seriesnamesum: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      seriesnameh: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
-    }
+
+               }
   },
   created () {
     this.getExp()
@@ -528,51 +545,17 @@ export default {
       }
       this.pieOptions.series[0].data = this.locations
     },
-    getTypes () {
-      var counter = 0
-      for (var va in this.seriesnames) {
-        this.seriesdatas = []
-        this.seriesdatas.push(this.seriesnames[va])
-        this.seriesdatas.push(this.getNums(this.seriesnames[va]))
-        counter += this.getNums(this.seriesnames[va])
-        this.type.push(this.seriesdatas)
-      }
-      this.barOptions.series[0].data = this.type
-    },
-    getCadre () {
-      var counter = 0
-      for (var vac in this.seriesnamec) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesnamec[vac])
-        this.seriesdata.push(this.getNumc(this.seriesnamec[vac]))
-        counter += this.getNumc(this.seriesnamec[vac])
-        this.cadre.push(this.seriesdata)
-      }
-      this.barOptionsCadre.series[0].data = this.cadre
-    },
-    getTime () {
-      var counter = 0
-      for (var vac in this.seriesnamet) {
-        this.seriesdatam = []
-        this.seriesdatam.push(this.seriesnamet[vac])
-        this.seriesdatam.push(this.getNumt(this.seriesnamet[vac]))
-        counter += this.getNumt(this.seriesnamet[vac])
-        this.date.push(this.seriesdatam)
-      }
-      this.barOptionsTime.series[0].data = this.date
-    },
-
-    getHour () {
-      var counter = 0
-      for (var vac in this.seriesnameh) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesnameh[vac])
-        this.seriesdata.push(this.getNumh(this.seriesnameh[vac]))
-        counter += this.getNumh(this.seriesnameh[vac])
-        this.hours.push(this.seriesdata)
-      }
-      this.barOptionsHour.series[0].data = this.hours
-    },
+  //  getTypes () {
+   //   var counter = 0
+   //   for (var va in this.seriesnames) {
+     ///   this.seriesdatas = []
+      //  this.seriesdatas.push(this.seriesnames[va])
+      //  this.seriesdatas.push(this.getNums(this.seriesnames[va]))
+       // counter += this.getNums(this.seriesnames[va])
+      //  this.type.push(this.seriesdatas)
+     // }
+      //this.barOptions.series[0].data = this.type
+  //  },
 
 
     getExp () {
@@ -585,6 +568,7 @@ export default {
           }else{
               this.getAgeData()
           }
+          console.log(exp.data.data)
       })
       .catch(error => console.log(error.message))
         .then((exp) => {
@@ -607,10 +591,6 @@ export default {
         }
       }
       this.getDep()
-      this.getTypes()
-      this.getCadre()
-      this.getTime()
-      this.getHour()
       this.getAgeData()
         this.getSum()
     },
@@ -632,6 +612,32 @@ export default {
       }
       this.gendOptions.series[0].data = data
       this.value1 = false
+
+          var data = []
+          for (var i in this.barOptionsCadre.xAxis.categories){
+              data.push(this.getNumc(this.barOptionsCadre.xAxis.categories[i]))
+          }
+          this.barOptionsCadre.series[0].data = data
+           this.valuec = false
+
+           var data = []
+          for (var i in this.barOptions.xAxis.categories){
+              data.push(this.getNums(this.barOptions.xAxis.categories[i]))
+          }
+          this.barOptions.series[0].data = data
+           this.valuet = false
+
+            var data = []
+          for (var i in this.barOptionsHour.xAxis.categories){
+              data.push(this.getNumh(this.barOptionsHour.xAxis.categories[i]))
+          }
+          this.barOptionsHour.series[0].data = data
+
+            var data = []
+          for (var i in this.barOptionsTime.xAxis.categories){
+              data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+          }
+          this.barOptionsTime.series[0].data = data
     },
     getAgeNum (cat) {
       var count = 0
@@ -670,16 +676,17 @@ export default {
     getNum (name) {
       var count = 0
       for (var x in this.s) {
-        if (this.s[x].location === name) {
+        if (this.s[x].exposure_location === name) {
+
           count++
         }
       }
       return count
     },
-    getNums (name) {
+    getNums (cat) {
       var counter = 0
       for (var xo in this.s) {
-        if (this.s[xo].type === name) {
+        if (this.s[xo].exposure_type === cat) {
           counter++
         }
       }
@@ -688,7 +695,7 @@ export default {
     getNumc (name) {
       var counter = 0
       for (var xc in this.s) {
-        if (this.s[xc].cadre.name === name) {
+        if (this.s[xc].cadre === name) {
           counter++
         }
       }
@@ -697,7 +704,7 @@ export default {
     getNumt (name) {
       var counter = 0
       for (var xt in this.s) {
-        if (this.s[xt].date.slice(0, 3) === name) {
+        if (this.s[xt].exposure_date.slice(0, 3) === name) {
           counter++
         }
       }
@@ -713,16 +720,7 @@ export default {
       }
       return counter
     },
-    getNumg (name) {
-      var counter = 0
-      for (var xg in this.s) {
-        /* if (this.s[xg].id === name){
-          console.log(this.s[xg].id)
-          counter++
-        } */
-      }
-      return counter
-    },
+
     getNumh (name) {
       var counter = 0
       for (var xh in this.s) {
