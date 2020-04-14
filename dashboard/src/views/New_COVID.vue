@@ -60,6 +60,7 @@
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
                   <input
+                    value="file"
                     id="file"
                     ref="file"
                     accept="image/*"
@@ -189,9 +190,9 @@ export default {
         this.snack('top', 'center')
         return false
       } else if (this.file == '') {
-        this.pre_out = 'Add image to proceed'
+        this.pre_out = 'Add an image to proceed'
         this.snack('top', 'center')
-        return false
+        return false  
       } else { return true }
     },
 
@@ -230,6 +231,7 @@ export default {
       
       let formData = new FormData();
       
+      if (this.validateData()) {
       // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i];
@@ -238,9 +240,9 @@ export default {
         formData.append('image_file', this.file);
         formData.append('title', this.title);
         formData.append('body', this.editorData);
+        }
       }
       
-      if (this.validateData()) {
         axios.post('resources/cmes/create',
             formData, {
               headers: {
@@ -258,7 +260,6 @@ export default {
             console.log(error)
             this.snack('top', 'center')
           })
-       }
     },
     snack (...args) {
         this.top = false
