@@ -102,8 +102,8 @@ export default {
   data () {
     return {
       value: true,
-      value1: true,
-    value2: true,
+     value1: true,
+   value2: true,
 
        monthOptions: {
         xAxis: {
@@ -253,9 +253,9 @@ export default {
           },
         ]
       },
-     mess1: 'Fetching Data.....',
-     mess: 'Fetching Data.....',
-      mess2: 'Fetching Data.....',
+    // mess1: 'Fetching Data.....',
+    // mess: 'Fetching Data.....',
+      //mess2: 'Fetching Data.....',
       s: [],
      // date: [],
       //options: data
@@ -306,7 +306,7 @@ export default {
         data.push(this.getAgeNum(i))
       }
       this.barOptions.series[0].data = data
-      this.mess = 'Data fetched'
+     // this.mess = 'Data fetched'
       this.value = false
 
       data = []
@@ -314,15 +314,15 @@ export default {
         data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
       }
       this.gendOptions.series[0].data = data
-     this.mess1 = 'Data fetched'
-      this.value1 = false
+    // this.mess1 = 'Data fetched'
+     this.value1 = false
 
       data = []
       for (var i in this.cadrOptions.xAxis.categories){
         data.push(this.getCadre(this.cadrOptions.xAxis.categories[i]))
       }
       this.cadrOptions.series[0].data = data
-    this.mess1 = 'Data fetched'
+    //this.mess1 = 'Data fetched'
       this.value1 = false
 
     },
