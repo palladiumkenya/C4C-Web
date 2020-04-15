@@ -1,6 +1,5 @@
 <template>
-<div>
->
+
   <v-container
     fill-height
     fluid
@@ -110,7 +109,7 @@
       </v-flex>
 
     </v-layout>
-    <v-snackbar
+     <v-snackbar
       :color="color"
       :bottom="bottom"
       :top="top"
@@ -132,10 +131,9 @@
       >
         mdi-close-circle
       </v-icon>
-    </v-snackbar>
+    </v-snackbar> 
 
   </v-container>
-</div> 
 </template>
 
 <script>
@@ -180,21 +178,21 @@ export default {
 
   methods: {
 
-    validateData () {
-      if (this.title == '') {
-        this.pre_out = 'Select a title to proceed'
-        this.snack('top', 'center')
-        return false
-      } else if (this.editorData == '') {
-        this.pre_out = 'Fill in the text area to proceed'
-        this.snack('top', 'center')
-        return false
-      } else if (this.file == '') {
-        this.pre_out = 'Add an image to proceed'
-        this.snack('top', 'center')
-        return false  
-      } else { return true }
-    },
+     validateData () {
+       if (this.title == '') {
+         this.pre_out = 'Select a title to proceed'
+         this.snack('top', 'center')
+         return false
+       } else if (this.editorData == '') {
+         this.pre_out = 'Fill in the text area to proceed'
+         this.snack('top', 'center')
+         return false
+       } else if (this.files == '') {
+         this.pre_out = 'You will be redirected shortly'
+         this.snack('top', 'center')
+         return true   
+       } else { return true }
+     },
 
     handleImageChange (e) {
       this.file = this.$refs.file.files[0]
@@ -229,58 +227,60 @@ export default {
     postCME (e) {
       e.preventDefault()
       
-      let formData = new FormData();
+      let allData = new FormData();
       
-      if (this.validateData()) {
       // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i];
 
-        formData.append('cme_files[' + i + ']', file);
-        formData.append('image_file', this.file);
-        formData.append('title', this.title);
-        formData.append('body', this.editorData);
-        }
-      }
+        allData.append('cme_files[' + i + ']', file);
+      }  
+        allData.append('image_file', this.file);
+        allData.append('title', this.title);
+        allData.append('body', this.editorData);
       
-        axios.post('resources/cmes/create',
-            formData, {
-              headers: {
-              "content-type": "multipart/form-data"
-            }
-            }).then((response) => {
-            this.output = response.data
-            console.log(response)
-            this.resp = Boolean(response.data.success)
-            this.snack('top', 'center')
-              this.$router.push('/cmes')
+      if (this.validateData()) {
+      axios({
+        method: "POST",
+        url: 'resources/cmes/create',
+        data: allData,
+        headers: {'Content-Type': 'multipart/form-data; boundary=${form._boundary}'}
+        })
+        .then((response) => {
+          this.output = response.data
+          console.log(response)
+             this.resp = Boolean(response.data.success)
+             this.snack('top', 'center')
+            this.$router.push('/cmes')
             })
           .catch(error => {
             this.output = error
-            console.log(error)
-            this.snack('top', 'center')
+             console.log(error)
+             this.snack('top', 'center')
           })
+      }    
     },
     snack (...args) {
-        this.top = false
-        this.bottom = false
-        this.left = false
-        this.right = false
+         this.top = false
+         this.bottom = false
+         this.left = false
+         this.right = false
 
-        for (const loc of args) {
-          this[loc] = true
-        }
-        if (this.resp) {
-          this.color = this.colors[0]
-        } else {
-          this.color = this.colors[1]
-        }
-        this.snackbar = true
-      }
+         for (const loc of args) {
+           this[loc] = true
+         }
+         if (this.resp) {
+           this.color = this.colors[0]
+         } else {
+           this.color = this.colors[1]
+         }
+         this.snackbar = true
+       }
   }
 }
 
 </script>
+
 <style>
 .document-editor {
     border: 1px solid var(--ck-color-base-border);

@@ -27,7 +27,7 @@
             </div>
           </v-card-text>
 
-          <v-form @submit="postCME">
+          <v-form @submit="postCME" ref="form" v-model="valid" lazy-validation>
             <v-container py-0>
               <v-layout wrap>
 
@@ -37,7 +37,7 @@
                 >
                   <v-text-field
                     id="title"
-                    :rules="[rules.required]"
+                    :rules="titleRules"
                     v-model="title"
                     required
                     label="Title"
@@ -49,7 +49,7 @@
                     :editor="editor"
                     v-model="editorData"
                     id="editorData" 
-                    :rules="[rules.required]"
+                    :rules="bodyRules"
                     placeholder="Write here"
                     required
                     :config="editorConfig">
@@ -96,11 +96,38 @@
                 >
                   <v-btn
                     class="mx-0 font-weight-light"
+                    :disabled="!valid"
+                    @click="validateData(); alert=!alert; dialog1=true"
+                    :loading="dialog1"
                     color="success"
                     type="submit"
                   >
-                    Submit
+                   Submit
                   </v-btn>
+
+                  <v-dialog       
+                  v-model="dialog1"
+                  max-width="290" 
+                  lazy>
+                  <v-card>
+                    <v-card-text class="text-xs-center">
+                            <v-progress-circular :size="70" indeterminate class="primary--text"/>
+                    </v-card-text>
+                  </v-card>
+                  </v-dialog>
+                   
+
+                  <v-alert
+                  text
+                  :value="alert"
+                  transition="scale-transition"
+                  color = "#47a44b"
+                  icon = "mdi-alert"
+                  dense
+                  >
+                  <h6> {{ output.error}} {{ output.message}} </h6>
+                  </v-alert>
+
                 </v-flex>
               </v-layout>
             </v-container>
@@ -109,29 +136,6 @@
       </v-flex>
 
     </v-layout>
-     <v-snackbar
-      :color="color"
-      :bottom="bottom"
-      :top="top"
-      :left="left"
-      :right="right"
-      v-model="snackbar"
-      dark
-      >
-      <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{pre_out}} <br> {{ output.message }}<br> {{ output.errors }} </div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-    </v-snackbar> 
 
   </v-container>
 </template>
@@ -150,48 +154,35 @@ export default {
       editorConfig: {
             // The configuration of the editor.
       },
-
-      color: null,
-      colors: [
-        'success',
-        'error'
+      valid: true,
+      titleRules: [
+        v => !!v || 'Title is required',
       ],
-      top: true,
-      bottom: false,
-      left: false,
-      right: false,
-      snackbar: false,
+      bodyRules: [
+        v => !!v || 'Fill in the required text',
+      ],
+      dialog1: false,
       result: '',
-      resp: false,
       output: '',
-      pre_out: '',
+      alert: false,
       title: '',
       file: '',
       showPreview: false,
       imagePreview: '',
       files: [],
-      rules: {
-        required: value => !!value || 'Required.'
-      }
     }
   },
-
+  watch: {
+      dialog1 (val) {
+        if (!val) return
+        setTimeout(() => (this.dialog1 = false), 4000)
+      }
+    },
+  
   methods: {
 
      validateData () {
-       if (this.title == '') {
-         this.pre_out = 'Select a title to proceed'
-         this.snack('top', 'center')
-         return false
-       } else if (this.editorData == '') {
-         this.pre_out = 'Fill in the text area to proceed'
-         this.snack('top', 'center')
-         return false
-       } else if (this.files == '') {
-         this.pre_out = 'You will be redirected shortly'
-         this.snack('top', 'center')
-         return true   
-       } else { return true }
+       this.$refs.form.validate()
      },
 
     handleImageChange (e) {
@@ -239,7 +230,6 @@ export default {
         allData.append('title', this.title);
         allData.append('body', this.editorData);
       
-      if (this.validateData()) {
       axios({
         method: "POST",
         url: 'resources/cmes/create',
@@ -249,33 +239,17 @@ export default {
         .then((response) => {
           this.output = response.data
           console.log(response)
-             this.resp = Boolean(response.data.success)
-             this.snack('top', 'center')
-            this.$router.push('/cmes')
+          this.alert = true   
+          this.$router.push('/cmes')
             })
           .catch(error => {
             this.output = error
-             console.log(error)
-             this.snack('top', 'center')
-          })
-      }    
+            console.log(error)
+            this.alert = true   
+ 
+          })   
     },
-    snack (...args) {
-         this.top = false
-         this.bottom = false
-         this.left = false
-         this.right = false
-
-         for (const loc of args) {
-           this[loc] = true
-         }
-         if (this.resp) {
-           this.color = this.colors[0]
-         } else {
-           this.color = this.colors[1]
-         }
-         this.snackbar = true
-       }
+    
   }
 }
 
