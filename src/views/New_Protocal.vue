@@ -24,7 +24,7 @@
             </div>
           </v-card-text>
 
-          <v-form @submit="postProtocal">
+          <v-form @submit="postProtocal" ref="form" v-model="valid" lazy-validation>
             <v-container py-0>
               <v-layout wrap>
 
@@ -34,7 +34,7 @@
                 >
                   <v-text-field
                     id="title"
-                    :rules="[rules.required]"
+                    :rules="titleRules"
                     v-model="title"
                     required
                     label="Title"
@@ -52,7 +52,11 @@
                   </v-chip>
                 </v-flex>
                 <v-flex xs12>
-                    <ckeditor :editor="editor" id="editorData" v-model="editorData"></ckeditor>
+                    <ckeditor
+                     :editor="editor"
+                      id="editorData"
+                      rules="bodyRules"
+                      v-model="editorData"></ckeditor>
                 </v-flex>
 
                 <v-flex xs12 >
@@ -96,11 +100,38 @@
                 >
                   <v-btn
                     class="mx-0 font-weight-light"
+                    :disabled="!valid"
+                    @click="validateData(); alert=!alert; dialog1=true"
+                    :loading="dialog1"
                     color="success"
                     type="submit"
                   >
-                    Submit
+                   Submit
                   </v-btn>
+
+                  <v-dialog       
+                  v-model="dialog1"
+                  max-width="290" 
+                  lazy>
+                  <v-card>
+                    <v-card-text class="text-xs-center">
+                            <v-progress-circular :size="70" indeterminate class="primary--text"/>
+                    </v-card-text>
+                  </v-card>
+                  </v-dialog>
+                   
+
+                  <v-alert
+                  text
+                  :value="alert"
+                  transition="scale-transition"
+                  color = "#47a44b"
+                  icon = "mdi-alert"
+                  dense
+                  >
+                  <h6> {{ output.error}} {{ output.message}} </h6>
+                  </v-alert>
+
                 </v-flex>
               </v-layout>
             </v-container>
@@ -111,30 +142,6 @@
 
     </v-layout>
 
-    <v-snackbar
-      :color="color"
-      :bottom="bottom"
-      :top="top"
-      :left="left"
-      :right="right"
-      v-model="snackbar"
-      dark
-      >
-      <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{pre_out}} {{ output.message }}<br> {{ output.errors }} </div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-    </v-snackbar>
-    
   </v-container>
 </div>
 </template>
@@ -152,16 +159,15 @@ export default {
       editorData: '',
       editorConfig: { },
       items: [],
-      color: null,
-      colors: [
-        'success',
-        'error'
+      alert:false,
+      valid: true,
+      titleRules: [
+        v => !!v || 'Title is required',
       ],
-      top: true,
-      bottom: false,
-      left: false,
-      right: false,
-      snackbar: false,
+      bodyRules: [
+        v => !!v || 'Fill in the required text',
+      ],
+      dialog1: false,
       result: '',
       all_facilities: [],
       facility: 'null',
@@ -172,7 +178,6 @@ export default {
       imagePreview: '',
       files: [],
       output: '',
-      pre_out: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -184,29 +189,18 @@ export default {
       user: 'auth/user'
     })
   },
+   watch: {
+      dialog1 (val) {
+        if (!val) return
+        setTimeout(() => (this.dialog1 = false), 4000)
+      }
+    },
   created () {
     this.getFacilities()
   },
   methods: {
     validateData () {
-      if (this.title == '') {
-        this.pre_out = 'Enter your title to proceed'
-        this.snack('top', 'center')
-        return false
-      } else if (this.editorData == '') {
-        this.pre_out = 'Provide the information to proceed'
-        this.snack('top', 'center')
-        return false
-      } else if (this.file == '') {
-        this.pre_out = 'You will be redirected shortly'
-        this.snack('top', 'center')
-        return true
-      }  else if (this.files== '') {
-        this.pre_out = 'You will be redirected shortly'
-        this.snack('top', 'center')
-        return true
-      }       
-      else { return true }
+     this.$refs.form.validate()
     },  
 
     handleFiles () {
@@ -262,7 +256,6 @@ export default {
         allData.append('body', this.editorData)
         allData.append('facility_id', this.user.hcw.facility.id)
 
-       if (this.validateData()) {
        axios({
           method: "POST",
           url : 'resources/protocols/create',
@@ -273,36 +266,18 @@ export default {
          .then((response) => {
            console.log(response)
           this.output = response.data
-          this.resp = Boolean(response.data.success)
-          this.snack('top', 'center')
+          this.alert=true
           this.$router.push('/protocals')
 
         })
         .catch(error => {
           this.output = error
           console.log(error)
-          this.snack('top', 'center')
+         this.alert=true
         })
-      } 
-    },
-      snack (...args) {
-        this.top = false
-        this.bottom = false
-        this.left = false
-        this.right = false
-
-        for (const loc of args) {
-          this[loc] = true
-        }
-        if (this.resp) {
-          this.color = this.colors[0]
-        } else {
-          this.color = this.colors[1]
-        }
-        this.snackbar = true
-      }
-      }
-    }
+    }   
+  }
+}
 
 </script>
 <style>
