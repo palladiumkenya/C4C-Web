@@ -5,15 +5,35 @@
       color="teal lighten-5"
       centered
     >
-      <v-tab>Measles</v-tab>
+      <v-tab>Summary Report</v-tab>
+        <v-tab>Measles</v-tab>
       <v-tab>Influenza</v-tab>
       <v-tab>TDAP</v-tab>
+        <v-tab>Varicella</v-tab>
       <v-tab>Meningococcal</v-tab>
       <v-tab-item
-        v-for="n in 4"
+        v-for="n in 6"
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n==1">
+            <!-- Start Graphs -->
+
+            <v-flex
+              md12
+              sm12
+              lg12
+            >
+
+                  <h3>Other Diseases Summary</h3>
+                  <highcharts :options="AllDiseaseschartOptions"
+                   ref="columnChart"/>
+
+
+            </v-flex>
+          </v-card-text>
+
+
+          <v-card-text v-if="n==2">
             <!-- Start Graphs -->
 
             <v-flex
@@ -30,7 +50,7 @@
 
             </v-flex>
           </v-card-text>
-          <v-card-text v-if="n==2"> <!-- Start Graphs -->
+          <v-card-text v-if="n==3"> <!-- Start Graphs -->
 
             <v-flex
               md12
@@ -47,7 +67,7 @@
 
             </v-flex>
           </v-card-text>
-          <v-card-text v-if="n==3">
+          <v-card-text v-if="n==4">
              <!-- Start Graphs -->
 
             <v-flex
@@ -66,7 +86,26 @@
             </v-flex>
           </v-card-text>
 
-            <v-card-text v-if="n==4">
+             <v-card-text v-if="n==5">
+             <!-- Start Graphs -->
+
+            <v-flex
+              md12
+              sm12
+              lg12
+            >
+
+
+                  <h3>Varicella Summary</h3>
+                  <highcharts :options="VaricellaChartOptions"
+                   ref="columnChart"/>
+
+
+
+            </v-flex>
+          </v-card-text>
+
+            <v-card-text v-if="n==6">
              <!-- Start Graphs -->
 
             <v-flex
@@ -115,6 +154,54 @@ export default {
   },
   data() {
     return {
+         AllDiseaseschartOptions: {
+        xAxis: {
+          categories: ['MALE', 'FEMALE' ],
+          title: {
+            text: 'Disease Immunized against'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of HCWs Immunized',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify'
+          }
+        },
+        chart: {
+          height: 700,
+          type: 'column'
+        },
+        title: {
+          text: 'Number of HCWs immunized'
+        },
+        series: [{
+          name: ['Measles'],
+          data: []
+        },
+        {
+          name: ['Influenza'],
+          data: []
+        },
+        {
+          name: ['TDAP'],
+          data: []
+        },
+        {
+          name: ['Vericella'],
+          data: []
+        },
+        {
+          name: ['Meningococcal'],
+          data: []
+        }
+        ]
+      },
+
+
       MeningococcalChartOptions: {
         chart: {
           type: 'column',
@@ -152,6 +239,49 @@ export default {
             //type: 'column',
             colorByPoint: true,
             name: 'Meningococcal Immunizations',
+            data: []
+          }
+
+        ]
+      },
+
+         VaricellaChartOptions: {
+        chart: {
+          type: 'column',
+          options3d: {
+            enabled: true,
+            alpha: 45
+          }
+        },
+        title: {
+          text: 'Immunizations|Varicella'
+        },
+        subtitle: {
+          // text: 'by Cadre'
+        },
+        xAxis: {
+          //
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
+
+          {
+            //type: 'column',
+            colorByPoint: true,
+            name: 'Varicella Immunizations',
             data: []
           }
 
@@ -294,7 +424,10 @@ export default {
       measles: [],
       influenza: [],
       tdap: [],
-      meningococcal: []
+      meningococcal: [],
+        varicella: [],
+        disease: [],
+        gender: []
     }
   },
 created ()  {
@@ -302,8 +435,20 @@ created ()  {
   this.getImmunizationsI()
   this.getImmunizationsT()
   this.getImmunizationsN()
+  this.getImmunizationsV()
+    this.getAllImmunizations()
   },
   methods: {
+    getAllImmunizations() {
+      axios.get('immunizations/all')
+              .then((exp) => {
+                console.log(exp)
+                this.a = exp.data.data
+                this.link = exp.data.links.next
+                this.loopA(this.link)
+              })
+              .catch(error => console.log(error.message))
+    },
     getImmunizationsM() {
       axios.get('immunizations/all/disease/4')
               .then((exp) => {
@@ -344,6 +489,27 @@ created ()  {
               })
               .catch(error => console.log(error.message))
     },
+       getImmunizationsV() {
+      axios.get('immunizations/all/disease/6')
+              .then((exp) => {
+                console.log(exp)
+                this.v = exp.data.data
+                this.link = exp.data.links.next
+                this.loopV(this.link)
+              })
+              .catch(error => console.log(error.message))
+    },
+      getAllDiseases () {
+      var count = 0
+      for (var i in this.AllDiseaseschartOptions.series) {
+        this.seriesdata = []
+        for (var v in this.AllDiseaseschartOptions.xAxis.categories) {
+          this.seriesdata.push(this.getNumAll(this.AllDiseaseschartOptions.xAxis.categories[v], this.AllDiseaseschartOptions.series[i].name[0]))
+          count += this.getNumAll(this.AllDiseaseschartOptions.xAxis.categories[v], this.AllDiseaseschartOptions.series[i].name[0])
+        }
+        this.AllDiseaseschartOptions.series[i].data = this.seriesdata
+      }
+    },
     getMeasles() {
       var counter = 0;
       for (var vac in this.seriesname) {
@@ -379,6 +545,17 @@ created ()  {
       }
       this.TDAPChartOptions.series[0].data = this.tdap
     },
+       getVaricella() {
+      var counter = 0;
+      for (var vac in this.seriesname) {
+        this.seriesdata = []
+        this.seriesdata.push(this.seriesname[vac])
+        this.seriesdata.push(this.getNumv(this.seriesname[vac]))
+        counter += this.getNumv(this.seriesname[vac])
+        this.varicella.push(this.seriesdata)
+      }
+      this.VaricellaChartOptions.series[0].data = this.varicella
+    },
     getMeningococcal() {
       var counter = 0;
       for (var vac in this.seriesname) {
@@ -390,6 +567,18 @@ created ()  {
       }
       this.MeningococcalChartOptions.series[0].data = this.meningococcal
     },
+
+      getNumAll (gender, disease) {
+      var count = 0
+      for (var x in this.a) {
+        // console.log(this.s[x].type)
+        if (this.a[x].gender === gender && this.a[x].disease === disease) {
+            count++
+        }
+      }
+      return count
+    },
+
     getNum(name) {
       var counter = 0
       for (var xo in this.s) {
@@ -429,6 +618,30 @@ created ()  {
         }
       }
       return counter
+    },
+        getNumv(name) {
+      var counter = 0
+      for (var xo in this.v) {
+        if (this.v[xo].date.slice(0, 3) === name) {
+          counter++
+        }
+      }
+      return counter
+    },
+
+     async loopA(l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l);
+          l = response.data.links.next;
+          this.a = this.a.concat(response.data.data);
+
+        } else {
+          i = 11
+        }
+      }
+      this.getAllDiseases()
     },
 
     async loopT(l) {
@@ -493,8 +706,24 @@ created ()  {
       }
 
       this.getMeningococcal()
+    },
+
+    async loopV(l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l);
+          l = response.data.links.next;
+
+          this.v = this.v.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+
+      this.getVaricella()
     }
   }
 }
-
+//end
 </script>
