@@ -2,9 +2,8 @@ build site:
   image: node:6
   stage: build
   script:
-    - npm install 
-    - npm install -g @vue/cli@latest
-    - npm run build
+    - yarn install 
+    - yarn build
 
   artifacts:
     expire_in: 1 week
@@ -15,8 +14,8 @@ unit test:
   image: node:6
   stage: test
   script:
-    - npm install 
-    - npm run unit
+    - yarn install 
+    - yarn run unit
 
 deploy:
   image: alpine
