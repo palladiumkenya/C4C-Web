@@ -11,7 +11,7 @@ build site:
       - dist
 
 unit test:
-  image: node:6
+  image: node:8
   stage: test
   script:
     - yarn install 
