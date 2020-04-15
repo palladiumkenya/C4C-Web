@@ -61,8 +61,9 @@
             </v-data-table>
           </div>
           <v-btn
+            href="reg.xlsx" 
+            download
             :disabled="!is_data"
-            type="submit"
             color="info"
           >Get Excel template
           </v-btn>

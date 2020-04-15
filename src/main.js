@@ -13,7 +13,6 @@ import { sync } from 'vuex-router-sync'
 
 import VuetifyDaterangePicker from 'vuetify-daterange-picker'
 import 'vuetify-daterange-picker/dist/vuetify-daterange-picker.css'
-import VueSweetalert2 from 'vue-sweetalert2' 
 
 // Application imports
 import App from './App'
@@ -25,7 +24,6 @@ require('@/store/subscriber')
 
 axios.defaults.baseURL = 'http://c4ctest.mhealthkenya.org/api'
 Vue.use(VuetifyDaterangePicker)
-Vue.use(VueSweetalert2)
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
