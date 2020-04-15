@@ -75,7 +75,7 @@ export default {
 
         ]
       },
-      seriesname: [1, 2, 3],
+      seriesname: ['Jan', 'Feb', 'Mar'],
       hbvs: []
     }
   },
@@ -120,9 +120,9 @@ export default {
       for (var u in b){
         if (b[u] === 3 && name == 0){
           count++
-        } else if (b[u] === 2 &&name == 1 ){
+        } else if (name == 2 ){
           count++
-        } else if(b[u] === 1 &&name == 2){
+        } else if(name == 1){
           count++
         } else {
           count
@@ -158,7 +158,5 @@ export default {
     }
   }
 }
-//end
+
 </script>
-
-
