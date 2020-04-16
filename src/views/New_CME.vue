@@ -118,12 +118,20 @@
                    
 
                   <v-alert
+<<<<<<< HEAD
+                  type="success"
+                  :value="alert"
+                  border="right"
+                  icon = "mdi-alert"
+                  dismissible
+=======
                   text
                   :value="alert"
                   transition="scale-transition"
                   color = "#47a44b"
                   icon = "mdi-alert"
                   dense
+>>>>>>> 1aadb5d4233ecd5644d67246c4d898b96d696347
                   >
                   <h6> {{ output.error}} {{ output.message}} </h6>
                   </v-alert>
