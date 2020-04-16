@@ -15,7 +15,7 @@ unit test:
   stage: test
   script:
     - yarn install 
-    - yarn test
+    - ya test
 
 deploy:
   image: alpine
