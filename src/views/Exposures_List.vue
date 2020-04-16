@@ -159,17 +159,28 @@ export default {
   },
   created () {
     this.getExp()
-    console.log(`data ${this.user}`)
+    console.log(this.user)
   },
   methods: {
     getExp () {
-      axios.get('exposures/all/')
+      if (this.user.role_id === 1){
+        axios.get('exposures/all/')
         .then((exp) => {
           this.exposures = exp.data.data
           this.link = exp.data.links.next
           this.loopT(this.link)
         })
         .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4){
+        axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+        .then((exp) => {
+          this.exposures = exp.data.data
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
+      }
+        
     },
     async loopT (l) {
       var i

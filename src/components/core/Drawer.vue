@@ -251,20 +251,20 @@ export default {
       ]
     }
   },
-  // computed: {
-  //   ...mapState('app', ['image', 'color']),
-  //   inputValue: {
-  //     get () {
-  //       return this.$store.state.app.drawer
-  //     },
-  //     set (val) {
-  //       this.setDrawer(val)
-  //     }
-  //   },
-  //   items () {
-  //     return this.$t('Layout.View.items')
-  //   }
-  // },
+  computed: {
+    ...mapState('app', ['image', 'color']),
+    inputValue: {
+      get () {
+        return this.$store.state.app.drawer
+      },
+      set (val) {
+        this.setDrawer(val)
+      }
+    },
+    items () {
+      return this.$t('Layout.View.items')
+    }
+  },
 
   methods: {
     ...mapMutations('app', ['setDrawer', 'toggleDrawer']),

@@ -932,7 +932,7 @@ export default {
         this.s = exp.data.data
           if(exp.data.links.next !=null) {
               this.link = exp.data.links.next
-              this.c = exp.data.cadre.meta.total // total cadre
+             // this.c = exp.data.cadre.meta.total // total cadre
               this.loopT(this.link)
           }else{
               this.getAgeData()

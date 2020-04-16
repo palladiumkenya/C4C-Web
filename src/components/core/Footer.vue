@@ -5,12 +5,12 @@
     height="82"
   >
     <div class="footer-items">
-       <div
+      <div
         v-if="this.$route.path !== '/login'">
         <span
           v-for="link in links"
           :key="link.name"
-        > 
+        >
 
           <a
             :href="link.Link"
@@ -18,7 +18,7 @@
             {{ link.name }}
           </a>
         </span>
-      </div> 
+      </div>
     </div>
     <v-spacer/>
     <span class="font-weight-light copyright">

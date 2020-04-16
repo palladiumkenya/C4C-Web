@@ -67,7 +67,6 @@
             color="info"
           >Get Excel template
           </v-btn>
-          <pre>Use 3 for roleID</pre>
         </material-card>
       </v-flex>
     </v-layout>
