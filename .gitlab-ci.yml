@@ -1,5 +1,5 @@
 build site:
-  image: node:8
+  image: node:10
   stage: build
   script:
     - yarn install 
@@ -11,11 +11,11 @@ build site:
       - dist
 
 unit test:
-  image: node:8
+  image: node:10
   stage: test
   script:
     - yarn install 
-    - ya test
+    - npm run test
 
 deploy:
   image: alpine
