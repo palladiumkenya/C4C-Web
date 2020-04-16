@@ -44,14 +44,18 @@ export default {
         title: {
           text: 'Immunizations by HBV'
         },
-        subtitle: {
-          // text: 'by Cadre'
-        },
         xAxis: {
           //
           categories: ['Dose 3', 'Dose 2', 'Dose 1']
           //  categories: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
 
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
         },
         labels: {
           items: [
@@ -81,68 +85,56 @@ export default {
   },
   created () {
     this.getImmunizations()
-  this.getDuplicateUsers()
   },
   methods: {
     getImmunizations() {
       axios.get('immunizations/all/disease/1')
-              .then((exp) => {
-                console.log(exp)
-                this.s = exp.data.data
-                this.link = exp.data.links.next
-                this.loopT(this.link)
-              })
-              .catch(error => console.log(error.message))
+      .then((exp) => {
+        this.s = exp.data.data
+        if (exp.data.links.next != null){
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        }else {
+          this.getHBV()
+        }
+      })
+      .catch(error => console.log(error.message))
     },
     getHBV () {
       var counter = 0
       this.seriesdata = []
       for (var vac in this.seriesname) {
         this.seriesdata.push(this.getNum(vac))
-        console.log(this.seriesdata)
       }
       this.barOptionsHBV.series[0].data = this.seriesdata
     },
     getNum (name) {
-      var a = [], b = [], c= [], prev, count = 0
-      var arr = this.s
+      var a = [], b = [], prev, count = 0, arr = []
+      for (var f in this.s){
+        arr.push(this.s[f].user_id)
+      }
       arr.sort()
       for ( var i = 0; i < arr.length; i++ ) {
-          if ( arr[i].user_id !== prev ) {
-              a.push(arr[i].user_id)
-              b.push(1)
-          } else {
-              b[b.length-1]++
-          }
-          prev = arr[i].user_id
+        if ( arr[i] !== prev ) {
+          a.push(arr[i])
+          b.push(1)
+        } else {
+          b[b.length-1]++
+        }
+        prev = arr[i]
       }
-      console.log(a +"\n "+ b)
       for (var u in b){
         if (b[u] === 3 && name == 0){
           count++
-        } else if (b[u] === 2 &&name == 1 ){
+        } else if (name == 1 && b[u] === 2){
           count++
-        } else if(b[u] === 1 &&name == 2){
+        } else if (name == 2 && b[u] === 1) {
           count++
-        } else {
-          count
         }
       }
-      console.log(count)
       return count
     },
-    getDuplicateUsers() {
-      var count = {};
-      var myarrat = [];
-      for (var xo in this.s) {
-        myarrat.push(this.s[xo].user_id)
-
-      myarrat.forEach(function (xo) {
-        count[xo] = (count[xo] || 0) + 1
-      });
-      console.log(count)
-    }
-    },
+   
     async loopT(l) {
       var i
       for (i = 0; i < 1;) {
@@ -158,7 +150,6 @@ export default {
     }
   }
 }
-//end
 </script>
 
 
