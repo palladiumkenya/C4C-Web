@@ -14,7 +14,7 @@
           class="tertiary--text footer-links">{{ link.name }}</a>
       </span>
     </div>
-    
+
     <v-spacer/>
     <span class="font-weight-light copyright">
       &copy;

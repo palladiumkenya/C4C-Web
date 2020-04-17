@@ -11,17 +11,17 @@
     },
     "jest": {
         "moduleFileExtensions": [
-          "js",
-          "vue"
+            "js",
+            "vue"
         ],
         "transform": {
-          "^.+\\.js$": "babel-jest",
-          ".*\\.vue$": "<rootDir>/node_modules/vue-jest"
+            "^.+\\.js$": "babel-jest",
+            ".*\\.vue$": "<rootDir>/node_modules/vue-jest"
         },
         "moduleNameMapper": {
-          "^@/(.*)$": "<rootDir>/src/$1"
+            "^@/(.*)$": "<rootDir>/src/$1"
         }
-      },
+    },
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^17.0.0",
         "@ckeditor/ckeditor5-build-decoupled-document": "^18.0.0",

@@ -45,7 +45,7 @@
             <v-btn
               :style="{left: '50%', transform:'translateX(-50%)'}"
               color="orange"
-              @click="$router.push({ name : 'View CME', params: {id: result.id } })"> 
+              @click="$router.push({ name : 'View CME', params: {id: result.id } })">
 
               View More
             </v-btn>

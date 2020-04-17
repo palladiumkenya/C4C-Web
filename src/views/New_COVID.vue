@@ -45,23 +45,22 @@
                 </v-flex>
 
                 <v-flex xs12>
-                    <ckeditor
+                  <ckeditor
+                    id="editorData"
                     :editor="editor"
                     v-model="editorData"
-                    id="editorData" 
                     :rules="[rules.required]"
+                    :config="editorConfig"
                     placeholder="Write here"
-                    required
-                    :config="editorConfig">
-                    </ckeditor>
+                    required/>
                 </v-flex>
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
                   <input
-                    value="file"
                     id="file"
                     ref="file"
+                    value="file"
                     accept="image/*"
                     type="file"
                     @change="handleImageChange()">
@@ -109,7 +108,7 @@
       </v-flex>
 
     </v-layout>
-     <v-snackbar
+    <v-snackbar
       :color="color"
       :bottom="bottom"
       :top="top"
@@ -117,30 +116,29 @@
       :right="right"
       v-model="snackbar"
       dark
-      >
+    >
       <v-icon
         color="white"
         class="mr-3"
       >
         mdi-bell-plus
       </v-icon>
-      <div> {{pre_out}} <br> {{ output.message }}<br> {{ output.errors }} </div>
+      <div> {{ pre_out }} <br> {{ output.message }}<br> {{ output.errors }} </div>
       <v-icon
         size="16"
         @click="snackbar = false"
       >
         mdi-close-circle
       </v-icon>
-    </v-snackbar> 
+    </v-snackbar>
 
   </v-container>
 </template>
 
 <script>
 
-import axios from 'axios' 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import axios from 'axios'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default {
   data () {
@@ -148,7 +146,7 @@ export default {
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
-            // The configuration of the editor.
+        // The configuration of the editor.
       },
 
       color: null,
@@ -178,21 +176,21 @@ export default {
 
   methods: {
 
-     validateData () {
-       if (this.title == '') {
-         this.pre_out = 'Select a title to proceed'
-         this.snack('top', 'center')
-         return false
-       } else if (this.editorData == '') {
-         this.pre_out = 'Fill in the text area to proceed'
-         this.snack('top', 'center')
-         return false
-       } else if (this.files == '') {
-         this.pre_out = 'You will be redirected shortly'
-         this.snack('top', 'center')
-         return true   
-       } else { return true }
-     },
+    validateData () {
+      if (this.title == '') {
+        this.pre_out = 'Select a title to proceed'
+        this.snack('top', 'center')
+        return false
+      } else if (this.editorData == '') {
+        this.pre_out = 'Fill in the text area to proceed'
+        this.snack('top', 'center')
+        return false
+      } else if (this.files == '') {
+        this.pre_out = 'You will be redirected shortly'
+        this.snack('top', 'center')
+        return true
+      } else { return true }
+    },
 
     handleImageChange (e) {
       this.file = this.$refs.file.files[0]
@@ -223,59 +221,59 @@ export default {
     removeFile (key) {
       this.files.splice(key, 1)
     },
-    
+
     postCME (e) {
       e.preventDefault()
-      
-      let allData = new FormData();
-      
+
+      let allData = new FormData()
+
       // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i];
+        let file = this.files[i]
 
-        allData.append('cme_files[' + i + ']', file);
-      }  
-        allData.append('image_file', this.file);
-        allData.append('title', this.title);
-        allData.append('body', this.editorData);
-      
+        allData.append('cme_files[' + i + ']', file)
+      }
+      allData.append('image_file', this.file)
+      allData.append('title', this.title)
+      allData.append('body', this.editorData)
+
       if (this.validateData()) {
-      axios({
-        method: "POST",
-        url: 'resources/cmes/create',
-        data: allData,
-        headers: {'Content-Type': 'multipart/form-data; boundary=${form._boundary}'}
+        axios({
+          method: 'POST',
+          url: 'resources/cmes/create',
+          data: allData,
+          headers: { 'Content-Type': 'multipart/form-data; boundary=${form._boundary}' }
         })
-        .then((response) => {
-          this.output = response.data
-          console.log(response)
-             this.resp = Boolean(response.data.success)
-             this.snack('top', 'center')
+          .then((response) => {
+            this.output = response.data
+            console.log(response)
+            this.resp = Boolean(response.data.success)
+            this.snack('top', 'center')
             this.$router.push('/cmes')
-            })
+          })
           .catch(error => {
             this.output = error
-             console.log(error)
-             this.snack('top', 'center')
+            console.log(error)
+            this.snack('top', 'center')
           })
-      }    
+      }
     },
     snack (...args) {
-         this.top = false
-         this.bottom = false
-         this.left = false
-         this.right = false
+      this.top = false
+      this.bottom = false
+      this.left = false
+      this.right = false
 
-         for (const loc of args) {
-           this[loc] = true
-         }
-         if (this.resp) {
-           this.color = this.colors[0]
-         } else {
-           this.color = this.colors[1]
-         }
-         this.snackbar = true
-       }
+      for (const loc of args) {
+        this[loc] = true
+      }
+      if (this.resp) {
+        this.color = this.colors[0]
+      } else {
+        this.color = this.colors[1]
+      }
+      this.snackbar = true
+    }
   }
 }
 

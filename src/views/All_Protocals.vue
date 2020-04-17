@@ -53,7 +53,6 @@
               </v-btn>
             </v-card-actions>
 
-
           </v-card>
         </v-list>
       </v-list-item>
@@ -67,7 +66,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      results: [],
+      results: []
     }
   },
   created () {

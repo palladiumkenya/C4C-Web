@@ -45,13 +45,13 @@ export default{
         //   console.log('failed')
         //   commit('SET_USER', null)
         //   commit('SET_TOKEN', null)
-        // } else 
+        // } else
         if (response.data.data.role_id != 3) {
-            commit('SET_USER', response.data.data)
+          commit('SET_USER', response.data.data)
         } else if (response.data.data.role_id === 3) {
-            console.log('failed 3')
-            commit('SET_USER', null)
-            commit('SET_TOKEN', null)
+          console.log('failed 3')
+          commit('SET_USER', null)
+          commit('SET_TOKEN', null)
         } else {
           commit('SET_USER', response.data.data)
         }

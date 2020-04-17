@@ -56,16 +56,20 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.id }}</td>
+                <td>{{ exposures.indexOf(props.item)+1 }}</td>
+                <td>{{ props.item.gender }}</td>
                 <td>{{ props.item.cadre }}</td>
-                <td>{{ props.item.previous_exposures }}</td>
+                <td v-if="props.item.device_used">{{ props.item.device_used }}</td>
+                <td v-else>Not Specified</td>
                 <td>{{ props.item.exposure_type }}</td>
-                <td>{{ props.item.device_used }}</td>
                 <td>{{ props.item.exposure_location }}</td>
+                <td>{{ Boolean(props.item.pep_initiated) }}</td>
+                <td>{{ props.item.exposure_date }}</td>
+
+                <td>{{ props.item.previous_exposures }}</td>
+                
                 <td>{{ props.item.result_of }}</td>
                 <td>{{ props.item.exposure_description }}</td>
-                <td>{{ props.item.exposure_date }}</td>
-                <td>{{ Boolean(props.item.pep_initiated) }}</td>
               </tr>
             </template>
             <template
@@ -102,17 +106,21 @@ export default {
       output: [],
       headers: [
         {
-          text: 'ID',
-          value: 'id'
+          text: 'No.',
+          value: 'No.'
+        },
+        {
+          sortable: false,
+          text: 'Gender',
+          value: 'gender'
         },
         {
           text: 'Cadre',
           value: 'cadre'
         },
         {
-          sortable: false,
-          text: 'Previous exposures',
-          value: 'previous_exposures'
+          text: 'Device',
+          value: 'device_used'
         },
         {
           sortable: false,
@@ -120,29 +128,16 @@ export default {
           value: 'exposure_type'
         },
         {
-          text: 'Device',
-          value: 'device_used'
-        },
-        {
           text: 'Location',
           value: 'exposure_location'
         },
         {
-          text: 'Result',
-          value: 'result_of'
+          text: 'Pep Initiated',
+          value: 'pep_initiated'
         },
-        {
-          text: 'Description',
-          value: 'exposure_description'
-        },
-
         {
           text: 'Date',
           value: 'exposure_date'
-        },
-        {
-          text: 'Pep Initiated',
-          value: 'pep_initiated'
         }
       ],
       exposures: [],
@@ -159,7 +154,6 @@ export default {
   },
   created () {
     this.getExp()
-    console.log(this.user)
   },
   methods: {
     getExp () {

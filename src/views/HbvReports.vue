@@ -1,11 +1,10 @@
 
 <template>
   <v-card>
-<h3></h3>
-              <highcharts
-                ref="columnChart"
-                :options="barOptionsHBV"/>
-
+    <h3/>
+    <highcharts
+      ref="columnChart"
+      :options="barOptionsHBV"/>
 
   </v-card>
 
@@ -87,18 +86,18 @@ export default {
     this.getImmunizations()
   },
   methods: {
-    getImmunizations() {
+    getImmunizations () {
       axios.get('immunizations/all/disease/1')
-      .then((exp) => {
-        this.s = exp.data.data
-        if (exp.data.links.next != null){
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        }else {
-          this.getHBV()
-        }
-      })
-      .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.s = exp.data.data
+          if (exp.data.links.next != null) {
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          } else {
+            this.getHBV()
+          }
+        })
+        .catch(error => console.log(error.message))
     },
     getHBV () {
       var counter = 0
@@ -110,23 +109,23 @@ export default {
     },
     getNum (name) {
       var a = [], b = [], prev, count = 0, arr = []
-      for (var f in this.s){
+      for (var f in this.s) {
         arr.push(this.s[f].user_id)
       }
       arr.sort()
-      for ( var i = 0; i < arr.length; i++ ) {
-        if ( arr[i] !== prev ) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] !== prev) {
           a.push(arr[i])
           b.push(1)
         } else {
-          b[b.length-1]++
+          b[b.length - 1]++
         }
         prev = arr[i]
       }
-      for (var u in b){
-        if (b[u] === 3 && name == 0){
+      for (var u in b) {
+        if (b[u] === 3 && name == 0) {
           count++
-        } else if (name == 1 && b[u] === 2){
+        } else if (name == 1 && b[u] === 2) {
           count++
         } else if (name == 2 && b[u] === 1) {
           count++
@@ -134,8 +133,8 @@ export default {
       }
       return count
     },
-   
-    async loopT(l) {
+
+    async loopT (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
@@ -151,5 +150,3 @@ export default {
   }
 }
 </script>
-
-

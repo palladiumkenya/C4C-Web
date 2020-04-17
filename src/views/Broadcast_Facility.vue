@@ -131,17 +131,17 @@ export default {
         .catch(error => console.log(error.message))
     }
   },
-   async loopT (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.all_messages = this.all_messages.concat(response.data.data)
-        } else {
-          i = 11
-        }
+  async loopT (l) {
+    var i
+    for (i = 0; i < 1;) {
+      if (l != null) {
+        let response = await axios.get(l)
+        l = response.data.links.next
+        this.all_messages = this.all_messages.concat(response.data.data)
+      } else {
+        i = 11
       }
     }
+  }
 }
 </script>
