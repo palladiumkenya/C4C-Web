@@ -1,12 +1,12 @@
 import { shallowMount } from '@vue/test-utils'
-import Footer from '../../src/components/core/Footer.vue'
+import Toolbar from '../../src/components/core/Toolbar.vue'
 
 
-describe('Footer.vue Test', () => {
+describe('Toolbar.vue Test', () => {
   it('renders props.msg when passed', () => {
     // render the component
     const msg = "Test is successful"
-    const wrapper = shallowMount(Footer, {
+    const wrapper = shallowMount(Toolbar, {
       propsData: { msg }
     });
 
