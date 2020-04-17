@@ -18,29 +18,7 @@
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n==1">
-<<<<<<< HEAD
-            <!-- Start filters -->
-
-               <core-filters/>
-                <v-flex
-          md6
-          lg12
-        >
-          <v-btn
-            :loading="loading2"
-            :disabled="loading2"
-            block
-            color="success"
-            @click="loader = 'loading2'"
-          >
-            Filter
-            <template v-slot:loader/>
-          </v-btn>
-        </v-flex>
-            <!-- End filters -->
-=======
             <!-- Start Graphs -->
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
 
             <v-layout wrap>
               <v-flex
@@ -113,152 +91,6 @@
           </v-card-text>
 
           <!-- Start Exposure Type -->
-<<<<<<< HEAD
-
-
-          <v-card-text v-if="n==2">
-            <highcharts
-              ref="barChart"
-              :options="barOptions"/>
-            <template>
-              <template>
-                <v-flex
-                  lg8
-                >
-                  <v-layout wrap>
-                    <v-flex
-                      xs12
-                      md3>
-                      <v-btn
-                        :loading="downloadLoading"
-                        color="primary"
-                        @click="handleDownload">
-                        Excel
-                      </v-btn>
-                    </v-flex>
-                    <br>
-                    <v-flex
-                      xs12
-                      md3>
-                      <v-btn
-                        :loading="downloadLoading"
-                        color="green"
-                        @click="handleDownload">
-                        PDF
-                      </v-btn>
-                    </v-flex>
-
-                    <v-flex
-                      xs12
-                      md3>
-                      <v-btn
-                        :loading="downloadLoading"
-                        color="blue"
-                        @click="handleDownload">
-                        CSV
-                      </v-btn>
-                    </v-flex>
-
-                  </v-layout>
-
-                  <v-data-table
-                    :headers="types"
-                    :items="exposure_type"
-
-                    :search="search"
-                    :rows-per-page-items="rowsPerPageItems"
-                  >
-                    <template
-                      slot="items"
-                      slot-scope="props">
-                      <tr>
-                        <td>{{ props.item.name }}</td>
-                        <td>{{ props.item.previous_exposures }}</td>
-                      </tr>
-                    </template>
-
-                  </v-data-table>
-                </v-flex>
-              </template>
-            </template>
-          </v-card-text>
-
-          <!-- Start Exposure Location -->
-          
-
-          <v-card-text v-if="n==3">
-        
-            <highcharts
-              ref="barChart"
-              :options="barOptionsLocation"/>
-            <template>
-              <v-flex
-                lg8
-              >
-                <v-layout wrap>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="primary"
-                      @click="handleDownload">
-                      Excel
-                    </v-btn>
-                  </v-flex>
-                  <br>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="green"
-                      @click="handleDownload">
-                      PDF
-                    </v-btn>
-                  </v-flex>
-
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="blue"
-                      @click="handleDownload">
-                      CSV
-                    </v-btn>
-                  </v-flex>
-
-                </v-layout>
-
-                <v-data-table
-                  :headers="locations"
-                  :items="cadres"
-
-                  :search="search"
-                  :rows-per-page-items="rowsPerPageItems"
-                >
-                  <template
-                    slot="items"
-                    slot-scope="props">
-                    <tr>
-                      <td>{{ props.item.name }}</td>
-                      <td>{{ props.item.previous_exposures }}</td>
-                    </tr>
-                  </template>
-
-                </v-data-table>
-              </v-flex>
-            </template>
-
-          </v-card-text>
-
-          <!-- Start Exposure Devices -->
-
-          <v-card-text v-if="n==4">
-
-    
-=======
 
           <v-card-text v-if="n==2">
             <v-layout wrap>
@@ -341,7 +173,6 @@
           <!-- Start Exposure Devices -->
 
           <v-card-text v-if="n==4">
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
             <highcharts
               ref="barChart"
               :options="barOptionsDevice"/>
@@ -351,42 +182,6 @@
 
           <v-card-text v-if="n==5">
 
-<<<<<<< HEAD
-
-            <div
-              v-if="valuec" />
-            <highcharts
-              ref="barChart"
-              :options="barOptionsCadre"/>
-
-            <template>
-              <v-flex
-                lg8
-              >
-                <v-layout wrap>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="primary"
-                      @click="handleDownload">
-                      Excel
-                    </v-btn>
-                  </v-flex>
-                  <br>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="green"
-                      @click="handleDownload">
-                      PDF
-                    </v-btn>
-                  </v-flex>
-
-=======
             <v-layout wrap>
               <v-flex
                 lg4
@@ -414,7 +209,6 @@
                     </v-btn>
                   </v-flex>
 
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
                   <v-flex
                     xs12
                     md3>
@@ -446,9 +240,6 @@
 
                 </v-data-table>
               </v-flex>
-<<<<<<< HEAD
-            </template>
-=======
               <v-flex
                 md
                 8>
@@ -460,7 +251,6 @@
               </v-flex>
 
             </v-layout>
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
           </v-card-text>
 
           <!-- Start Exposure Time -->
@@ -475,10 +265,6 @@
           <!--Start Exposure Age -->
 
           <v-card-text v-if="n==7">
-<<<<<<< HEAD
-      
-=======
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
             <template>
               <h3>{{ mess }}</h3>
               <div
@@ -507,29 +293,6 @@
           <!-- Start Gender -->
           <v-card-text v-if="n==9">
 
-<<<<<<< HEAD
-            <!-- Start filters -->
-
-               <core-filters/>
-                <v-flex
-          md6
-          lg12
-        >
-          <v-btn
-            :loading="loading2"
-            :disabled="loading2"
-            block
-            color="success"
-            @click="loader = 'loading2'"
-          >
-            Filter
-            <template v-slot:loader/>
-          </v-btn>
-        </v-flex>
-            <!-- End filters -->
-
-=======
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
             <template>
               <h3>{{ mess1 }}</h3>
               <div
@@ -543,70 +306,6 @@
               <highcharts
                 ref="barChart"
                 :options="gendOptions"/>
-<<<<<<< HEAD
-            </template>
-
-                        <template>
-              <v-flex
-                lg8
-                align center
-              >
-                <v-layout wrap>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="primary"
-                      @click="handleDownload">
-                      Excel
-                    </v-btn>
-                  </v-flex>
-                  <br>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="green"
-                      @click="handleDownload">
-                      PDF
-                    </v-btn>
-                  </v-flex>
-
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="blue"
-                      @click="handleDownload">
-                      CSV
-                    </v-btn>
-                  </v-flex>
-
-                </v-layout>
-
-                <v-data-table
-                  :headers="genders"
-                  :items="gend"
-
-                  :search="search"
-                  :rows-per-page-items="rowsPerPageItems"
-                >
-                  <template
-                    slot="items"
-                    slot-scope="props">
-                    <tr>
-                      <td>{{  }}</td>
-                      <td>{{ props.item.previous_exposures }}</td>
-                    </tr>
-                  </template>
-
-                </v-data-table>
-              </v-flex>
-=======
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
             </template>
 
 
@@ -624,15 +323,9 @@ import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
-<<<<<<< HEAD
-// eslint-disable-next-line no-unused-vars
-import { mapGetters, mapState } from 'vuex'
-import moment from 'moment'
-=======
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
 import Exposure_by_time from './Exposure_by_time'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
 import json from '../map.json'
 
 // SeriesLabel(Highcharts);
@@ -652,10 +345,7 @@ export default {
   },
   // eslint-disable-next-line vue/order-in-components
   components: {
-<<<<<<< HEAD
-=======
     Exposure_by_time,
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
     highcharts: Chart
   },
   // eslint-disable-next-line vue/order-in-components
@@ -675,11 +365,7 @@ export default {
         {
           sortable: false,
           text: 'Number Exposed',
-<<<<<<< HEAD
-          value: ''
-=======
           value: 'previous_exposures'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
         }
       ],
       footer: [
@@ -699,48 +385,12 @@ export default {
           text: 'Number Exposed',
           value: 'previous_exposures'
         }
-<<<<<<< HEAD
-      ],
-      // Location
-      location: [
-        {
-          text: 'Exposure Location',
-          value: 'new_exposures'
-        },
-        {
-          sortable: false,
-          text: 'Number Exposed',
-          value: 'previous_exposures'
-        }
-      ],
-      //gender
-      genders: [
-        {
-          text: 'Gender',
-          value: 'gender'
-        },
-        {
-          sortable: false,
-          text: 'Number Exposed',
-          value: ''
-        }
-      ],
-      gend: [
-        {
-          name: 'Male'
-        },
-              {
-          name: 'Female'
-        }
-      ],
-=======
       ],
       footer: [
         {
           text: 'Total'
         }
       ],
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
 
       value: true,
       value1: true,
@@ -789,7 +439,6 @@ export default {
               colorByPoint: true,
               name: 'Exposures',
               data: []
-<<<<<<< HEAD
             }
 
           ]
@@ -902,19 +551,6 @@ export default {
           categories: ['18 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
           title: {
             text: 'Age Groups'
-=======
-            }
-
-          ]
-        }
-      },
-
-      gendOptions: {
-        xAxis: {
-          categories: ['MALE', 'FEMALE', 'UNDEFINED'],
-          title: {
-            text: 'Gender'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
           }
         },
         yAxis: {
@@ -943,144 +579,6 @@ export default {
               enabled: true
             }
           }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-<<<<<<< HEAD
-          text: 'Exposures by Age'
-=======
-          text: 'Exposure by Gender'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-<<<<<<< HEAD
-
-      // stats
-      barOptionsHour: {
-        xAxis: {
-          categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ],
-          title: {
-            text: 'Hours Range'
-=======
-      // devices starts
-
-      barOptionsDevice: {
-        xAxis: {
-          categories: ['Syringe/ Needle IM/ SC Injection', 'Syringe/Needle Blood Drawing', 'Phlebotomy needle/vacuum set', 'IV catheter/canula', 'Needle IV Line', 'Unused Needle', 'Lancet', 'Sature Needle', 'Scalpel', 'Capillary Tube', 'Glass Slide', 'Pippete Tip', 'Thermal Gun', 'Scapel', 'Canular', 'Syringe Regular', 'Test', 'Test Syringe', 'Other'],
-          title: {
-            text: 'Devices'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'Health Care Workers',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-<<<<<<< HEAD
-          text: 'Exposures by Hours'
-=======
-          text: 'Exposures by Devices'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-<<<<<<< HEAD
-      // ends
-
-      barOptionsTime: {
-        xAxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          title: {
-            text: 'Months Range'
-=======
-      // devices ends
-
-      barOptionsAge: {
-        xAxis: {
-          categories: ['18 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
-          title: {
-            text: 'Age Groups'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'Health Care Workers',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-<<<<<<< HEAD
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'Exposures by Months'
-        },
-=======
         },
         chart: {
           type: 'column'
@@ -1088,7 +586,6 @@ export default {
         title: {
           text: 'Exposures by Age'
         },
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
         series: [
           {
             colorByPoint: true,
@@ -1098,20 +595,12 @@ export default {
         ]
       },
 
-<<<<<<< HEAD
-      barOptionsCadre: {
-        xAxis: {
-          categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
-          title: {
-            text: 'Cadre'
-=======
       // stats
       barOptionsHour: {
         xAxis: {
           categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ],
           title: {
             text: 'Hours Range'
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
           }
         },
         yAxis: {
@@ -1145,8 +634,6 @@ export default {
           type: 'column'
         },
         title: {
-<<<<<<< HEAD
-=======
           text: 'Exposures by Hours'
         },
         series: [
@@ -1247,7 +734,6 @@ export default {
           type: 'column'
         },
         title: {
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
           text: 'Exposures by Cadre'
         },
         series: [
@@ -1313,7 +799,6 @@ export default {
           categories: ['Medical ward', 'Surgical ward', 'Theatre', 'Maternity', 'Dental clinic', 'OP/MCH', 'Laundry', 'Laboratory', 'Other'],
           title: {
             text: 'Exposure Location'
-<<<<<<< HEAD
           }
         },
         yAxis: {
@@ -1343,37 +828,6 @@ export default {
             }
           }
         },
-=======
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'Health Care Workers',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
         chart: {
           type: 'column'
         },
@@ -1396,17 +850,10 @@ export default {
             enabled: true,
             alpha: 45
           }
-<<<<<<< HEAD
         },
         title: {
           text: 'Exposures By Location in Facility'
         },
-=======
-        },
-        title: {
-          text: 'Exposures By Location in Facility'
-        },
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
         subtitle: {
           text: 'by location'
         },
@@ -1414,7 +861,6 @@ export default {
           pie: {
             innerSize: 100,
             depth: 45
-<<<<<<< HEAD
           }
         },
         series: [
@@ -1422,15 +868,6 @@ export default {
             name: 'Exposures Count',
             data: []
           }
-=======
-          }
-        },
-        series: [
-          {
-            name: 'Exposures Count',
-            data: []
-          }
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
         ]
       },
 
@@ -1552,32 +989,18 @@ export default {
       this.barOptionsAge.series[0].data = data
       this.value = false
 
-<<<<<<< HEAD
-      var datag = []
-      for (var i in this.gendOptions.xAxis.categories) {
-        datag.push(this.getGend(this.gendOptions.xAxis.categories[i]))
-=======
       var data = []
       for (var i in this.gendOptions.xAxis.categories) {
         data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
       }
       this.gendOptions.series[0].data = datag
       this.value1 = false
 
-<<<<<<< HEAD
-      var datad = []
-      for (var i in this.barOptionsDevice.xAxis.categories) {
-        datad.push(this.getDevice(this.barOptionsDevice.xAxis.categories[i]))
-      }
-      this.barOptionsDevice.series[0].data = datad
-=======
       var data = []
       for (var i in this.barOptionsDevice.xAxis.categories) {
         data.push(this.getDevice(this.barOptionsDevice.xAxis.categories[i]))
       }
       this.barOptionsDevice.series[0].data = data
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
       // this.value1 = false
 
       var datac = []
@@ -1587,32 +1010,6 @@ export default {
       this.barOptionsCadre.series[0].data = datac
       // this.valuec = false
 
-<<<<<<< HEAD
-      var datal = []
-      for (var i in this.barOptionsLocation.xAxis.categories) {
-        datal.push(this.getNum(this.barOptionsLocation.xAxis.categories[i]))
-      }
-      this.barOptionsLocation.series[0].data = datal
-
-      var datas = []
-      for (var i in this.barOptions.xAxis.categories) {
-        datas.push(this.getNums(this.barOptions.xAxis.categories[i]))
-      }
-      this.barOptions.series[0].data = datas
-      this.valuet = false
-
-      var datah = []
-      for (var i in this.barOptionsHour.xAxis.categories) {
-        datah.push(this.getNumh(this.barOptionsHour.xAxis.categories[i]))
-      }
-      this.barOptionsHour.series[0].data = datah
-
-      var datat = []
-      for (var i in this.barOptionsTime.xAxis.categories) {
-        datat.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
-      }
-      this.barOptionsTime.series[0].data = datat
-=======
       var data = []
       for (var i in this.barOptionsLocation.xAxis.categories) {
         data.push(this.getNum(this.barOptionsLocation.xAxis.categories[i]))
@@ -1637,16 +1034,11 @@ export default {
         data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
       }
       this.barOptionsTime.series[0].data = data
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
     },
     getAgeNum (cat) {
       var count = 0
       for (var x in this.s) {
         var date = new Date(this.s[x].dob)
-<<<<<<< HEAD
-        // eslint-disable-next-line camelcase
-=======
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
         var diff_ms = Date.now() - date.getTime()
         var age_dt = new Date(diff_ms)
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
@@ -1672,10 +1064,6 @@ export default {
       var count = 0
       for (var x in this.s) {
         if (this.s[x].gender === cat) {
-<<<<<<< HEAD
-          console.log()
-=======
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
           count++
         }
       }
@@ -1692,10 +1080,6 @@ export default {
 
     },
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
     getDevice (cat) {
       var count = 0
       for (var x in this.s) {
