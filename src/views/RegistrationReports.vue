@@ -49,6 +49,7 @@
               <highcharts :options="cadrOptions" ref="barChart"/>
             </template>
           </v-card-text>
+          
           <v-card-text v-if="n==3">
             <template>
               <h3>{{mess}}</h3>
@@ -63,6 +64,7 @@
               <highcharts :options="barOptions" ref="barChart"/>
             </template>
           </v-card-text>
+
           <v-card-text v-if="n==4">
             <template>
               <h3>{{mess1}}</h3>
@@ -77,6 +79,7 @@
               <highcharts :options="gendOptions" ref="barChart"/>
             </template>
           </v-card-text>
+
         </v-container>
       </v-tab-item>
     </v-tabs>
@@ -253,13 +256,7 @@ export default {
           },
         ]
       },
-    // mess1: 'Fetching Data.....',
-    // mess: 'Fetching Data.....',
-      //mess2: 'Fetching Data.....',
-      s: [],
-     // date: [],
-      //options: data
-      //seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    
     }
   },
 
@@ -307,7 +304,7 @@ export default {
       }
       this.barOptions.series[0].data = data
      // this.mess = 'Data fetched'
-      this.value = false
+    //  this.value = false
 
       data = []
       for (var i in this.gendOptions.xAxis.categories){
@@ -315,7 +312,7 @@ export default {
       }
       this.gendOptions.series[0].data = data
     // this.mess1 = 'Data fetched'
-     this.value1 = false
+    // this.value1 = false
 
       data = []
       for (var i in this.cadrOptions.xAxis.categories){
@@ -323,7 +320,7 @@ export default {
       }
       this.cadrOptions.series[0].data = data
     //this.mess1 = 'Data fetched'
-      this.value1 = false
+      //this.value1 = false
 
     },
     getAgeNum (cat) {

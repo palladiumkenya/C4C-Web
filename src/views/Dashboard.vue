@@ -81,7 +81,28 @@
 
       <!-- End Cards -->
 
-      <!-- Filters -->
+      <template>
+
+        <!-- Start filters -->
+
+               <core-filters/>
+                <v-flex
+          md6
+          lg12
+        >
+          <v-btn
+            :loading="loading2"
+            :disabled="loading2"
+            block
+            color="success"
+            @click="loader = 'loading2'"
+          >
+            Filter
+            <template v-slot:loader/>
+          </v-btn>
+        </v-flex>
+            <!-- End filters -->
+      </template>
 
       <!-- Start Graphs -->
 
@@ -317,7 +338,6 @@ export default {
       for (var r in this.userz) {
         var dat = new Date(this.userz[r].created_at)
         var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-      // console.log(list[dat.getMonth()])
         if (list[dat.getMonth()] === name) {
           console.log(name)
           counter++

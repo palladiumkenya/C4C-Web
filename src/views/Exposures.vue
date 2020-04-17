@@ -18,7 +18,25 @@
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n==1">
-            <!-- Start Graphs -->
+            <!-- Start filters -->
+
+               <core-filters/>
+                <v-flex
+          md6
+          lg12
+        >
+          <v-btn
+            :loading="loading2"
+            :disabled="loading2"
+            block
+            color="success"
+            @click="loader = 'loading2'"
+          >
+            Filter
+            <template v-slot:loader/>
+          </v-btn>
+        </v-flex>
+            <!-- End filters -->
 
             <v-layout wrap>
               <v-flex
@@ -92,6 +110,7 @@
 
           <!-- Start Exposure Type -->
 
+
           <v-card-text v-if="n==2">
             <highcharts
               ref="barChart"
@@ -160,8 +179,10 @@
           </v-card-text>
 
           <!-- Start Exposure Location -->
+          
 
           <v-card-text v-if="n==3">
+        
             <highcharts
               ref="barChart"
               :options="barOptionsLocation"/>
@@ -230,6 +251,8 @@
           <!-- Start Exposure Devices -->
 
           <v-card-text v-if="n==4">
+
+    
             <highcharts
               ref="barChart"
               :options="barOptionsDevice"/>
@@ -238,6 +261,7 @@
           <!-- Start Exposure Cadre -->
 
           <v-card-text v-if="n==5">
+
 
             <div
               v-if="valuec" />
@@ -318,6 +342,7 @@
           <!--Start Exposure Age -->
 
           <v-card-text v-if="n==7">
+      
             <template>
               <h3>{{ mess }}</h3>
               <div
@@ -346,6 +371,26 @@
           <!-- Start Gender -->
           <v-card-text v-if="n==9">
 
+            <!-- Start filters -->
+
+               <core-filters/>
+                <v-flex
+          md6
+          lg12
+        >
+          <v-btn
+            :loading="loading2"
+            :disabled="loading2"
+            block
+            color="success"
+            @click="loader = 'loading2'"
+          >
+            Filter
+            <template v-slot:loader/>
+          </v-btn>
+        </v-flex>
+            <!-- End filters -->
+
             <template>
               <h3>{{ mess1 }}</h3>
               <div
@@ -360,6 +405,68 @@
                 ref="barChart"
                 :options="gendOptions"/>
             </template>
+
+                        <template>
+              <v-flex
+                lg8
+                align center
+              >
+                <v-layout wrap>
+                  <v-flex
+                    xs12
+                    md3>
+                    <v-btn
+                      :loading="downloadLoading"
+                      color="primary"
+                      @click="handleDownload">
+                      Excel
+                    </v-btn>
+                  </v-flex>
+                  <br>
+                  <v-flex
+                    xs12
+                    md3>
+                    <v-btn
+                      :loading="downloadLoading"
+                      color="green"
+                      @click="handleDownload">
+                      PDF
+                    </v-btn>
+                  </v-flex>
+
+                  <v-flex
+                    xs12
+                    md3>
+                    <v-btn
+                      :loading="downloadLoading"
+                      color="blue"
+                      @click="handleDownload">
+                      CSV
+                    </v-btn>
+                  </v-flex>
+
+                </v-layout>
+
+                <v-data-table
+                  :headers="genders"
+                  :items="gend"
+
+                  :search="search"
+                  :rows-per-page-items="rowsPerPageItems"
+                >
+                  <template
+                    slot="items"
+                    slot-scope="props">
+                    <tr>
+                      <td>{{  }}</td>
+                      <td>{{ props.item.previous_exposures }}</td>
+                    </tr>
+                  </template>
+
+                </v-data-table>
+              </v-flex>
+            </template>
+
 
           </v-card-text>
           <v-card-text v-if="n==10">This is the Third tab</v-card-text>
@@ -416,7 +523,7 @@ export default {
         {
           sortable: false,
           text: 'Number Exposed',
-          value: 'previous_exposures'
+          value: ''
         }
       ],
       footer: [
@@ -447,6 +554,26 @@ export default {
           sortable: false,
           text: 'Number Exposed',
           value: 'previous_exposures'
+        }
+      ],
+      //gender
+      genders: [
+        {
+          text: 'Gender',
+          value: 'gender'
+        },
+        {
+          sortable: false,
+          text: 'Number Exposed',
+          value: ''
+        }
+      ],
+      gend: [
+        {
+          name: 'Male'
+        },
+              {
+          name: 'Female'
         }
       ],
 
@@ -1123,11 +1250,23 @@ export default {
       var count = 0
       for (var x in this.s) {
         if (this.s[x].gender === cat) {
+          console.log()
           count++
         }
       }
       return count
     },
+    getGp (cat, num) {
+      var count = 0
+      for (var x in this.s) {
+        if (this.s[x].gender === cat && this.s[x].gender === num) {
+          count++
+           console.log((count / 100 ) * (cat + num))
+        }
+      }
+
+    },
+
 
     getDevice (cat) {
       var count = 0

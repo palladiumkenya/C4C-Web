@@ -139,26 +139,9 @@
 
         <v-flex
           md6
-          lg6
+          lg10
         >
-          <core-DatePicker/>
-
-        </v-flex>
-
-        <v-flex
-          md6
-          lg6
-        >
-          <v-btn
-            :loading="loading2"
-            :disabled="loading2"
-            block
-            color="success"
-            @click="loader = 'loading2'"
-          >
-            Filter
-            <template v-slot:loader/>
-          </v-btn>
+           <core-DatePicker/>
         </v-flex>
 
       </template>
@@ -170,19 +153,30 @@
 
 <script>
   import axios from 'axios'
+   import format from 'date-fns/format'
   import {mapGetters, mapState} from 'vuex'
 export default {
+
+
   data () {
+
       return {
           facility: '',
           county: '',
           all_counties: [],
-          all_facilities: []
+          all_facilities: [],
+
+           date: new Date().toISOString().substr(0, 10),
+      menu1: false,
+      menu2: false,
       }
   },
 
+
+
   created() {
     this.getFacilities ()
+
 
   },
 
