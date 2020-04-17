@@ -1,7 +1,8 @@
 <template>
-<highcharts :options="barOptionsCadre" ref="columnChart"/>
+  <highcharts
+    ref="columnChart"
+    :options="barOptionsCadre"/>
 </template>
-
 
 <script>
 import { Chart } from 'highcharts-vue'
@@ -9,11 +10,10 @@ import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import Exposure_by_time from "./Exposure_by_time";
+import Exposure_by_time from './Exposure_by_time'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
-
 
 export default {
   computed: {
@@ -36,55 +36,54 @@ export default {
           }
         },
         title: {
-    text: 'Registration By Cadres'
-  },
+          text: 'Registration By Cadres'
+        },
 
-  xAxis: {
-    categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
+        xAxis: {
+          categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
 
+        },
+        labels: {
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        },
+        series: [
 
-  },
-  labels: {
-    items: [
-      {
-        html: '',
-        style: {
-          left: '50px',
-          top: '18px',
-          color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-        }
-      }
-    ]
-  },
-  series: [
+          {
+            // type: 'column',
+            colorByPoint: true,
+            name: 'Cadre by Number',
+            data: []
+          }
 
-    {
-      //type: 'column',
-      colorByPoint: true,
-      name: 'Cadre by Number',
-      data: []
-    }
-
-  ]
+        ]
       },
 
       cadreDoc: 0,
       s: [],
-       cadre: [],
-        seriesdatac: [],
-      seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+      cadre: [],
+      seriesdatac: [],
+      seriesnamec: ['Nurse', 'Clinical officer', 'Doctor', 'Lab Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify']
 
     }
   },
-  created ()  {
+  created () {
     this.getExp()
   },
   methods: {
 
-    getCadre(){
-      var counter = 0;
-      for(var vac in this.seriesnamec){
-        this.seriesdata=[]
+    getCadre () {
+      var counter = 0
+      for (var vac in this.seriesnamec) {
+        this.seriesdata = []
         this.seriesdata.push(this.seriesnamec[vac])
         this.seriesdata.push(this.getNumc(this.seriesnamec[vac]))
         counter += this.getNumc(this.seriesnamec[vac])
@@ -94,14 +93,14 @@ export default {
     },
     getExp () {
       axios.get('hcw')
-      .then((exp) => {
-        this.s = exp.data.data
-        console.log(this.s)
-        console.log(this.s[0].date.slice(0,3))
-        this.link = exp.data.links.next
-        this.loopT(this.link)
-      })
-      .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.s = exp.data.data
+          console.log(this.s)
+          console.log(this.s[0].date.slice(0, 3))
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
     async loopT (l) {
       var i
@@ -115,20 +114,18 @@ export default {
         }
       }
 
-
       this.getCadre()
-
     },
 
-    getNumc(name){
+    getNumc (name) {
       var counter = 0
-      for(var xc in this.s){
-        if (this.s[xc].cadre.name === name){
+      for (var xc in this.s) {
+        if (this.s[xc].cadre.name === name) {
           counter++
         }
       }
       return counter
-    },
+    }
   }
 }
 </script>

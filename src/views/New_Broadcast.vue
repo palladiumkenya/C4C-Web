@@ -90,29 +90,29 @@
                   submit</v-btn>
 
               </v-layout>
-               <v-snackbar
-              :color="color"
-              :bottom="bottom"
-              :top="top"
-              :left="left"
-              :right="right"
-              v-model="snackbar"
-              dark
+              <v-snackbar
+                :color="color"
+                :bottom="bottom"
+                :top="top"
+                :left="left"
+                :right="right"
+                v-model="snackbar"
+                dark
               >
-              <v-icon
-                color="white"
-                class="mr-3"
-              >
-                mdi-bell-plus
-              </v-icon>
-              <div> {{ output.message }}<br> {{ output.errors }} </div>
-              <v-icon
-                size="16"
-                @click="snackbar = false"
-              >
-                mdi-close-circle
-              </v-icon>
-            </v-snackbar>
+                <v-icon
+                  color="white"
+                  class="mr-3"
+                >
+                  mdi-bell-plus
+                </v-icon>
+                <div> {{ output.message }}<br> {{ output.errors }} </div>
+                <v-icon
+                  size="16"
+                  @click="snackbar = false"
+                >
+                  mdi-close-circle
+                </v-icon>
+              </v-snackbar>
 
             </v-container>
           </v-form>
@@ -142,7 +142,7 @@ export default {
       left: false,
       right: false,
       resp: false,
-      snackbar: false, 
+      snackbar: false,
       search: null,
       facility: '',
       output: '',
@@ -196,29 +196,28 @@ export default {
           this.resp = Boolean(response.data.success)
           this.snack('top', 'center')
           this.$router.push('/broadcast')
-
         })
         .catch(error => {
           this.output = error
           this.snack('top', 'center')
-      })
+        })
     },
-      snack (...args) {
-        this.top = false
-        this.bottom = false
-        this.left = false
-        this.right = false
+    snack (...args) {
+      this.top = false
+      this.bottom = false
+      this.left = false
+      this.right = false
 
-        for (const loc of args) {
-          this[loc] = true
-        }
-        if (this.resp) {
-          this.color = this.colors[0]
-        } else {
-          this.color = this.colors[1]
-        }
-        this.snackbar = true
+      for (const loc of args) {
+        this[loc] = true
       }
+      if (this.resp) {
+        this.color = this.colors[0]
+      } else {
+        this.color = this.colors[1]
+      }
+      this.snackbar = true
+    }
   }
 }
 </script>

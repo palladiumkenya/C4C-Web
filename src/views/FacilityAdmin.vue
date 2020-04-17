@@ -88,14 +88,14 @@
                 label="Facility"
                 class="purple-input"
               />
-               <v-btn
+              <v-btn
                 color="secondary"
                 @click="DeviceList">View List
               </v-btn>
             </v-card-text>
-            
+
             <template>
-              
+
               <v-data-table
                 :headers="headers"
                 :items="items"
@@ -233,7 +233,7 @@ export default {
         .then((users) => {
           console.log(users.data)
           this.all_users = users.data.data
-          if (users.data.links.next){
+          if (users.data.links.next) {
             this.loopT(users.data.links.next)
           } else {
             this.FilterAdmns()
@@ -256,9 +256,9 @@ export default {
     },
     FilterAdmns () {
       for (var a in this.all_users) {
-        if (this.all_users[a].role_id == 4){
+        if (this.all_users[a].role_id == 4) {
           var p = new Object()
-          p.text = this.all_users[a].first_name+" "+this.all_users[a].surname+" "+this.all_users[a].email
+          p.text = this.all_users[a].first_name + ' ' + this.all_users[a].surname + ' ' + this.all_users[a].email
           p.value = this.all_users[a]
           this.admins.push(p)
         }
@@ -274,26 +274,25 @@ export default {
             p.value = this.facilities_all[k]
             this.facilities.push(p)
           }
-        })  
-      
+        })
     },
-    
+
     DeviceList () {
-      //setTimeout(function () {
-        axios.get(`facility_admin/${this.facility_id.value.id}`)
-          .then((exp) => {
-            this.items = exp.data.data
-            console.log(exp.data)
-            console.log(this.facility_id.value.id)
-          })
-          .catch(error => console.log(error.message))  
-      //}, 1000);
+      // setTimeout(function () {
+      axios.get(`facility_admin/${this.facility_id.value.id}`)
+        .then((exp) => {
+          this.items = exp.data.data
+          console.log(exp.data)
+          console.log(this.facility_id.value.id)
+        })
+        .catch(error => console.log(error.message))
+      // }, 1000);
     },
-    
+
     AddDevice (e) {
       e.preventDefault()
       if (this.checkData()) {
-        //console.log(this.facility_id.value.id)
+        // console.log(this.facility_id.value.id)
         axios.post('facility_admin/assign', {
           facility_id: this.facility_id.value.id,
           user_id: this.name.value.id

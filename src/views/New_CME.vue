@@ -27,7 +27,11 @@
             </div>
           </v-card-text>
 
-          <v-form @submit="postCME" ref="form" v-model="valid" lazy-validation>
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            @submit="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -45,23 +49,22 @@
                 </v-flex>
 
                 <v-flex xs12>
-                    <ckeditor
+                  <ckeditor
+                    id="editorData"
                     :editor="editor"
                     v-model="editorData"
-                    id="editorData" 
                     :rules="bodyRules"
+                    :config="editorConfig"
                     placeholder="Write here"
-                    required
-                    :config="editorConfig">
-                    </ckeditor>
+                    required/>
                 </v-flex>
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
                   <input
-                    value="file"
                     id="file"
                     ref="file"
+                    value="file"
                     accept="image/*"
                     type="file"
                     @change="handleImageChange()">
@@ -95,45 +98,44 @@
                   text-xs-right
                 >
                   <v-btn
-                    class="mx-0 font-weight-light"
                     :disabled="!valid"
-                    @click="validateData(); alert=!alert; dialog1=true"
                     :loading="dialog1"
+                    class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
+                    @click="validateData(); alert=!alert; dialog1=true"
                   >
-                   Submit
+                    Submit
                   </v-btn>
 
-                  <v-dialog       
-                  v-model="dialog1"
-                  max-width="290" 
-                  lazy>
-                  <v-card>
-                    <v-card-text class="text-xs-center">
-                            <v-progress-circular :size="70" indeterminate class="primary--text"/>
-                    </v-card-text>
-                  </v-card>
+                  <v-dialog
+                    v-model="dialog1"
+                    max-width="290"
+                    lazy>
+                    <v-card>
+                      <v-card-text class="text-xs-center">
+                        <v-progress-circular
+                          :size="70"
+                          indeterminate
+                          class="primary--text"/>
+                      </v-card-text>
+                    </v-card>
                   </v-dialog>
-                   
 
                   <v-alert
-<<<<<<< HEAD
-                  type="success"
-                  :value="alert"
-                  border="right"
-                  icon = "mdi-alert"
-                  dismissible
-=======
-                  text
-                  :value="alert"
-                  transition="scale-transition"
-                  color = "#47a44b"
-                  icon = "mdi-alert"
-                  dense
->>>>>>> 1aadb5d4233ecd5644d67246c4d898b96d696347
+                    :value="alert"
+                    head
+                    type="success"
+                    border="right"
+                    icon = "mdi-alert"
+                    dismissible
+                      ="======"
+                    text
+                    transition="scale-transition"
+                    color = "#47a44b"
+                    dense
                   >
-                  <h6> {{ output.error}} {{ output.message}} </h6>
+                    <h6> {{ output.error }} {{ output.message }} </h6>
                   </v-alert>
 
                 </v-flex>
@@ -150,9 +152,8 @@
 
 <script>
 
-import axios from 'axios' 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import axios from 'axios'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default {
   data () {
@@ -160,14 +161,14 @@ export default {
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
-            // The configuration of the editor.
+        // The configuration of the editor.
       },
       valid: true,
       titleRules: [
-        v => !!v || 'Title is required',
+        v => !!v || 'Title is required'
       ],
       bodyRules: [
-        v => !!v || 'Fill in the required text',
+        v => !!v || 'Fill in the required text'
       ],
       dialog1: false,
       result: '',
@@ -177,21 +178,21 @@ export default {
       file: '',
       showPreview: false,
       imagePreview: '',
-      files: [],
+      files: []
     }
   },
   watch: {
-      dialog1 (val) {
-        if (!val) return
-        setTimeout(() => (this.dialog1 = false), 4000)
-      }
-    },
-  
+    dialog1 (val) {
+      if (!val) return
+      setTimeout(() => (this.dialog1 = false), 4000)
+    }
+  },
+
   methods: {
 
-     validateData () {
-       this.$refs.form.validate()
-     },
+    validateData () {
+      this.$refs.form.validate()
+    },
 
     handleImageChange (e) {
       this.file = this.$refs.file.files[0]
@@ -222,42 +223,41 @@ export default {
     removeFile (key) {
       this.files.splice(key, 1)
     },
-    
+
     postCME (e) {
       e.preventDefault()
-      
-      let allData = new FormData();
-      
+
+      let allData = new FormData()
+
       // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i];
+        let file = this.files[i]
 
-        allData.append('cme_files[' + i + ']', file);
-      }  
-        allData.append('image_file', this.file);
-        allData.append('title', this.title);
-        allData.append('body', this.editorData);
-      
+        allData.append('cme_files[' + i + ']', file)
+      }
+      allData.append('image_file', this.file)
+      allData.append('title', this.title)
+      allData.append('body', this.editorData)
+
       axios({
-        method: "POST",
+        method: 'POST',
         url: 'resources/cmes/create',
         data: allData,
-        headers: {'Content-Type': 'multipart/form-data; boundary=${form._boundary}'}
-        })
+        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
+      })
         .then((response) => {
           this.output = response.data
           console.log(response)
-          this.alert = true   
+          this.alert = true
           this.$router.push('/cmes')
-            })
-          .catch(error => {
-            this.output = error
-            console.log(error)
-            this.alert = true   
- 
-          })   
-    },
-    
+        })
+        .catch(error => {
+          this.output = error
+          console.log(error)
+          this.alert = true
+        })
+    }
+
   }
 }
 

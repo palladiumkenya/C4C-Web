@@ -61,9 +61,9 @@
                 <td>{{ props.item.created_at }}</td>
                 <td>
                   <v-btn
-                    type="submit"
                     :loading="downloadLoading"
                     :disabled="Boolean(props.item.approved)"
+                    type="submit"
                     color="secondary"
                     @click.prevent="approvCh(props.item.id)">
                     Approve<v-icon right>mdi-check</v-icon>
@@ -77,9 +77,13 @@
               <v-card flat>
                 <v-card-text>
                   <div class="maps">
-                    <l-map :zoom="zoom" :center="LatLng(props.item.lat, props.item.lng)">
-                      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-                      <l-marker :lat-lng="LatLng(props.item.lat, props.item.lng)"></l-marker>
+                    <l-map
+                      :zoom="zoom"
+                      :center="LatLng(props.item.lat, props.item.lng)">
+                      <l-tile-layer
+                        :url="url"
+                        :attribution="attribution"/>
+                      <l-marker :lat-lng="LatLng(props.item.lat, props.item.lng)"/>
                     </l-map>
                   </div>
                 </v-card-text>
@@ -109,21 +113,21 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import L from 'leaflet';
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+import L from 'leaflet'
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 
 export default {
   components: {
     LMap,
     LTileLayer,
-    LMarker,
+    LMarker
   },
   data () {
     return {
-      zoom:18,
+      zoom: 18,
       center: L.latLng(0, 0),
-      url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       marker: L.latLng(0, 0),
       rowsPerPageItems: [50, 250, 500],
       search: '',
@@ -190,20 +194,20 @@ export default {
     },
     approvCh (check_id) {
       console.log(check_id)
-      axios.post('check_in/approve',{
+      axios.post('check_in/approve', {
         check_in_id: check_id
       })
-      .then((r)=>{
-        this.result = r.data
-        this.showResult = true
-        this.users =[]
-        this.getChec()
-      })
-      .catch(() => {
-        this.error = true
-        this.result = 'Email or Password is incorrect.'
-        this.showResult = true
-      })
+        .then((r) => {
+          this.result = r.data
+          this.showResult = true
+          this.users = []
+          this.getChec()
+        })
+        .catch(() => {
+          this.error = true
+          this.result = 'Email or Password is incorrect.'
+          this.showResult = true
+        })
     },
     LatLng (lat, lng) {
       return L.latLng(lat, lng)
