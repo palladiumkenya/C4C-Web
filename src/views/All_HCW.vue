@@ -84,6 +84,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -106,22 +107,22 @@ export default {
         {
           sortable: false,
           text: 'Facility',
-          value: 'facility_name'
+          value: 'facility.name'
         },
         {
           sortable: false,
           text: 'County',
-          value: 'facility_county'
+          value: 'facility.county'
         },
         {
           sortable: false,
           text: 'Department',
-          value: 'facility_department'
+          value: 'department'
         },
         {
           sortable: false,
           text: 'Cadre',
-          value: 'cadre'
+          value: 'cadre.name'
         },
         {
           sortable: false,
@@ -130,6 +131,11 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
   created () {
     this.getHCW()

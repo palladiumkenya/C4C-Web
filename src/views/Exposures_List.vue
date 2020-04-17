@@ -207,15 +207,20 @@ export default {
           .then((exp) => {
             this.exposures = exp.data.data
             this.link = exp.data.links.next
-            this.loopT(this.link)
+            if (this.link) {
+              this.loopT(this.link)
+            }
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
+        console.log(this.user.hcw.facility_id)
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {
             this.exposures = exp.data.data
             this.link = exp.data.links.next
-            this.loopT(this.link)
+            if (this.link) {
+              this.loopT(this.link)
+            }
           })
           .catch(() => {
           this.error = true
@@ -235,7 +240,6 @@ export default {
           i = 11
         }
       }
-      console.log(this.exposures)
     },
     handleDownload () {
       this.downloadLoading = true
