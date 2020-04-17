@@ -104,6 +104,7 @@
             <!-- End filters -->
       </template>
 
+
       <!-- Start Graphs -->
 
       <!-- End Graphs -->
@@ -171,12 +172,17 @@ export default {
           }
         },
 
+        chart: {
+          type: 'column'
+        },
+
         title: {
           text: 'Registration Trend and Exposure rate by Month'
         },
         series: [
           {
             type: 'column',
+
             colorByPoint: true,
             name: 'No of Reported Exposures',
             data: []
@@ -190,6 +196,10 @@ export default {
         ]
       },
 
+      
+
+      date: [],
+
       date: [],
       s: [],
       userz: [],
@@ -198,6 +208,7 @@ export default {
       b: 0,
       scount: 0
     }
+    
   },
   computed: {
     broadcastsCount () {
@@ -248,6 +259,7 @@ export default {
     },
 
     getMonth () {
+
       var wdata = []
       for (var i in this.barOptionsTime.xAxis.categories) {
         wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
@@ -260,6 +272,13 @@ export default {
         data.push(this.getNumr(this.barOptionsTime.xAxis.categories[r]))
       }
       this.barOptionsTime.series[1].data = data
+
+      var data = []
+      for (var i in this.barOptionsTime.xAxis.categories) {
+        data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+      }
+      this.barOptionsTime.series[0].data = data
+
     },
 
     getUsers () {
@@ -276,7 +295,6 @@ export default {
           console.log(exp.data.data)
           this.link = exp.data.links.next
           this.loopG(this.link)
-
         })
         .catch(error => console.log(error.message))
     },
@@ -296,7 +314,9 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
+
            this.userz = this.userz.concat(response.data.data)
+
         } else {
           i = 11
         }
@@ -304,6 +324,7 @@ export default {
 
       this.getMonth()
       this.getReg()
+
     },
 
     async loopG (l) {
@@ -318,7 +339,9 @@ export default {
           i = 11
         }
       }
-     // this.getReg()
+     // this.getReg(
+      this.getRegistrations()
+      this.getLocations()
 
     },
 

@@ -5,21 +5,16 @@
     height="82"
   >
     <div class="footer-items">
-      <div
-        v-if="this.$route.path !== '/login'">
-        <span
-          v-for="link in links"
-          :key="link.name"
-        >
-
-          <a
-            :href="link.Link"
-            class="tertiary--text footer-links">
-            {{ link.name }}
-          </a>
-        </span>
-      </div>
+      <span
+        v-for="link in links"
+        :key="link.name"
+      >
+        <a
+          :href="link.Link"
+          class="tertiary--text footer-links">{{ link.name }}</a>
+      </span>
     </div>
+
     <v-spacer/>
     <span class="font-weight-light copyright">
       &copy;

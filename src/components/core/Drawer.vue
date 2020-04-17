@@ -110,6 +110,8 @@ import {
   mapState,
   mapActions
 } from 'vuex'
+import store from './../../store'
+import auth from '../../store/auth.js'
 
 export default {
   props: {

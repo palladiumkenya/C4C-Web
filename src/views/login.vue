@@ -89,7 +89,7 @@ export default {
       }
     }
   },
-    computed: {
+  computed: {
     ...mapGetters({
       user: 'auth/user'
     })
@@ -111,9 +111,9 @@ export default {
       this.signIn(this.form)
         .then(() => {
           // if(this.user != null){
-            this.$router.replace({
-              name: 'Dashboard'
-            })
+          this.$router.replace({
+            name: 'Dashboard'
+          })
           // } else {
           //   vm.error = true
           //   vm.result = 'Not an admin. Please check your email.'

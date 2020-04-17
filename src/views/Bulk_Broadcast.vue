@@ -36,13 +36,13 @@
                 <v-flex
                   xs12
                 >
-                 <v-text-field
-                 :rules="[rules.required]"
-                 v-model="phoneNumbers"
-                  label="Add Phone Numbers Seperated By A Comma"
-                  required
-                  single-line
-                ></v-text-field> 
+                  <v-text-field
+                    :rules="[rules.required]"
+                    v-model="phoneNumbers"
+                    label="Add Phone Numbers Seperated By A Comma"
+                    required
+                    single-line
+                  />
                 </v-flex>
 
                 <v-flex
@@ -72,7 +72,7 @@
       </v-flex>
     </v-layout>
 
-      <v-snackbar
+    <v-snackbar
       :color="color"
       :bottom="bottom"
       :top="top"
@@ -80,7 +80,7 @@
       :right="right"
       v-model="snackbar"
       dark
-      >
+    >
       <v-icon
         color="white"
         class="mr-3"
@@ -126,7 +126,7 @@ export default {
   },
 
   methods: {
-  
+
     validate () {
       this.$refs.form.validate()
     },
@@ -147,24 +147,24 @@ export default {
         .catch(error => {
           this.output = error
           this.snack('top', 'center')
-      })
+        })
     },
-      snack (...args) {
-        this.top = false
-        this.bottom = false
-        this.left = false
-        this.right = false
+    snack (...args) {
+      this.top = false
+      this.bottom = false
+      this.left = false
+      this.right = false
 
-        for (const loc of args) {
-          this[loc] = true
-        }
-        if (this.resp) {
-          this.color = this.colors[0]
-        } else {
-          this.color = this.colors[1]
-        }
-        this.snackbar = true
+      for (const loc of args) {
+        this[loc] = true
       }
-}
+      if (this.resp) {
+        this.color = this.colors[0]
+      } else {
+        this.color = this.colors[1]
+      }
+      this.snackbar = true
+    }
+  }
 }
 </script>

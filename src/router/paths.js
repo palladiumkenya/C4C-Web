@@ -10,7 +10,7 @@ export default [
     path: '',
     name: 'Dashboard',
     // Relative to /src/views
-    view: 'Dashboard',
+    view: 'Dashboard'
     // beforeEnter: (to, from, next) => {
     //   if (!store.getters['auth/authenticated']) {
     //     return next({
@@ -51,7 +51,7 @@ export default [
       next()
     }
   },
-     {
+  {
     path: '/other-diseases',
     name: 'Other Diseases',
     view: 'OtherDiseases',
@@ -244,7 +244,7 @@ export default [
   {
     path: '/covid19_resources',
     name: 'COVID19 Resources',
-    view: 'All_Covid',
+    view: 'All_Covid'
   },
   {
     path: '/new_covid19_resources',
@@ -259,10 +259,10 @@ export default [
     path: '/icons',
     view: 'Icons'
   },
-      {
+  {
     path: '/exposure_by_cadre',
     view: 'Exposure_by_cadre'
-  },
+  }
   // {
   //   path: '/add_device',
   //   name: 'Add Devices',

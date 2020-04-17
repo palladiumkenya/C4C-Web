@@ -61,9 +61,9 @@
             </v-data-table>
           </div>
           <v-btn
-            href="reg.xlsx" 
-            download
             :disabled="!is_data"
+            href="reg.xlsx"
+            download
             color="info"
           >Get Excel template
           </v-btn>
@@ -216,7 +216,7 @@ export default {
               return
             }
             this.snack('top', 'center')
-            axios.post('broadcasts/web/direct',{
+            axios.post('broadcasts/web/direct', {
               phone_numbers: this.tableData[v].mobile.toString(),
               message: `You have been signed up for C4C download the app here https://play.google.com/store/apps/details?id=mhealth.login&hl=en and use this as your password ${this.tableData[v].password.toString()}`
             })

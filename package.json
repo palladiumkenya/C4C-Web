@@ -6,13 +6,29 @@
         "serve": "vue-cli-service serve --open",
         "dev": "npm run serve",
         "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+        "lint": "vue-cli-service lint",
+        "test": "vue-cli-service test:unit"
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "vue"
+        ],
+        "transform": {
+            "^.+\\.js$": "babel-jest",
+            ".*\\.vue$": "<rootDir>/node_modules/vue-jest"
+        },
+        "moduleNameMapper": {
+            "^@/(.*)$": "<rootDir>/src/$1"
+        }
     },
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^17.0.0",
         "@ckeditor/ckeditor5-build-decoupled-document": "^18.0.0",
         "@ckeditor/ckeditor5-vue": "^1.0.1",
         "@syncfusion/ej2-vue-calendars": "^17.4.51",
+        "@vue/cli-plugin-unit-jest": "^4.3.1",
+        "@vue/test-utils": "^1.0.0-beta.33",
         "chartist": "0.11.0",
         "cors": "^2.8.5",
         "date-fns": "^2.10.0",
