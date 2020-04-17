@@ -156,8 +156,6 @@
    import format from 'date-fns/format'
   import {mapGetters, mapState} from 'vuex'
 
-import axios from 'axios'
-import { mapGetters, mapState } from 'vuex'
 
 export default {
 
