@@ -308,6 +308,7 @@
                 :options="gendOptions"/>
             </template>
 
+
           </v-card-text>
           <v-card-text v-if="n==10">This is the Third tab</v-card-text>
         </v-container>
@@ -342,10 +343,12 @@ export default {
     })
 
   },
+  // eslint-disable-next-line vue/order-in-components
   components: {
     Exposure_by_time,
     highcharts: Chart
   },
+  // eslint-disable-next-line vue/order-in-components
   data () {
     return {
 
@@ -905,6 +908,7 @@ export default {
       this.barOptionsSummary.series[0].data = this.date
     },
     getDep () {
+      // eslint-disable-next-line no-unused-vars
       var count = 0
       for (var v in this.seriesname) {
         this.seriesdata = []
@@ -989,7 +993,7 @@ export default {
       for (var i in this.gendOptions.xAxis.categories) {
         data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
       }
-      this.gendOptions.series[0].data = data
+      this.gendOptions.series[0].data = datag
       this.value1 = false
 
       var data = []
@@ -1064,6 +1068,16 @@ export default {
         }
       }
       return count
+    },
+    getGp (cat, num) {
+      var count = 0
+      for (var x in this.s) {
+        if (this.s[x].gender === cat && this.s[x].gender === num) {
+          count++
+           console.log((count / 100 ) * (cat + num))
+        }
+      }
+
     },
 
     getDevice (cat) {

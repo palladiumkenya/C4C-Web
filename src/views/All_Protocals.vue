@@ -1,8 +1,5 @@
 <template>
-  <v-container grid-list-lg>
-    <v-layout
-      row
-      wrap>
+  <v-container >
 
       <v-flex
         xs12
@@ -16,30 +13,19 @@
         </v-btn>
       </v-flex>
 
-      <v-list-item
+    <v-row dense>  
+      <v-col
         v-for="result in results"
         :key="result.id"
-        xs12
-        sm6
-        md6
-        lg4
-        dense>
-
-        <v-list
-          class
-          xs12
-          sm6
-          md6
-          lg4
-          dense >
+        cols="12"
+        dark>
 
           <v-card
-            min-width="900"
-            max-width="900"
-            style="padding-bottom"
-            class="mx-auto"
-          >
+            class="mx-auto">
+       
             <v-card-title class="headline">{{ result.title }}</v-card-title>
+
+            <v-divider></v-divider>
 
             <v-card-actions>
               <v-card-text class="text--primary">
@@ -54,9 +40,8 @@
             </v-card-actions>
 
           </v-card>
-        </v-list>
-      </v-list-item>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -84,3 +69,8 @@ export default {
   }
 }
 </script>
+
+<style >
+.v-card { margin: 20px; }
+
+</style>

@@ -81,7 +81,29 @@
 
       <!-- End Cards -->
 
-      <!-- Filters -->
+      <template>
+
+        <!-- Start filters -->
+
+               <core-filters/>
+                <v-flex
+          md6
+          lg12
+        >
+          <v-btn
+            :loading="loading2"
+            :disabled="loading2"
+            block
+            color="success"
+            @click="loader = 'loading2'"
+          >
+            Filter
+            <template v-slot:loader/>
+          </v-btn>
+        </v-flex>
+            <!-- End filters -->
+      </template>
+
 
       <!-- Start Graphs -->
 
@@ -149,28 +171,36 @@ export default {
             }
           }
         },
+
         chart: {
           type: 'column'
         },
+
         title: {
           text: 'Registration Trend and Exposure rate by Month'
         },
         series: [
           {
+            type: 'column',
+
             colorByPoint: true,
             name: 'No of Reported Exposures',
             data: []
           },
           {
-            name: 'Reported Exposures',
+            type: 'spline',
+            name: 'Registration in Numbers',
             data: []
           }
 
         ]
       },
 
+      
+
       date: [],
 
+      date: [],
       s: [],
       userz: [],
       usersl: [],
@@ -178,6 +208,7 @@ export default {
       b: 0,
       scount: 0
     }
+    
   },
   computed: {
     broadcastsCount () {
@@ -211,6 +242,7 @@ export default {
     this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
+
   },
   methods: {
 
@@ -227,11 +259,26 @@ export default {
     },
 
     getMonth () {
+
+      var wdata = []
+      for (var i in this.barOptionsTime.xAxis.categories) {
+        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+      }
+      this.barOptionsTime.series[0].data = wdata
+    },
+    getReg () {
+      var data = []
+      for (var r in this.barOptionsTime.xAxis.categories) {
+        data.push(this.getNumr(this.barOptionsTime.xAxis.categories[r]))
+      }
+      this.barOptionsTime.series[1].data = data
+
       var data = []
       for (var i in this.barOptionsTime.xAxis.categories) {
         data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
       }
       this.barOptionsTime.series[0].data = data
+
     },
 
     getUsers () {
@@ -251,6 +298,7 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+
     getBroadcasts () {
       axios.get('broadcasts/web/all')
         .then((users) => {
@@ -266,12 +314,17 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
+
+           this.userz = this.userz.concat(response.data.data)
+
         } else {
           i = 11
         }
       }
 
       this.getMonth()
+      this.getReg()
+
     },
 
     async loopG (l) {
@@ -286,14 +339,30 @@ export default {
           i = 11
         }
       }
+     // this.getReg(
       this.getRegistrations()
       this.getLocations()
+
     },
 
     getNumt (name) {
       var counter = 0
       for (var xt in this.s) {
         if (this.s[xt].exposure_date.slice(0, 3) === name) {
+          console.log(name)
+          counter++
+        }
+      }
+      return counter
+    },
+
+    getNumr (name) {
+      var counter = 0
+      for (var r in this.userz) {
+        var dat = new Date(this.userz[r].created_at)
+        var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        if (list[dat.getMonth()] === name) {
+          console.log(name)
           counter++
         }
       }

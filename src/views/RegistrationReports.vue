@@ -53,6 +53,7 @@
                 :options="cadrOptions"/>
             </template>
           </v-card-text>
+          
           <v-card-text v-if="n==3">
             <template>
               <h3>{{ mess }}</h3>
@@ -69,6 +70,7 @@
                 :options="barOptions"/>
             </template>
           </v-card-text>
+
           <v-card-text v-if="n==4">
             <template>
               <h3>{{ mess1 }}</h3>
@@ -85,6 +87,7 @@
                 :options="gendOptions"/>
             </template>
           </v-card-text>
+
         </v-container>
       </v-tab-item>
     </v-tabs>

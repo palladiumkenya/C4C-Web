@@ -139,26 +139,9 @@
 
         <v-flex
           md6
-          lg6
+          lg10
         >
-          <core-DatePicker/>
-
-        </v-flex>
-
-        <v-flex
-          md6
-          lg6
-        >
-          <v-btn
-            :loading="loading2"
-            :disabled="loading2"
-            block
-            color="success"
-            @click="loader = 'loading2'"
-          >
-            Filter
-            <template v-slot:loader/>
-          </v-btn>
+           <core-DatePicker/>
         </v-flex>
 
       </template>
@@ -169,9 +152,14 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { mapGetters, mapState } from 'vuex'
+  import axios from 'axios'
+   import format from 'date-fns/format'
+  import {mapGetters, mapState} from 'vuex'
+
+
 export default {
+
+
   data () {
     return {
       facility: '',
