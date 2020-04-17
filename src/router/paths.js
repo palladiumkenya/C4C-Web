@@ -197,7 +197,7 @@ export default [
   },
   {
     path: '/new_bulk_broadcast',
-    name: 'Broadcast Facility',
+    name: 'New Broadcast Facility',
     view: 'Bulk_Broadcast'
   },
   {

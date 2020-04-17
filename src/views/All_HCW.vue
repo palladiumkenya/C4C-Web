@@ -64,9 +64,11 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      search: '',
       output: [],
       all_hcws: [],
       rowsPerPageItems: [50, 250, 500],
@@ -84,22 +86,22 @@ export default {
         {
           sortable: false,
           text: 'Facility',
-          value: 'facility_name'
+          value: 'facility.name'
         },
         {
           sortable: false,
           text: 'County',
-          value: 'facility_county'
+          value: 'facility.county'
         },
         {
           sortable: false,
           text: 'Department',
-          value: 'facility_department'
+          value: 'department'
         },
         {
           sortable: false,
           text: 'Cadre',
-          value: 'cadre'
+          value: 'cadre.name'
         },
         {
           sortable: false,
@@ -109,18 +111,37 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   created () {
     this.getHCW()
   },
   methods: {
     getHCW () {
-      axios.get('hcw')
-        .then((workers) => {
-          console.log(workers.data)
-          this.all_hcws = workers.data.data
-          this.loopT(workers.data.links.next)
-        })
-        .catch(error => console.log(error.message))
+      if (this.user.role_id === 1) {
+        axios.get('hcw')
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            if (workers.data.links.next) {
+              this.loopT(workers.data.links.next)
+            }
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            if (workers.data.links.next) {
+              this.loopT(workers.data.links.next)
+            }
+          })
+          .catch(error => console.log(error.message))
+      }
     },
     async loopT (l) {
       var i

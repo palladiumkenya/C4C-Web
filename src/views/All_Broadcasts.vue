@@ -74,6 +74,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -110,18 +111,33 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   created () {
     this.getBroadcast()
   },
   methods: {
     getBroadcast () {
-      axios.get('broadcasts/web/all')
-        .then((broadcast) => {
-          console.log(broadcast.data)
-          this.all_messages = broadcast.data.data
-          this.loopT(broadcast.data.links.next)
-        })
-        .catch(error => console.log(error.message))
+      if (this.user.role_id === 1) {
+        axios.get('broadcasts/web/all')
+          .then((broadcast) => {
+            console.log(broadcast.data)
+            this.all_messages = broadcast.data.data
+            this.loopT(broadcast.data.links.next)
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4){
+        axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
+          .then((broadcast) => {
+            // console.log(broadcast.data)
+            this.all_messages = broadcast.data.data
+            this.loopT(broadcast.data.links.next)
+          })
+          .catch(error => console.log(error.message))
+      }
     },
     async loopT (l) {
       var i
@@ -134,6 +150,7 @@ export default {
           i = 11
         }
       }
+      console.log(this.all_messages)
     }
   }
 }

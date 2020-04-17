@@ -33,6 +33,7 @@
           </v-list-tile-title>
         </v-list-tile>
         <v-divider/>
+        {{user.role_id}}
         <div
           v-for="(link, i) in links"
           :key="i"
@@ -82,20 +83,38 @@
                 <v-list-tile-title>{{ link.text }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-
-            <v-list-tile
+            <div
               v-for="sublink in link.subLinks"
-              :to="sublink.to"
-              :active-class="color"
-              :key="sublink.text"
-              class="v-list-item"
-              avatar
-            >
-              <v-list-tile-action>
+              :key="sublink.text">
+            <template
+              v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'CME')">
+              <v-list-tile
+                :to="sublink.to"
+                :active-class="color"
+                class="v-list-item"
+                avatar
+              >
+                <v-list-tile-action>
                 <v-icon>{{ sublink.icon }}</v-icon>
               </v-list-tile-action>
               <v-list-tile-title v-text="sublink.text" />
-            </v-list-tile>
+              </v-list-tile>
+              </template>
+              <template
+                v-else>
+                <v-list-tile
+                  :to="sublink.to"
+                  :active-class="color"
+                  class="v-list-item"
+                  avatar
+                >
+                  <v-list-tile-action>
+                  <v-icon>{{ sublink.icon }}</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-title v-text="sublink.text" />
+              </v-list-tile>
+              </template>
+            </div>
           </v-list-group>
         </div>
       </v-layout>
@@ -108,7 +127,8 @@
 import {
   mapMutations,
   mapState,
-  mapActions
+  mapActions,
+  mapGetters
 } from 'vuex'
 import store from './../../store'
 import auth from '../../store/auth.js'
@@ -255,6 +275,9 @@ export default {
   },
   computed: {
     ...mapState('app', ['image', 'color']),
+    ...mapGetters({
+      user: 'auth/user'
+    }),
     inputValue: {
       get () {
         return this.$store.state.app.drawer
@@ -267,12 +290,22 @@ export default {
       return this.$t('Layout.View.items')
     }
   },
-
+  created () {
+    // this.drawerList()
+  },
   methods: {
     ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     ...mapActions({
       logoutAction: 'auth/signout'
     }),
+    drawerList (){
+      if (this.user.role_id === 4){
+        this.links[6].subLinks.splice(2, 1)
+        this.links[7].subLinks.splice(2, 1)
+        this.links[7].subLinks.splice(0, 1)
+        console.log(this.links[7].subLinks)
+      }
+    },
     logout () {
       this.logoutAction().then(() => {
         this.pre_out = 'Logged out!'
