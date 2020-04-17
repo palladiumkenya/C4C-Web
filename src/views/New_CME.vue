@@ -124,8 +124,6 @@
 
                   <v-alert
                     :value="alert"
-                    :value="alert"
-                    <<<<<<<
                     head
                     type="success"
                     border="right"
@@ -135,9 +133,7 @@
                     text
                     transition="scale-transition"
                     color = "#47a44b"
-                    icon = "mdi-alert"
                     dense
-                  >>>>>>> 1aadb5d4233ecd5644d67246c4d898b96d696347
                   >
                     <h6> {{ output.error }} {{ output.message }} </h6>
                   </v-alert>
@@ -247,7 +243,7 @@ export default {
         method: 'POST',
         url: 'resources/cmes/create',
         data: allData,
-        headers: { 'Content-Type': 'multipart/form-data; boundary=${form._boundary}' }
+        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
       })
         .then((response) => {
           this.output = response.data

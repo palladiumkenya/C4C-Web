@@ -66,17 +66,40 @@
                 <td>{{ Boolean(props.item.pep_initiated) }}</td>
                 <td>{{ props.item.exposure_date }}</td>
 
-                <td>{{ props.item.previous_exposures }}</td>
-                
-                <td>{{ props.item.result_of }}</td>
-                <td>{{ props.item.exposure_description }}</td>
               </tr>
             </template>
             <template
               slot="expand"
               slot-scope="props">
               <v-card flat>
-                <v-card-text>patient hiv status: {{ props.item.patient_hiv_status }} <br> patient hbv status: {{ props.item.patient_hbv_status }} <v-spacer/> description: {{ props.item.description }}</v-card-text>
+                <v-container py-0>
+                  <v-layout wrap>
+                    <v-flex
+                        xs12
+                        md6
+                      >
+                    <v-card-text>
+                      facility: {{props.item.facility}} <br>
+                      facility: {{props.item.pep_date}} <br>
+                      patient hiv status: {{ props.item.patient_hiv_status }} <br>
+                      patient hbv status: {{ props.item.patient_hbv_status }}
+                    </v-card-text>
+                    </v-flex>
+                      <v-flex
+                        xs12
+                        md4
+                      >
+                      <v-card-text>
+                        
+                      device purpose: {{ props.item.device_purpose }} <br>
+                      previous exposures: {{ props.item.previous_exposures }} <br>
+                      exposure result of: <div v-if="props.item.result_of"> {{ props.item.result_of }}</div> <small v-else>Not specified</small> <br>
+                      exposure description: {{ props.item.exposure_description }}
+                      </v-card-text>
+                      </v-flex>
+                    
+                  </v-layout>
+                </v-container>
               </v-card>
             </template>
             <v-alert
@@ -159,22 +182,21 @@ export default {
     getExp () {
       if (this.user.role_id === 1){
         axios.get('exposures/all/')
-        .then((exp) => {
-          this.exposures = exp.data.data
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
-      } else if (this.user.role_id === 4){
+          .then((exp) => {
+            this.exposures = exp.data.data
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
-        .then((exp) => {
-          this.exposures = exp.data.data
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
+          .then((exp) => {
+            this.exposures = exp.data.data
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          })
+          .catch(error => console.log(error.message))
       }
-        
     },
     async loopT (l) {
       var i
@@ -193,7 +215,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['Cadre', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Date']
-        const filterVal = [ 'cadre', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'exposure_date']
+        const filterVal = ['cadre', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'exposure_date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
