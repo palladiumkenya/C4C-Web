@@ -83,18 +83,17 @@
 
       <!-- Filters -->
 
-
       <!-- Start Graphs -->
 
       <!-- End Graphs -->
-        <v-flex
+      <v-flex
         md4
         lg12
-        >
-           <highcharts
-              ref="barChart"
-              :options="barOptionsTime"/>
-           </v-flex>
+      >
+        <highcharts
+          ref="barChart"
+          :options="barOptionsTime"/>
+      </v-flex>
       <!-- Start Maps -->
 
       <!-- Start Tables -->
@@ -116,67 +115,61 @@ export default {
   data () {
     return {
 
+      barOptionsTime: {
+        xAxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          title: {
+            text: 'Months Range'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No of Reg and Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
 
-        barOptionsTime: {
-                xAxis: {
-                   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                      title: {
-                        text: 'Months Range'
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: "No of Reg and Exposures",
-                        align: "high"
-                    },
-                    labels: {
-                        overflow: "justify",
-                      items: [
-                        {
-                          html: '',
-                          style: {
-                            left: '50px',
-                            top: '18px',
-                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                          }
-                        }
-                      ]
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        dataLabels: {
-                            enabled: true
-                        }
-                    }
-                },
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Registration Trend and Exposure rate by Month'
-                },
-                series: [
-                    {
-                      colorByPoint: true,
-                        name: "No of Reported Exposures",
-                        data: []
-                    },
-                  {
-                        name: "Reported Exposures",
-                        data: []
-                    },
+        title: {
+          text: 'Registration Trend and Exposure rate by Month'
+        },
+        series: [
+          {
+            type: 'column',
+            colorByPoint: true,
+            name: 'No of Reported Exposures',
+            data: []
+          },
+          {
+            type: 'spline',
+            name: 'Registration in Numbers',
+            data: []
+          }
 
+        ]
+      },
 
-                ]
-            },
-
-
-
-
-        date: [],
-
+      date: [],
       s: [],
       userz: [],
       usersl: [],
@@ -205,10 +198,10 @@ export default {
       user: 'auth/user'
     })
   },
-  
+
   created () {
-    if (this.user === null){
-      alert("Not admin")
+    if (this.user === null) {
+      alert('Not admin')
       this.$router.replace({
         name: 'login'
       })
@@ -217,29 +210,36 @@ export default {
     this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
+
   },
   methods: {
 
     getExp () {
-
       axios.get('exposures/all/')
         .then((exp) => {
           this.scount = exp.data.meta.total
           this.s = exp.data.data
-            console.log(exp.data.data)
+          console.log(exp.data.data)
           this.link = exp.data.links.next
           this.loopT(this.link)
         })
         .catch(error => console.log(error.message))
     },
 
-      getMonth () {
-        var data = []
-          for (var i in this.barOptionsTime.xAxis.categories){
-              data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
-          }
-          this.barOptionsTime.series[0].data = data
-      },
+    getMonth () {
+      var wdata = []
+      for (var i in this.barOptionsTime.xAxis.categories) {
+        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+      }
+      this.barOptionsTime.series[0].data = wdata
+    },
+    getReg () {
+      var data = []
+      for (var r in this.barOptionsTime.xAxis.categories) {
+        data.push(this.getNumr(this.barOptionsTime.xAxis.categories[r]))
+      }
+      this.barOptionsTime.series[1].data = data
+    },
 
     getUsers () {
       axios.get('users')
@@ -250,14 +250,16 @@ export default {
     },
     getAllUsers () {
       axios.get('users')
-      .then((exp) => {
-        this.userz = exp.data.data
-        console.log(exp.data.data)
-        this.link = exp.data.links.next
-        this.loopG(this.link)
-      })
-      .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.userz = exp.data.data
+          console.log(exp.data.data)
+          this.link = exp.data.links.next
+          this.loopG(this.link)
+
+        })
+        .catch(error => console.log(error.message))
     },
+
     getBroadcasts () {
       axios.get('broadcasts/web/all')
         .then((users) => {
@@ -266,23 +268,24 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-     async loopT (l) {
-       var i
-       for (i = 0; i < 1;) {
-         if (l != null) {
-           let response = await axios.get(l)
-           l = response.data.links.next
-           this.s = this.s.concat(response.data.data)
-         } else {
-           i = 11
-         }
-       }
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.s = this.s.concat(response.data.data)
+           this.userz = this.userz.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
 
-       this.getMonth()
-     },
+      this.getMonth()
+      this.getReg()
+    },
 
-
-       async loopG (l) {
+    async loopG (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
@@ -294,15 +297,29 @@ export default {
           i = 11
         }
       }
-  this.getRegistrations()
-      this.getLocations()
+     // this.getReg()
 
     },
 
-      getNumt (name) {
+    getNumt (name) {
       var counter = 0
       for (var xt in this.s) {
         if (this.s[xt].exposure_date.slice(0, 3) === name) {
+          console.log(name)
+          counter++
+        }
+      }
+      return counter
+    },
+
+    getNumr (name) {
+      var counter = 0
+      for (var r in this.userz) {
+        var dat = new Date(this.userz[r].created_at)
+        var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      // console.log(list[dat.getMonth()])
+        if (list[dat.getMonth()] === name) {
+          console.log(name)
           counter++
         }
       }
@@ -317,9 +334,7 @@ export default {
         }
       }
       return counter
-    },
-
-
+    }
 
   }
 }
