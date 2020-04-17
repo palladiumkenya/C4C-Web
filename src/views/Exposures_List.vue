@@ -11,6 +11,26 @@
       <v-flex
         md12
       >
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.error }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
         <material-card
           color="green"
           title="Broadcast Messages"
@@ -127,6 +147,8 @@ export default {
       search: '',
       link: '',
       output: [],
+      result: '',
+      snackbar: false,
       headers: [
         {
           text: 'No.',
@@ -195,7 +217,11 @@ export default {
             this.link = exp.data.links.next
             this.loopT(this.link)
           })
-          .catch(error => console.log(error.message))
+          .catch(() => {
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
+          })
       }
     },
     async loopT (l) {

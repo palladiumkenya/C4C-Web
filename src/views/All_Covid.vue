@@ -77,6 +77,8 @@ export default {
         .then((resources) => {
           console.log(resources.data)
           this.results = resources.data.data
+          NProgress.start()
+
         })
         .catch(error => console.log(error.message))
     }

@@ -7,13 +7,34 @@
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
-          @click="$router.push('add_protocal')"
+          @click="$router.push('add_protocal');"
         >
-          Add A New Protocal
+          Add A New Facility Protocal
         </v-btn>
       </v-flex>
 
-    <v-row dense>  
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.error }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
+    <v-row dense>
+
       <v-col
         v-for="result in results"
         :key="result.id"
@@ -34,7 +55,7 @@
 
               <v-btn
                 color="orange"
-                @click="$router.push({ name: 'View Protocal', params: {id: result.id} })">
+                @click="$router.push({ name: 'View Facility Resource', params: {id: result.id} })">
                 View More
               </v-btn>
             </v-card-actions>
@@ -51,20 +72,32 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      results: []
+      results: [],
+      snackbar: false,
+      output: '',
+      result: ''
     }
   },
   created () {
     this.getProtocals()
   },
   methods: {
+
     getProtocals () {
+
+      const vm = this
+
       axios.get('resources/hcw/protocols')
         .then((protocals) => {
           console.log(protocals.data)
           this.results = protocals.data.data
+          
         })
-        .catch(error => console.log(error.message))
+        .catch(() => {
+          vm.error = true
+          vm.result = 'Check your internet connection or retry logging in.'
+          vm.snackbar = true
+        })
     }
   }
 }

@@ -12,6 +12,26 @@
         md12
       >
 
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.errors }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
         <v-card>
           <v-card-title>
             Health Care Workers
@@ -67,8 +87,10 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      output: [],
       all_hcws: [],
+      snackbar: false,
+      output: '',
+      result: '',
       rowsPerPageItems: [50, 250, 500],
       headers: [
         {
@@ -120,7 +142,11 @@ export default {
           this.all_hcws = workers.data.data
           this.loopT(workers.data.links.next)
         })
-        .catch(error => console.log(error.message))
+        .catch(() => {
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
+        })
     },
     async loopT (l) {
       var i
