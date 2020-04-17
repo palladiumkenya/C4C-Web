@@ -263,9 +263,6 @@ export default {
           }
         ]
       },
-<<<<<<< HEAD
-    
-=======
       // mess1: 'Fetching Data.....',
       // mess: 'Fetching Data.....',
       // mess2: 'Fetching Data.....',
@@ -273,7 +270,6 @@ export default {
       // date: [],
       // options: data
       // seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
     }
   },
 
@@ -319,40 +315,24 @@ export default {
         data.push(this.getAgeNum(i))
       }
       this.barOptions.series[0].data = data
-<<<<<<< HEAD
-     // this.mess = 'Data fetched'
-    //  this.value = false
-=======
       // this.mess = 'Data fetched'
       this.value = false
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
 
       data = []
       for (var i in this.gendOptions.xAxis.categories) {
         data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
       }
       this.gendOptions.series[0].data = data
-<<<<<<< HEAD
-    // this.mess1 = 'Data fetched'
-    // this.value1 = false
-=======
       // this.mess1 = 'Data fetched'
       this.value1 = false
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
 
       data = []
       for (var i in this.cadrOptions.xAxis.categories) {
         data.push(this.getCadre(this.cadrOptions.xAxis.categories[i]))
       }
       this.cadrOptions.series[0].data = data
-<<<<<<< HEAD
-    //this.mess1 = 'Data fetched'
-      //this.value1 = false
-
-=======
       // this.mess1 = 'Data fetched'
       this.value1 = false
->>>>>>> a40a993f467f74d55336f1e89c3b8d4708d0344d
     },
     getAgeNum (cat) {
       var count = 0
