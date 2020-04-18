@@ -706,26 +706,34 @@ export default {
     // this.barOptions.series[0].data = this.type
     //  },
 
-     getExp () {
-      axios.get('exposures/all/')
-        .then((exp) => {
-          this.s = exp.data.data
-          if (exp.data.links.next != null) {
-            this.link = exp.data.links.next
-            // this.c = exp.data.cadre.meta.total // total cadre
-            this.loopT(this.link)
-          } else {
-            this.getAgeData()
-          }
-          console.log(exp.data.data)
-        })
-        .catch(error => console.log(error.message))
-        .then((exp) => {
-          this.s = exp.data.data
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
+    getExp () {
+      if (this.user.role_id === 1) {
+        axios.get('exposures/all/')
+          .then((exp) => {
+            this.s = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              // this.c = exp.data.cadre.meta.total // total cadre
+              this.loopT(this.link)
+            } else {
+              this.getAgeData()
+            }
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.s = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              // this.c = exp.data.cadre.meta.total // total cadre
+              this.loopT(this.link)
+            } else {
+              this.getAgeData()
+            }
+          })
+          .catch(error => console.log(error.message))
+      } 
     },
 
     getCad () {
