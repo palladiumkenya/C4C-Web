@@ -107,6 +107,15 @@
 
       <!-- Start Graphs -->
 
+  <v-flex
+        md4
+        lg12
+      >
+        <highcharts
+          ref="barChart"
+          :options="barOptionsTest"/>
+      </v-flex>
+
       <!-- End Graphs -->
       <v-flex
         md4
@@ -118,7 +127,9 @@
       </v-flex>
       <!-- Start Maps -->
 
+
       <!-- Start Tables -->
+
 
     </v-layout>
   </v-container>
@@ -147,7 +158,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'No of Reg and Exposures',
+            text: 'No of Exposures',
             align: 'high'
           },
           labels: {
@@ -177,7 +188,8 @@ export default {
         },
 
         title: {
-          text: 'Registration Trend and Exposure rate by Month'
+          text: 'Monthly Exposure Rate'
+
         },
         series: [
           {
@@ -187,15 +199,64 @@ export default {
             name: 'No of Reported Exposures',
             data: []
           },
-          {
-            type: 'spline',
+
+        ]
+        
+      },
+
+      barOptionsTest: {
+        xAxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          title: {
+            text: 'Months Range'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No of Registration',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+
+        chart: {
+          type: 'column'
+        },
+
+        title: {
+          text: 'Monthly Registration Trends '
+        },
+        series: [
+          
+           {
+            type: 'column',
+            colorByPoint: true,
             name: 'Registration in Numbers',
             data: []
           }
-
         ]
+        
       },
-
       
 
       date: [],
@@ -266,19 +327,17 @@ export default {
       }
       this.barOptionsTime.series[0].data = wdata
     },
-    getReg () {
-      var data = []
-      for (var r in this.barOptionsTime.xAxis.categories) {
-        data.push(this.getNumr(this.barOptionsTime.xAxis.categories[r]))
+   
+    getTest ()
+    {
+       var reg = []
+      for (var r in this.barOptionsTest.xAxis.categories) {
+        reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r]))
+        
       }
-      this.barOptionsTime.series[1].data = data
-
-      var data = []
-      for (var i in this.barOptionsTime.xAxis.categories) {
-        data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+     this.barOptionsTest.series[0].data = reg
       }
-      this.barOptionsTime.series[0].data = data
-
+     
     },
 
     getUsers () {
@@ -315,6 +374,8 @@ export default {
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
 
+           //this.userz = this.userz.concat(response.data.data)
+
            this.userz = this.userz.concat(response.data.data)
 
         } else {
@@ -339,7 +400,8 @@ export default {
           i = 11
         }
       }
-     // this.getReg(
+     this.getTest()
+     // this.getReg
       this.getRegistrations()
       this.getLocations()
 
@@ -359,7 +421,7 @@ export default {
     getNumr (name) {
       var counter = 0
       for (var r in this.userz) {
-        var dat = new Date(this.userz[r].created_at)
+        var dat = new Date(this.userz[r].updated_at)
         var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         if (list[dat.getMonth()] === name) {
           console.log(name)
@@ -380,5 +442,5 @@ export default {
     }
 
   }
-}
+
 </script>

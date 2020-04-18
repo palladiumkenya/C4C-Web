@@ -20,6 +20,11 @@
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
 
+            <highcharts
+                  ref="barChart"
+                  :options="barOptionsTime"/>
+
+
             <v-layout wrap>
               <v-flex
                 lg4
@@ -88,11 +93,17 @@
 
               </v-flex>
             </v-layout>
+
           </v-card-text>
 
           <!-- Start Exposure Type -->
 
           <v-card-text v-if="n==2">
+
+            <highcharts
+                  ref="barChart"
+                  :options="barOptions"/>
+
             <v-layout wrap>
               <v-flex
                 lg4
@@ -160,6 +171,7 @@
                   :options="barOptions"/>
               </v-flex>
             </v-layout>
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
           </v-card-text>
 
           <!-- Start Exposure Location -->
@@ -181,6 +193,12 @@
           <!-- Start Exposure Cadre -->
 
           <v-card-text v-if="n==5">
+              
+              
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsCadre"/>
+
 
             <v-layout wrap>
               <v-flex
@@ -251,6 +269,7 @@
               </v-flex>
 
             </v-layout>
+
           </v-card-text>
 
           <!-- Start Exposure Time -->
@@ -351,46 +370,6 @@ export default {
   // eslint-disable-next-line vue/order-in-components
   data () {
     return {
-
-      // cadre
-      rowsPerPageItems: [50],
-      search: '',
-      link: '',
-      output: [],
-      headers: [
-        {
-          text: 'Cadre',
-          value: 'cadre'
-        },
-        {
-          sortable: false,
-          text: 'Number Exposed',
-          value: 'previous_exposures'
-        }
-      ],
-      footer: [
-        {
-          text: 'Total'
-        }
-      ],
-
-      // Type
-      types: [
-        {
-          text: 'Exposure Type',
-          value: 'new_exposures'
-        },
-        {
-          sortable: false,
-          text: 'Number Exposed',
-          value: 'previous_exposures'
-        }
-      ],
-      footer: [
-        {
-          text: 'Total'
-        }
-      ],
 
       value: true,
       value1: true,
@@ -931,7 +910,7 @@ export default {
     // this.barOptions.series[0].data = this.type
     //  },
 
-    getExp () {
+     getExp () {
       axios.get('exposures/all/')
         .then((exp) => {
           this.s = exp.data.data
@@ -993,7 +972,7 @@ export default {
       for (var i in this.gendOptions.xAxis.categories) {
         data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
       }
-      this.gendOptions.series[0].data = datag
+      this.gendOptions.series[0].data = data
       this.value1 = false
 
       var data = []
@@ -1042,7 +1021,7 @@ export default {
         var diff_ms = Date.now() - date.getTime()
         var age_dt = new Date(diff_ms)
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
-        if (age < 26 && cat == 0) {
+        if (age >= 18 && age < 26 && cat == 0) {
           count++
         } else if (age > 25 && age <= 35 && cat == 1) {
           count++
@@ -1054,7 +1033,10 @@ export default {
           count++
         } else if (age > 65 && cat == 5) {
           count++
-        } else {
+        } else if (age < 18 && cat == 6){
+          count++
+        }
+         else {
           count
         }
       }

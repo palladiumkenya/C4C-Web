@@ -46,6 +46,8 @@ const router = new Router({
   }
 })
 
+<<<<<<< HEAD
+=======
   // router.beforeResolve ((to, from, next) => {
   //   if (to.name) {
   //       NProgress.start()
@@ -57,6 +59,7 @@ const router = new Router({
   //     NProgress.done()
   // })
 
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
 Vue.use(Meta)
 
 // Bootstrap Analytics

@@ -33,7 +33,10 @@
           </v-list-tile-title>
         </v-list-tile>
         <v-divider/>
+<<<<<<< HEAD
+=======
         {{user.role_id}}
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
         <div
           v-for="(link, i) in links"
           :key="i"
@@ -83,6 +86,22 @@
                 <v-list-tile-title>{{ link.text }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
+<<<<<<< HEAD
+
+            <v-list-tile
+              v-for="sublink in link.subLinks"
+              :to="sublink.to"
+              :active-class="color"
+              :key="sublink.text"
+              class="v-list-item"
+              avatar
+            >
+              <v-list-tile-action>
+                <v-icon>{{ sublink.icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title v-text="sublink.text" />
+            </v-list-tile>
+=======
             <div
               v-for="sublink in link.subLinks"
               :key="sublink.text">
@@ -115,6 +134,7 @@
               </v-list-tile>
               </template>
             </div>
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
           </v-list-group>
         </div>
       </v-layout>
@@ -127,8 +147,12 @@
 import {
   mapMutations,
   mapState,
+<<<<<<< HEAD
+  mapActions
+=======
   mapActions,
   mapGetters
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
 } from 'vuex'
 import store from './../../store'
 import auth from '../../store/auth.js'
@@ -245,14 +269,22 @@ export default {
           icon: 'mdi-arrow-down-bold-circle',
           subLinks: [
             {
+<<<<<<< HEAD
+              text: 'CME',
+=======
               text: 'Public Resources',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
               to: '/cmes',
               icon: 'mdi-animation'
             },
             {
               to: '/protocals',
               icon: 'mdi-archive',
+<<<<<<< HEAD
+              text: 'Protocals'
+=======
               text: 'Facility Resources'
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
             },
             {
               to: '/covid19_resources',
@@ -275,9 +307,12 @@ export default {
   },
   computed: {
     ...mapState('app', ['image', 'color']),
+<<<<<<< HEAD
+=======
     ...mapGetters({
       user: 'auth/user'
     }),
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     inputValue: {
       get () {
         return this.$store.state.app.drawer
@@ -290,14 +325,20 @@ export default {
       return this.$t('Layout.View.items')
     }
   },
+<<<<<<< HEAD
+
+=======
   created () {
     // this.drawerList()
   },
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
   methods: {
     ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     ...mapActions({
       logoutAction: 'auth/signout'
     }),
+<<<<<<< HEAD
+=======
     drawerList (){
       if (this.user.role_id === 4){
         this.links[6].subLinks.splice(2, 1)
@@ -306,6 +347,7 @@ export default {
         console.log(this.links[7].subLinks)
       }
     },
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     logout () {
       this.logoutAction().then(() => {
         this.pre_out = 'Logged out!'

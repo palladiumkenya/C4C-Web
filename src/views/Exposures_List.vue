@@ -11,6 +11,7 @@
       <v-flex
         md12
       >
+
       <v-snackbar
         color="error"
         v-model="snackbar"
@@ -30,6 +31,7 @@
         mdi-close-circle
       </v-icon>
       </v-snackbar>
+
 
         <material-card
           color="green"
@@ -147,8 +149,10 @@ export default {
       search: '',
       link: '',
       output: [],
+
       result: '',
       snackbar: false,
+
       headers: [
         {
           text: 'No.',
@@ -201,7 +205,7 @@ export default {
     this.getExp()
   },
   methods: {
-    getExp () {
+  getExp () {
       if (this.user.role_id === 1){
         axios.get('exposures/all/')
           .then((exp) => {
@@ -229,6 +233,7 @@ export default {
           })
       }
     },
+
     async loopT (l) {
       var i
       for (i = 0; i < 1;) {
@@ -240,6 +245,8 @@ export default {
           i = 11
         }
       }
+
+      console.log(this.exposures)
     },
     handleDownload () {
       this.downloadLoading = true
