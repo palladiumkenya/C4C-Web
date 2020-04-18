@@ -24,76 +24,6 @@
                   ref="barChart"
                   :options="barOptionsTime"/>
 
-
-            <v-layout wrap>
-              <v-flex
-                lg4
-              >
-                <v-layout wrap>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="primary"
-                      @click="handleDownload">
-                      Excel
-                    </v-btn>
-                  </v-flex>
-                  <br>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="green"
-                      @click="handleDownload">
-                      PDF
-                    </v-btn>
-                  </v-flex>
-
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="blue"
-                      @click="handleDownload">
-                      CSV
-                    </v-btn>
-                  </v-flex>
-
-                </v-layout>
-
-                <v-data-table
-                  :headers="headers"
-                  :items="cadres"
-
-                  :search="search"
-                  :rows-per-page-items="rowsPerPageItems"
-                >
-                  <template
-                    slot="items"
-                    slot-scope="props">
-                    <tr>
-                      <td>{{ props.item.name }}</td>
-                      <td>{{ cadreCount }}</td>
-                    </tr>
-                  </template>
-
-                </v-data-table>
-              </v-flex>
-              <br>
-              <v-flex
-                lg8
-              >
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsTime"/>
-
-              </v-flex>
-            </v-layout>
-
           </v-card-text>
 
           <!-- Start Exposure Type -->
@@ -104,74 +34,6 @@
                   ref="barChart"
                   :options="barOptions"/>
 
-            <v-layout wrap>
-              <v-flex
-                lg4
-              >
-                <v-layout wrap>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="primary"
-                      @click="handleDownload">
-                      Excel
-                    </v-btn>
-                  </v-flex>
-                  <br>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="green"
-                      @click="handleDownload">
-                      PDF
-                    </v-btn>
-                  </v-flex>
-
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="blue"
-                      @click="handleDownload">
-                      CSV
-                    </v-btn>
-                  </v-flex>
-
-                </v-layout>
-
-                <v-data-table
-                  :headers="types"
-                  :items="cadres"
-
-                  :search="search"
-                  :rows-per-page-items="rowsPerPageItems"
-                >
-                  <template
-                    slot="items"
-                    slot-scope="props">
-                    <tr>
-                      <td>{{ props.item.exposure_type }}</td>
-                      <td>{{ props.item.previous_exposures }}</td>
-                    </tr>
-                  </template>
-
-                </v-data-table>
-              </v-flex>
-              <v-flex
-                lg
-                8>
-
-                <highcharts
-                  ref="barChart"
-                  :options="barOptions"/>
-              </v-flex>
-            </v-layout>
->>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
           </v-card-text>
 
           <!-- Start Exposure Location -->
@@ -193,82 +55,10 @@
           <!-- Start Exposure Cadre -->
 
           <v-card-text v-if="n==5">
-              
-              
+    
                 <highcharts
                   ref="barChart"
                   :options="barOptionsCadre"/>
-
-
-            <v-layout wrap>
-              <v-flex
-                lg4
-              >
-                <v-layout wrap>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="primary"
-                      @click="handleDownload">
-                      Excel
-                    </v-btn>
-                  </v-flex>
-                  <br>
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="green"
-                      @click="handleDownload">
-                      PDF
-                    </v-btn>
-                  </v-flex>
-
-                  <v-flex
-                    xs12
-                    md3>
-                    <v-btn
-                      :loading="downloadLoading"
-                      color="blue"
-                      @click="handleDownload">
-                      CSV
-                    </v-btn>
-                  </v-flex>
-
-                </v-layout>
-
-                <v-data-table
-                  :headers="headers"
-                  :items="cadres"
-
-                  :search="search"
-                  :rows-per-page-items="rowsPerPageItems"
-                >
-                  <template
-                    slot="items"
-                    slot-scope="props">
-                    <tr>
-                      <td>{{ props.item.name }}</td>
-                      <td>{{ props.item.previous_exposures }}</td>
-                    </tr>
-                  </template>
-
-                </v-data-table>
-              </v-flex>
-              <v-flex
-                md
-                8>
-                <div
-                  v-if="valuec" />
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsCadre"/>
-              </v-flex>
-
-            </v-layout>
 
           </v-card-text>
 
@@ -370,6 +160,12 @@ export default {
   // eslint-disable-next-line vue/order-in-components
   data () {
     return {
+
+       options: [
+      { text: 'One', value: 'A' },
+      { text: 'Two', value: 'B' },
+      { text: 'Three', value: 'C' }
+    ],
 
       value: true,
       value1: true,
