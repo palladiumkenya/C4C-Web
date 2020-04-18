@@ -116,7 +116,7 @@ export default {
       value2: true,
 
       monthOptions: {
-       xAxis: {
+              xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
             text: 'Months Range'
@@ -310,6 +310,7 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+
     getAllUsers () {
       axios.get('users')
         .then((exp) => {
@@ -333,7 +334,9 @@ export default {
       }
       console.log(this.s)
       this.getAgeData()
+
       this.getsummarydata()
+      // this.getTime()
     },
 
     getAgeData () {
@@ -346,7 +349,6 @@ export default {
 
      // this.mess = 'Data fetched'
     //  this.value = false
-
       // this.mess = 'Data fetched'
       this.value = false
 
@@ -355,10 +357,6 @@ export default {
         data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
       }
       this.gendOptions.series[0].data = data
-
-    // this.mess1 = 'Data fetched'
-    // this.value1 = false
-
       // this.mess1 = 'Data fetched'
       this.value1 = false
 
@@ -384,6 +382,7 @@ export default {
      this.monthOptions.series[0].data = reg
 
     },
+
     getAgeNum (cat) {
       var count = 0
       for (var x in this.s) {
@@ -426,6 +425,7 @@ export default {
         }
       }
       return count
+
     },
 
     getNumr (name) {
@@ -440,7 +440,8 @@ export default {
       }
       return counter
     },
+    }
+
 
   }
-}
 </script>

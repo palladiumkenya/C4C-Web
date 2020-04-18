@@ -106,6 +106,7 @@
 
 
       <!-- Start Graphs -->
+
   <v-flex
         md4
         lg12
@@ -114,6 +115,7 @@
           ref="barChart"
           :options="barOptionsTest"/>
       </v-flex>
+
       <!-- End Graphs -->
       <v-flex
         md4
@@ -124,7 +126,10 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-n    
+
+
+      <!-- Start Tables -->
+
 
     </v-layout>
   </v-container>
@@ -184,6 +189,7 @@ export default {
 
         title: {
           text: 'Monthly Exposure Rate'
+
         },
         series: [
           {
@@ -193,6 +199,7 @@ export default {
             name: 'No of Reported Exposures',
             data: []
           },
+
         ]
         
       },
@@ -250,8 +257,6 @@ export default {
         ]
         
       },
-
-
       
 
       date: [],
@@ -322,14 +327,7 @@ export default {
       }
       this.barOptionsTime.series[0].data = wdata
     },
-    getReg () {
-      var data = []
-      for (var r in this.barOptionsTime.xAxis.categories) {
-        data.push(this.getNumt(this.barOptionsTime.xAxis.categories[r])) 
-      }
-      this.barOptionsTime.series[0].data = data  
-
-    },
+   
     getTest ()
     {
        var reg = []
@@ -338,6 +336,8 @@ export default {
         
       }
      this.barOptionsTest.series[0].data = reg
+      }
+     
     },
 
     getUsers () {
@@ -376,6 +376,8 @@ export default {
 
            //this.userz = this.userz.concat(response.data.data)
 
+           this.userz = this.userz.concat(response.data.data)
+
         } else {
           i = 11
         }
@@ -399,6 +401,7 @@ export default {
         }
       }
      this.getTest()
+     // this.getReg
       this.getRegistrations()
       this.getLocations()
 
@@ -439,5 +442,5 @@ export default {
     }
 
   }
-}
+
 </script>

@@ -12,9 +12,29 @@
           color="success"
           @click="$router.push('add_CME')">
 
-          Add A New CME
+          Add A New Public Resource
         </v-btn>
       </v-flex>
+
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.errors }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
 
       <v-flex
         v-for="result in results"
@@ -45,7 +65,7 @@
             <v-btn
               :style="{left: '50%', transform:'translateX(-50%)'}"
               color="orange"
-              @click="$router.push({ name : 'View CME', params: {id: result.id } })">
+              @click="$router.push({ name : 'View Public Resource', params: {id: result.id } })">
 
               View More
             </v-btn>
@@ -63,7 +83,11 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      results: []
+      results: [],
+      snackbar: false,
+      output: '',
+      result: ''
+
     }
   },
   created () {
@@ -72,12 +96,18 @@ export default {
 
   methods: {
     getResources () {
+
+      const vm = this
       axios.get('resources/cmes')
         .then((resources) => {
           console.log(resources.data)
           this.results = resources.data.data
         })
-        .catch(error => console.log(error.message))
+        .catch(() => {
+          vm.error = true
+          vm.result = 'Check your internet connection or retry logging in.'
+          vm.snackbar = true
+        })
     }
   }
 }

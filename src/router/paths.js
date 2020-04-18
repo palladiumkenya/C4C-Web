@@ -197,7 +197,11 @@ export default [
   },
   {
     path: '/new_bulk_broadcast',
+<<<<<<< HEAD
     name: 'Broadcast Facility',
+=======
+    name: 'New Broadcast Facility',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     view: 'Bulk_Broadcast'
   },
   {
@@ -207,32 +211,56 @@ export default [
   },
   {
     path: '/cmes',
+<<<<<<< HEAD
     name: 'CMES',
+=======
+    name: 'Public Resources',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     view: 'All_Cmes'
   },
   {
     path: '/add_CME',
+<<<<<<< HEAD
     name: 'Add CME',
+=======
+    name: 'Add Public Resource',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     view: 'New_CME'
   },
   {
     path: '/view_CME/:id',
+<<<<<<< HEAD
     name: 'View CME',
+=======
+    name: 'View Public Resource',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     view: 'View_CME'
   },
   {
     path: '/view_Protocal/:id',
+<<<<<<< HEAD
     name: 'View Protocal',
+=======
+    name: 'View Facility Resource',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     view: 'View_Protocal'
   },
   {
     path: '/protocals',
+<<<<<<< HEAD
     name: 'Protocals',
+=======
+    name: 'Facility Resources',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     view: 'All_Protocals'
   },
   {
     path: '/add_protocal',
+<<<<<<< HEAD
     name: 'Add Protocal',
+=======
+    name: 'Add Facility Resource',
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
     view: 'New_Protocal'
   },
   {
@@ -263,6 +291,7 @@ export default [
     path: '/exposure_by_cadre',
     view: 'Exposure_by_cadre'
   }
+<<<<<<< HEAD
   // {
   //   path: '/add_device',
   //   name: 'Add Devices',
@@ -278,3 +307,8 @@ export default [
   //   }
   // }
 ]
+=======
+]
+
+
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a

@@ -11,6 +11,28 @@
       <v-flex
         md12
       >
+
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.errors }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
+
         <v-card>
           <v-card-title>
             All Users
@@ -64,7 +86,8 @@ export default {
   data () {
     return {
       rowsPerPageItems: [50, 250, 500],
-      output: [],
+      output: '',
+      result: '',
       all_users: [],
       headers: [
         {
@@ -106,7 +129,11 @@ export default {
           this.all_users = users.data.data
           this.loopT(users.data.links.next)
         })
-        .catch(error => console.log(error.message))
+        .catch(() => {
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
+        })
     },
     async loopT (l) {
       var i

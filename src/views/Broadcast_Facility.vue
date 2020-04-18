@@ -8,6 +8,27 @@
       justify-center
       wrap
     >
+
+     <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.error }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
       <v-flex
         xs12
         text-xs-right
@@ -82,10 +103,13 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       output: [],
+      result: '',
+      snackbar: 'false',
       rowsPerPageItems: [50, 250, 500],
       all_messages: [],
       search: '',
@@ -118,6 +142,11 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   created () {
     this.getBroadcast()
   },
@@ -128,7 +157,11 @@ export default {
           console.log(broadcast.data)
           this.all_messages = broadcast.data.data
         })
-        .catch(error => console.log(error.message))
+        .catch(() => {
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
+    })
     }
   },
   async loopT (l) {

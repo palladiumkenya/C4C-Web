@@ -156,6 +156,10 @@
    import format from 'date-fns/format'
   import {mapGetters, mapState} from 'vuex'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c1efdb1e3d4faabfef609988b8f66e3e8b0fe83a
 export default {
 
 
