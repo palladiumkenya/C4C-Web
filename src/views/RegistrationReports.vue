@@ -116,20 +116,30 @@ export default {
       value2: true,
 
       monthOptions: {
-        xAxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Undefined'],
+       xAxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Monthly Registration'
+            text: 'Months Range'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No of Registration',
             align: 'high'
           },
           labels: {
-            overflow: 'justify'
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
           }
         },
         plotOptions: {
@@ -139,19 +149,25 @@ export default {
             }
           }
         },
+
         chart: {
           type: 'column'
         },
+
         title: {
-          text: 'Monthly Registration'
+          text: 'Monthly Registration Trends '
         },
         series: [
-          {
-            name: 'Numbers',
+          
+           {
+            type: 'column',
+            colorByPoint: true,
+            name: 'Registration in Numbers',
             data: []
           }
         ]
       },
+
       barOptions: {
         xAxis: {
           categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
@@ -276,6 +292,7 @@ export default {
 
   created () {
     this.getUsers()
+    this.getAllUsers()
   },
   methods: {
     getUsers () {
@@ -293,6 +310,16 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+    getAllUsers () {
+      axios.get('users')
+        .then((exp) => {
+          this.userz = exp.data.data
+          console.log(exp.data.data)
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
+    },
     async loopT (l) {
       var i
       for (i = 0; i < 1;) {
@@ -306,7 +333,7 @@ export default {
       }
       console.log(this.s)
       this.getAgeData()
-      // this.getTime()
+      this.getsummarydata()
     },
 
     getAgeData () {
@@ -346,6 +373,16 @@ export default {
 
       // this.mess1 = 'Data fetched'
       this.value1 = false
+    },
+
+    getsummarydata (){
+        var reg = []
+      for (var r in this.monthOptionsTest.xAxis.categories) {
+        reg.push(this.getNumr(this.monthOptionsTest.xAxis.categories[r]))
+        
+      }
+     this.monthOptions.series[0].data = reg
+
     },
     getAgeNum (cat) {
       var count = 0
@@ -389,7 +426,20 @@ export default {
         }
       }
       return count
-    }
+    },
+
+    getNumr (name) {
+      var counter = 0
+      for (var r in this.userz) {
+        var dat = new Date(this.userz[r].updated_at)
+        var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        if (list[dat.getMonth()] === name) {
+          console.log(name)
+          counter++
+        }
+      }
+      return counter
+    },
 
   }
 }
