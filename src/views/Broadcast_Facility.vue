@@ -10,23 +10,24 @@
     >
 
      <v-snackbar
-        color="error"
-        v-model="snackbar"
-        :timeout="12000"
-        top>
+      color="error"
+      v-model="snackbar"
+      :timeout="1200"
+      top
+      >
         <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{ output.error }} {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
+          color="white"
+          class="mr-3"
+        >
+          mdi-bell-plus
+        </v-icon>
+        <div> {{ output.error }} {{result}}</div>
+        <v-icon
+          size="16"
+          @click="snackbar = false"
+        >
+          mdi-close-circle
+        </v-icon>
       </v-snackbar>
 
       <v-flex
@@ -109,7 +110,7 @@ export default {
     return {
       output: [],
       result: '',
-      snackbar: 'false',
+      snackbar: false,
       rowsPerPageItems: [50, 250, 500],
       all_messages: [],
       search: '',
@@ -152,27 +153,40 @@ export default {
   },
   methods: {
     getBroadcast () {
-      axios.get('broadcasts/web/all')
-        .then((broadcast) => {
-          console.log(broadcast.data)
-          this.all_messages = broadcast.data.data
-        })
-        .catch(() => {
-          this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
-          this.snackbar = true
-    })
-    }
-  },
-  async loopT (l) {
-    var i
-    for (i = 0; i < 1;) {
-      if (l != null) {
-        let response = await axios.get(l)
-        l = response.data.links.next
-        this.all_messages = this.all_messages.concat(response.data.data)
-      } else {
-        i = 11
+      if (this.user.role_id === 1){
+        axios.get('broadcasts/web/all')
+          .then((broadcast) => {
+            console.log(broadcast.data)
+            this.all_messages = broadcast.data.data
+          })
+          .catch(() => {
+            this.snackbar = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      } else if(this.user.role_id === 4){
+        axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
+          .then((broadcast) => {
+            console.log(broadcast.data)
+            this.all_messages = broadcast.data.data
+          })
+          .catch(() => {
+            this.snackbar = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      }
+    },
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.all_messages = this.all_messages.concat(response.data.data)
+        } else {
+          i = 11
+        }
       }
     }
   }

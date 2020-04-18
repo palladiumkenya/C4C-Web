@@ -34,6 +34,7 @@
               <v-layout wrap>
 
                 <v-flex
+                  v-if="user.role_id === 1"
                   xs12
                 >
                   <v-combobox
@@ -49,6 +50,17 @@
                     label="Select Facility"
                     required
                   />
+                </v-flex>
+                <v-flex
+                  v-else
+                >
+                  <label>Facility:</label>
+                  <v-chip
+                    class="ma-2"
+                    x-large
+                  >
+                    {{ user.hcw.facility.name }}
+                  </v-chip>
                 </v-flex>
 
                 <v-flex
@@ -125,6 +137,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -153,6 +166,11 @@ export default {
       }
 
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
   created () {
     this.getCadres()
@@ -184,23 +202,41 @@ export default {
 
     postBroadcast (e) {
       e.preventDefault()
+      if (this.user.role_id === 1) {
+        axios.post('broadcasts/web/create', {
+          facility_id: this.facility.id,
 
-      axios.post('broadcasts/web/create', {
-        facility_id: this.facility.id,
+          cadres: this.cadres.map(item => item.id),
+          message: this.message
+        })
+          .then((response) => {
+            this.output = response.data
+            this.resp = Boolean(response.data.success)
+            this.snack('top', 'center')
+            this.$router.push('/broadcast')
+          })
+          .catch(error => {
+            this.output = error
+            this.snack('top', 'center')
+          })
+      } else if (this.role_id === 4){
+        axios.post('broadcasts/web/create', {
+          facility_id: this.user.hcw.facility_id,
 
-        cadres: this.cadres.map(item => item.id),
-        message: this.message
-      })
-        .then((response) => {
-          this.output = response.data
-          this.resp = Boolean(response.data.success)
-          this.snack('top', 'center')
-          this.$router.push('/broadcast')
+          cadres: this.cadres.map(item => item.id),
+          message: this.message
         })
-        .catch(error => {
-          this.output = error
-          this.snack('top', 'center')
-        })
+          .then((response) => {
+            this.output = response.data
+            this.resp = Boolean(response.data.success)
+            this.snack('top', 'center')
+            this.$router.push('/broadcast')
+          })
+          .catch(error => {
+            this.output = error
+            this.snack('top', 'center')
+          })
+      }
     },
     snack (...args) {
       this.top = false
