@@ -1,0 +1,303 @@
+<template>
+  <v-navigation-drawer
+    id="app-drawer"
+    v-model="inputValue"
+    app
+    dark
+    floating
+    persistent
+    mobile-break-point="991"
+    width="270"
+  >
+    <v-img
+      :src="image"
+      height="100%"
+    >
+      <v-layout
+        class="fill-height items"
+        tag="v-list"
+        column
+      >
+        <v-list-tile avatar>
+          <v-list-tile-avatar
+            color="white"
+          >
+            <v-img
+              :src="logo"
+              height="34"
+              contain
+            />
+          </v-list-tile-avatar>
+          <v-list-tile-title class="title">
+            Care For The Carer
+          </v-list-tile-title>
+        </v-list-tile>
+        <v-divider/>
+        <div
+          v-for="(link, i) in links"
+          :key="i"
+          dense>
+          <v-list-tile
+            v-if="link.text == 'Logout'"
+            :active-class="color"
+            avatar
+            class="v-list-item"
+          >
+            <v-list-tile-action>
+              <v-icon>{{ link.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title
+              @click="logout"
+              v-text="link.text"
+            />
+          </v-list-tile>
+          <v-list-tile
+            v-else-if="!link.subLinks"
+            :to="link.to"
+            :active-class="color"
+            avatar
+            class="v-list-item"
+          >
+            <v-list-tile-action>
+              <v-icon>{{ link.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title
+              v-text="link.text"
+            />
+          </v-list-tile>
+          <v-list-group
+            v-else
+            :key="link.text"
+            no-action
+          >
+            <v-list-tile
+              slot="activator"
+              :active-class="color"
+              class="v-list-item"
+              avatar>
+              <v-list-tile-action>
+                <v-icon>{{ link.icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ link.text }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile
+              v-for="sublink in link.subLinks"
+              :to="sublink.to"
+              :active-class="color"
+              :key="sublink.text"
+              class="v-list-item"
+              avatar
+            >
+              <v-list-tile-action>
+                <v-icon>{{ sublink.icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title v-text="sublink.text" />
+            </v-list-tile>
+          </v-list-group>
+        </div>
+      </v-layout>
+    </v-img>
+  </v-navigation-drawer>
+</template>
+
+<script>
+// Utilities
+import {
+  mapMutations,
+  mapState,
+  mapActions
+} from 'vuex'
+import store from './../../store'
+import auth from '../../store/auth.js'
+
+export default {
+  props: {
+    opened: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      pre_out: '',
+      logo: 'c4c_new.png',
+      links: [
+        {
+          to: '/',
+          icon: 'mdi-view-dashboard',
+          text: 'Dashboard'
+        },
+        {
+          icon: 'mdi-account',
+          text: 'Users',
+          subLinks: [
+            {
+              text: 'Upload HCW',
+              to: '/add-user',
+              icon: 'mdi-account-plus'
+            },
+            {
+              to: '/users_list',
+              icon: 'mdi-account-multiple-plus',
+              text: 'View Users'
+            },
+            {
+              to: '/hcw_list',
+              icon: 'mdi-account-group',
+              text: 'Health Care Workers'
+            }
+          ]
+        },
+        {
+          to: 'registration-reports',
+          icon: 'mdi-transcribe',
+          text: 'Registration Reports'
+        },
+        {
+          icon: 'mdi-alert-circle-outline',
+          text: 'Exposures',
+          subLinks: [
+            {
+              text: 'Exposure report',
+              to: '/exposures',
+              icon: 'mdi-chart-bar'
+            },
+            {
+              to: '/exposure-list',
+              icon: 'mdi-playlist-check',
+              text: 'Exposures List'
+            }
+          ]
+        },
+        {
+
+          icon: 'mdi-account-edit',
+          text: 'Immunizations',
+          subLinks: [
+            {
+              text: 'HBV Reports',
+              to: '/hbv-summary',
+              icon: 'mdi-signal-hspa-plus'
+            },
+            {
+              to: '/other-diseases',
+              icon: 'mdi-chart-line',
+              text: 'Other Diseases'
+            }
+          ]
+        },
+        {
+          to: '/broadcast',
+          icon: 'mdi-account-switch',
+          text: 'Broadcasts'
+        },
+        {
+          text: 'Manage Facility',
+          icon: 'mdi-settings',
+          subLinks: [
+            // {
+            //   to: '/add_device',
+            //   icon: 'mdi-gamepad',
+            //   text: 'Devices'
+            // },
+            {
+              to: '/departments',
+              icon: 'mdi-file-tree',
+              text: 'Departments'
+            },
+            {
+              to: '/checkin',
+              icon: 'mdi-crosshairs-gps',
+              text: 'Checkin'
+            },
+            {
+              to: '/facility-admin',
+              icon: 'mdi-lock-pattern',
+              text: 'Facility Admins'
+            }
+          ]
+        },
+        {
+          text: 'Resource Center',
+          icon: 'mdi-arrow-down-bold-circle',
+          subLinks: [
+            {
+              text: 'CME',
+              to: '/cmes',
+              icon: 'mdi-animation'
+            },
+            {
+              to: '/protocals',
+              icon: 'mdi-archive',
+              text: 'Protocals'
+            },
+            {
+              to: '/covid19_resources',
+              icon: 'mdi-alert-decagram',
+              text: 'COVID 19 Resources'
+            }
+          ]
+        },
+        {
+          to: '/feed-back',
+          icon: 'mdi-bullhorn',
+          text: 'Feedback'
+        },
+        {
+          icon: 'mdi-clipboard-outline',
+          text: 'Logout'
+        }
+      ]
+    }
+  },
+  computed: {
+    ...mapState('app', ['image', 'color']),
+    inputValue: {
+      get () {
+        return this.$store.state.app.drawer
+      },
+      set (val) {
+        this.setDrawer(val)
+      }
+    },
+    items () {
+      return this.$t('Layout.View.items')
+    }
+  },
+
+  methods: {
+    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
+    ...mapActions({
+      logoutAction: 'auth/signout'
+    }),
+    logout () {
+      this.logoutAction().then(() => {
+        this.pre_out = 'Logged out!'
+        this.$router.replace({
+          name: 'login'
+        })
+      })
+    }
+
+  }
+}
+</script>
+
+<style lang="scss">
+  #app-drawer {
+    .v-list__tile {
+      border-radius: 4px;
+
+      &--buy {
+        margin-top: auto;
+        margin-bottom: 17px;
+      }
+    }
+  }
+  .items {
+    overflow: auto;
+  }
+</style>
