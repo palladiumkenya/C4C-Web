@@ -74,6 +74,7 @@
 
 <script>
 import axios from 'axios'
+
 import { mapGetters } from 'vuex'
 export default {
   data () {
@@ -111,16 +112,26 @@ export default {
       ]
     }
   },
+
   computed: {
     ...mapGetters({
       user: 'auth/user'
     })
   },
+
   created () {
     this.getBroadcast()
   },
   methods: {
     getBroadcast () {
+      axios.get('broadcasts/web/all')
+        .then((broadcast) => {
+          console.log(broadcast.data)
+          this.all_messages = broadcast.data.data
+          this.loopT(broadcast.data.links.next)
+        })
+        .catch(error => console.log(error.message))
+
       if (this.user.role_id === 1) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {
@@ -138,6 +149,7 @@ export default {
           })
           .catch(error => console.log(error.message))
       }
+
     },
     async loopT (l) {
       var i
@@ -151,6 +163,7 @@ export default {
         }
       }
       console.log(this.all_messages)
+
     }
   }
 }

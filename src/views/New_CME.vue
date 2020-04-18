@@ -14,7 +14,7 @@
       >
         <material-card
           color="green"
-          title="Create A Resource For Continuous Medical Education "
+          title="Create A Public Resource "
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>

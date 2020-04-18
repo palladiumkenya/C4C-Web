@@ -245,14 +245,14 @@ export default {
           icon: 'mdi-arrow-down-bold-circle',
           subLinks: [
             {
-              text: 'CME',
+              text: 'Public Resources',
               to: '/cmes',
               icon: 'mdi-animation'
             },
             {
               to: '/protocals',
               icon: 'mdi-archive',
-              text: 'Protocals'
+              text: 'Facility Resources'
             },
             {
               to: '/covid19_resources',

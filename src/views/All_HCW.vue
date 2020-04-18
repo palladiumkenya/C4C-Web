@@ -12,6 +12,26 @@
         md12
       >
 
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.errors }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
         <v-card>
           <v-card-title>
             Health Care Workers
@@ -68,9 +88,10 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      search: '',
-      output: [],
       all_hcws: [],
+      snackbar: false,
+      output: '',
+      result: '',
       rowsPerPageItems: [50, 250, 500],
       headers: [
         {
@@ -121,27 +142,17 @@ export default {
   },
   methods: {
     getHCW () {
-      if (this.user.role_id === 1) {
-        axios.get('hcw')
-          .then((workers) => {
-            console.log(workers.data)
-            this.all_hcws = workers.data.data
-            if (workers.data.links.next) {
-              this.loopT(workers.data.links.next)
-            }
-          })
-          .catch(error => console.log(error.message))
-      } else if (this.user.role_id === 4) {
-        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-          .then((workers) => {
-            console.log(workers.data)
-            this.all_hcws = workers.data.data
-            if (workers.data.links.next) {
-              this.loopT(workers.data.links.next)
-            }
-          })
-          .catch(error => console.log(error.message))
-      }
+      axios.get('hcw')
+        .then((workers) => {
+          console.log(workers.data)
+          this.all_hcws = workers.data.data
+          this.loopT(workers.data.links.next)
+        })
+        .catch(() => {
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
+        })
     },
     async loopT (l) {
       var i

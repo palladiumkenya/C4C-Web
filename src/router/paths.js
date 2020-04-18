@@ -255,7 +255,7 @@ export default [
   },
   {
     path: '/cmes',
-    name: 'CMES',
+    name: 'Public Resources',
     view: 'All_Cmes',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
@@ -268,7 +268,7 @@ export default [
   },
   {
     path: '/add_CME',
-    name: 'Add CME',
+    name: 'Add Public Resource',
     view: 'New_CME',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
@@ -281,7 +281,7 @@ export default [
   },
   {
     path: '/view_CME/:id',
-    name: 'View CME',
+    name: 'View Public Resource',
     view: 'View_CME',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
@@ -294,7 +294,7 @@ export default [
   },
   {
     path: '/view_Protocal/:id',
-    name: 'View Protocal',
+    name: 'View Facility Resource',
     view: 'View_Protocal',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
@@ -307,7 +307,7 @@ export default [
   },
   {
     path: '/protocals',
-    name: 'Protocals',
+    name: 'Facility Resources',
     view: 'All_Protocals',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
@@ -320,7 +320,7 @@ export default [
   },
   {
     path: '/add_protocal',
-    name: 'Add Protocal',
+    name: 'Add Facility Resource',
     view: 'New_Protocal',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
@@ -391,18 +391,6 @@ export default [
       next()
     }
   }
-  // {
-  //   path: '/add_device',
-  //   name: 'Add Devices',
-  //   view: 'AddDevices',
-  //   meta: { title: 'Add Devices' },
-  //   beforeEnter: (to, from, next) => {
-  //     if (!store.getters['auth/authenticated']) {
-  //       return next({
-  //         name: 'login'
-  //       })
-  //     }
-  //     next()
-  //   }
-  // }
 ]
+
+

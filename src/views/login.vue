@@ -125,6 +125,7 @@ export default {
           vm.error = true
           vm.result = 'Email or Password is incorrect.'
           vm.showResult = true
+          vm.snackbar = true
         })
     }
   }

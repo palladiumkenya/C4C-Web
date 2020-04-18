@@ -17,7 +17,8 @@
             <v-card-text>
               <div/>
               <p class="display-1 text--primary">
-                Add A New Protocal
+
+                Add A New Facility Protocal
               </p>
               <div class="text--primary">
                 Kindly fill all the required fields
