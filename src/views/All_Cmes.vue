@@ -71,7 +71,7 @@
 
             <v-btn icon
               color="green"
-              @click="$router.push({ name : 'Edit Publci Resource', params: {id: result.id } })">
+              @click="$router.push({ name : 'Edit Public Resource', params: {id: result.id } })">
               <v-icon> mdi-pencil </v-icon>
             </v-btn>
 

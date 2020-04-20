@@ -293,7 +293,7 @@ export default [
     }
   },
   {
-    path: '/edit_public-resource/:id',
+    path: '/edit_public_resource/:id',
     name: 'Edit Public Resource',
     view: 'Edit_CME'
   },
@@ -338,8 +338,8 @@ export default [
   },
   {
     path: '/edit_protocol/:id',
-    name: 'Edit Facility_Resource',
-    view: 'Edit_Facility_Resource'
+    name: 'Edit Facility Resource',
+    view: 'Edit_Protocol'
   },
   {
     path: '/departments',
