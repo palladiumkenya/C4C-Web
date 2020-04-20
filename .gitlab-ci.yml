@@ -17,9 +17,4 @@ unit test:
     - yarn install 
     - npm run test
 
-deploy:
-  image: docker
-  services:
-    - docker:dind
-  stages:
-    - deploy
+
