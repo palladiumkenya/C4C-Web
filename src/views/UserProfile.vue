@@ -103,7 +103,7 @@
                   class="ma-2"
                   x-large
                 >
-                  {{ user.hcw.facility.name }}
+                  {{ user.hcw.facility_name }}
                 </v-chip>
               </v-flex>
               <v-flex

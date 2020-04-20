@@ -82,31 +82,141 @@
       <!-- End Cards -->
 
       <template>
+   <!-- Start filters -->
 
-        <!-- Start filters -->
+           <v-layout >
+              <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
 
-               <core-filters/>
-                <v-flex
-          md6
-          lg12
-        >
-          <v-btn
-            :loading="loading2"
-            :disabled="loading2"
-            block
-            color="success"
-            @click="loader = 'loading2'"
-          >
-            Filter
-            <template v-slot:loader/>
-          </v-btn>
-        </v-flex>
+            <template>
+
+                 <v-combobox
+          v-model="counties"
+          item-text="name"
+          item-value="id"
+          :items="all_counties"
+          label="Select County"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+               <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
+
+            <template>
+
+                 <v-combobox
+          v-model="subcounties"
+          item-text="name"
+          item-value="id"
+          :items="all_subcounties"
+          label="Select Sub-County"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+              <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
+
+            <template>
+
+                 <v-combobox
+          v-model="facility"
+          item-text="partner"
+          item-value="id"
+          :items="all_facilities"
+          label="Select Partner"
+          multiple
+          clerable
+          disabled
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+              <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
+
+            <template>
+
+                 <v-combobox
+
+          :items="all_facilities_level"
+          label="Select Facility Level"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+           <v-flex
+           xs12
+             md6
+            lg3
+           >
+            <template>
+                 <v-combobox
+          v-model="facility"
+          item-text="name"
+          item-value="id"
+          :items="all_facilities"
+          label="Select Facility"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+           </v-flex>
+           </v-layout>
+    
+
+            <template>
+
+              <input type="date" v-model="startDate">
+              <input type="date" v-model="endDate">
+            </template>
+
+                <template>
+                  <v-btn block color="secondary" dark>Filter</v-btn>
+                </template>
+               
             <!-- End filters -->
       </template>
 
 
       <!-- Start Graphs -->
   <v-flex
+        sm3
+        xs8
         md4
         lg12
       >
@@ -116,6 +226,8 @@
       </v-flex>
       <!-- End Graphs -->
       <v-flex
+        sm3
+        xs8
         md4
         lg12
       >
@@ -143,6 +255,14 @@ export default {
   },
   data () {
     return {
+
+       facility: '',
+       counties: '',
+       subcounties: '',
+      all_facilities: [],
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_counties: [],
+      all_subcounties: [],
 
      barOptionsTime: {
         xAxis: {
@@ -297,24 +417,81 @@ export default {
       })
     }
     this.getExp()
-    this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
+    this.getFacilities()
+    this.getCounties()
+    this.getSubCounties()
 
   },
   methods: {
 
-    getExp () {
-      axios.get('exposures/all/')
-        .then((exp) => {
-          this.scount = exp.data.meta.total
-          this.s = exp.data.data
-          console.log(exp.data.data)
-          this.link = exp.data.links.next
-          this.loopT(this.link)
+     
+
+     getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+          this.all_counties = facilities.data.data
+          if (facilities.data.links.next != null) {
+            this.link = facilities.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    }, 
+     getCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          console.log(counties.data)
+          this.all_counties = counties.data.data
+          if (counties.data.links.next != null) {
+            this.link = counties.data, links.next
+            this.loopT(this.link)
+          }
         })
         .catch(error => console.log(error.message))
     },
+
+    getSubCounties () {
+      axios.get('subcounties/3')
+        .then((subcounties) => {
+          console.log(subcounties.data)
+          this.all_subcounties = subcounties.data.data
+          if (subcounties.data.links.next != null) {
+            this.link = subcounties.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getExp () {
+      // if (this.user.role_id === 1) {
+        axios.get('exposures/all/')
+          .then((exp) => {
+            this.scount = exp.data.meta.total
+            this.s = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          })
+          .catch(error => console.log(error.message))
+      // } else if (this.user.role_id === 4){
+      //   axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+      //     .then((exp) => {
+      //       this.scount = exp.data.meta.total
+      //       this.s = exp.data.data
+      //       console.log(exp.data.data)
+      //       this.link = exp.data.links.next
+      //       this.loopT(this.link)
+      //     })
+      //     .catch(error => console.log(error.message))
+      // }
+    },
+
+    
 
     getMonth () {
 
@@ -334,31 +511,46 @@ export default {
      this.barOptionsTest.series[0].data = reg
       },
 
-    getUsers () {
-      axios.get('users')
-        .then((users) => {
-          this.u = users.data.meta.total
-        })
-        .catch(error => console.log(error.message))
-    },
     getAllUsers () {
-      axios.get('users')
-        .then((exp) => {
-          this.userz = exp.data.data
-          console.log(exp.data.data)
-          this.link = exp.data.links.next
-          this.loopG(this.link)
-        })
-        .catch(error => console.log(error.message))
+      // if (this.user.role_id === 1) {
+        axios.get('users')
+          .then((exp) => { 
+            this.u = exp.data.meta.total
+            this.userz = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+      // } else if (this.user.role_id === 4) {
+      //   axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+      //     .then((exp) => { 
+      //       this.u = exp.data.meta.total
+      //       this.userz = exp.data.data
+      //       console.log(exp.data.data)
+      //       this.link = exp.data.links.next
+      //       this.loopG(this.link)
+      //     })
+      //     .catch(error => console.log(error.message))
+      // }
     },
 
     getBroadcasts () {
-      axios.get('broadcasts/web/all')
-        .then((users) => {
-          // console.log(users.data.meta.total)
-          this.b = users.data.meta.total
-        })
-        .catch(error => console.log(error.message))
+      if (this.user.role_id === 1) {
+        axios.get('broadcasts/web/all')
+          .then((users) => {
+            // console.log(users.data.meta.total)
+            this.b = users.data.meta.total
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
+          .then((users) => {
+            // console.log(users.data.meta.total)
+            this.b = users.data.meta.total
+          })
+          .catch(error => console.log(error.message))
+      }
     },
     async loopT (l) {
       var i
@@ -430,7 +622,8 @@ export default {
         }
       }
       return counter
-    }
+    },
+    
 
   }
 }

@@ -52,10 +52,10 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.cadre.name }}</td>
+                <td>{{ props.item.cadre.id }}</td>
                 <td>{{ props.item.created_by }}</td>
                 <td>{{ props.item.approved_by }}</td>
-                <td>{{ props.item.facility.name }}</td>
+                <td>{{ props.item.facility }}</td>
                 <td>{{ props.item.message }}</td>
               </tr>
             </template>
@@ -126,14 +126,6 @@ export default {
   },
   methods: {
     getBroadcast () {
-      axios.get('broadcasts/web/all')
-        .then((broadcast) => {
-          console.log(broadcast.data)
-          this.all_messages = broadcast.data.data
-          this.loopT(broadcast.data.links.next)
-        })
-        .catch(error => console.log(error.message))
-
       if (this.user.role_id === 1) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {

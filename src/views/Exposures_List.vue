@@ -205,7 +205,7 @@ export default {
     this.getExp()
   },
   methods: {
-  getExp () {
+    getExp () {
       if (this.user.role_id === 1){
         axios.get('exposures/all/')
           .then((exp) => {
@@ -216,22 +216,25 @@ export default {
             }
           })
           .catch(() => {
-          this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
-          this.snackbar = true
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
           })
-
-        } else if (this.user.role_id === 4) {
-          console.log(this.user.hcw.facility_id)
+      } else if (this.user.role_id === 4) {
           axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
             .then((exp) => {
               this.exposures = exp.data.data
               this.link = exp.data.links.next
-            if (this.link) {
-              this.loopT(this.link)
-            }
-          })
-      }
+              if (this.link) {
+                this.loopT(this.link)
+              }
+            })
+            .catch(() => {
+              this.error = true
+              this.result = 'Check your internet connection or retry logging in.'
+              this.snackbar = true
+            })
+        }
     },
 
     async loopT (l) {
