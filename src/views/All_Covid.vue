@@ -16,7 +16,9 @@
         </v-btn>
       </v-flex>
 
-      <v-flex
+      <Loader v-if="loading" />
+
+      <v-flex v-else
         v-for="result in results"
         :key="result.id"
         xs12
@@ -59,11 +61,15 @@
 
 <script>
 import axios from 'axios'
+import Loader from '../components/core/Loader.vue'
 
 export default {
+  components : { Loader },
+
   data () {
     return {
       results: [],
+      loading: true,
       dialog: false
     }
   },
@@ -76,12 +82,15 @@ export default {
       axios.get('resources/cmes')
         .then((resources) => {
           console.log(resources.data)
-          this.results = resources.data.data
-          NProgress.start()
-
+          
+          this.loading = false
         })
-        .catch(error => console.log(error.message))
-    }
+        .catch((error) => {
+        console.log(error.message)
+        
+        this.loading = false
+        })
   }
+}
 }
 </script>

@@ -42,6 +42,8 @@
             :headers="headers"
             :items="all_messages"
             :search="search"
+            loading
+            loading-text="Loading... Please wait"
             :rows-per-page-items="rowsPerPageItems"
             show-actions
             item-key="id"

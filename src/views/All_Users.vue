@@ -8,10 +8,11 @@
       justify-center
       wrap
     >
+    
       <v-flex
         md12
       >
-
+    
       <v-snackbar
         color="error"
         v-model="snackbar"
@@ -32,7 +33,6 @@
       </v-icon>
       </v-snackbar>
 
-
         <v-card>
           <v-card-title>
             All Users
@@ -49,6 +49,8 @@
           <v-data-table
             :headers="headers"
             :items="all_users"
+            loading 
+            loading-text="Loading... Please wait"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
             item-key="id"
@@ -73,7 +75,9 @@
             </v-alert>
 
           </v-data-table>
+
         </v-card>
+
       </v-flex>
 
     </v-layout>
@@ -87,7 +91,9 @@ export default {
     return {
       rowsPerPageItems: [50, 250, 500],
       output: '',
+      search: '',
       result: '',
+      loading:false,
       all_users: [],
       headers: [
         {
@@ -123,6 +129,7 @@ export default {
   },
   methods: {
     getUsers () {
+      this.loading = true
       axios.get('users')
         .then((users) => {
           console.log(users.data)
@@ -134,6 +141,9 @@ export default {
           this.result = 'Check your internet connection or retry logging in.'
           this.snackbar = true
         })
+        .finally(() => 
+        (this.loading = false ))
+      
     },
     async loopT (l) {
       var i

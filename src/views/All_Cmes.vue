@@ -36,14 +36,14 @@
       </v-icon>
       </v-snackbar>
 
-      <v-flex
+
+      <v-flex 
         v-for="result in results"
         :key="result.id"
         xs12
         sm6
         md6
         lg4>
-        <template>
 
           <v-card
             class="mx-auto"
@@ -62,16 +62,28 @@
               <div><span>Created On: </span>{{ result.created_at }}</div>
             </v-card-text>
 
-            <v-btn
-              :style="{left: '50%', transform:'translateX(-50%)'}"
+            <v-card-actions>
+            <v-btn icon 
               color="orange"
               @click="$router.push({ name : 'View Public Resource', params: {id: result.id } })">
-
-              View More
+              <v-icon> mdi-plus </v-icon>
             </v-btn>
 
+            <v-btn icon
+              color="green"
+              @click="$router.push({ name : 'Edit Public Resource', params: {id: result.id } })">
+              <v-icon> mdi-pencil </v-icon>
+            </v-btn>
+
+            <v-btn icon
+              color="red"
+              @click=" deleteResource(); $router.push({ name : 'Public Resources'}); ">
+              <v-icon> mdi-delete </v-icon>
+            </v-btn>
+
+            </v-card-actions>
+
           </v-card>
-        </template>
       </v-flex>
     </v-layout>
   </v-container>
@@ -81,13 +93,14 @@
 import axios from 'axios'
 
 export default {
+
   data () {
     return {
       results: [],
       snackbar: false,
       output: '',
-      result: ''
-
+      result: '',
+      loading: true
     }
   },
   created () {
@@ -97,17 +110,37 @@ export default {
   methods: {
     getResources () {
 
-      const vm = this
       axios.get('resources/cmes')
         .then((resources) => {
           console.log(resources.data)
           this.results = resources.data.data
+          this.loading = false
+
         })
         .catch(() => {
-          vm.error = true
-          vm.result = 'Check your internet connection or retry logging in.'
-          vm.snackbar = true
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
         })
+    },
+
+    deleteResource() {
+      axios.delete('')
+      .then((response) => {
+        console.log(response.data)
+        this.result = resource.data.data
+        this.loading = true
+
+        this.result = 'Deleted Successfully'
+          
+        this.snackbar = true
+      })
+      .catch(() => {
+        this.error = true
+        this.result = 'Failed, please try again'
+        this.snackbar = true
+      })
+
     }
   }
 }

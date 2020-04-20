@@ -18,20 +18,18 @@
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
-            <div/> 
+            <div/>
             <p class="display-1 text--primary">
-              Add A New Public Resource
+              Edit Public Resource
             </p>
-            <div class="text--primary">
-              Kindly fill all the required fields
-            </div>
+           
           </v-card-text>
 
           <v-form
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit="postCME">
+            @submit="editCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -42,7 +40,7 @@
                   <v-text-field
                     id="title"
                     :rules="titleRules"
-                    v-model="title"
+                    v-model="cme.title"
                     required
                     label="Title"
                     class="purple-input"/>
@@ -52,7 +50,7 @@
                   <ckeditor
                     id="editorData"
                     :editor="editor"
-                    v-model="editorData"
+                    v-model="cme.body"
                     :rules="bodyRules"
                     :config="editorConfig"
                     placeholder="Write here"
@@ -64,7 +62,7 @@
                   <input
                     id="file"
                     ref="file"
-                    value="file"
+                    value="cme.file"
                     accept="image/*"
                     type="file"
                     @change="handleImageChange()">
@@ -77,6 +75,7 @@
                 <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
+                    value="cme.files"
                     id="files"
                     ref="files"
                     type="file"
@@ -105,7 +104,7 @@
                     type="submit"
                     @click="validateData(); alert=!alert; dialog1=true"
                   >
-                    Submit
+                    Save
                   </v-btn>
 
                   <v-dialog
@@ -158,7 +157,7 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      editorData: '',
+      body: '',
       editorConfig: {
         // The configuration of the editor.
       },
@@ -223,7 +222,23 @@ export default {
       this.files.splice(key, 1)
     },
 
-    postCME (e) {
+    created() {
+       getCME()
+    },
+
+    getCME () {
+      var id = this.$route.params.id
+       axios.get('resources/cmes/' + id)
+        .then((response) =>{
+        this.cme = response.data.data 
+        console.log(response.data.data)
+
+        }).catch((error) => {
+        console.log(error)
+        })
+    },
+
+    editCME (e) {
       e.preventDefault()
 
       let allData = new FormData()
@@ -236,7 +251,7 @@ export default {
       }
       allData.append('image_file', this.file)
       allData.append('title', this.title)
-      allData.append('body', this.editorData)
+      allData.append('body', this.body)
 
       axios({
         method: 'POST',
