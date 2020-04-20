@@ -36,14 +36,14 @@
       </v-icon>
       </v-snackbar>
 
-      <v-flex
+
+      <v-flex 
         v-for="result in results"
         :key="result.id"
         xs12
         sm6
         md6
         lg4>
-        <template>
 
           <v-card
             class="mx-auto"
@@ -71,7 +71,6 @@
             </v-btn>
 
           </v-card>
-        </template>
       </v-flex>
     </v-layout>
   </v-container>
@@ -81,13 +80,14 @@
 import axios from 'axios'
 
 export default {
+
   data () {
     return {
       results: [],
       snackbar: false,
       output: '',
-      result: ''
-
+      result: '',
+      loading: true
     }
   },
   created () {
@@ -102,6 +102,7 @@ export default {
         .then((resources) => {
           console.log(resources.data)
           this.results = resources.data.data
+          this.loading = false
         })
         .catch(() => {
           vm.error = true

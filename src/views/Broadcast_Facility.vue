@@ -71,6 +71,8 @@
             :rows-per-page-items="rowsPerPageItems"
             :items="all_messages"
             :search="search"
+            loading 
+            loading-text="Loading... Please wait"
             show-actions
             item-key="id"
           >
@@ -107,12 +109,12 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      output: [],
+      output: '',
       result: '',
+      search: '',
       snackbar: 'false',
       rowsPerPageItems: [50, 250, 500],
       all_messages: [],
-      search: '',
       headers: [
         {
           sortable: false,

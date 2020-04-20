@@ -71,6 +71,8 @@
           <v-data-table
             :headers="headers"
             :items="exposures"
+            loading 
+            loading-text="Loading... Please wait"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
           >
@@ -148,11 +150,9 @@ export default {
       rowsPerPageItems: [50, 250, 500],
       search: '',
       link: '',
-      output: [],
-
+      output: '',
       result: '',
       snackbar: false,
-
       headers: [
         {
           text: 'No.',
@@ -215,21 +215,21 @@ export default {
               this.loopT(this.link)
             }
           })
-          .catch(error => console.log(error.message))
-      } else if (this.user.role_id === 4) {
-        console.log(this.user.hcw.facility_id)
-        axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.exposures = exp.data.data
-            this.link = exp.data.links.next
-            if (this.link) {
-              this.loopT(this.link)
-            }
-          })
           .catch(() => {
           this.error = true
           this.result = 'Check your internet connection or retry logging in.'
           this.snackbar = true
+          })
+
+        } else if (this.user.role_id === 4) {
+          console.log(this.user.hcw.facility_id)
+          axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+            .then((exp) => {
+              this.exposures = exp.data.data
+              this.link = exp.data.links.next
+            if (this.link) {
+              this.loopT(this.link)
+            }
           })
       }
     },

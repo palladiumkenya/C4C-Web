@@ -48,9 +48,10 @@
           <v-data-table
             :headers="headers"
             :items="all_hcws"
+            loading 
+            loading-text="Loading... Please wait"
             :rows-per-page-items="rowsPerPageItems"
             :search="search"
-            show-actions
             item-key="id"
           >
             <template
@@ -89,6 +90,7 @@ export default {
   data () {
     return {
       all_hcws: [],
+      search: '',
       snackbar: false,
       output: '',
       result: '',
