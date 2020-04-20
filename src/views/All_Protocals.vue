@@ -53,11 +53,25 @@
                 <div><span> Created On: </span> {{ result.created_at }}</div>
               </v-card-text>
 
-              <v-btn
+              <v-btn icon
                 color="orange"
                 @click="$router.push({ name: 'View Facility Resource', params: {id: result.id} })">
-                View More
+                <v-icon> mdi-plus  </v-icon>
               </v-btn>
+
+              <v-btn icon
+              color="green"
+              @click="$router.push({ name : 'Edit Facility Resource', params: {id: result.id } })">
+              <v-icon> mdi-pencil </v-icon>
+            </v-btn>
+
+            <v-btn icon
+              color="red"
+              @click=" deleteResource(); $router.push({ name : 'Facility Resources'}); ">
+
+              <v-icon> mdi-delete </v-icon>
+            </v-btn>
+
             </v-card-actions>
 
           </v-card>
@@ -85,8 +99,6 @@ export default {
 
     getProtocals () {
 
-      const vm = this
-
       axios.get('resources/hcw/protocols')
         .then((protocals) => {
           console.log(protocals.data)
@@ -94,10 +106,28 @@ export default {
           
         })
         .catch(() => {
-          vm.error = true
-          vm.result = 'Check your internet connection or retry logging in.'
-          vm.snackbar = true
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
         })
+    }, 
+
+      deleteResource() {
+        axios.delete('')
+        .then((response) => {
+          console.log(response.data)
+          this.result = resource.data.data
+          this.loading = true
+
+          this.result = 'Deleted Successfully'
+            
+          this.snackbar = true
+      })
+      .catch(() => {
+        this.error = true
+        this.result = 'Failed, please try again'
+        this.snackbar = true
+      })  
     }
   }
 }
