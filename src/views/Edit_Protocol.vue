@@ -18,18 +18,16 @@
               <div/>
               <p class="display-1 text--primary">
 
-                Add A New Facility Resource
+                Edit Facility Resource
               </p>
-              <div class="text--primary">
-                Kindly fill all the required fields
-              </div>
+              
             </v-card-text>
 
             <v-form
               ref="form"
               v-model="valid"
               lazy-validation
-              @submit="postProtocal">
+              @submit="editProtocal">
               <v-container py-0>
                 <v-layout wrap>
 
@@ -40,7 +38,7 @@
                     <v-text-field
                       id="title"
                       :rules="titleRules"
-                      v-model="title"
+                      v-model="protocol.title"
                       required
                       label="Title"
                       class="purple-input"/>
@@ -60,7 +58,7 @@
                     <ckeditor
                       id="editorData"
                       :editor="editor"
-                      v-model="editorData"
+                      v-model="protocol.body"
                       rules="bodyRules"/>
                   </v-flex>
 
@@ -70,7 +68,7 @@
                     <input
                       id="file"
                       ref="file"
-                      value="file"
+                      value="protocol.file"
                       accept="image/*"
                       type="file"
                       @change="handleImageChange()">
@@ -85,7 +83,7 @@
                     <input
                       id="files"
                       ref="files"
-                      value="files"
+                      value="protocol.files"
                       type="file"
                       multiple
                       @change="handleFiles()">
@@ -111,7 +109,7 @@
                       type="submit"
                       @click="validateData(); alert=!alert; dialog1=true"
                     >
-                      Submit
+                      Save
                     </v-btn>
 
                     <v-dialog
@@ -164,7 +162,7 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      editorData: '',
+      body: '',
       editorConfig: { },
       items: [],
       alert: false,
@@ -248,8 +246,24 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+    created() {
+        getProtocol();
+    },
 
-    postProtocal (e) {
+    getProtocol(){
+      var id = this.$route.params.id
+      axios.get('resources/hcw/protocols' + id)
+       .then((response) => {
+           this.protocol = this.response.data.data
+           console.log(response.data)
+
+       })
+       .catch((error) => {
+           console.log(error)
+       })
+    },
+
+    editProtocal (e) {
       e.preventDefault()
 
       let allData = new FormData()
@@ -261,7 +275,7 @@ export default {
       }
       allData.append('image_file', this.file)
       allData.append('title', this.title)
-      allData.append('body', this.editorData)
+      allData.append('body', this.body)
       allData.append('facility_id', this.user.hcw.facility.id)
 
       axios({

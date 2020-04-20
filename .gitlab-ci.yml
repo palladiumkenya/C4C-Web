@@ -17,13 +17,13 @@ unit test:
     - yarn install 
     - npm run test
 
-deploy:
-  image: alpine
+image: docker
+services:
+  - docker:dind
+stages:
+  - deploy
+step-deploy-prod:
   stage: deploy
   script:
-    - apk add --no-cache rsync openssh
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
-    - chmod 600 ~/.ssh/id_dsa
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav --delete dist/ user@server.com:/your/project/path/
+    - docker build -t app/vue-demo .
+    - docker run -d -p 80:80 --rm --name todoapp app/vue-demo

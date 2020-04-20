@@ -293,6 +293,11 @@ export default [
     }
   },
   {
+    path: '/edit_public-resource/:id',
+    name: 'Edit Public Resource',
+    view: 'Edit_CME'
+  },
+  {
     path: '/view_Protocal/:id',
     name: 'View Facility Resource',
     view: 'View_Protocal',
@@ -332,6 +337,11 @@ export default [
     }
   },
   {
+    path: '/edit_protocol/:id',
+    name: 'Edit Facility_Resource',
+    view: 'Edit_Facility_Resource'
+  },
+  {
     path: '/departments',
     name: 'Departments',
     view: 'AddDepartments',
@@ -349,14 +359,14 @@ export default [
     path: '/covid19_resources',
     name: 'COVID19 Resources',
     view: 'All_Covid',
-    beforeEnter: (to, from, next) => {
-      if (!store.getters['auth/authenticated']) {
-        return next({
-          name: 'login'
-        })
-      }
-      next()
-    }
+    // beforeEnter: (to, from, next) => {
+    //   if (!store.getters['auth/authenticated']) {
+    //     return next({
+    //       name: 'login'
+    //     })
+    //   }
+    //   next()
+    // }
   },
   {
     path: '/new_covid19_resources',
