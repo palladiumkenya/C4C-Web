@@ -162,7 +162,6 @@ export default {
             this.all_messages = broadcast.data.data
           })
           .catch(() => {
-            this.snackbar = true
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
@@ -175,7 +174,6 @@ export default {
           .catch(() => {
             this.snackbar = true
             this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true
           })
       }
     },

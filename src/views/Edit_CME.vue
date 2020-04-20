@@ -22,7 +22,6 @@
             <p class="display-1 text--primary">
               Edit Public Resource
             </p>
-           
           </v-card-text>
 
           <v-form
@@ -43,7 +42,8 @@
                     v-model="cme.title"
                     required
                     label="Title"
-                    class="purple-input"/>
+                    class="purple-input">
+                  </v-text-field>
                 </v-flex>
 
                 <v-flex xs12>
@@ -54,7 +54,8 @@
                     :rules="bodyRules"
                     :config="editorConfig"
                     placeholder="Write here"
-                    required/>
+                    required>
+                  </ckeditor>  
                 </v-flex>
 
                 <v-flex xs12 >
@@ -62,14 +63,23 @@
                   <input
                     id="file"
                     ref="file"
-                    value="cme.file"
+                    value="file"
                     accept="image/*"
                     type="file"
                     @change="handleImageChange()">
 
+                  <v-img
+                    :src="cme.file"
+                    class="white--text align-end"
+                    height="400px"
+                  />                                      
+
+                </v-flex>
+
+                <v-flex xs12>
                   <img
                     v-show="showPreview"
-                    :src="imagePreview">
+                    src="imagePreview">
                 </v-flex>
 
                 <v-flex xs12>
@@ -81,15 +91,24 @@
                     type="file"
                     multiple
                     @change="handleFiles()">
+                    {{cme.files.file_name}}
+
+                  <v-list
+                      v-for="file in cme.files"
+                      :key="file"
+                      class="file-listing"> {{file.file_name}}
+                      <span
+                        class="remove-file"
+                        @click="removeFile(key)"> Remove </span>
+                  </v-list>   
 
                   <v-card
                     v-for="(file, key) in files"
                     :key="file.id"
-                    class="file-listing">{{ file.name }}
+                    class="file-listing">{{ file.name }} {{cme.files[file_name]}}
                     <span
                       class="remove-file"
                       @click="removeFile(key)"> Remove </span> </v-card>
-
                 </v-flex>
 
                 <v-flex
@@ -176,7 +195,8 @@ export default {
       file: '',
       showPreview: false,
       imagePreview: '',
-      files: []
+      files: [],
+      cme: ''
     }
   },
   watch: {
@@ -185,6 +205,10 @@ export default {
       setTimeout(() => (this.dialog1 = false), 4000)
     }
   },
+
+  created() {
+       this.getCME()
+    },
 
   methods: {
 
@@ -222,19 +246,15 @@ export default {
       this.files.splice(key, 1)
     },
 
-    created() {
-       getCME()
-    },
-
     getCME () {
       var id = this.$route.params.id
        axios.get('resources/cmes/' + id)
-        .then((response) =>{
-        this.cme = response.data.data 
-        console.log(response.data.data)
+        .then((resource) => {
+        this.cme = resource.data.data 
+        console.log(resource.data)
 
         }).catch((error) => {
-        console.log(error)
+        console.log(error.message)
         })
     },
 

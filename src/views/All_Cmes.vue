@@ -63,22 +63,19 @@
             </v-card-text>
 
             <v-card-actions>
-            <v-btn icon 
-              color="orange"
+            <v-btn icon color="orange"
               @click="$router.push({ name : 'View Public Resource', params: {id: result.id } })">
-              <v-icon> mdi-plus </v-icon>
+              <v-icon > mdi-plus </v-icon>
             </v-btn>
 
-            <v-btn icon
-              color="green"
+            <v-btn icon color="green"
               @click="$router.push({ name : 'Edit Public Resource', params: {id: result.id } })">
-              <v-icon> mdi-pencil </v-icon>
+              <v-icon  > mdi-pencil </v-icon>
             </v-btn>
 
-            <v-btn icon
-              color="red"
+            <v-btn icon color="red"
               @click=" deleteResource(); $router.push({ name : 'Public Resources'}); ">
-              <v-icon> mdi-delete </v-icon>
+              <v-icon > mdi-delete </v-icon>
             </v-btn>
 
             </v-card-actions>
