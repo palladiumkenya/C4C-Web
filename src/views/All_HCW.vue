@@ -60,10 +60,10 @@
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.first_name }}</td>
                 <td>{{ props.item.surname }}</td>
-                <td>{{ props.item.facility.name }}</td>
-                <td>{{ props.item.facility.county }}</td>
+                <td>{{ props.item.facility_name }}</td>
+                <!-- <td>{{ props.item.facility.county }}</td> -->
                 <td>{{ props.item.department }}</td>
-                <td>{{ props.item.cadre.name }}</td>
+                <td>{{ props.item.cadre }}</td>
                 <td>{{ props.item.dob }}</td>
               </tr>
             </template>
@@ -113,18 +113,13 @@ export default {
         },
         {
           sortable: false,
-          text: 'County',
-          value: 'facility.county'
-        },
-        {
-          sortable: false,
           text: 'Department',
           value: 'department'
         },
         {
           sortable: false,
           text: 'Cadre',
-          value: 'cadre.name'
+          value: 'cadre'
         },
         {
           sortable: false,
@@ -144,17 +139,31 @@ export default {
   },
   methods: {
     getHCW () {
-      axios.get('hcw')
-        .then((workers) => {
-          console.log(workers.data)
-          this.all_hcws = workers.data.data
-          this.loopT(workers.data.links.next)
-        })
-        .catch(() => {
-          this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
-          this.snackbar = true
-        })
+      if (this.user.role_id === 1){
+        axios.get('hcw')
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            this.loopT(workers.data.links.next)
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            this.loopT(workers.data.links.next)
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      }
     },
     async loopT (l) {
       var i
