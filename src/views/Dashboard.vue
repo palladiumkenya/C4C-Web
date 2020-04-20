@@ -80,7 +80,7 @@
       </v-flex>
 
       <!-- End Cards -->
-      
+
       <template>
    <!-- Start filters -->
 
@@ -94,10 +94,10 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
-          item-text="county"
+          v-model="counties"
+          item-text="name"
           item-value="id"
-          :items="all_facilities"
+          :items="all_counties"
           label="Select County"
           multiple
           clerable
@@ -117,10 +117,10 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
-          item-text="sub_county"
-          item-value="county"
-          :items="all_facilities"
+          v-model="subcounties"
+          item-text="name"
+          item-value="id"
+          :items="all_subcounties"
           label="Select Sub-County"
           multiple
           clerable
@@ -142,11 +142,12 @@
                  <v-combobox
           v-model="facility"
           item-text="partner"
-          item-value="sub_county"
+          item-value="id"
           :items="all_facilities"
           label="Select Partner"
           multiple
           clerable
+          disabled
           persistent-hint
           chips>
           </v-combobox>
@@ -163,10 +164,8 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
-          item-text="fecility_level"
-          item-value="id"
-          :items="all_facilities"
+
+          :items="all_facilities_level"
           label="Select Facility Level"
           multiple
           clerable
@@ -258,7 +257,12 @@ export default {
     return {
 
        facility: '',
+       counties: '',
+       subcounties: '',
       all_facilities: [],
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_counties: [],
+      all_subcounties: [],
 
      barOptionsTime: {
         xAxis: {
@@ -417,9 +421,13 @@ export default {
     this.getBroadcasts()
     this.getAllUsers()
     this.getFacilities()
+    this.getCounties()
+    this.getSubCounties()
 
   },
   methods: {
+
+     
 
      getFacilities () {
       axios.get('facilities')
@@ -429,6 +437,31 @@ export default {
           this.all_counties = facilities.data.data
           if (facilities.data.links.next != null) {
             this.link = facilities.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    }, 
+     getCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          console.log(counties.data)
+          this.all_counties = counties.data.data
+          if (counties.data.links.next != null) {
+            this.link = counties.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getSubCounties () {
+      axios.get('subcounties/3')
+        .then((subcounties) => {
+          console.log(subcounties.data)
+          this.all_subcounties = subcounties.data.data
+          if (subcounties.data.links.next != null) {
+            this.link = subcounties.data, links.next
             this.loopT(this.link)
           }
         })
@@ -446,6 +479,8 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+
+    
 
     getMonth () {
 
@@ -561,7 +596,8 @@ export default {
         }
       }
       return counter
-    }
+    },
+    
 
   }
 }

@@ -78,6 +78,7 @@
           :items="all_facilities"
           label="Select Partner"
           multiple
+          disabled
           clerable
           persistent-hint
           chips>
@@ -95,10 +96,7 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
-          item-text="fecility_level"
-          item-value="id"
-          :items="all_facilities"
+          :items="all_facilities_level"
           label="Select Facility Level"
           multiple
           clerable
@@ -240,6 +238,7 @@ export default {
   },
   data () {
     return {
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
 
       facility: '',
       all_facilities: [],

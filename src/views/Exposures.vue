@@ -31,10 +31,10 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
-          item-text="county"
+          v-model="counties"
+          item-text="name"
           item-value="id"
-          :items="all_facilities"
+          :items="all_counties"
           label="Select County"
           multiple
           clerable
@@ -54,7 +54,7 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
+          v-model="subcounties"
           item-text="sub_county"
           item-value="county"
           :items="all_facilities"
@@ -83,6 +83,7 @@
           :items="all_facilities"
           label="Select Partner"
           multiple
+          disabled
           clerable
           persistent-hint
           chips>
@@ -100,10 +101,7 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
-          item-text="fecility_level"
-          item-value="id"
-          :items="all_facilities"
+          :items="all_facilities_level"
           label="Select Facility Level"
           multiple
           clerable
@@ -195,9 +193,9 @@
 
                  <v-combobox
           v-model="facility"
-          item-text="sub_county"
+          item-text="name"
           item-value="id"
-          :items="all_facilities"
+          :items="all_subcounties"
           label="Select Sub-County"
           multiple
           clerable
@@ -363,8 +361,12 @@ export default {
       //my test filter area
       valid: false,
      facility: '',
-    
+       counties: '',
+       subcounties: '',
+    all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
        all_facilities: [],
+       all_subcounties: [],
+       all_counties: [],
     
       startDate: null,
       endDate: null,
@@ -873,19 +875,46 @@ export default {
     this.getCad()
     this.getFacilities()
     this.getCountt()
+    this.getCounties()
+    this.getSubCounties()
     // this.getExpo()
   },
   methods: {
-
 
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          this.all_counties = facilities.data.data
+          //this.all_counties = facilities.data.data
           if (facilities.data.links.next != null) {
             this.link = facilities.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          console.log(counties.data)
+          this.all_counties = counties.data.data
+          if (counties.data.links.next != null) {
+            this.link = counties.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getSubCounties () {
+      axios.get('subcounties/3')
+        .then((subcounties) => {
+          console.log(subcounties.data)
+          this.all_subcounties = subcounties.data.data
+          if (subcounties.data.links.next != null) {
+            this.link = subcounties.data, links.next
             this.loopT(this.link)
           }
         })
