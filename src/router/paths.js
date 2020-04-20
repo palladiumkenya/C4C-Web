@@ -10,7 +10,17 @@ export default [
     path: '',
     name: 'Dashboard',
     // Relative to /src/views
-    view: 'Dashboard'
+    view: 'Dashboard',
+<<<<<<< HEAD
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+=======
     // beforeEnter: (to, from, next) => {
     //   if (!store.getters['auth/authenticated']) {
     //     return next({
@@ -19,6 +29,7 @@ export default [
     //   }
     //   next()
     // }
+>>>>>>> 6e4320b6ee2cc6c2f2050d4c26bf1751490ae6b1
   },
   {
     path: '/login',
@@ -160,12 +171,28 @@ export default [
   {
     path: '/users_list',
     name: 'Users List',
-    view: 'All_Users'
+    view: 'All_Users',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/hcw_list',
     name: 'HCW List',
-    view: 'All_HCW'
+    view: 'All_HCW',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/forgot_password',
@@ -188,68 +215,172 @@ export default [
   {
     path: '/all_broadcast',
     name: 'Broadcast',
-    view: 'All_Broadcasts'
+    view: 'All_Broadcasts',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/broadcast',
     name: 'Broadcast Facility',
-    view: 'Broadcast_Facility'
+    view: 'Broadcast_Facility',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/new_bulk_broadcast',
     name: 'New Broadcast Facility',
-    view: 'Bulk_Broadcast'
+    view: 'Bulk_Broadcast',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/new_broadcast',
     name: 'New Broadcast',
-    view: 'New_Broadcast'
+    view: 'New_Broadcast',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/cmes',
     name: 'Public Resources',
-    view: 'All_Cmes'
+    view: 'All_Cmes',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/add_CME',
     name: 'Add Public Resource',
-    view: 'New_CME'
+    view: 'New_CME',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/view_CME/:id',
     name: 'View Public Resource',
-    view: 'View_CME'
+    view: 'View_CME',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/view_Protocal/:id',
     name: 'View Facility Resource',
-    view: 'View_Protocal'
+    view: 'View_Protocal',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/protocals',
     name: 'Facility Resources',
-    view: 'All_Protocals'
+    view: 'All_Protocals',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/add_protocal',
     name: 'Add Facility Resource',
-    view: 'New_Protocal'
+    view: 'New_Protocal',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/departments',
     name: 'Departments',
-    view: 'AddDepartments'
+    view: 'AddDepartments',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
 
   {
     path: '/covid19_resources',
     name: 'COVID19 Resources',
-    view: 'All_Covid'
+    view: 'All_Covid',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/new_covid19_resources',
     name: 'New COVID19 Resource',
-    view: 'New_COVID'
+    view: 'New_COVID',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/notifications',
@@ -261,7 +392,15 @@ export default [
   },
   {
     path: '/exposure_by_cadre',
-    view: 'Exposure_by_cadre'
+    view: 'Exposure_by_cadre',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   }
 ]
 

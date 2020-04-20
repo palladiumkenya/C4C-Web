@@ -106,7 +106,6 @@
 
 
       <!-- Start Graphs -->
-
   <v-flex
         md4
         lg12
@@ -115,7 +114,6 @@
           ref="barChart"
           :options="barOptionsTest"/>
       </v-flex>
-
       <!-- End Graphs -->
       <v-flex
         md4
@@ -127,9 +125,7 @@
       </v-flex>
       <!-- Start Maps -->
 
-
       <!-- Start Tables -->
-
 
     </v-layout>
   </v-container>
@@ -148,7 +144,7 @@ export default {
   data () {
     return {
 
-      barOptionsTime: {
+     barOptionsTime: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
@@ -257,6 +253,7 @@ export default {
         ]
         
       },
+
       
 
       date: [],
@@ -292,7 +289,7 @@ export default {
     })
   },
 
-  created () {
+   created () {
     if (this.user === null) {
       alert('Not admin')
       this.$router.replace({
@@ -327,8 +324,7 @@ export default {
       }
       this.barOptionsTime.series[0].data = wdata
     },
-   
-    getTest ()
+     getTest ()
     {
        var reg = []
       for (var r in this.barOptionsTest.xAxis.categories) {
@@ -336,9 +332,7 @@ export default {
         
       }
      this.barOptionsTest.series[0].data = reg
-      }
-     
-    },
+      },
 
     getUsers () {
       axios.get('users')
@@ -374,8 +368,6 @@ export default {
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
 
-           //this.userz = this.userz.concat(response.data.data)
-
            this.userz = this.userz.concat(response.data.data)
 
         } else {
@@ -384,7 +376,7 @@ export default {
       }
 
       this.getMonth()
-      this.getReg()
+      
 
     },
 
@@ -401,7 +393,6 @@ export default {
         }
       }
      this.getTest()
-     // this.getReg
       this.getRegistrations()
       this.getLocations()
 
@@ -421,7 +412,7 @@ export default {
     getNumr (name) {
       var counter = 0
       for (var r in this.userz) {
-        var dat = new Date(this.userz[r].updated_at)
+        var dat = new Date(this.userz[r].created_at)
         var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         if (list[dat.getMonth()] === name) {
           console.log(name)
@@ -442,5 +433,5 @@ export default {
     }
 
   }
-
+}
 </script>
