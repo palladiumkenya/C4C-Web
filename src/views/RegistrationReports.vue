@@ -14,6 +14,135 @@
         <v-container fluid>
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
+   <!-- Start filters -->
+
+           <v-layout >
+              <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
+
+            <template>
+
+                 <v-combobox
+          v-model="facility"
+          item-text="county"
+          item-value="id"
+          :items="all_facilities"
+          label="Select County"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+               <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
+
+            <template>
+
+                 <v-combobox
+          v-model="facility"
+          item-text="sub_county"
+          item-value="county"
+          :items="all_facilities"
+          label="Select Sub-County"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+              <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
+
+            <template>
+
+                 <v-combobox
+          v-model="facility"
+          item-text="partner"
+          item-value="sub_county"
+          :items="all_facilities"
+          label="Select Partner"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+              <v-flex
+               xs12
+                  md6
+                  lg3
+                  >
+
+            <template>
+
+                 <v-combobox
+          v-model="facility"
+          item-text="fecility_level"
+          item-value="id"
+          :items="all_facilities"
+          label="Select Facility Level"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+            </v-flex>
+
+           <v-flex
+           xs12
+             md6
+            lg3
+           >
+            <template>
+                 <v-combobox
+          v-model="facility"
+          item-text="name"
+          item-value="id"
+          :items="all_facilities"
+          label="Select Facility"
+          multiple
+          clerable
+          persistent-hint
+          chips>
+          </v-combobox>
+                
+            </template>
+           </v-flex>
+           </v-layout>
+    
+
+            <template>
+
+              <input type="date" v-model="startDate">
+              <input type="date" v-model="endDate">
+            </template>
+
+                <template>
+                  <v-btn block color="secondary" dark>Filter</v-btn>
+                </template>
+               
+            <!-- End filters -->
 
             <v-flex
               md12
@@ -111,6 +240,10 @@ export default {
   },
   data () {
     return {
+
+      facility: '',
+      all_facilities: [],
+    
       value: true,
       value1: true,
       value2: true,
@@ -293,8 +426,23 @@ export default {
   created () {
     this.getUsers()
     this.getAllUsers()
+    this.getFacilities()
   },
   methods: {
+
+     getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+          this.all_counties = facilities.data.data
+          if (facilities.data.links.next != null) {
+            this.link = facilities.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
     getUsers () {
       axios.get('hcw')// facility/9831
         .then((exp) => {
