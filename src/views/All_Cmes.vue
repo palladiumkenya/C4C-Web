@@ -36,8 +36,11 @@
       </v-icon>
       </v-snackbar>
 
+      <v-flex v-if="loading">
+          <Loader />
+      </v-flex>  
 
-      <v-flex 
+      <v-flex v-else
         v-for="result in results"
         :key="result.id"
         xs12
@@ -88,8 +91,10 @@
 
 <script>
 import axios from 'axios'
+import Loader from '../components/core/Loader'
 
 export default {
+  components: {Loader},
 
   data () {
     return {
@@ -118,6 +123,7 @@ export default {
           this.error = true
           this.result = 'Check your internet connection or retry logging in.'
           this.snackbar = true
+          this.loading = false
         })
     },
 

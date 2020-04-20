@@ -33,8 +33,13 @@
       </v-icon>
       </v-snackbar>
 
-    <v-row dense>
+    <v-flex v-if="loading">
+          <Loader />
+      </v-flex>  
 
+    <v-row dense v-else>
+
+      {{results}}
       <v-col
         v-for="result in results"
         :key="result.id"
@@ -82,12 +87,16 @@
 
 <script>
 import axios from 'axios'
+import Loader from '../components/core/Loader'
 
 export default {
+  components: {Loader},
+
   data () {
     return {
       results: [],
       snackbar: false,
+      loading: true,
       output: '',
       result: ''
     }
@@ -103,12 +112,16 @@ export default {
         .then((protocals) => {
           console.log(protocals.data)
           this.results = protocals.data.data
+
+          this.loading = false
           
         })
         .catch(() => {
           this.error = true
           this.result = 'Check your internet connection or retry logging in.'
           this.snackbar = true
+
+          this.loading = false
         })
     }, 
 
