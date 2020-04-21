@@ -371,19 +371,45 @@ export default [
     path: '/covid19_resources',
     name: 'COVID19 Resources',
     view: 'All_Covid',
-    // beforeEnter: (to, from, next) => {
-    //   if (!store.getters['auth/authenticated']) {
-    //     return next({
-    //       name: 'login'
-    //     })
-    //   }
-    //   next()
-    // }
+     beforeEnter: (to, from, next) => {
+       if (!store.getters['auth/authenticated']) {
+         return next({
+           name: 'login'
+         })
+       }
+       next()
+     }
   },
   {
     path: '/new_covid19_resources',
     name: 'New COVID19 Resource',
     view: 'New_COVID',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
+    path: '/view_covid19_resource/:id',
+    name: 'View COVID19 Resource',
+    view: 'View_COVID',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
+    path: '/edit_covid19_resource/:id',
+    name: 'Edit COVID19 Resource',
+    view: 'Edit_COVID',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({

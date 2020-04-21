@@ -9,25 +9,24 @@
       wrap
     >
 
-     <v-snackbar
-      color="error"
-      v-model="snackbar"
-      :timeout="1200"
-      top
+    <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
       >
-        <v-icon
-          color="white"
-          class="mr-3"
-        >
-          mdi-bell-plus
-        </v-icon>
-        <div> {{ output.error }} {{result}}</div>
-        <v-icon
-          size="16"
-          @click="snackbar = false"
-        >
-          mdi-close-circle
-        </v-icon>
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.errors }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
       </v-snackbar>
 
       <v-flex
@@ -72,8 +71,6 @@
             :rows-per-page-items="rowsPerPageItems"
             :items="all_messages"
             :search="search"
-            loading 
-            loading-text="Loading... Please wait"
             show-actions
             item-key="id"
           >
@@ -84,7 +81,7 @@
                 <td>{{ props.item.cadre.name }}</td>
                 <td>{{ props.item.created_by }}</td>
                 <td>{{ props.item.approved_by }}</td>
-                <td>{{ props.item.facility }}</td>
+                <td>{{ props.item.facility.name }}</td>
                 <td>{{ props.item.message }}</td>
               </tr>
             </template>
@@ -113,7 +110,7 @@ export default {
       output: '',
       result: '',
       search: '',
-      snackbar: 'false',
+      snackbar: false,
       rowsPerPageItems: [50, 250, 500],
       all_messages: [],
       headers: [

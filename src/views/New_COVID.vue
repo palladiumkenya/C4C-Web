@@ -14,20 +14,24 @@
       >
         <material-card
           color="green"
-          title="Create A Resource For Continuous Medical Education "
+          title="Create A COVID19 Resource "
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
-            <div/>
+            <div/> 
             <p class="display-1 text--primary">
-              Add Continuous Medical Education Content
+              Add A New COVID19 Resource
             </p>
             <div class="text--primary">
               Kindly fill all the required fields
             </div>
           </v-card-text>
 
-          <v-form @submit="postCME">
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            @submit="postCOVID19">
             <v-container py-0>
               <v-layout wrap>
 
@@ -37,7 +41,7 @@
                 >
                   <v-text-field
                     id="title"
-                    :rules="[rules.required]"
+                    :rules="titleRules"
                     v-model="title"
                     required
                     label="Title"
@@ -49,7 +53,7 @@
                     id="editorData"
                     :editor="editor"
                     v-model="editorData"
-                    :rules="[rules.required]"
+                    :rules="bodyRules"
                     :config="editorConfig"
                     placeholder="Write here"
                     required/>
@@ -94,12 +98,45 @@
                   text-xs-right
                 >
                   <v-btn
+                    :disabled="!valid"
+                    :loading="dialog1"
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
+                    @click="validateData(); alert=!alert; dialog1=true"
                   >
                     Submit
                   </v-btn>
+
+                  <v-dialog
+                    v-model="dialog1"
+                    max-width="290"
+                    lazy>
+                    <v-card>
+                      <v-card-text class="text-xs-center">
+                        <v-progress-circular
+                          :size="70"
+                          indeterminate
+                          class="primary--text"/>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+
+                  <v-alert
+                    :value="alert"
+                    head
+                    type="success"
+                    border="right"
+                    icon = "mdi-alert"
+                    dismissible
+                    text
+                    transition="scale-transition"
+                    color = "#47a44b"
+                    dense
+                  >
+                    <h6> {{ output.error }} {{ output.message }} </h6>
+                  </v-alert>
+
                 </v-flex>
               </v-layout>
             </v-container>
@@ -108,29 +145,6 @@
       </v-flex>
 
     </v-layout>
-    <v-snackbar
-      :color="color"
-      :bottom="bottom"
-      :top="top"
-      :left="left"
-      :right="right"
-      v-model="snackbar"
-      dark
-    >
-      <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{ pre_out }} <br> {{ output.message }}<br> {{ output.errors }} </div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-    </v-snackbar>
 
   </v-container>
 </template>
@@ -148,48 +162,35 @@ export default {
       editorConfig: {
         // The configuration of the editor.
       },
-
-      color: null,
-      colors: [
-        'success',
-        'error'
+      valid: true,
+      titleRules: [
+        v => !!v || 'Title is required'
       ],
-      top: true,
-      bottom: false,
-      left: false,
-      right: false,
-      snackbar: false,
+      bodyRules: [
+        v => !!v || 'Fill in the required text'
+      ],
+      dialog1: false,
       result: '',
-      resp: false,
       output: '',
-      pre_out: '',
+      alert: false,
       title: '',
       file: '',
       showPreview: false,
       imagePreview: '',
-      files: [],
-      rules: {
-        required: value => !!value || 'Required.'
-      }
+      files: []
+    }
+  },
+  watch: {
+    dialog1 (val) {
+      if (!val) return
+      setTimeout(() => (this.dialog1 = false), 4000)
     }
   },
 
   methods: {
 
     validateData () {
-      if (this.title == '') {
-        this.pre_out = 'Select a title to proceed'
-        this.snack('top', 'center')
-        return false
-      } else if (this.editorData == '') {
-        this.pre_out = 'Fill in the text area to proceed'
-        this.snack('top', 'center')
-        return false
-      } else if (this.files == '') {
-        this.pre_out = 'You will be redirected shortly'
-        this.snack('top', 'center')
-        return true
-      } else { return true }
+      this.$refs.form.validate()
     },
 
     handleImageChange (e) {
@@ -222,7 +223,7 @@ export default {
       this.files.splice(key, 1)
     },
 
-    postCME (e) {
+    postCOVID19 (e) {
       e.preventDefault()
 
       let allData = new FormData()
@@ -231,49 +232,31 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('cme_files[' + i + ']', file)
+        allData.append('resource_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
       allData.append('title', this.title)
       allData.append('body', this.editorData)
 
-      if (this.validateData()) {
-        axios({
-          method: 'POST',
-          url: 'resources/cmes/create',
-          data: allData,
-          headers: { 'Content-Type': 'multipart/form-data; boundary=${form._boundary}' }
+      axios({
+        method: 'POST',
+        url: 'resources/special/create',
+        data: allData,
+        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
+      })
+        .then((response) => {
+          this.output = response.data
+          console.log(response)
+          this.alert = true
+          this.$router.push('/covid19_resources')
         })
-          .then((response) => {
-            this.output = response.data
-            console.log(response)
-            this.resp = Boolean(response.data.success)
-            this.snack('top', 'center')
-            this.$router.push('/cmes')
-          })
-          .catch(error => {
-            this.output = error
-            console.log(error)
-            this.snack('top', 'center')
-          })
-      }
-    },
-    snack (...args) {
-      this.top = false
-      this.bottom = false
-      this.left = false
-      this.right = false
-
-      for (const loc of args) {
-        this[loc] = true
-      }
-      if (this.resp) {
-        this.color = this.colors[0]
-      } else {
-        this.color = this.colors[1]
-      }
-      this.snackbar = true
+        .catch(error => {
+          this.output = error
+          console.log(error)
+          this.alert = true
+        })
     }
+
   }
 }
 

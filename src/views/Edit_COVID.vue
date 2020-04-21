@@ -14,13 +14,13 @@
       >
         <material-card
           color="green"
-          title="Create A Public Resource "
+          title="Edit COVID 19 Resource "
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Edit Public Resource
+              Edit COVID 19 Resource
             </p>
           </v-card-text>
 
@@ -28,7 +28,7 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit="editCME">
+            @submit="editCovid19">
             <v-container py-0>
               <v-layout wrap>
 
@@ -39,7 +39,7 @@
                   <v-text-field
                     id="title"
                     :rules="titleRules"
-                    v-model="cme.title"
+                    v-model="covid19.title"
                     required
                     label="Title"
                     class="purple-input">
@@ -50,7 +50,7 @@
                   <ckeditor
                     id="editorData"
                     :editor="editor"
-                    v-model="cme.body"
+                    v-model="covid19.body"
                     :rules="bodyRules"
                     :config="editorConfig"
                     placeholder="Write here"
@@ -69,7 +69,7 @@
                     @change="handleImageChange()">
 
                   <v-img
-                    :src="cme.file"
+                    :src="covid19.file"
                     class="white--text align-end"
                     height="400px"
                   />                                      
@@ -85,16 +85,16 @@
                 <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
-                    value="cme.files"
+                    value="covid19.files"
                     id="files"
                     ref="files"
                     type="file"
                     multiple
                     @change="handleFiles()">
-                    {{cme.files.file_name}}
+                    {{covid19.files.file_name}}
 
                   <v-list
-                      v-for="file in cme.files"
+                      v-for="file in covid19.files"
                       :key="file"
                       class="file-listing"> {{file.file_name}}
                       <span
@@ -105,7 +105,7 @@
                   <v-card
                     v-for="(file, key) in files"
                     :key="file.id"
-                    class="file-listing">{{ file.name }} {{cme.files[file_name]}}
+                    class="file-listing">{{ file.name }} {{covid19.files[file_name]}}
                     <span
                       class="remove-file"
                       @click="removeFile(key)"> Remove </span> </v-card>
@@ -196,7 +196,7 @@ export default {
       showPreview: false,
       imagePreview: '',
       files: [],
-      cme: ''
+      covid19: ''
     }
   },
   watch: {
@@ -207,7 +207,7 @@ export default {
   },
 
   created() {
-       this.getCME()
+       this.getCovid()
     },
 
   methods: {
@@ -246,11 +246,11 @@ export default {
       this.files.splice(key, 1)
     },
 
-    getCME () {
+    getCovid () {
       var id = this.$route.params.id
-       axios.get('resources/cmes/' + id)
+       axios.get('resources/special/' + id)
         .then((resource) => {
-        this.cme = resource.data.data 
+        this.covid19 = resource.data.data 
         console.log(resource.data)
 
         }).catch((error) => {
@@ -258,7 +258,7 @@ export default {
         })
     },
 
-    editCME (e) {
+    editCovid19 (e) {
       e.preventDefault()
 
       let allData = new FormData()
