@@ -37,7 +37,7 @@
         >
           <v-icon color="tertiary">mdi-view-dashboard</v-icon>
         </router-link>
-        <v-menu
+        <!-- <v-menu
           bottom
           left
           content-class="dropdown-menu"
@@ -72,7 +72,7 @@
               </v-list-tile>
             </v-list>
           </v-card>
-        </v-menu>
+        </v-menu> -->
         <router-link
           v-ripple
           class="toolbar-items"
@@ -93,9 +93,9 @@ import {
 
 export default {
   data: () => ({
-    notifications: [
+    // notifications: [
 
-    ],
+    // ],
     title: null,
     responsive: false
   }),
