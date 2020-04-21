@@ -20,7 +20,7 @@
 
                 Edit Facility Resource
               </p>
-              
+
             </v-card-text>
 
             <v-form
@@ -75,14 +75,14 @@
                       type="file"
                       @change="handleImageChange()">
 
-                      <v-img
-                        :src="protocol.file"
-                        class="white--text align-end"
-                        max-height="400px"
-                      />
+                    <v-img
+                      :src="protocol.file"
+                      class="white--text align-end"
+                      max-height="400px"
+                    />
 
                   </v-flex>
-                  <v-flex xs12>  
+                  <v-flex xs12>
                     <img
                       v-show="showPreview"
                       :src="imagePreview">
@@ -98,15 +98,14 @@
                       multiple
                       @change="handleFiles()">
 
- 
-                     <v-list
+                    <v-list
                       v-for="file in protocol.files"
                       :key="file"
-                      class="file-listing"> {{file.file_name}}
+                      class="file-listing"> {{ file.file_name }}
                       <span
                         class="remove-file"
                         @click="removeFile(key)"> Remove </span>
-                      </v-list>  
+                    </v-list>
 
                     <v-card
                       v-for="(file, key) in files"
@@ -269,17 +268,16 @@ export default {
         .catch(error => console.log(error.message))
     },
 
-    getProtocol(){
+    getProtocol () {
       var id = this.$route.params.id
       axios.get('resources/protocols/details/' + id)
-       .then((response) => {
-           this.protocol = response.data.data
-           console.log(response.data)
-
-       })
-       .catch((error) => {
-           console.log(error)
-       })
+        .then((response) => {
+          this.protocol = response.data.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
 
     editProtocal (e) {

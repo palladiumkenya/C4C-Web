@@ -9,11 +9,11 @@
       wrap
     >
 
-     <v-snackbar
-      color="error"
-      v-model="snackbar"
-      :timeout="1200"
-      top
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="1200"
+        color="error"
+        top
       >
         <v-icon
           color="white"
@@ -21,7 +21,7 @@
         >
           mdi-bell-plus
         </v-icon>
-        <div> {{ output.error }} {{result}}</div>
+        <div> {{ output.error }} {{ result }}</div>
         <v-icon
           size="16"
           @click="snackbar = false"
@@ -72,7 +72,7 @@
             :rows-per-page-items="rowsPerPageItems"
             :items="all_messages"
             :search="search"
-            loading 
+            loading
             loading-text="Loading... Please wait"
             show-actions
             item-key="id"
@@ -155,7 +155,7 @@ export default {
   },
   methods: {
     getBroadcast () {
-      if (this.user.role_id === 1){
+      if (this.user.role_id === 1) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {
             console.log(broadcast.data)
@@ -165,7 +165,7 @@ export default {
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
-      } else if(this.user.role_id === 4){
+      } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
           .then((broadcast) => {
             console.log(broadcast.data)

@@ -17,73 +17,80 @@
       </v-flex>
 
       <v-snackbar
-        color="error"
         v-model="snackbar"
         :timeout="12000"
+        color="error"
         top>
         <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{ output.errors }} {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
+          color="white"
+          class="mr-3"
+        >
+          mdi-bell-plus
+        </v-icon>
+        <div> {{ output.errors }} {{ result }}</div>
+        <v-icon
+          size="16"
+          @click="snackbar = false"
+        >
+          mdi-close-circle
+        </v-icon>
       </v-snackbar>
 
       <v-flex v-if="loading">
-          <Loader />
-      </v-flex>  
+        <Loader />
+      </v-flex>
 
-      <v-flex v-else
+      <v-flex
         v-for="result in results"
+        v-else
         :key="result.id"
         xs12
         sm6
         md6
         lg4>
 
-          <v-card
-            class="mx-auto"
-            max-width="400"
+        <v-card
+          class="mx-auto"
+          max-width="400"
 
-          >
-            <v-img
-              :src="result.file || 'sunshine.jpg' "
-              class="white--text align-end"
-              height="200px"
-            />
+        >
+          <v-img
+            :src="result.file || 'sunshine.jpg' "
+            class="white--text align-end"
+            height="200px"
+          />
 
-            <v-card-title>{{ result.title }}</v-card-title>
+          <v-card-title>{{ result.title }}</v-card-title>
 
-            <v-card-text class="text--primary">
-              <div><span>Created On: </span>{{ result.created_at }}</div>
-            </v-card-text>
+          <v-card-text class="text--primary">
+            <div><span>Created On: </span>{{ result.created_at }}</div>
+          </v-card-text>
 
-            <v-card-actions>
-            <v-btn icon color="orange"
+          <v-card-actions>
+            <v-btn
+              icon
+              color="orange"
               @click="$router.push({ name : 'View Public Resource', params: {id: result.id } })">
               <v-icon > mdi-plus </v-icon>
             </v-btn>
 
-            <v-btn icon color="green"
+            <v-btn
+              icon
+              color="green"
               @click="$router.push({ name : 'Edit Public Resource', params: {id: result.id } })">
-              <v-icon  > mdi-pencil </v-icon>
+              <v-icon > mdi-pencil </v-icon>
             </v-btn>
 
-            <v-btn icon color="red"
+            <v-btn
+              icon
+              color="red"
               @click=" deleteResource(); $router.push({ name : 'Public Resources'}); ">
               <v-icon > mdi-delete </v-icon>
             </v-btn>
 
-            </v-card-actions>
+          </v-card-actions>
 
-          </v-card>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -94,7 +101,7 @@ import axios from 'axios'
 import Loader from '../components/core/Loader'
 
 export default {
-  components: {Loader},
+  components: { Loader },
 
   data () {
     return {
@@ -111,13 +118,11 @@ export default {
 
   methods: {
     getResources () {
-
       axios.get('resources/cmes')
         .then((resources) => {
           console.log(resources.data)
           this.results = resources.data.data
           this.loading = false
-
         })
         .catch(() => {
           this.error = true
@@ -127,23 +132,22 @@ export default {
         })
     },
 
-    deleteResource() {
+    deleteResource () {
       axios.delete('')
-      .then((response) => {
-        console.log(response.data)
-        this.result = resource.data.data
-        this.loading = true
+        .then((response) => {
+          console.log(response.data)
+          this.result = resource.data.data
+          this.loading = true
 
-        this.result = 'Deleted Successfully'
-          
-        this.snackbar = true
-      })
-      .catch(() => {
-        this.error = true
-        this.result = 'Failed, please try again'
-        this.snackbar = true
-      })
+          this.result = 'Deleted Successfully'
 
+          this.snackbar = true
+        })
+        .catch(() => {
+          this.error = true
+          this.result = 'Failed, please try again'
+          this.snackbar = true
+        })
     }
   }
 }

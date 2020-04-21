@@ -21,134 +21,135 @@
             <!-- Start Graphs -->
             <!-- Start filters -->
 
-           <v-layout >
+            <v-layout >
               <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="counties"
-          item-text="name"
-          item-value="id"
-          :items="all_counties"
-          label="Select County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-               <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="subcounties"
-          item-text="sub_county"
-          item-value="county"
-          :items="all_facilities"
-          label="Select Sub-County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="facility"
-          item-text="partner"
-          item-value="sub_county"
-          :items="all_facilities"
-          label="Select Partner"
-          multiple
-          disabled
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          :items="all_facilities_level"
-          label="Select Facility Level"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-           <v-flex
-           xs12
-             md6
-            lg3
-           >
-            <template>
-                 <v-combobox
-          v-model="facility"
-          item-text="name"
-          item-value="id"
-          :items="all_facilities"
-          label="Select Facility"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-           </v-flex>
-           </v-layout>
-    
-
-            <template>
-
-              <input type="date" v-model="startDate">
-              <input type="date" v-model="endDate">
-            </template>
+                xs12
+                md6
+                lg3
+              >
 
                 <template>
-                  <v-btn block color="secondary" dark>Filter</v-btn>
+
+                  <v-combobox
+                    v-model="counties"
+                    :items="all_counties"
+                    item-text="name"
+                    item-value="id"
+                    label="Select County"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
                 </template>
-               
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+
+                <template>
+
+                  <v-combobox
+                    v-model="subcounties"
+                    :items="all_facilities"
+                    item-text="sub_county"
+                    item-value="county"
+                    label="Select Sub-County"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+
+                <template>
+
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    item-text="partner"
+                    item-value="sub_county"
+                    label="Select Partner"
+                    multiple
+                    disabled
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+
+                <template>
+
+                  <v-combobox
+                    :items="all_facilities_level"
+                    label="Select Facility Level"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+                <template>
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    item-text="name"
+                    item-value="id"
+                    label="Select Facility"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+            </v-layout>
+
+            <template>
+
+              <input
+                v-model="startDate"
+                type="date">
+              <input
+                v-model="endDate"
+                type="date">
+            </template>
+
+            <template>
+              <v-btn
+                block
+                color="secondary"
+                dark>Filter</v-btn>
+            </template>
+
             <!-- End filters -->
             <highcharts
-                  ref="barChart"
-                  :options="barOptionsTime"/>
+              ref="barChart"
+              :options="barOptionsTime"/>
 
           </v-card-text>
 
@@ -157,8 +158,8 @@
           <v-card-text v-if="n==2">
 
             <highcharts
-                  ref="barChart"
-                  :options="barOptions"/>
+              ref="barChart"
+              :options="barOptions"/>
 
           </v-card-text>
 
@@ -183,68 +184,71 @@
           <v-card-text v-if="n==5">
 
             <v-layout wrap>
-               <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="facility"
-          item-text="name"
-          item-value="id"
-          :items="all_subcounties"
-          label="Select Sub-County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-           <v-flex
-             md6
-            lg3
-           >
-            <template>
-            <v-flex
-            xs12
-            >
-                 <v-combobox
-          v-model="facility"
-          item-text="name"
-          item-value="id"
-          :items="all_facilities"
-          label="Select Facility"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                </v-flex>
-            </template>
-           </v-flex>
-           </v-layout>
-    
-
-            <template>
-
-              <input type="date" v-model="startDate">
-              <input type="date" v-model="endDate">
-            </template>
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
 
                 <template>
-                  <v-btn block color="secondary" dark>Filter</v-btn>
+
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_subcounties"
+                    item-text="name"
+                    item-value="id"
+                    label="Select Sub-County"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
                 </template>
-               
-            
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsCadre"/>
+              </v-flex>
+
+              <v-flex
+                md6
+                lg3
+              >
+                <template>
+                  <v-flex
+                    xs12
+                  >
+                    <v-combobox
+                      v-model="facility"
+                      :items="all_facilities"
+                      item-text="name"
+                      item-value="id"
+                      label="Select Facility"
+                      multiple
+                      clerable
+                      persistent-hint
+                      chips/>
+                  </v-flex>
+                </template>
+              </v-flex>
+            </v-layout>
+
+            <template>
+
+              <input
+                v-model="startDate"
+                type="date">
+              <input
+                v-model="endDate"
+                type="date">
+            </template>
+
+            <template>
+              <v-btn
+                block
+                color="secondary"
+                dark>Filter</v-btn>
+            </template>
+
+            <highcharts
+              ref="barChart"
+              :options="barOptionsCadre"/>
 
           </v-card-text>
 
@@ -303,7 +307,6 @@
                 :options="gendOptions"/>
             </template>
 
-
           </v-card-text>
           <v-card-text v-if="n==10">This is the Third tab</v-card-text>
         </v-container>
@@ -331,14 +334,13 @@ export default {
   computed: {
 
   // getCounties() {
-   //   return this.all_facilities.reduce((seed, current) => {
-      //  return Object.assign(seed, {
-       //   [current.county]: current
-      //  });
-     // });
-      //console.log(current.county)
-    //},
-
+    //   return this.all_facilities.reduce((seed, current) => {
+    //  return Object.assign(seed, {
+    //   [current.county]: current
+    //  });
+    // });
+    // console.log(current.county)
+    // },
 
     cadreCount () {
       return this.c
@@ -358,19 +360,19 @@ export default {
   data () {
     return {
 
-      //my test filter area
+      // my test filter area
       valid: false,
-     facility: '',
-       counties: '',
-       subcounties: '',
-    all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
-       all_facilities: [],
-       all_subcounties: [],
-       all_counties: [],
-    
+      facility: '',
+      counties: '',
+      subcounties: '',
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_facilities: [],
+      all_subcounties: [],
+      all_counties: [],
+
       startDate: null,
       endDate: null,
-       //end
+      // end
 
       value: true,
       value1: true,
@@ -482,7 +484,7 @@ export default {
             text: 'Devices'
           }
         },
-        
+
         yAxis: {
           min: 0,
           title: {
@@ -886,7 +888,7 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          //this.all_counties = facilities.data.data
+          // this.all_counties = facilities.data.data
           if (facilities.data.links.next != null) {
             this.link = facilities.data, links.next
             this.loopT(this.link)
@@ -983,7 +985,7 @@ export default {
             }
           })
           .catch(error => console.log(error.message))
-      } 
+      }
     },
 
     getCad () {
@@ -1087,10 +1089,9 @@ export default {
           count++
         } else if (age > 65 && cat == 5) {
           count++
-        } else if (age < 18 && cat == 6){
+        } else if (age < 18 && cat == 6) {
           count++
-        }
-         else {
+        } else {
           count
         }
       }
@@ -1110,10 +1111,9 @@ export default {
       for (var x in this.s) {
         if (this.s[x].gender === cat && this.s[x].gender === num) {
           count++
-           console.log((count / 100 ) * (cat + num))
+          console.log((count / 100) * (cat + num))
         }
       }
-
     },
 
     getDevice (cat) {

@@ -8,30 +8,30 @@
       justify-center
       wrap
     >
-    
+
       <v-flex
         md12
       >
-    
-      <v-snackbar
-        color="error"
-        v-model="snackbar"
-        :timeout="12000"
-        top>
-        <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{ output.errors }} {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-      </v-snackbar>
+
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="12000"
+          color="error"
+          top>
+          <v-icon
+            color="white"
+            class="mr-3"
+          >
+            mdi-bell-plus
+          </v-icon>
+          <div> {{ output.errors }} {{ result }}</div>
+          <v-icon
+            size="16"
+            @click="snackbar = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-snackbar>
 
         <v-card>
           <v-card-title>
@@ -49,10 +49,10 @@
           <v-data-table
             :headers="headers"
             :items="all_users"
-            loading 
-            loading-text="Loading... Please wait"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
+            loading
+            loading-text="Loading... Please wait"
             item-key="id"
           >
             <template
@@ -93,7 +93,7 @@ export default {
       output: '',
       search: '',
       result: '',
-      loading:false,
+      loading: false,
       all_users: [],
       headers: [
         {
@@ -141,9 +141,8 @@ export default {
           this.result = 'Check your internet connection or retry logging in.'
           this.snackbar = true
         })
-        .finally(() => 
-        (this.loading = false ))
-      
+        .finally(() =>
+          (this.loading = false))
     },
     async loopT (l) {
       var i

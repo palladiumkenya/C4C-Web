@@ -1,6 +1,4 @@
 
-
-
 <template>
   <v-card>
     <h3/>
@@ -89,7 +87,7 @@ export default {
   },
   methods: {
     getImmunizations () {
-      if (this.user.role_id===1)
+      if (this.user.role_id === 1) {
         axios.get('immunizations/all/disease/1')
           .then((exp) => {
             this.s = exp.data.data
@@ -101,7 +99,8 @@ export default {
             }
           })
           .catch(error => console.log(error.message))
-      if (this.user.role_id===4) {
+      }
+      if (this.user.role_id === 4) {
         axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/1`)
           .then((exp) => {
             this.s = exp.data.data

@@ -12,7 +12,6 @@ export default [
     // Relative to /src/views
     view: 'Dashboard',
 
-
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -370,7 +369,7 @@ export default [
   {
     path: '/covid19_resources',
     name: 'COVID19 Resources',
-    view: 'All_Covid',
+    view: 'All_Covid'
     // beforeEnter: (to, from, next) => {
     //   if (!store.getters['auth/authenticated']) {
     //     return next({
@@ -414,5 +413,3 @@ export default [
     }
   }
 ]
-
-

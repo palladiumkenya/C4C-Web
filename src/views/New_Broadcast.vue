@@ -219,7 +219,7 @@ export default {
             this.output = error
             this.snack('top', 'center')
           })
-      } else if (this.role_id === 4){
+      } else if (this.role_id === 4) {
         axios.post('broadcasts/web/create', {
           facility_id: this.user.hcw.facility_id,
 

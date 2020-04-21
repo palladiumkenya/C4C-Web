@@ -42,8 +42,7 @@
                     v-model="cme.title"
                     required
                     label="Title"
-                    class="purple-input">
-                  </v-text-field>
+                    class="purple-input"/>
                 </v-flex>
 
                 <v-flex xs12>
@@ -54,8 +53,7 @@
                     :rules="bodyRules"
                     :config="editorConfig"
                     placeholder="Write here"
-                    required>
-                  </ckeditor>  
+                    required/>
                 </v-flex>
 
                 <v-flex xs12 >
@@ -72,7 +70,7 @@
                     :src="cme.file"
                     class="white--text align-end"
                     height="400px"
-                  />                                      
+                  />
 
                 </v-flex>
 
@@ -85,27 +83,27 @@
                 <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
-                    value="cme.files"
                     id="files"
                     ref="files"
+                    value="cme.files"
                     type="file"
                     multiple
                     @change="handleFiles()">
-                    {{cme.files.file_name}}
+                  {{ cme.files.file_name }}
 
                   <v-list
-                      v-for="file in cme.files"
-                      :key="file"
-                      class="file-listing"> {{file.file_name}}
-                      <span
-                        class="remove-file"
-                        @click="removeFile(key)"> Remove </span>
-                  </v-list>   
+                    v-for="file in cme.files"
+                    :key="file"
+                    class="file-listing"> {{ file.file_name }}
+                    <span
+                      class="remove-file"
+                      @click="removeFile(key)"> Remove </span>
+                  </v-list>
 
                   <v-card
                     v-for="(file, key) in files"
                     :key="file.id"
-                    class="file-listing">{{ file.name }} {{cme.files[file_name]}}
+                    class="file-listing">{{ file.name }} {{ cme.files[file_name] }}
                     <span
                       class="remove-file"
                       @click="removeFile(key)"> Remove </span> </v-card>
@@ -206,9 +204,9 @@ export default {
     }
   },
 
-  created() {
-       this.getCME()
-    },
+  created () {
+    this.getCME()
+  },
 
   methods: {
 
@@ -248,13 +246,12 @@ export default {
 
     getCME () {
       var id = this.$route.params.id
-       axios.get('resources/cmes/' + id)
+      axios.get('resources/cmes/' + id)
         .then((resource) => {
-        this.cme = resource.data.data 
-        console.log(resource.data)
-
+          this.cme = resource.data.data
+          console.log(resource.data)
         }).catch((error) => {
-        console.log(error.message)
+          console.log(error.message)
         })
     },
 
