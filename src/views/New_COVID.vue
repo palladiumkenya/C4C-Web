@@ -14,13 +14,13 @@
       >
         <material-card
           color="green"
-          title="Create A COVID19 Resource "
+          title="Create A Public Resource "
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
             <div/> 
             <p class="display-1 text--primary">
-              Add A New COVID19 Resource
+              Add A New COVID 19 Resource
             </p>
             <div class="text--primary">
               Kindly fill all the required fields
@@ -31,7 +31,7 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit="postCOVID19">
+            @submit="postCOVID">
             <v-container py-0>
               <v-layout wrap>
 
@@ -223,7 +223,7 @@ export default {
       this.files.splice(key, 1)
     },
 
-    postCOVID19 (e) {
+    postCOVID (e) {
       e.preventDefault()
 
       let allData = new FormData()
@@ -242,7 +242,7 @@ export default {
         method: 'POST',
         url: 'resources/special/create',
         data: allData,
-        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
         .then((response) => {
           this.output = response.data

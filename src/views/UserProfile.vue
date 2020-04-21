@@ -78,35 +78,41 @@
                 md6
               >
                 <v-select
-                v-model="user.role"
-                :items="items"
+                v-model="user.role.name"
+                :items="roles"
                 label="Role"
                 required
               >
               </v-select>
               </v-flex>
 
-              <!-- <v-flex
-                xs12
-                md12
-              >
-               <v-text-field
-                v-model="user.created_at"
-                label="Created_at"
-                required
-              ></v-text-field>
-              </v-flex> -->
-
               <v-flex
                 xs12
-                md8>
+                md6>
                 <v-select
                   v-model="user.hcw.facility_name"
                   :items="all_facilities"
+                  item-value="id"
+                  item-text="name"
                   label="Facility"
                   required
-                ></v-select>
+                > </v-select> {{user.hcw.facility_name}}
               </v-flex>
+
+              <v-flex
+                xs12
+                md6>
+                <v-select
+                  v-model="user.cadre"
+                  :hint="user.cadre"
+                  :items="all_cadres"
+                  item-text="name"
+                  label="Cadre"
+                  item-value="id"
+                  required
+                >
+                </v-select>  {{user.cadre}}   
+              </v-flex> 
 
               <v-flex
                 xs12
@@ -167,8 +173,14 @@ export default {
         'FEMALE',
         'UNDEFINED'
       ],
+      roles: [
+        'Super Admin',
+        'Partner Admin',
+        'Health care worker',
+        'Facility Admin'
+      ],
       all_facilities : [],
-      roles: []
+      all_cadres: []
     }
   },
   computed: {
@@ -178,7 +190,7 @@ export default {
   },
   created () {
     this.getFacilities()
-    this.getRoles()
+    this.getCadres()
 
   },
 
@@ -192,11 +204,11 @@ export default {
         .catch(error => console.log(error.message))
     },
 
-    getRoles () {
-      axios.get('roles')
-        .then((roles) => {
-          console.log(roles.data)
-          this.all_roles = roles.data.data
+    getCadres () {
+      axios.get('cadres')
+        .then((cadres) => {
+          console.log(cadres.data)
+          this.all_cadres = cadres.data.data
         })
         .catch(error => console.log(error.message))
     }

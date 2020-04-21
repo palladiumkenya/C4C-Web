@@ -39,7 +39,6 @@
 
     <v-row dense v-else>
 
-      {{results}}
       <v-col
         v-for="result in results"
         :key="result.id"

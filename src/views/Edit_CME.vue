@@ -105,7 +105,7 @@
                   <v-card
                     v-for="(file, key) in files"
                     :key="file.id"
-                    class="file-listing">{{ file.name }} {{cme.files[file_name]}}
+                    class="file-listing">{{ file.name }} 
                     <span
                       class="remove-file"
                       @click="removeFile(key)"> Remove </span> </v-card>
