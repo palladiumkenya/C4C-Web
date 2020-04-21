@@ -455,7 +455,7 @@ export default {
     },
 
     getSubCounties () {
-      axios.get('subcounties/3')
+      axios.get('subcounties/4')
         .then((subcounties) => {
           console.log(subcounties.data)
           this.all_subcounties = subcounties.data.data
@@ -468,7 +468,7 @@ export default {
     },
 
     getExp () {
-      // if (this.user.role_id === 1) {
+      if (this.user.role_id === 1) {
         axios.get('exposures/all/')
           .then((exp) => {
             this.scount = exp.data.meta.total
@@ -478,17 +478,17 @@ export default {
             this.loopT(this.link)
           })
           .catch(error => console.log(error.message))
-      // } else if (this.user.role_id === 4){
-      //   axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
-      //     .then((exp) => {
-      //       this.scount = exp.data.meta.total
-      //       this.s = exp.data.data
-      //       console.log(exp.data.data)
-      //       this.link = exp.data.links.next
-      //       this.loopT(this.link)
-      //     })
-      //     .catch(error => console.log(error.message))
-      // }
+      } else if (this.user.role_id === 4){
+        axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.scount = exp.data.meta.total
+            this.s = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          })
+          .catch(error => console.log(error.message))
+      }
     },
 
     
@@ -512,7 +512,7 @@ export default {
       },
 
     getAllUsers () {
-      // if (this.user.role_id === 1) {
+      if (this.user.role_id === 1) {
         axios.get('users')
           .then((exp) => { 
             this.u = exp.data.meta.total
@@ -522,17 +522,17 @@ export default {
             this.loopG(this.link)
           })
           .catch(error => console.log(error.message))
-      // } else if (this.user.role_id === 4) {
-      //   axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-      //     .then((exp) => { 
-      //       this.u = exp.data.meta.total
-      //       this.userz = exp.data.data
-      //       console.log(exp.data.data)
-      //       this.link = exp.data.links.next
-      //       this.loopG(this.link)
-      //     })
-      //     .catch(error => console.log(error.message))
-      // }
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => { 
+            this.u = exp.data.meta.total
+            this.userz = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+      }
     },
 
     getBroadcasts () {
