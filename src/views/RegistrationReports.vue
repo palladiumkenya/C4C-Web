@@ -307,7 +307,7 @@ export default {
 
       barOptions: {
         xAxis: {
-          categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
+          categories: ['18 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
           title: {
             text: 'Age Groups'
           }
@@ -437,6 +437,7 @@ export default {
     this.getFacilities()
     this.getCounties()
     this.getSubCounties()
+    this.getAllUsers()
   },
   methods: {
 
@@ -479,6 +480,18 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+    getAllUsers () {
+        axios.get('users')
+          .then((exp) => {
+            this.u = exp.data.meta.total
+            this.userz = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+    },
+    
     getUsers () {
       if (this.user.role_id === 1) {
         axios.get('hcw')// facility/9831
@@ -491,6 +504,7 @@ export default {
             } else {
               console.log('mm')
               this.getAgeData()
+              
             }
           })
           .catch(error => console.log(error.message))
@@ -505,6 +519,7 @@ export default {
             } else {
               console.log(this.s)
               this.getAgeData()
+             
             }
           })
           .catch(error => console.log(error.message))
@@ -523,9 +538,22 @@ export default {
       }
       console.log(this.s)
       this.getAgeData()
-
-      this.getsummarydata()
       // this.getTime()
+    },
+     async loopG (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.userz = this.userz.concat(response.data.data)
+        //  this.userl = this.userl.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+       this.getsummarydata()
+      
     },
 
     getAgeData () {
@@ -562,10 +590,11 @@ export default {
       this.value1 = false
     },
 
-    getsummarydata () {
-      var reg = []
-      for (var r in this.monthOptionsTest.xAxis.categories) {
-        reg.push(this.getNumr(this.monthOptionsTest.xAxis.categories[r]))
+    getsummarydata (){
+        var reg = []
+      for (var r in this.monthOptions.xAxis.categories) {
+        reg.push(this.getNumr(this.monthOptions.xAxis.categories[r]))
+        
       }
       this.monthOptions.series[0].data = reg
     },
@@ -577,7 +606,7 @@ export default {
         var diff_ms = Date.now() - date.getTime()
         var age_dt = new Date(diff_ms)
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
-        if (age < 26 && cat == 0) {
+        if (age >= 18 && age < 26 && cat == 0) {
           count++
         } else if (age > 25 && age <= 35 && cat == 1) {
           count++
