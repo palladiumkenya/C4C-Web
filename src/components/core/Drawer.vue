@@ -85,20 +85,20 @@
             <div
               v-for="sublink in link.subLinks"
               :key="sublink.text">
-            <template
-              v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources')">
-              <!-- {{drawerList(sublink.text)}} -->
-              <v-list-tile
-                :to="sublink.to"
-                :active-class="color"
-                class="v-list-item"
-                avatar
-              >
-                <v-list-tile-action>
-                <v-icon>{{ sublink.icon }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-title v-text="sublink.text" />
-              </v-list-tile>
+              <template
+                v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources')">
+                <!-- {{drawerList(sublink.text)}} -->
+                <v-list-tile
+                  :to="sublink.to"
+                  :active-class="color"
+                  class="v-list-item"
+                  avatar
+                >
+                  <v-list-tile-action>
+                    <v-icon>{{ sublink.icon }}</v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-title v-text="sublink.text" />
+                </v-list-tile>
               </template>
               <template
                 v-else-if="user.role_id != 4">
@@ -111,8 +111,8 @@
                   <v-list-tile-action>
                     <v-icon>{{ sublink.icon }}</v-icon>
                   </v-list-tile-action>
-                <v-list-tile-title v-text="sublink.text" />
-              </v-list-tile>
+                  <v-list-tile-title v-text="sublink.text" />
+                </v-list-tile>
               </template>
             </div>
           </v-list-group>
@@ -298,7 +298,7 @@ export default {
     ...mapActions({
       logoutAction: 'auth/signout'
     }),
-    drawerList (ii){
+    drawerList (ii) {
       console.log(ii)
       // if (this.user.role_id === 4){
       //   this.links[6].subLinks.splice(2, 1)

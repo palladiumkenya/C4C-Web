@@ -14,7 +14,6 @@
           >
             <v-combobox
               v-model="selectedcounty"
-               @change="onSelect"
               :items="all_counties"
               :search-input.sync="search"
               item-text="county"
@@ -23,6 +22,7 @@
               chips
               label="Select County"
               required
+              @change="onSelect"
             />
           </v-flex>
 
@@ -142,11 +142,16 @@
           md6
           lg10
         >
-         <template>
+          <template>
 
-              <input type="date" label="From" v-model="startDate">
-              <input type="date" v-model="endDate">
-            </template>
+            <input
+              v-model="startDate"
+              type="date"
+              label="From">
+            <input
+              v-model="endDate"
+              type="date">
+          </template>
         </v-flex>
 
       </template>
@@ -157,12 +162,11 @@
 </template>
 
 <script>
-  import axios from 'axios'
-   import format from 'date-fns/format'
-  import {mapGetters, mapState} from 'vuex'
+import axios from 'axios'
+import format from 'date-fns/format'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
-
 
   data () {
     return {
@@ -175,12 +179,12 @@ export default {
   },
 
   computed: {
-    getCounties() {
+    getCounties () {
       return this.all_facilities.reduce((seed, current) => {
         return Object.assign(seed, {
           [current.county]: current
-        });
-      });
+        })
+      })
       console.log(current.county)
     }
   },
@@ -203,20 +207,19 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-   
-     onSelect(e) {
-    if (e.length == 0) {
-      this.all_facilities.forEach((item) => item.disabled = false)
-    } else {
-        let chosen = this.all_facilities.filter((item) => item.id==e[0])
+
+    onSelect (e) {
+      if (e.length == 0) {
+        this.all_facilities.forEach((item) => item.disabled = false)
+      } else {
+        let chosen = this.all_facilities.filter((item) => item.id == e[0])
         this.all_facilities.forEach((item) => {
           if (item.sub_county != chosen[0].sub_county) {
             item.disabled = true
           }
         })
       }
-  }           
-      
+    }
 
   }
 }

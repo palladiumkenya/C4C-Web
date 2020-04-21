@@ -12,25 +12,25 @@
         md12
       >
 
-      <v-snackbar
-        color="error"
-        v-model="snackbar"
-        :timeout="12000"
-        top>
-        <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{ output.errors }} {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-      </v-snackbar>
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="12000"
+          color="error"
+          top>
+          <v-icon
+            color="white"
+            class="mr-3"
+          >
+            mdi-bell-plus
+          </v-icon>
+          <div> {{ output.errors }} {{ result }}</div>
+          <v-icon
+            size="16"
+            @click="snackbar = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-snackbar>
 
         <v-card>
           <v-card-title>
@@ -48,10 +48,10 @@
           <v-data-table
             :headers="headers"
             :items="all_hcws"
-            loading 
-            loading-text="Loading... Please wait"
             :rows-per-page-items="rowsPerPageItems"
             :search="search"
+            loading
+            loading-text="Loading... Please wait"
             item-key="id"
           >
             <template
@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     getHCW () {
-      if (this.user.role_id === 1){
+      if (this.user.role_id === 1) {
         axios.get('hcw')
           .then((workers) => {
             console.log(workers.data)

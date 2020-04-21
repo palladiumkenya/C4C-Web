@@ -1,24 +1,24 @@
 <template>
-    <v-card
+  <v-card
     width="400"
     center
-    >
+  >
     <v-card-text>
-          Please wait ...
-          <v-progress-linear
-            indeterminate
-            color="green"
-            class="mb-0"
-          ></v-progress-linear>
-        </v-card-text>
-      </v-card>
+      Please wait ...
+      <v-progress-linear
+        indeterminate
+        color="green"
+        class="mb-0"
+      />
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
 export default {
-  name: "loader",
- 
-};
+  name: 'Loader'
+
+}
 </script>
 
 <style scoped>

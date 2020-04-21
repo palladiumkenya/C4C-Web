@@ -42,9 +42,9 @@
             :headers="headers"
             :items="all_messages"
             :search="search"
+            :rows-per-page-items="rowsPerPageItems"
             loading
             loading-text="Loading... Please wait"
-            :rows-per-page-items="rowsPerPageItems"
             show-actions
             item-key="id"
           >
@@ -134,7 +134,7 @@ export default {
             this.loopT(broadcast.data.links.next)
           })
           .catch(error => console.log(error.message))
-      } else if (this.user.role_id === 4){
+      } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
           .then((broadcast) => {
             // console.log(broadcast.data)
@@ -143,7 +143,6 @@ export default {
           })
           .catch(error => console.log(error.message))
       }
-
     },
     async loopT (l) {
       var i
@@ -157,7 +156,6 @@ export default {
         }
       }
       console.log(this.all_messages)
-
     }
   }
 }

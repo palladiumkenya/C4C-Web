@@ -37,33 +37,34 @@
       </v-snackbar>
 
       <v-flex v-if="loading">
-          <Loader />
-      </v-flex>  
+        <Loader />
+      </v-flex>
 
-      <v-flex v-else
+      <v-flex
         v-for="result in results"
+        v-else
         :key="result.id"
         xs12
         sm6
         md6
         lg4>
 
-          <v-card
-            class="mx-auto"
-            max-width="400"
+        <v-card
+          class="mx-auto"
+          max-width="400"
 
-          >
-            <v-img
-              :src="result.file || 'sunshine.jpg' "
-              class="white--text align-end"
-              height="200px"
-            />
+        >
+          <v-img
+            :src="result.file || 'sunshine.jpg' "
+            class="white--text align-end"
+            height="200px"
+          />
 
-            <v-card-title>{{ result.title }}</v-card-title>
+          <v-card-title>{{ result.title }}</v-card-title>
 
-            <v-card-text class="text--primary">
-              <div><span>Created On: </span>{{ result.created_at }}</div>
-            </v-card-text>
+          <v-card-text class="text--primary">
+            <div><span>Created On: </span>{{ result.created_at }}</div>
+          </v-card-text>
 
             <v-card-actions>
             <v-btn icon color="orange"
