@@ -13,14 +13,12 @@
         md4
         lg4
       >
-
         <template>
           <v-card
             class="mx-auto"
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1" >mdi-account-group</v-icon>
               <h2 align="center">{{ usersCount }}</h2>
@@ -28,23 +26,19 @@
             </v-card-text>
           </v-card>
         </template>
-
       </v-flex>
-
       <v-flex
         sm3
         xs8
         md4
         lg4
       >
-
         <template>
           <v-card
             class="mx-auto"
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1">mdi-file-chart</v-icon>
               <h2 align="center">{{ exposuresCount }}</h2>
@@ -52,9 +46,7 @@
             </v-card-text>
           </v-card>
         </template>
-
       </v-flex>
-
       <v-flex
         sm3
         xs8
@@ -68,7 +60,6 @@
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1">mdi-message</v-icon>
               <h2 align="center">{{ broadcastsCount }}</h2>
@@ -78,144 +69,142 @@
         </template>
 
       </v-flex>
-
       <!-- End Cards -->
 
       <template>
-   <!-- Start filters -->
+        <!-- Start filters -->
 
-           <v-layout >
-              <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-                 
-          v-model="counties"
-          item-text="name"
-          item-value="id"
-          :items="all_counties"
-          label="Select County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-               <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="subcounties"
-          item-text="name"
-          item-value="id"
-          :items="all_subcounties"
-          label="Select Sub-County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="facility"
-          item-text="partner"
-          item-value="id"
-          :items="all_facilities"
-          label="Select Partner"
-          multiple
-          clerable
-          disabled
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-
-          :items="all_facilities_level"
-          label="Select Facility Level"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-           <v-flex
-           xs12
-             md6
+        <v-layout >
+          <v-flex
+            xs12
+            md6
             lg3
-           >
+          >
             <template>
-                 <v-combobox
-          v-model="facility"
-          item-text="name"
-          item-value="id"
-          :items="all_facilities"
-          label="Select Facility"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
+              <v-combobox
+                v-model="counties"
+                :items="all_counties"
+                item-text="name"
+                item-value="id"
+                label="Select County"
+                v-on:change="getSubCounties"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
             </template>
-           </v-flex>
-           </v-layout>
-    
+            <!-- {{ getSubCounties(counties) }} -->
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
 
             <template>
 
-              <input type="date" v-model="startDate">
-              <input type="date" v-model="endDate">
-            </template>
+              <v-combobox
+                v-model="subcounties"
+                :items="all_subcounties"
+                item-text="name"
+                item-value="id"
+                label="Select Sub-County"
+                :disabled="active"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
 
-                <template>
-                  <v-btn block color="secondary" @click="click" dark>Filter</v-btn>
-                </template>
-               
-            <!-- End filters -->
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+
+            <template>
+
+              <v-combobox
+                v-model="facility"
+                :items="all_facilities"
+                item-text="partner"
+                item-value="id"
+                label="Select Partner"
+                multiple
+                clerable
+                disabled
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+
+            <template>
+
+              <v-combobox
+
+                :items="all_facilities_level"
+                label="Select Facility Level"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+            <template>
+              <v-combobox
+                v-model="facility"
+                :items="all_facilities"
+                item-text="name"
+                item-value="id"
+                label="Select Facility"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+        </v-layout>
+
+        <template>
+
+          <input
+            v-model="startDate"
+            type="date">
+          <input
+            v-model="endDate"
+            type="date">
+        </template>
+
+        <template>
+          <v-btn
+            block
+            color="secondary"
+            dark
+            @click="click">Filter</v-btn>
+        </template>
+
+        <!-- End filters -->
       </template>
- 
 
       <!-- Start Graphs -->
-  <v-flex
+      <v-flex
         sm3
         xs8
         md4
@@ -251,9 +240,7 @@ import Highcharts from 'highcharts'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 
-import { EventBus } from "./../event-bus.js";
-
-
+import { EventBus } from './../event-bus.js'
 
 export default {
   components: {
@@ -261,19 +248,17 @@ export default {
   },
   data () {
     return {
-
-
-      
-
-       facility: '',
-       counties: '',
-       subcounties: '',
+      startDate: '',
+      endDate: '',
+      facility: '',
+      counties: '',
+      subcounties: '',
       all_facilities: [],
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
       all_subcounties: [],
-
-     barOptionsTime: {
+      active: true,
+      barOptionsTime: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
@@ -307,14 +292,11 @@ export default {
             }
           }
         },
-
         chart: {
           type: 'column'
         },
-
         title: {
           text: 'Monthly Exposure Rate'
-
         },
         series: [
           {
@@ -323,12 +305,10 @@ export default {
             colorByPoint: true,
             name: 'No of Reported Exposures',
             data: []
-          },
+          }
 
         ]
-        
       },
-
       barOptionsTest: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -363,30 +343,22 @@ export default {
             }
           }
         },
-
         chart: {
           type: 'column'
         },
-
         title: {
           text: 'Monthly Registration Trends '
         },
         series: [
-          
-           {
+          {
             type: 'column',
             colorByPoint: true,
             name: 'Registration in Numbers',
             data: []
           }
         ]
-        
       },
-
-      
-
       date: [],
-
       date: [],
       s: [],
       userz: [],
@@ -395,21 +367,14 @@ export default {
       b: 0,
       scount: 0
     }
-    
   },
   computed: {
     broadcastsCount () {
       return this.b
     },
-
-    // all facility exposures # computed
-
     usersCount () {
       return this.u
     },
-
-    // hcws with exposures # computed
-
     exposuresCount () {
       return this.scount
     },
@@ -418,48 +383,45 @@ export default {
     })
   },
 
-   created () {
+  created () {
     if (this.user === null) {
       alert('Not admin')
       this.$router.replace({
         name: 'login'
       })
     }
-     // EventBus.on("btn-clicked", data => {
-     // this.barOptionsTime.series[0].data = data.newData;
-    //});
-
+    // EventBus.on("btn-clicked", data => {
+    // this.barOptionsTime.series[0].data = data.newData;
+    // });
     this.getExp()
     this.getBroadcasts()
     this.getAllUsers()
     this.getFacilities()
     this.getCounties()
-    this.getSubCounties()
+    // this.getSubCounties()
 
     this.filterCounty()
     this.filterSubCounty()
-
   },
   methods: {
 
-    //  click() {
-     // EventBus.emit("btn-clicked", {
-     //   newData: [100, 12800, 500]
-     // });
-    //},
-filterSubCounty (){
-   document.getElementById('selectSubCounty').addEventListener('change', function() {
-    barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max);
-});
- },
+    click () {
+    //  EventBus.emit("btn-clicked", {
+    //    newData: [100, 12800, 500]
+    //  });
+    },
+    filterSubCounty () {
+      document.getElementById('selectSubCounty').addEventListener('change', function () {
+        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
+      })
+    },
 
- filterCounty (){
-   document.getElementById('selectCounty').addEventListener('change', function() {
-    barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max);
-});
- },
-
-     getFacilities () {
+    filterCounty () {
+      document.getElementById('selectCounty').addEventListener('change', function () {
+        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
+      })
+    },
+    getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
@@ -470,31 +432,35 @@ filterSubCounty (){
           }
         })
         .catch(error => console.log(error.message))
-    }, 
-     getCounties () {
+    },
+    getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data)
+          console.log(counties.data.data)
           this.all_counties = counties.data.data
-          if (counties.data.links.next != null) {
-            this.link = counties.data, links.next
-            this.loopT(this.link)
-          }
         })
         .catch(error => console.log(error.message))
     },
 
-    getSubCounties () {
-      axios.get('subcounties/all')
-        .then((subcounties) => {
-          console.log(subcounties.data)
-          this.all_subcounties = subcounties.data.data
-          if (subcounties.data.links.next != null) {
-            this.link = subcounties.data, links.next
-            this.loopT(this.link)
-          }
-        })
-        .catch(error => console.log(error.message))
+    getSubCounties (a) {
+      console.log(a)
+      if (a) {
+        this.active = false
+        for (var i in a) {
+          axios.get(`subcounties/${a[i].id}`)
+            .then((subcounties) => {
+              // console.log(subcounties.data)
+              this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+            })
+            .catch(error => console.log(error.message))
+        }
+      }
+      // axios.get('subcounties/4')
+      //   .then((subcounties) => {
+      //     console.log(subcounties.data)
+      //     this.all_subcounties = subcounties.data.data
+      //   })
+      //   .catch(error => console.log(error.message))
     },
 
     getExp () {
@@ -508,7 +474,7 @@ filterSubCounty (){
             this.loopT(this.link)
           })
           .catch(error => console.log(error.message))
-      } else if (this.user.role_id === 4){
+      } else if (this.user.role_id === 4) {
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {
             this.scount = exp.data.meta.total
@@ -521,31 +487,25 @@ filterSubCounty (){
       }
     },
 
-    
-
     getMonth () {
-
       var wdata = []
       for (var i in this.barOptionsTime.xAxis.categories) {
-        
         wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
       }
       this.barOptionsTime.series[0].data = wdata
     },
-     getTest ()
-    {
-       var reg = []
+    getTest () {
+      var reg = []
       for (var r in this.barOptionsTest.xAxis.categories) {
         reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r]))
-        
       }
-     this.barOptionsTest.series[0].data = reg
-      },
+      this.barOptionsTest.series[0].data = reg
+    },
 
     getAllUsers () {
       if (this.user.role_id === 1) {
         axios.get('users')
-          .then((exp) => { 
+          .then((exp) => {
             this.u = exp.data.meta.total
             this.userz = exp.data.data
             console.log(exp.data.data)
@@ -555,10 +515,9 @@ filterSubCounty (){
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
         axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => { 
+          .then((exp) => {
             this.u = exp.data.meta.total
             this.userz = exp.data.data
-            console.log(exp.data.data)
             this.link = exp.data.links.next
             this.loopG(this.link)
           })
@@ -591,16 +550,13 @@ filterSubCounty (){
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
 
-           this.userz = this.userz.concat(response.data.data)
-
+          this.userz = this.userz.concat(response.data.data)
         } else {
           i = 11
         }
       }
 
       this.getMonth()
-      
-
     },
 
     async loopG (l) {
@@ -615,10 +571,9 @@ filterSubCounty (){
           i = 11
         }
       }
-     this.getTest()
+      this.getTest()
       this.getRegistrations()
       this.getLocations()
-
     },
 
     getNumt (name) {
@@ -636,7 +591,7 @@ filterSubCounty (){
       var counter = 0
       for (var r in this.userz) {
         var dat = new Date(this.userz[r].created_at)
-        var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if (list[dat.getMonth()] === name) {
           console.log(name)
           counter++
@@ -653,8 +608,7 @@ filterSubCounty (){
         }
       }
       return counter
-    },
-    
+    }
 
   }
 }
