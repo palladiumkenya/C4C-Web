@@ -15,8 +15,10 @@
           Add A New COVID 19 Resource
         </v-btn>
       </v-flex>
-
-      <Loader v-if="loading" />
+      
+      <v-flex v-if="loading">
+          <Loader />
+      </v-flex>  
 
       <v-flex v-else
         v-for="result in results"
@@ -25,7 +27,6 @@
         sm6
         md6
         lg4>
-        <template>
 
           <v-card
             class="mx-auto"
@@ -53,7 +54,6 @@
             </v-btn>
 
           </v-card>
-        </template>
       </v-flex>
     </v-layout>
   </v-container>
@@ -81,7 +81,9 @@ export default {
     getResources () {
       axios.get('resources/cmes')
         .then((resources) => {
-          console.log(resources.data)
+
+          this.results = resources.data.data
+          console.log(resources.data.data)
           
           this.loading = false
         })

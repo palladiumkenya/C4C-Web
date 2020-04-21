@@ -94,6 +94,7 @@
             <template>
 
                  <v-combobox
+                 
           v-model="counties"
           item-text="name"
           item-value="id"
@@ -206,7 +207,7 @@
             </template>
 
                 <template>
-                  <v-btn block color="secondary" dark>Filter</v-btn>
+                  <v-btn block color="secondary" @click="click" dark>Filter</v-btn>
                 </template>
                
             <!-- End filters -->
@@ -249,6 +250,11 @@ import axios from 'axios'
 import Highcharts from 'highcharts'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
+
+import { EventBus } from "./../event-bus.js";
+
+
+
 export default {
   components: {
     highcharts: Chart
@@ -416,6 +422,10 @@ export default {
         name: 'login'
       })
     }
+     // EventBus.on("btn-clicked", data => {
+     // this.barOptionsTime.series[0].data = data.newData;
+    //});
+
     this.getExp()
     this.getBroadcasts()
     this.getAllUsers()
@@ -423,17 +433,34 @@ export default {
     this.getCounties()
     this.getSubCounties()
 
+    this.filterCounty()
+    this.filterSubCounty()
+
   },
   methods: {
 
-     
+    //  click() {
+     // EventBus.emit("btn-clicked", {
+     //   newData: [100, 12800, 500]
+     // });
+    //},
+filterSubCounty (){
+   document.getElementById('selectSubCounty').addEventListener('change', function() {
+    barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max);
+});
+ },
+
+ filterCounty (){
+   document.getElementById('selectCounty').addEventListener('change', function() {
+    barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max);
+});
+ },
 
      getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          this.all_counties = facilities.data.data
           if (facilities.data.links.next != null) {
             this.link = facilities.data, links.next
             this.loopT(this.link)
@@ -497,6 +524,7 @@ export default {
 
       var wdata = []
       for (var i in this.barOptionsTime.xAxis.categories) {
+        
         wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
       }
       this.barOptionsTime.series[0].data = wdata
