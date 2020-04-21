@@ -477,7 +477,7 @@ export default {
 
       barOptionsDevice: {
         xAxis: {
-          categories: ['Syringe/ Needle IM/ SC Injection', 'Syringe/Needle Blood Drawing', 'Phlebotomy needle/vacuum set', 'IV catheter/canula', 'Needle IV Line', 'Unused Needle', 'Lancet', 'Sature Needle', 'Scalpel', 'Capillary Tube', 'Glass Slide', 'Pippete Tip', 'Thermal Gun', 'Scapel', 'Canular', 'Syringe Regular', 'Test', 'Test Syringe', 'Other'],
+          categories: ['Syringe/ Needle IM/ SC Injection', 'Syringe /needle blood drawing', 'Phlebotomy needle/vacuum set', 'IV catheter/canula', 'Needle IV Line', 'Unused Needle', 'Lancet', 'Sature Needle', 'Scalpel', 'Capillary Tube', 'Glass Slide', 'Pippete Tip', 'Thermal Gun', 'Scapel', 'Canular', 'Syringe Regular', 'Test', 'Test Syringe', 'Other'],
           title: {
             text: 'Devices'
           }
@@ -909,7 +909,7 @@ export default {
     },
 
     getSubCounties () {
-      axios.get('subcounties/1')
+      axios.get('subcounties/3')
         .then((subcounties) => {
           console.log(subcounties.data)
           this.all_subcounties = subcounties.data.data

@@ -485,7 +485,7 @@ filterSubCounty (){
     },
 
     getSubCounties () {
-      axios.get('subcounties/4')
+      axios.get('subcounties/all')
         .then((subcounties) => {
           console.log(subcounties.data)
           this.all_subcounties = subcounties.data.data
