@@ -18,7 +18,7 @@
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
-            <div/> 
+            <div/>
             <p class="display-1 text--primary">
               Add A New Public Resource
             </p>

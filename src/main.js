@@ -10,15 +10,15 @@ import './components'
 // Plugins
 import './plugins'
 import { sync } from 'vuex-router-sync'
-import VuetifyDaterangePicker from "vuetify-daterange-picker";
-import "vuetify-daterange-picker/dist/vuetify-daterange-picker.css";
-Vue.use(VuetifyDaterangePicker);
+import VuetifyDaterangePicker from 'vuetify-daterange-picker'
+import 'vuetify-daterange-picker/dist/vuetify-daterange-picker.css'
 
 // Application imports
 import App from './App'
 import router from '@/router'
 import store from './store'
 import axios from 'axios'
+Vue.use(VuetifyDaterangePicker)
 
 require('@/store/subscriber')
 

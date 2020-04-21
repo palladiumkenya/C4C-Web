@@ -152,7 +152,7 @@ export default {
   },
   methods: {
     getBroadcast () {
-      if (this.user.role_id === 1){
+      if (this.user.role_id === 1) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {
             console.log(broadcast.data)
@@ -162,7 +162,7 @@ export default {
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
-      } else if(this.user.role_id === 4){
+      } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
           .then((broadcast) => {
             console.log(broadcast.data)

@@ -14,132 +14,133 @@
         <v-container fluid>
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
-   <!-- Start filters -->
+            <!-- Start filters -->
 
-           <v-layout >
+            <v-layout >
               <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="counties"
-          item-text="county"
-          item-value="id"
-          :items="all_counties"
-          label="Select County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-               <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="subcounties"
-          item-text="sub_county"
-          item-value="subcounty"
-          :items="all_subcounties"
-          label="Select Sub-County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="facility"
-          item-text="partner"
-          item-value="sub_county"
-          :items="all_facilities"
-          label="Select Partner"
-          multiple
-          disabled
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          :items="all_facilities_level"
-          label="Select Facility Level"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-           <v-flex
-           xs12
-             md6
-            lg3
-           >
-            <template>
-                 <v-combobox
-          v-model="facility"
-          item-text="name"
-          item-value="id"
-          :items="all_facilities"
-          label="Select Facility"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-           </v-flex>
-           </v-layout>
-    
-
-            <template>
-
-              <input type="date" v-model="startDate">
-              <input type="date" v-model="endDate">
-            </template>
+                xs12
+                md6
+                lg3
+              >
 
                 <template>
-                  <v-btn block color="secondary" dark>Filter</v-btn>
+
+                  <v-combobox
+                    v-model="counties"
+                    :items="all_counties"
+                    item-text="county"
+                    item-value="id"
+                    label="Select County"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
                 </template>
-               
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+
+                <template>
+
+                  <v-combobox
+                    v-model="subcounties"
+                    :items="all_subcounties"
+                    item-text="sub_county"
+                    item-value="subcounty"
+                    label="Select Sub-County"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+
+                <template>
+
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    item-text="partner"
+                    item-value="sub_county"
+                    label="Select Partner"
+                    multiple
+                    disabled
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+
+                <template>
+
+                  <v-combobox
+                    :items="all_facilities_level"
+                    label="Select Facility Level"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+
+              <v-flex
+                xs12
+                md6
+                lg3
+              >
+                <template>
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    item-text="name"
+                    item-value="id"
+                    label="Select Facility"
+                    multiple
+                    clerable
+                    persistent-hint
+                    chips/>
+
+                </template>
+              </v-flex>
+            </v-layout>
+
+            <template>
+
+              <input
+                v-model="startDate"
+                type="date">
+              <input
+                v-model="endDate"
+                type="date">
+            </template>
+
+            <template>
+              <v-btn
+                block
+                color="secondary"
+                dark>Filter</v-btn>
+            </template>
+
             <!-- End filters -->
 
             <v-flex
@@ -180,7 +181,7 @@
                 :options="cadrOptions"/>
             </template>
           </v-card-text>
-          
+
           <v-card-text v-if="n==3">
             <template>
               <h3>{{ mess }}</h3>
@@ -239,21 +240,20 @@ export default {
   },
   data () {
     return {
-        facility: '',
-       counties: '',
-       subcounties: '',
+      facility: '',
+      counties: '',
+      subcounties: '',
       all_facilities: [],
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
       all_subcounties: [],
 
-    
       value: true,
       value1: true,
       value2: true,
 
       monthOptions: {
-              xAxis: {
+        xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
             text: 'Months Range'
@@ -295,8 +295,8 @@ export default {
           text: 'Monthly Registration Trends '
         },
         series: [
-          
-           {
+
+          {
             type: 'column',
             colorByPoint: true,
             name: 'Registration in Numbers',
@@ -307,7 +307,7 @@ export default {
 
       barOptions: {
         xAxis: {
-          categories: ['0 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
+          categories: ['18 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
           title: {
             text: 'Age Groups'
           }
@@ -437,6 +437,7 @@ export default {
     this.getFacilities()
     this.getCounties()
     this.getSubCounties()
+    this.getAllUsers()
   },
   methods: {
 
@@ -466,12 +467,12 @@ export default {
         .catch(error => console.log(error.message))
     },
 
-     getFacilities () {
+    getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-         // this.all_counties = facilities.data.data
+          // this.all_counties = facilities.data.data
           if (facilities.data.links.next != null) {
             this.link = facilities.data, links.next
             this.loopT(this.link)
@@ -479,6 +480,18 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+    getAllUsers () {
+        axios.get('users')
+          .then((exp) => {
+            this.u = exp.data.meta.total
+            this.userz = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+    },
+    
     getUsers () {
       if (this.user.role_id === 1) {
         axios.get('hcw')// facility/9831
@@ -491,6 +504,7 @@ export default {
             } else {
               console.log('mm')
               this.getAgeData()
+              
             }
           })
           .catch(error => console.log(error.message))
@@ -503,8 +517,9 @@ export default {
               this.link = exp.data.links.next
               this.loopT(this.link)
             } else {
-      console.log(this.s)
+              console.log(this.s)
               this.getAgeData()
+             
             }
           })
           .catch(error => console.log(error.message))
@@ -523,9 +538,22 @@ export default {
       }
       console.log(this.s)
       this.getAgeData()
-
-      this.getsummarydata()
       // this.getTime()
+    },
+     async loopG (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.userz = this.userz.concat(response.data.data)
+        //  this.userl = this.userl.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+       this.getsummarydata()
+      
     },
 
     getAgeData () {
@@ -536,8 +564,8 @@ export default {
       }
       this.barOptions.series[0].data = data
 
-     // this.mess = 'Data fetched'
-    //  this.value = false
+      // this.mess = 'Data fetched'
+      //  this.value = false
       // this.mess = 'Data fetched'
       this.value = false
 
@@ -555,8 +583,8 @@ export default {
       }
       this.cadrOptions.series[0].data = data
 
-    //this.mess1 = 'Data fetched'
-      //this.value1 = false
+      // this.mess1 = 'Data fetched'
+      // this.value1 = false
 
       // this.mess1 = 'Data fetched'
       this.value1 = false
@@ -564,12 +592,11 @@ export default {
 
     getsummarydata (){
         var reg = []
-      for (var r in this.monthOptionsTest.xAxis.categories) {
-        reg.push(this.getNumr(this.monthOptionsTest.xAxis.categories[r]))
+      for (var r in this.monthOptions.xAxis.categories) {
+        reg.push(this.getNumr(this.monthOptions.xAxis.categories[r]))
         
       }
-     this.monthOptions.series[0].data = reg
-
+      this.monthOptions.series[0].data = reg
     },
 
     getAgeNum (cat) {
@@ -579,7 +606,7 @@ export default {
         var diff_ms = Date.now() - date.getTime()
         var age_dt = new Date(diff_ms)
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
-        if (age < 26 && cat == 0) {
+        if (age >= 18 && age < 26 && cat == 0) {
           count++
         } else if (age > 25 && age <= 35 && cat == 1) {
           count++
@@ -591,7 +618,7 @@ export default {
           count++
         } else if (age > 65 && cat == 5) {
           count++
-        } else if (cat ==6 && isNaN(age)) {
+        } else if (cat == 6 && isNaN(age)) {
           count++
         }
       }
@@ -614,23 +641,21 @@ export default {
         }
       }
       return count
-
     },
 
     getNumr (name) {
       var counter = 0
       for (var r in this.userz) {
         var dat = new Date(this.userz[r].updated_at)
-        var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if (list[dat.getMonth()] === name) {
           console.log(name)
           counter++
         }
       }
       return counter
-    },
     }
-
-
   }
+
+}
 </script>

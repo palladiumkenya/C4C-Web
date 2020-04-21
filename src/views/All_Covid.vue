@@ -37,8 +37,8 @@
       </v-snackbar>
 
       <v-flex v-if="loading">
-          <Loader />
-      </v-flex>  
+        <Loader />
+      </v-flex>
 
       <v-row dense v-else>
 

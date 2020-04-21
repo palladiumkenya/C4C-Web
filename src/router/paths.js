@@ -12,7 +12,6 @@ export default [
     // Relative to /src/views
     view: 'Dashboard',
 
-
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -440,5 +439,3 @@ export default [
     }
   }
 ]
-
-
