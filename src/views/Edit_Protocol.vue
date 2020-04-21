@@ -43,7 +43,8 @@
                       label="Title"
                       class="purple-input"/>
                   </v-flex>
-                  <v-flex
+
+                  <!-- <v-flex
                     xs12
                     md8>
                     <label>Facility:</label>
@@ -53,7 +54,8 @@
                     >
                       {{ user.hcw.facility.name }}
                     </v-chip>
-                  </v-flex>
+                  </v-flex> -->
+
                   <v-flex xs12>
                     <ckeditor
                       id="editorData"
@@ -68,11 +70,19 @@
                     <input
                       id="file"
                       ref="file"
-                      value="protocol.file"
+                      value="file"
                       accept="image/*"
                       type="file"
                       @change="handleImageChange()">
 
+                      <v-img
+                        :src="protocol.file"
+                        class="white--text align-end"
+                        max-height="400px"
+                      />
+
+                  </v-flex>
+                  <v-flex xs12>  
                     <img
                       v-show="showPreview"
                       :src="imagePreview">
@@ -83,10 +93,20 @@
                     <input
                       id="files"
                       ref="files"
-                      value="protocol.files"
+                      value="files"
                       type="file"
                       multiple
                       @change="handleFiles()">
+
+ 
+                     <v-list
+                      v-for="file in protocol.files"
+                      :key="file"
+                      class="file-listing"> {{file.file_name}}
+                      <span
+                        class="remove-file"
+                        @click="removeFile(key)"> Remove </span>
+                      </v-list>  
 
                     <v-card
                       v-for="(file, key) in files"
@@ -184,6 +204,7 @@ export default {
       imagePreview: '',
       files: [],
       output: '',
+      protocol: [],
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -203,6 +224,7 @@ export default {
   },
   created () {
     this.getFacilities()
+    this.getProtocol()
   },
   methods: {
     validateData () {
@@ -246,15 +268,12 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-    created() {
-        getProtocol();
-    },
 
     getProtocol(){
       var id = this.$route.params.id
-      axios.get('resources/hcw/protocols' + id)
+      axios.get('resources/protocols/details/' + id)
        .then((response) => {
-           this.protocol = this.response.data.data
+           this.protocol = response.data.data
            console.log(response.data)
 
        })

@@ -36,8 +36,11 @@
       </v-icon>
       </v-snackbar>
 
+      <v-flex v-if="loading">
+          <Loader />
+      </v-flex>  
 
-      <v-flex 
+      <v-flex v-else
         v-for="result in results"
         :key="result.id"
         xs12
@@ -63,22 +66,19 @@
             </v-card-text>
 
             <v-card-actions>
-            <v-btn icon 
-              color="orange"
+            <v-btn icon color="orange"
               @click="$router.push({ name : 'View Public Resource', params: {id: result.id } })">
-              <v-icon> mdi-plus </v-icon>
+              <v-icon > mdi-plus </v-icon>
             </v-btn>
 
-            <v-btn icon
-              color="green"
+            <v-btn icon color="green"
               @click="$router.push({ name : 'Edit Public Resource', params: {id: result.id } })">
-              <v-icon> mdi-pencil </v-icon>
+              <v-icon  > mdi-pencil </v-icon>
             </v-btn>
 
-            <v-btn icon
-              color="red"
+            <v-btn icon color="red"
               @click=" deleteResource(); $router.push({ name : 'Public Resources'}); ">
-              <v-icon> mdi-delete </v-icon>
+              <v-icon > mdi-delete </v-icon>
             </v-btn>
 
             </v-card-actions>
@@ -91,8 +91,10 @@
 
 <script>
 import axios from 'axios'
+import Loader from '../components/core/Loader'
 
 export default {
+  components: {Loader},
 
   data () {
     return {
@@ -121,6 +123,7 @@ export default {
           this.error = true
           this.result = 'Check your internet connection or retry logging in.'
           this.snackbar = true
+          this.loading = false
         })
     },
 

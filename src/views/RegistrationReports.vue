@@ -228,6 +228,7 @@ import axios from 'axios'
 import VueHighcharts from 'vue2-highcharts'
 // import SeriesLabel from "highcharts/modules/series-label";
 import Highcharts from 'highcharts'
+import { mapGetters } from 'vuex'
 
 // SeriesLabel(Highcharts);
 
@@ -415,9 +416,9 @@ export default {
           }
         ]
       },
-      // mess1: 'Fetching Data.....',
-      // mess: 'Fetching Data.....',
-      // mess2: 'Fetching Data.....',
+      mess1: 'Fetching Data.....',
+      mess: 'Fetching Data.....',
+      mess2: 'Fetching Data.....',
       s: []
       // date: [],
       // options: data
@@ -425,10 +426,14 @@ export default {
 
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
 
   created () {
     this.getUsers()
-    this.getAllUsers()
     this.getFacilities()
     this.getCounties()
     this.getSubCounties()
@@ -475,30 +480,35 @@ export default {
         .catch(error => console.log(error.message))
     },
     getUsers () {
-      axios.get('hcw')// facility/9831
-        .then((exp) => {
-          this.s = exp.data.data
-          // console.log(exp.data)
-          if (exp.data.links.next != null) {
-            this.link = exp.data.links.next
-            this.loopT(this.link)
-          } else {
-            console.log('mm')
-            this.getAgeData()
-          }
-        })
-        .catch(error => console.log(error.message))
-    },
-
-    getAllUsers () {
-      axios.get('users')
-        .then((exp) => {
-          this.userz = exp.data.data
-          console.log(exp.data.data)
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
+      if (this.user.role_id === 1) {
+        axios.get('hcw')// facility/9831
+          .then((exp) => {
+            this.s = exp.data.data
+            // console.log(exp.data)
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              this.loopT(this.link)
+            } else {
+              console.log('mm')
+              this.getAgeData()
+            }
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.s = exp.data.data
+            // console.log(exp.data)
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              this.loopT(this.link)
+            } else {
+      console.log(this.s)
+              this.getAgeData()
+            }
+          })
+          .catch(error => console.log(error.message))
+      }
     },
     async loopT (l) {
       var i
@@ -581,8 +591,8 @@ export default {
           count++
         } else if (age > 65 && cat == 5) {
           count++
-        } else {
-          count
+        } else if (cat ==6 && isNaN(age)) {
+          count++
         }
       }
       return count
@@ -599,7 +609,7 @@ export default {
     getCadre (cat) {
       var count = 0
       for (var x in this.s) {
-        if (this.s[x].cadre.name === cat) {
+        if (this.s[x].cadre === cat) {
           count++
         }
       }

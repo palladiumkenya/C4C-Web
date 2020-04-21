@@ -427,7 +427,6 @@ export default {
     //});
 
     this.getExp()
-    this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
     this.getFacilities()
@@ -496,15 +495,27 @@ filterSubCounty (){
     },
 
     getExp () {
-      axios.get('exposures/all/')
-        .then((exp) => {
-          this.scount = exp.data.meta.total
-          this.s = exp.data.data
-          console.log(exp.data.data)
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
+      // if (this.user.role_id === 1) {
+        axios.get('exposures/all/')
+          .then((exp) => {
+            this.scount = exp.data.meta.total
+            this.s = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          })
+          .catch(error => console.log(error.message))
+      // } else if (this.user.role_id === 4){
+      //   axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+      //     .then((exp) => {
+      //       this.scount = exp.data.meta.total
+      //       this.s = exp.data.data
+      //       console.log(exp.data.data)
+      //       this.link = exp.data.links.next
+      //       this.loopT(this.link)
+      //     })
+      //     .catch(error => console.log(error.message))
+      // }
     },
 
     
@@ -528,31 +539,46 @@ filterSubCounty (){
      this.barOptionsTest.series[0].data = reg
       },
 
-    getUsers () {
-      axios.get('users')
-        .then((users) => {
-          this.u = users.data.meta.total
-        })
-        .catch(error => console.log(error.message))
-    },
     getAllUsers () {
-      axios.get('users')
-        .then((exp) => {
-          this.userz = exp.data.data
-          console.log(exp.data.data)
-          this.link = exp.data.links.next
-          this.loopG(this.link)
-        })
-        .catch(error => console.log(error.message))
+      // if (this.user.role_id === 1) {
+        axios.get('users')
+          .then((exp) => { 
+            this.u = exp.data.meta.total
+            this.userz = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+      // } else if (this.user.role_id === 4) {
+      //   axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+      //     .then((exp) => { 
+      //       this.u = exp.data.meta.total
+      //       this.userz = exp.data.data
+      //       console.log(exp.data.data)
+      //       this.link = exp.data.links.next
+      //       this.loopG(this.link)
+      //     })
+      //     .catch(error => console.log(error.message))
+      // }
     },
 
     getBroadcasts () {
-      axios.get('broadcasts/web/all')
-        .then((users) => {
-          // console.log(users.data.meta.total)
-          this.b = users.data.meta.total
-        })
-        .catch(error => console.log(error.message))
+      if (this.user.role_id === 1) {
+        axios.get('broadcasts/web/all')
+          .then((users) => {
+            // console.log(users.data.meta.total)
+            this.b = users.data.meta.total
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
+          .then((users) => {
+            // console.log(users.data.meta.total)
+            this.b = users.data.meta.total
+          })
+          .catch(error => console.log(error.message))
+      }
     },
     async loopT (l) {
       var i

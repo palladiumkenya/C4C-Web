@@ -84,7 +84,7 @@
                 <td>{{ props.item.cadre.name }}</td>
                 <td>{{ props.item.created_by }}</td>
                 <td>{{ props.item.approved_by }}</td>
-                <td>{{ props.item.facility.name }}</td>
+                <td>{{ props.item.facility }}</td>
                 <td>{{ props.item.message }}</td>
               </tr>
             </template>
@@ -162,7 +162,6 @@ export default {
             this.all_messages = broadcast.data.data
           })
           .catch(() => {
-            this.snackbar = true
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
@@ -175,7 +174,6 @@ export default {
           .catch(() => {
             this.snackbar = true
             this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true
           })
       }
     },
