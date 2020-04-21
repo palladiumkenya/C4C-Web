@@ -58,6 +58,31 @@
           </v-flex>
         </v-layout>
       </v-container>
+       <v-footer
+          id="core-footer"
+          absolute
+          height="82"
+        >
+          <div class="footer-items">
+            <span
+              v-for="link in links"
+              :key="link.name"
+            >
+              <a
+                :href="link.Link"
+                class="tertiary--text footer-links">{{ link.name }}</a>
+            </span>
+          </div>
+
+          <v-spacer/>
+          <span class="font-weight-light copyright">
+            &copy;
+            {{ (new Date()).getFullYear() }}
+            <a
+              href="https://www.mhealthkenya.org/"
+              target="_blank">m-Health Kenya </a>
+          </span>
+        </v-footer>
       <v-snackbar
         :color="'#f55a4e'"
         v-model="showResult"
@@ -74,6 +99,10 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      links: [
+        { name: 'About Us', Link: 'https://www.mhealthkenya.org/why-choose-us' },
+        { name: 'Publication', Link: 'https://www.mhealthkenya.org/news-publications' }
+      ],
       logo: 'c4c_new.png',
       loading: false,
       form: {

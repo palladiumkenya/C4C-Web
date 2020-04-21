@@ -108,6 +108,7 @@
                 item-value="id"
                 label="Select Sub-County"
                 :disabled="active"
+                v-on:change="facilitySubCounty"
                 multiple
                 clerable
                 persistent-hint
@@ -361,6 +362,7 @@ export default {
       s: [],
       userz: [],
       usersl: [],
+      load: false,
       u: 0,
       b: 0,
       scount: 0
@@ -437,7 +439,7 @@ export default {
     },
 
     getSubCounties (a) {
-      // console.log(a)
+      console.log(a)
       if (a) {
         this.active = false
         this.all_subcounties = []
@@ -453,9 +455,9 @@ export default {
       }
     },
     facilityCounty (a) {
-      let b = [], e = []
+      let b = [], e = [], us = []
 
-      console.log(a)
+      // console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           // console.log(a[c].name)
@@ -467,14 +469,55 @@ export default {
           for (var ex in this.s) {
             if (this.s[ex].county == a[c].name) {
               e.push(this.s[ex])
-              console.log(this.s[ex])
+              // console.log(this.s[ex])
+            }
+          }
+          for (var u in this.userz) {
+            if (this.userz[u].county == a[c].name) {
+              us.push(this.userz[u])
             }
           }
         }
+        this.getTest(us)
         this.getMonth(e)
         this.fac = b.sort()
       } else {
         this.fac = this.all_facilities
+        this.getTest(this.userz)
+        this.getMonth(this.s)
+      }
+    },
+    facilitySubCounty (a) {
+      let b = [], e = [], us = []
+
+      console.log(a)
+      if (a.length > 0) {
+        for (var c in a) {
+          // console.log(a[c].name)
+          for (var f in this.all_facilities) {
+            if (this.all_facilities[f].sub_county == a[c].name) {
+              b.push(this.all_facilities[f])
+            }
+          }
+          for (var ex in this.s) {
+            if (this.s[ex].sub_county == a[c].name) {
+              e.push(this.s[ex])
+              console.log(this.s[ex])
+            }
+          }
+          for (var u in this.userz) {
+            if (this.userz[u].sub_county == a[c].name) {
+              us.push(this.userz[u])
+            }
+          }
+        }
+        this.getTest(us)
+        this.getMonth(e)
+        this.fac = b.sort()
+      } else {
+        this.fac = this.all_facilities
+        this.getTest(this.userz)
+        this.getMonth(this.s)
       }
     },
 
@@ -532,14 +575,6 @@ export default {
     },
 
 
-    getTest () {
-      var reg = []
-      for (var r in this.barOptionsTest.xAxis.categories) {
-        reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r]))
-      }
-      this.barOptionsTest.series[0].data = reg
-    },
-
     getAllUsers () {
       if (this.user.role_id === 1) {
         axios.get('users')
@@ -562,6 +597,43 @@ export default {
           .catch(error => console.log(error.message))
       }
     },
+
+    async loopG (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.userz = this.userz.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+      this.getTest(this.userz)
+    },
+
+    getTest (list) {
+      this.load = true
+      var reg = []
+      for (var r in this.barOptionsTest.xAxis.categories) {
+        reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r], list))
+      }
+      this.barOptionsTest.series[0].data = reg
+      this.load = false
+    },
+    
+    getNumr (name, li) {
+      var counter = 0
+      for (var r in li) {
+        var dat = new Date(li[r].created_at)
+        var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        if (list[dat.getMonth()] === name) {
+          counter++
+        }
+      }
+      return counter
+    },
+
     getBroadcasts () {
       if (this.user.role_id === 1) {
         axios.get('broadcasts/web/all')
@@ -578,32 +650,6 @@ export default {
           })
           .catch(error => console.log(error.message))
       }
-    },
-
-    async loopG (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.userz = this.userz.concat(response.data.data)
-        } else {
-          i = 11
-        }
-      }
-      this.getTest()
-    },
-
-    getNumr (name) {
-      var counter = 0
-      for (var r in this.userz) {
-        var dat = new Date(this.userz[r].created_at)
-        var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        if (list[dat.getMonth()] === name) {
-          counter++
-        }
-      }
-      return counter
     },
 
     getNums (name) {
