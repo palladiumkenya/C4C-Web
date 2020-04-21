@@ -26,10 +26,10 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
+          v-model="counties"
           item-text="county"
           item-value="id"
-          :items="all_facilities"
+          :items="all_counties"
           label="Select County"
           multiple
           clerable
@@ -49,10 +49,10 @@
             <template>
 
                  <v-combobox
-          v-model="facility"
+          v-model="subcounties"
           item-text="sub_county"
-          item-value="county"
-          :items="all_facilities"
+          item-value="subcounty"
+          :items="all_subcounties"
           label="Select Sub-County"
           multiple
           clerable
@@ -238,10 +238,14 @@ export default {
   },
   data () {
     return {
-      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
-
-      facility: '',
+        facility: '',
+       counties: '',
+       subcounties: '',
       all_facilities: [],
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_counties: [],
+      all_subcounties: [],
+
     
       value: true,
       value1: true,
@@ -426,15 +430,43 @@ export default {
     this.getUsers()
     this.getAllUsers()
     this.getFacilities()
+    this.getCounties()
+    this.getSubCounties()
   },
   methods: {
+
+    getCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          console.log(counties.data)
+          this.all_counties = counties.data.data
+          if (counties.data.links.next != null) {
+            this.link = counties.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getSubCounties () {
+      axios.get('subcounties/3')
+        .then((subcounties) => {
+          console.log(subcounties.data)
+          this.all_subcounties = subcounties.data.data
+          if (subcounties.data.links.next != null) {
+            this.link = subcounties.data, links.next
+            this.loopT(this.link)
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
 
      getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          this.all_counties = facilities.data.data
+         // this.all_counties = facilities.data.data
           if (facilities.data.links.next != null) {
             this.link = facilities.data, links.next
             this.loopT(this.link)
