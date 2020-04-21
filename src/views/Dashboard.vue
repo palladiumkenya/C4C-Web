@@ -100,9 +100,7 @@
             md6
             lg3
           >
-
             <template>
-
               <v-combobox
                 v-model="subcounties"
                 :items="all_subcounties"
@@ -128,7 +126,7 @@
 
               <v-combobox
                 v-model="facility"
-                :items="all_facilities"
+                :items="fac"
                 item-text="partner"
                 item-value="id"
                 label="Select Partner"
@@ -150,7 +148,6 @@
             <template>
 
               <v-combobox
-
                 :items="all_facilities_level"
                 label="Select Facility Level"
                 multiple
@@ -169,7 +166,7 @@
             <template>
               <v-combobox
                 v-model="facility"
-                :items="all_facilities"
+                :items="fac"
                 item-text="name"
                 item-value="id"
                 label="Select Facility"
@@ -253,6 +250,7 @@ export default {
       facility: '',
       counties: '',
       subcounties: '',
+      fac: [],
       all_facilities: [],
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
@@ -426,10 +424,6 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          if (facilities.data.links.next != null) {
-            this.link = facilities.data, links.next
-            this.loopT(this.link)
-          }
         })
         .catch(error => console.log(error.message))
     },
@@ -443,9 +437,10 @@ export default {
     },
 
     getSubCounties (a) {
-      console.log(a)
+      // console.log(a)
       if (a) {
         this.active = false
+        this.all_subcounties = []
         for (var i in a) {
           axios.get(`subcounties/${a[i].id}`)
             .then((subcounties) => {
@@ -454,13 +449,33 @@ export default {
             })
             .catch(error => console.log(error.message))
         }
+        this.facilityCounty(a)
       }
-      // axios.get('subcounties/4')
-      //   .then((subcounties) => {
-      //     console.log(subcounties.data)
-      //     this.all_subcounties = subcounties.data.data
-      //   })
-      //   .catch(error => console.log(error.message))
+    },
+    facilityCounty (a) {
+      let b = [], e = []
+
+      console.log(a)
+      if (a.length > 0) {
+        for (var c in a) {
+          // console.log(a[c].name)
+          for (var f in this.all_facilities) {
+            if (this.all_facilities[f].county == a[c].name) {
+              b.push(this.all_facilities[f])
+            }
+          }
+          for (var ex in this.s) {
+            if (this.s[ex].county == a[c].name) {
+              e.push(this.s[ex])
+              console.log(this.s[ex])
+            }
+          }
+        }
+        this.getMonth(e)
+        this.fac = b.sort()
+      } else {
+        this.fac = this.all_facilities
+      }
     },
 
     getExp () {
@@ -469,7 +484,6 @@ export default {
           .then((exp) => {
             this.scount = exp.data.meta.total
             this.s = exp.data.data
-            console.log(exp.data.data)
             this.link = exp.data.links.next
             this.loopT(this.link)
           })
@@ -479,21 +493,45 @@ export default {
           .then((exp) => {
             this.scount = exp.data.meta.total
             this.s = exp.data.data
-            console.log(exp.data.data)
             this.link = exp.data.links.next
             this.loopT(this.link)
           })
           .catch(error => console.log(error.message))
       }
     },
-
-    getMonth () {
+    async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.s = this.s.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+      this.getMonth(this.s)
+    },
+    getMonth (list) {
+      // console.log(list)
       var wdata = []
       for (var i in this.barOptionsTime.xAxis.categories) {
-        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i],list))
       }
       this.barOptionsTime.series[0].data = wdata
     },
+
+    getNumt (name, sa) {
+      var counter = 0
+      for (var xt in sa) {
+        if (sa[xt].exposure_date.slice(0, 3) === name) {
+          counter++
+        }
+      }
+      return counter
+    },
+
+
     getTest () {
       var reg = []
       for (var r in this.barOptionsTest.xAxis.categories) {
@@ -524,7 +562,6 @@ export default {
           .catch(error => console.log(error.message))
       }
     },
-
     getBroadcasts () {
       if (this.user.role_id === 1) {
         axios.get('broadcasts/web/all')
@@ -542,22 +579,6 @@ export default {
           .catch(error => console.log(error.message))
       }
     },
-    async loopT (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.s = this.s.concat(response.data.data)
-
-          this.userz = this.userz.concat(response.data.data)
-        } else {
-          i = 11
-        }
-      }
-
-      this.getMonth()
-    },
 
     async loopG (l) {
       var i
@@ -566,25 +587,11 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.userz = this.userz.concat(response.data.data)
-        //  this.userl = this.userl.concat(response.data.data)
         } else {
           i = 11
         }
       }
       this.getTest()
-      this.getRegistrations()
-      this.getLocations()
-    },
-
-    getNumt (name) {
-      var counter = 0
-      for (var xt in this.s) {
-        if (this.s[xt].exposure_date.slice(0, 3) === name) {
-          console.log(name)
-          counter++
-        }
-      }
-      return counter
     },
 
     getNumr (name) {
@@ -593,7 +600,6 @@ export default {
         var dat = new Date(this.userz[r].created_at)
         var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if (list[dat.getMonth()] === name) {
-          console.log(name)
           counter++
         }
       }
