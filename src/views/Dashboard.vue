@@ -13,14 +13,12 @@
         md4
         lg4
       >
-
         <template>
           <v-card
             class="mx-auto"
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1" >mdi-account-group</v-icon>
               <h2 align="center">{{ usersCount }}</h2>
@@ -28,23 +26,19 @@
             </v-card-text>
           </v-card>
         </template>
-
       </v-flex>
-
       <v-flex
         sm3
         xs8
         md4
         lg4
       >
-
         <template>
           <v-card
             class="mx-auto"
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1">mdi-file-chart</v-icon>
               <h2 align="center">{{ exposuresCount }}</h2>
@@ -52,9 +46,7 @@
             </v-card-text>
           </v-card>
         </template>
-
       </v-flex>
-
       <v-flex
         sm3
         xs8
@@ -68,7 +60,6 @@
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1">mdi-message</v-icon>
               <h2 align="center">{{ broadcastsCount }}</h2>
@@ -78,7 +69,6 @@
         </template>
 
       </v-flex>
-
       <!-- End Cards -->
 
       <template>
@@ -90,7 +80,6 @@
             md6
             lg3
           >
-
             <template>
               <v-combobox
                 v-model="counties"
@@ -98,14 +87,14 @@
                 item-text="name"
                 item-value="id"
                 label="Select County"
+                v-on:change="getSubCounties"
                 multiple
                 clerable
                 persistent-hint
                 chips/>
             </template>
-            {{ getSubCounties(counties) }}
+            <!-- {{ getSubCounties(counties) }} -->
           </v-flex>
-
           <v-flex
             xs12
             md6
@@ -120,6 +109,7 @@
                 item-text="name"
                 item-value="id"
                 label="Select Sub-County"
+                :disabled="active"
                 multiple
                 clerable
                 persistent-hint
@@ -267,7 +257,7 @@ export default {
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
       all_subcounties: [],
-
+      active: true,
       barOptionsTime: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -302,14 +292,11 @@ export default {
             }
           }
         },
-
         chart: {
           type: 'column'
         },
-
         title: {
           text: 'Monthly Exposure Rate'
-
         },
         series: [
           {
@@ -321,9 +308,7 @@ export default {
           }
 
         ]
-
       },
-
       barOptionsTest: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -358,16 +343,13 @@ export default {
             }
           }
         },
-
         chart: {
           type: 'column'
         },
-
         title: {
           text: 'Monthly Registration Trends '
         },
         series: [
-
           {
             type: 'column',
             colorByPoint: true,
@@ -375,11 +357,8 @@ export default {
             data: []
           }
         ]
-
       },
-
       date: [],
-
       date: [],
       s: [],
       userz: [],
@@ -393,15 +372,9 @@ export default {
     broadcastsCount () {
       return this.b
     },
-
-    // all facility exposures # computed
-
     usersCount () {
       return this.u
     },
-
-    // hcws with exposures # computed
-
     exposuresCount () {
       return this.scount
     },
@@ -420,7 +393,6 @@ export default {
     // EventBus.on("btn-clicked", data => {
     // this.barOptionsTime.series[0].data = data.newData;
     // });
-
     this.getExp()
     this.getBroadcasts()
     this.getAllUsers()
@@ -449,7 +421,6 @@ export default {
         barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
       })
     },
-
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
@@ -473,6 +444,17 @@ export default {
 
     getSubCounties (a) {
       console.log(a)
+      if (a) {
+        this.active = false
+        for (var i in a) {
+          axios.get(`subcounties/${a[i].id}`)
+            .then((subcounties) => {
+              // console.log(subcounties.data)
+              this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+            })
+            .catch(error => console.log(error.message))
+        }
+      }
       // axios.get('subcounties/4')
       //   .then((subcounties) => {
       //     console.log(subcounties.data)
