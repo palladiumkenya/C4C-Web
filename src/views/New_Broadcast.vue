@@ -9,7 +9,7 @@
     >
       <v-flex
         xs12
-        md10
+        md11
       >
         <material-card
           color="green"
@@ -94,37 +94,52 @@
                   />
                 </v-flex>
 
+              <v-flex
+              xs12
+              >
                 <v-btn
                   :disabled="!valid"
                   class="mr-4 success"
                   type="submit"
-                  @click="validate(); ">
+                  @click="validate(); dialog1=true; alert=!alert; ">
                   submit</v-btn>
+              </v-flex>   
+
+              <v-flex
+              xs12
+              >
+                   <v-dialog
+                    v-model="dialog1"
+                    max-width="290"
+                    lazy>
+                    <v-card>
+                      <v-card-text class="text-xs-center">
+                        <v-progress-circular
+                          :size="70"
+                          indeterminate
+                          class="primary--text"/>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+
+                  <v-alert
+                    :value="alert"
+                    head
+                    type="success"
+                    border="right"
+                    icon = "mdi-alert"
+                    dismissible
+                    text
+                    transition="scale-transition"
+                    color = "#47a44b"
+                    dense
+                  >
+                    <h6> {{ output.error }} {{ output.message }} </h6>
+                  </v-alert>
+              </v-flex>    
 
               </v-layout>
-              <v-snackbar
-                :color="color"
-                :bottom="bottom"
-                :top="top"
-                :left="left"
-                :right="right"
-                v-model="snackbar"
-                dark
-              >
-                <v-icon
-                  color="white"
-                  class="mr-3"
-                >
-                  mdi-bell-plus
-                </v-icon>
-                <div> {{ output.message }}<br> {{ output.errors }} </div>
-                <v-icon
-                  size="16"
-                  @click="snackbar = false"
-                >
-                  mdi-close-circle
-                </v-icon>
-              </v-snackbar>
+              
 
             </v-container>
           </v-form>
@@ -145,17 +160,8 @@ export default {
       all_cadres: [],
       all_facilities: [],
       valid: true,
-      color: null,
-      colors: [
-        'success',
-        'error'
-      ],
-      top: true,
-      bottom: false,
-      left: false,
-      right: false,
-      resp: false,
-      snackbar: false,
+      alert: false,
+      dialog1: false,
       search: null,
       facility: '',
       output: '',
@@ -211,13 +217,12 @@ export default {
         })
           .then((response) => {
             this.output = response.data
-            this.resp = Boolean(response.data.success)
-            this.snack('top', 'center')
+            this.alert = true
             this.$router.push('/broadcast')
           })
           .catch(error => {
             this.output = error
-            this.snack('top', 'center')
+            this.alert = true
           })
       } else if (this.role_id === 4) {
         axios.post('broadcasts/web/create', {
@@ -228,13 +233,12 @@ export default {
         })
           .then((response) => {
             this.output = response.data
-            this.resp = Boolean(response.data.success)
-            this.snack('top', 'center')
+            this.alert = true
             this.$router.push('/broadcast')
           })
           .catch(error => {
             this.output = error
-            this.snack('top', 'center')
+            this.alert = true
           })
       }
     },

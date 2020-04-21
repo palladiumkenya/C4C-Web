@@ -40,52 +40,63 @@
         <Loader />
       </v-flex>
 
-      <v-flex
+      <v-row dense v-else>
+
+      <v-col
         v-for="result in results"
-        v-else
         :key="result.id"
-        xs12
-        sm6
-        md6
-        lg4>
+        cols="12"
+        dark>
 
-        <v-card
-          class="mx-auto"
-          max-width="400"
+        <v-card 
+        class="mx-auto"
+        outlined>
 
-        >
-          <v-img
-            :src="result.file || 'sunshine.jpg' "
-            class="white--text align-end"
-            height="200px"
-          />
 
-          <v-card-title>{{ result.title }}</v-card-title>
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <v-img
+              :src="result.file || 'sunshine.jpg' "
+              class="white--text align-end"
+              
+            />
+             
+              <v-list cols="8">
+              <v-card-title class="headline"> {{ result.title }} </v-card-title>
 
-          <v-card-text class="text--primary">
-            <div><span>Created On: </span>{{ result.created_at }}</div>
-          </v-card-text>
+              <v-card-actions>
+                <v-card-text class="text--primary">
+                <div><span> Created On: </span> {{ result.created_at }}</div>
+              </v-card-text>
 
-            <v-card-actions>
-            <v-btn icon color="orange"
-              @click="$router.push({ name : 'View COVID19 Resource', params: {id: result.id } })">
-              <v-icon > mdi-plus </v-icon>
-            </v-btn>
+              <v-btn icon
+                color="orange"
+                @click="$router.push({ name: 'View COVID19 Resource', params: {id: result.id} })">
+                <v-icon> mdi-plus  </v-icon>
+              </v-btn>
 
-            <v-btn icon color="green"
+              <v-btn icon
+              color="green"
               @click="$router.push({ name : 'Edit COVID19 Resource', params: {id: result.id } })">
-              <v-icon  > mdi-pencil </v-icon>
+              <v-icon> mdi-pencil </v-icon>
             </v-btn>
 
-            <v-btn icon color="red"
-              @click=" deleteResource(); $router.push({ name : 'Public Resources'}); ">
-              <v-icon > mdi-delete </v-icon>
+            <v-btn icon
+              color="red"
+              @click=" deleteResource(); $router.push({ name : 'Facility Resources'}); ">
+              <v-icon> mdi-delete </v-icon>
             </v-btn>
 
-            </v-card-actions>
+            </v-card-actions>              
+          </v-list>
 
+          </div>
           </v-card>
-      </v-flex>
+
+      
+      
+      </v-col>
+    </v-row>
+
     </v-layout>
   </v-container>
 </template>
@@ -149,3 +160,8 @@ export default {
   }
 }
 </script>
+
+<style >
+.v-card { margin: 20px; }
+
+</style>

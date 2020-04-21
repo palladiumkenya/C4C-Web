@@ -242,7 +242,7 @@ export default {
         method: 'POST',
         url: 'resources/cmes/create',
         data: allData,
-        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
+        headers: { 'Content-Type': `multipart/form-data` }
       })
         .then((response) => {
           this.output = response.data

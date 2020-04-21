@@ -1,5 +1,4 @@
 <template>
-  <div id="ScrollableDiv">
     <v-container
       fill-height
       fluid
@@ -15,7 +14,6 @@
           <v-card>
 
             <v-card-text>
-              <div/>
               <p class="display-1 text--primary">
 
                 Add A New Facility Resource
@@ -45,7 +43,8 @@
                       label="Title"
                       class="purple-input"/>
                   </v-flex>
-                  <v-flex
+
+                   <v-flex
                     xs12
                     md8>
                     <label>Facility:</label>
@@ -55,7 +54,8 @@
                     >
                       {{ user.hcw.facility.name }}
                     </v-chip>
-                  </v-flex>
+                  </v-flex> 
+                  
                   <v-flex xs12>
                     <ckeditor
                       id="editorData"
@@ -151,7 +151,7 @@
       </v-layout>
 
     </v-container>
-  </div>
+  
 </template>
 
 <script>
@@ -244,6 +244,7 @@ export default {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
+           
           this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
@@ -269,10 +270,11 @@ export default {
         url: 'resources/protocols/create',
         data: allData,
         headers: {
-          'content-type': 'multipart/form-data; boundary=${form._boundary' }
+          'content-type': `multipart/form-data` }
       })
         .then((response) => {
           console.log(response)
+         
           this.output = response.data
           this.alert = true
           this.$router.push('/protocals')
