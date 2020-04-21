@@ -212,7 +212,7 @@
                
             <!-- End filters -->
       </template>
-
+ 
 
       <!-- Start Graphs -->
   <v-flex
@@ -261,6 +261,9 @@ export default {
   },
   data () {
     return {
+
+
+      
 
        facility: '',
        counties: '',

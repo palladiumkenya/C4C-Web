@@ -27,7 +27,7 @@
 
                  <v-combobox
           v-model="counties"
-          item-text="county"
+          item-text="name"
           item-value="id"
           :items="all_counties"
           label="Select County"
@@ -50,8 +50,8 @@
 
                  <v-combobox
           v-model="subcounties"
-          item-text="sub_county"
-          item-value="subcounty"
+          item-text="name"
+          item-value="id"
           :items="all_subcounties"
           label="Select Sub-County"
           multiple

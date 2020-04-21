@@ -31,7 +31,7 @@
             <template>
 
                  <v-combobox
-          v-model="counties"
+         v-model="counties"
           item-text="name"
           item-value="id"
           :items="all_counties"
@@ -54,10 +54,10 @@
             <template>
 
                  <v-combobox
-          v-model="subcounties"
-          item-text="sub_county"
-          item-value="county"
-          :items="all_facilities"
+         v-model="subcounties"
+          item-text="name"
+          item-value="id"
+          :items="all_subcounties"
           label="Select Sub-County"
           multiple
           clerable
@@ -79,7 +79,7 @@
                  <v-combobox
           v-model="facility"
           item-text="partner"
-          item-value="sub_county"
+          item-value="id"
           :items="all_facilities"
           label="Select Partner"
           multiple
@@ -321,7 +321,7 @@ import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
 import Exposure_by_time from './Exposure_by_time'
-import json from '../map.json'
+//import json from '../map.json'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -359,7 +359,7 @@ export default {
     return {
 
       //my test filter area
-      valid: false,
+      //valid: false,
      facility: '',
        counties: '',
        subcounties: '',
@@ -909,7 +909,7 @@ export default {
     },
 
     getSubCounties () {
-      axios.get('subcounties/3')
+      axios.get('subcounties/1')
         .then((subcounties) => {
           console.log(subcounties.data)
           this.all_subcounties = subcounties.data.data
