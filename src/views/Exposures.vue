@@ -29,7 +29,6 @@
               >
 
                 <template>
-
                   <v-combobox
                     v-model="counties"
                     :items="all_counties"
@@ -324,7 +323,7 @@ import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
 import Exposure_by_time from './Exposure_by_time'
-import json from '../map.json'
+//import json from '../map.json'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -911,7 +910,7 @@ export default {
     },
 
     getSubCounties () {
-      axios.get('subcounties/3')
+      axios.get('subcounties/1')
         .then((subcounties) => {
           console.log(subcounties.data)
           this.all_subcounties = subcounties.data.data

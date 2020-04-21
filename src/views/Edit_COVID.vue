@@ -14,13 +14,13 @@
       >
         <material-card
           color="green"
-          title="Create A Public Resource "
+          title="Edit COVID 19 Resource "
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Edit Public Resource
+              Edit COVID 19 Resource
             </p>
           </v-card-text>
 
@@ -28,7 +28,7 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit="editCME">
+            @submit="editCovid19">
             <v-container py-0>
               <v-layout wrap>
 
@@ -39,21 +39,23 @@
                   <v-text-field
                     id="title"
                     :rules="titleRules"
-                    v-model="cme.title"
+                    v-model="covid19.title"
                     required
                     label="Title"
-                    class="purple-input"/>
+                    class="purple-input">
+                  </v-text-field>
                 </v-flex>
 
                 <v-flex xs12>
                   <ckeditor
                     id="editorData"
                     :editor="editor"
-                    v-model="cme.body"
+                    v-model="covid19.body"
                     :rules="bodyRules"
                     :config="editorConfig"
                     placeholder="Write here"
-                    required/>
+                    required>
+                  </ckeditor>  
                 </v-flex>
 
                 <v-flex xs12 >
@@ -67,10 +69,10 @@
                     @change="handleImageChange()">
 
                   <v-img
-                    :src="cme.file"
+                    :src="covid19.file"
                     class="white--text align-end"
                     height="400px"
-                  />
+                  />                                      
 
                 </v-flex>
 
@@ -83,27 +85,27 @@
                 <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
+                    value="covid19.files"
                     id="files"
                     ref="files"
-                    value="cme.files"
                     type="file"
                     multiple
                     @change="handleFiles()">
-                  {{ cme.files.file_name }}
+                    {{covid19.files.file_name}}
 
                   <v-list
-                    v-for="file in cme.files"
-                    :key="file"
-                    class="file-listing"> {{ file.file_name }}
-                    <span
-                      class="remove-file"
-                      @click="removeFile(key)"> Remove </span>
-                  </v-list>
+                      v-for="file in covid19.files"
+                      :key="file"
+                      class="file-listing"> {{file.file_name}}
+                      <span
+                        class="remove-file"
+                        @click="removeFile(key)"> Remove </span>
+                  </v-list>   
 
                   <v-card
                     v-for="(file, key) in files"
                     :key="file.id"
-                    class="file-listing">{{ file.name }} {{ cme.files[file_name] }}
+                    class="file-listing">{{ file.name }} {{covid19.files[file_name]}}
                     <span
                       class="remove-file"
                       @click="removeFile(key)"> Remove </span> </v-card>
@@ -194,7 +196,7 @@ export default {
       showPreview: false,
       imagePreview: '',
       files: [],
-      cme: ''
+      covid19: ''
     }
   },
   watch: {
@@ -204,9 +206,9 @@ export default {
     }
   },
 
-  created () {
-    this.getCME()
-  },
+  created() {
+       this.getCovid()
+    },
 
   methods: {
 
@@ -244,18 +246,19 @@ export default {
       this.files.splice(key, 1)
     },
 
-    getCME () {
+    getCovid () {
       var id = this.$route.params.id
-      axios.get('resources/cmes/' + id)
+       axios.get('resources/special/' + id)
         .then((resource) => {
-          this.cme = resource.data.data
-          console.log(resource.data)
+        this.covid19 = resource.data.data 
+        console.log(resource.data)
+
         }).catch((error) => {
-          console.log(error.message)
+        console.log(error.message)
         })
     },
 
-    editCME (e) {
+    editCovid19 (e) {
       e.preventDefault()
 
       let allData = new FormData()

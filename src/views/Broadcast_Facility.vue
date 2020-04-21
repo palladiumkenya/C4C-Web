@@ -9,25 +9,24 @@
       wrap
     >
 
-      <v-snackbar
-        v-model="snackbar"
-        :timeout="1200"
+    <v-snackbar
         color="error"
-        top
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
       >
-        <v-icon
-          color="white"
-          class="mr-3"
-        >
-          mdi-bell-plus
-        </v-icon>
-        <div> {{ output.error }} {{ result }}</div>
-        <v-icon
-          size="16"
-          @click="snackbar = false"
-        >
-          mdi-close-circle
-        </v-icon>
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.errors }} {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
       </v-snackbar>
 
       <v-flex
@@ -72,8 +71,6 @@
             :rows-per-page-items="rowsPerPageItems"
             :items="all_messages"
             :search="search"
-            loading
-            loading-text="Loading... Please wait"
             show-actions
             item-key="id"
           >

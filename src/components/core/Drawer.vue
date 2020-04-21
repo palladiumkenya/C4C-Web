@@ -253,12 +253,12 @@ export default {
               to: '/protocals',
               icon: 'mdi-archive',
               text: 'Facility Resources'
-            }
-            // {
-            //   to: '/covid19_resources',
-            //   icon: 'mdi-alert-decagram',
-            //   text: 'COVID 19 Resources'
-            // }
+            },
+             {
+               to: '/covid19_resources',
+               icon: 'mdi-alert-decagram',
+               text: 'COVID 19 Resources'
+             }
           ]
         },
         {
