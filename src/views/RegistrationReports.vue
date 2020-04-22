@@ -437,7 +437,6 @@ export default {
     this.getFacilities()
     this.getCounties()
     this.getSubCounties()
-    this.getAllUsers()
   },
   methods: {
 
@@ -480,18 +479,7 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-    getAllUsers () {
-        axios.get('users')
-          .then((exp) => {
-            this.u = exp.data.meta.total
-            this.userz = exp.data.data
-            console.log(exp.data.data)
-            this.link = exp.data.links.next
-            this.loopG(this.link)
-          })
-          .catch(error => console.log(error.message))
-    },
-    
+
     getUsers () {
       if (this.user.role_id === 1) {
         axios.get('hcw')// facility/9831
