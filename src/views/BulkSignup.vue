@@ -22,15 +22,35 @@
             <upload-excel-component
               :on-success="handleSuccess"
               :before-upload="beforeUpload" />
-
+            
             <v-form @submit="postUsers">
-              <v-btn
-                :disabled="is_data"
-                type="submit"
-                color="success"
-              >Submit
-              </v-btn>
+              <v-container py-0>
+                <v-layout wrap>
+                  <v-flex
+                    xs12
+                    md6
+                  >
+                    <v-btn
+                      :disabled="is_data"
+                      type="submit"
+                      color="success"
+                    >Submit
+                    </v-btn>
+                  </v-flex>
+                  <v-flex
+                    xs12
+                    md4
+                  >
+                    <v-text-field
+                      :disabled="is_data"
+                      v-model="affl"
+                      label="Enter affliation"
+                      class="green-input"/>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-form>
+            
             <v-data-table
               :headers="tableHead"
               :items="tableData.slice(0, 500)"
@@ -104,6 +124,7 @@ export default {
   components: { UploadExcelComponent },
   data () {
     return {
+      affl: '',
       is_data: true,
       output: '',
       output_pre: '',
@@ -205,7 +226,8 @@ export default {
           gender: this.tableData[v].gender,
           email: this.tableData[v].email,
           password: this.tableData[v].password.toString(),
-          password_confirmation: this.tableData[v].password.toString() }
+          password_confirmation: this.tableData[v].password.toString(),
+          message: `Welcome ${this.tableData[v].first_name} to Caring For the Carer(C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
         )
           .then((response) => {
             this.output = response.data
@@ -216,10 +238,6 @@ export default {
               return
             }
             this.snack('top', 'center')
-            axios.post('broadcasts/web/direct', {
-              phone_numbers: this.tableData[v].mobile.toString(),
-              message: `You have been signed up for C4C download the app here https://play.google.com/store/apps/details?id=mhealth.login&hl=en and use this as your password ${this.tableData[v].password.toString()}`
-            })
           })
           .catch((error) => {
             this.output = error

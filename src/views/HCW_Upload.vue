@@ -126,6 +126,16 @@
                 <v-flex
                   xs12
                   md6
+                >
+                  <v-text-field
+                    v-model="affl"
+                    :rules="[rules.required]"
+                    label="Enter affliation"
+                    class="green-input"/>
+                </v-flex>
+                <v-flex
+                  xs12
+                  md6
                   text-xs-left
                 >
                   <router-link to="/bulk-signup">
@@ -199,6 +209,7 @@ export default {
       cnf_pass: '',
       msisdn: '',
       email: '',
+      affl: '',
       output: '',
       pre_out: '',
       rules: {
@@ -264,7 +275,11 @@ export default {
         this.pre_out = 'Passwords dont match'
         this.snack('top', 'center')
         return false
-      } else {
+      } else if (this.affl == '') {
+        this.pre_out = 'Affliation must be filled out'
+        this.snack('top', 'center')
+        return false
+      }  else {
         return true
       }
     },
@@ -282,7 +297,8 @@ export default {
           gender: this.gendInp,
           email: this.email,
           password: this.password,
-          password_confirmation: this.cnf_pass }
+          password_confirmation: this.cnf_pass,
+          message: `Welcome ${this.fname} to Caring For the Carer(C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
         )
           .then((response) => {
             this.output = response.data
