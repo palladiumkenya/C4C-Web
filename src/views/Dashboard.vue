@@ -93,7 +93,6 @@
                 persistent-hint
                 chips/>
             </template>
-            <!-- {{ getSubCounties(counties) }} -->
           </v-flex>
           <v-flex
             xs12
@@ -151,6 +150,8 @@
               <v-combobox
                 :items="all_facilities_level"
                 label="Select Facility Level"
+                v-on:change="facilityLevel"
+                :disabled="active_level"
                 multiple
                 clerable
                 persistent-hint
@@ -171,6 +172,8 @@
                 item-text="name"
                 item-value="id"
                 label="Select Facility"
+                v-on:change="facilityFilter"
+                :disabled="active_fac"
                 multiple
                 clerable
                 persistent-hint
@@ -270,6 +273,8 @@ export default {
       all_counties: [],
       all_subcounties: [],
       active: true,
+      active_fac: true,
+      active_level: true,
       barOptionsTime: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -378,7 +383,16 @@ export default {
       load: true,
       u: 0,
       b: 0,
-      scount: 0
+      scount: 0,
+      fac_filt: [],
+      exp_filt: [],
+      us_filt: [],
+      fac_filtl: [],
+      exp_filtl: [],
+      us_filtl: [],
+      fac_filtf: [],
+      exp_filtf: [],
+      us_filtf: [],
     }
   },
   computed: {
@@ -403,18 +417,11 @@ export default {
         name: 'login'
       })
     }
-    // EventBus.on("btn-clicked", data => {
-    // this.barOptionsTime.series[0].data = data.newData;
-    // });
     this.getExp()
     this.getBroadcasts()
     this.getAllUsers()
     this.getFacilities()
     this.getCounties()
-    // this.getSubCounties()
-
-    this.filterCounty()
-    this.filterSubCounty()
   },
   methods: {
 
@@ -422,17 +429,6 @@ export default {
     //  EventBus.emit("btn-clicked", {
     //    newData: [100, 12800, 500]
     //  });
-    },
-    filterSubCounty () {
-      document.getElementById('selectSubCounty').addEventListener('change', function () {
-        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
-      })
-    },
-
-    filterCounty () {
-      document.getElementById('selectCounty').addEventListener('change', function () {
-        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
-      })
     },
     getFacilities () {
       axios.get('facilities')
@@ -453,7 +449,7 @@ export default {
 
     getSubCounties (a) {
       console.log(a)
-      if (a) {
+      if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
         for (var i in a) {
@@ -465,35 +461,36 @@ export default {
             .catch(error => console.log(error.message))
         }
         this.facilityCounty(a)
+      } else {
+        this.active = true
+        this.facilityCounty(a)
       }
     },
     facilityCounty (a) {
-      let b = [], e = [], us = []
-
-      // console.log(a)
+      this.us_filt =[],this.fac_filt = [], this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
           // console.log(a[c].name)
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
-              b.push(this.all_facilities[f])
+              this.fac_filt.push(this.all_facilities[f])
+              for (var u in this.userz) {
+                if (this.userz[u].facility_id == this.all_facilities[f].id) {
+                  this.us_filt.push(this.userz[u])
+                }
+              }
             }
           }
           for (var ex in this.s) {
             if (this.s[ex].county == a[c].name) {
-              e.push(this.s[ex])
+              this.exp_filt.push(this.s[ex])
               // console.log(this.s[ex])
             }
           }
-          for (var u in this.userz) {
-            if (this.userz[u].county == a[c].name) {
-              us.push(this.userz[u])
-            }
-          }
         }
-        this.getTest(us)
-        this.getMonth(e)
-        this.fac = b.sort()
+        this.getTest(this.us_filt)
+        this.getMonth(this.exp_filt)
+        this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
         this.getTest(this.userz)
@@ -501,36 +498,111 @@ export default {
       }
     },
     facilitySubCounty (a) {
-      let b = [], e = [], us = []
-
-      console.log(a)
+      this.exp_filtl = [], this.fac_filtl = [], this.us_filtl = []
+      this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
           // console.log(a[c].name)
-          for (var f in this.all_facilities) {
-            if (this.all_facilities[f].sub_county == a[c].name) {
-              b.push(this.all_facilities[f])
+          for (var f in this.fac_filt) {
+            if (this.fac_filt[f].sub_county == a[c].name) {
+              this.fac_filtl.push(this.fac_filt[f])
+              for (var u in this.userz) {
+                if (this.userz[u].facility_id == this.fac_filt[f].id) {
+                  this.us_filtl.push(this.userz[u])
+                }
+              }
             }
           }
-          for (var ex in this.s) {
-            if (this.s[ex].sub_county == a[c].name) {
-              e.push(this.s[ex])
-              console.log(this.s[ex])
+          for (var ex in this.exp_filt) {
+            if (this.exp_filt[ex].sub_county == a[c].name) {
+              this.exp_filtl.push(this.exp_filt[ex])
             }
           }
-          for (var u in this.userz) {
-            if (this.userz[u].sub_county == a[c].name) {
-              us.push(this.userz[u])
+          // for (var u in this.us_filt) {
+          //   if (this.us_filt[u].sub_county == a[c].name) {
+          //     us.push(this.us_filt[u])
+          //   }
+          // }
+        }
+        this.getTest(this.us_filtl)
+        this.getMonth(this.exp_filtl)
+        this.fac = this.fac_filtl.sort()
+      } else {
+        this.fac = this.fac_filt
+        this.getTest(this.us_filt)
+        this.getMonth(this.exp_filt)
+        this.active_level = true
+      }
+    },
+
+    facilityLevel (a) {
+      this.fac_filtf = [], this.exp_filtf = [], this.us_filtf = []
+      this.active_fac = false
+      console.log(a)
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var f in this.fac_filtl) {
+            if (this.fac_filtl[f].level == a[c]) {
+              this.fac_filtf.push(this.fac_filtl[f])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.fac_filtl[f].level.slice(6,7)) >= 5) {
+                this.fac_filtf.push(this.fac_filtl[f])
+              }
             }
           }
+          for (var ex in this.exp_filtl) {
+            if (this.exp_filtl[ex].facility_level == a[c]) {
+              this.exp_filtf.push(this.exp_filtl[ex])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.exp_filtl[ex].facility_level.slice(6,7)) >= 5) {
+                this.exp_filtf.push(this.exp_filtl[ex])
+              }
+            }
+          }
+          for (var u in this.us_filtl) {
+            if (this.us_filtl[u].facility_level == a[c]) {
+              this.us_filtf.push(this.us_filtl[u])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.us_filtl[u].facility_level.slice(6,7)) >= 5) {
+                this.us_filtf.push(this.us_filtl[u])
+              }
+            }
+          }
+          
+        }
+        this.getTest(this.us_filtf)
+        this.getMonth(this.exp_filtf)
+        this.fac = this.fac_filtf.sort()
+      } else {
+        this.fac = this.fac_filtl
+        this.getTest(this.us_filtl)
+        this.active_fac = true
+        this.getMonth(this.exp_filtl)
+      }
+    },
+
+    facilityFilter (a) {
+      let b = [], e = [], us = []
+
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var ex in this.exp_filtf) {
+            if (this.exp_filtf[ex].facility_name == a[c].name) {
+              e.push(this.exp_filtf[ex])
+            }
+          }
+          for (var u in this.us_filtf) {
+            if (this.us_filtf[u].facility_name == a[c].name) {
+              us.push(this.us_filtf[u])
+            }
+          }
+          
         }
         this.getTest(us)
         this.getMonth(e)
-        this.fac = b.sort()
       } else {
-        this.fac = this.all_facilities
-        this.getTest(this.userz)
-        this.getMonth(this.s)
+        this.getTest(this.us_filtf)
+        this.getMonth(this.exp_filtf)
       }
     },
 
@@ -590,11 +662,10 @@ export default {
 
     getAllUsers () {
       if (this.user.role_id === 1) {
-        axios.get('users')
+        axios.get('hcw')
           .then((exp) => {
             this.u = exp.data.meta.total
             this.userz = exp.data.data
-            console.log(exp.data.data)
             this.link = exp.data.links.next
             this.loopG(this.link)
           })

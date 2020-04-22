@@ -129,7 +129,6 @@
                 >
                   <v-text-field
                     v-model="affl"
-                    :rules="[rules.required]"
                     label="Enter affliation"
                     class="green-input"/>
                 </v-flex>
@@ -275,11 +274,7 @@ export default {
         this.pre_out = 'Passwords dont match'
         this.snack('top', 'center')
         return false
-      } else if (this.affl == '') {
-        this.pre_out = 'Affliation must be filled out'
-        this.snack('top', 'center')
-        return false
-      }  else {
+      } else {
         return true
       }
     },
