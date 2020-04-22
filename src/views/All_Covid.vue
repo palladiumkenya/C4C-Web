@@ -27,7 +27,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div> {{ output.errors }} {{result}}</div>
+      <div> {{output.message}} {{ output.errors }} {{resp}}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -43,7 +43,7 @@
       <v-row dense v-else>
 
       <v-col
-        v-for="result in results"
+        v-for="(result, index) in results"
         :key="result.id"
         cols="12"
         dark>
@@ -60,7 +60,7 @@
               
             />
              
-              <v-list cols="8">
+              <v-list >
               <v-card-title class="headline"> {{ result.title }} </v-card-title>
 
               <v-card-actions>
@@ -82,7 +82,7 @@
 
             <v-btn icon
               color="red"
-              @click=" deleteResource(); $router.push({ name : 'Facility Resources'}); ">
+              @click=" deleteResource(result.id, index); loading=true ">
               <v-icon> mdi-delete </v-icon>
             </v-btn>
 
@@ -113,7 +113,7 @@ export default {
       results: [],
       snackbar: false,
       output: '',
-      result: '',
+      resp: '',
       loading: true
     }
   },
@@ -133,25 +133,30 @@ export default {
         })
         .catch(() => {
           this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
+          this.resp = 'Check your internet connection or retry logging in.'
           this.snackbar = true
           this.loading = false
         })
     },
 
-    deleteResource() {
-      axios.delete('')
-      .then((response) => {
-        console.log(response.data)
-        this.result = resource.data.data
-        this.loading = true
+    deleteResource(id, index)  {
 
-        this.result = 'Deleted Successfully'
+    axios.delete('resources/special/delete/' +id)
+      .then((response) => {
+      // this.result.splice(index, 1)
+        console.log(response.data) 
+
+        this.loading = false
+
+        this.results.splice(index, 1)
+
+        this.resp = 'Deleted Successfully'
           
         this.snackbar = true
       })
-      .catch(() => {
+      .catch((error) => {
         this.error = true
+        console.log(error)
         this.result = 'Failed, please try again'
         this.snackbar = true
       })

@@ -272,9 +272,9 @@ export default {
 
       axios({
         method: 'POST',
-        url: 'resources/cmes/create',
+        url: 'resources/cmes/update',
         data: allData,
-        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
+        headers: { 'Content-Type': `multipart/form-data` }
       })
         .then((response) => {
           this.output = response.data

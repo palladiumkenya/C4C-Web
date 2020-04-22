@@ -43,8 +43,8 @@
                       label="Title"
                       class="purple-input"/>
                   </v-flex>
-
-                  <!-- <v-flex
+<!-- 
+                   <v-flex
                     xs12
                     md8>
                     <label>Facility:</label>
@@ -54,7 +54,7 @@
                     >
                       {{ user.hcw.facility.name }}
                     </v-chip>
-                  </v-flex> -->
+                  </v-flex>  -->
 
                   <v-flex xs12>
                     <ckeditor
@@ -295,12 +295,14 @@ export default {
       allData.append('body', this.body)
       allData.append('facility_id', this.user.hcw.facility.id)
 
+      var id = this.$route.params.id
+
       axios({
         method: 'POST',
-        url: 'resources/protocols/create',
+        url: 'resources/protocols/update/' +id,
         data: allData,
         headers: {
-          'content-type': 'multipart/form-data; boundary=${form._boundary' }
+          'content-type': 'multipart/form-data' }
       })
         .then((response) => {
           console.log(response)
