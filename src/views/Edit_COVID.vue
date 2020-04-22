@@ -120,7 +120,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; dialog1=true"
+                    @click="validateData(); alert=!alert; "
                   >
                     Save
                   </v-btn>
@@ -151,7 +151,7 @@
                     color = "#47a44b"
                     dense
                   >
-                    <h6> {{ output.error }} {{ output.message }} {{result}} </h6>
+                    <h6> {{ output.error }} {{ output.message }} {{resp}} </h6>
                   </v-alert>
 
                 </v-flex>
@@ -192,12 +192,13 @@ export default {
       covid19: {
               body: '',
               title: '',
-              file: '',
-              files: [],
-              }, 
+      },
+      file: '',
+      files: [],
       showPreview: false,
       imagePreview: '',
-      covid19: ''
+      covid19: '',
+      resp: ''
     }
   },
   watch: {
@@ -269,9 +270,9 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('resource_files[' + i + ']', covid19.file)
+        allData.append('resource_files[' + i + ']', file)
       }
-      allData.append('image_file', this.covid19.file)
+      allData.append('image_file', this.file)
       allData.append('title', this.covid19.title)
       allData.append('body', this.covid19.body)
       allData.append('special_resource_id', this.covid19.id)
@@ -286,12 +287,18 @@ export default {
           this.output = response.data
           console.log(response)
           this.alert = true
-          //this.$router.push('covid19_resources')
+
+          this.resp = 'COVID 19 Resource Successfully Added'
+
+          this.$router.push('covid19_resources')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
+
+          this.resp = 'Failed, please try again'
+
         })
     }
 

@@ -85,7 +85,7 @@
                   <input
                     id="files"
                     ref="files"
-                    value="cme.files"
+                    value="files"
                     type="file"
                     multiple
                     @change="handleFiles()">
@@ -119,7 +119,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; dialog1=true"
+                    @click="validateData(); alert=!alert; "
                   >
                     Save
                   </v-btn>
@@ -150,7 +150,7 @@
                     color = "#47a44b"
                     dense
                   >
-                    <h6> {{ output.error }} {{ output.message }} </h6>
+                    <h6> {{ output.error }} {{ output.message }} {{resp}} </h6>
                   </v-alert>
 
                 </v-flex>
@@ -174,7 +174,6 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      body: '',
       editorConfig: {
         // The configuration of the editor.
       },
@@ -189,12 +188,15 @@ export default {
       result: '',
       output: '',
       alert: false,
+      cme: {
+      body: '',
       title: '',
+      },
       file: '',
       showPreview: false,
       imagePreview: '',
       files: [],
-      cme: ''
+      resp: ''
     }
   },
   watch: {
@@ -267,8 +269,9 @@ export default {
         allData.append('cme_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.body)
+      allData.append('title', this.cme.title)
+      allData.append('body', this.cme.body)
+      allData.append('cme_id', this.cme.id)
 
       axios({
         method: 'POST',
@@ -279,13 +282,19 @@ export default {
         .then((response) => {
           this.output = response.data
           console.log(response)
+
+          this.resp = 'Public Resource Successfully Added'
+
           this.alert = true
+
           this.$router.push('/cmes')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
+
+          this.resp = 'Failed, please try again'
         })
     }
 
