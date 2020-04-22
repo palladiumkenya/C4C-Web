@@ -264,5 +264,3 @@ export default [
     view: 'Exposure_by_cadre'
   }
 ]
-
-
