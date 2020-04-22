@@ -1,0 +1,154 @@
+<template>
+  <v-container >
+
+    <v-flex
+      xs12
+      text-xs-right>
+      <v-btn
+        class="mx-0 font-weight-light "
+        color="success"
+        @click="$router.push('add_protocal');"
+      >
+        Add A New Facility Protocal
+      </v-btn>
+    </v-flex>
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="12000"
+      color="error"
+      top>
+      <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{ output.error }} {{ result }}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+    </v-snackbar>
+
+    <v-flex v-if="loading">
+      <Loader />
+    </v-flex>
+
+    <v-row
+      v-else
+      dense>
+
+      <v-col
+        v-for="result in results"
+        :key="result.id"
+        cols="12"
+        dark>
+
+        <v-card
+          class="mx-auto">
+
+          <v-card-title class="headline">{{ result.title }}</v-card-title>
+
+          <v-divider/>
+
+          <v-card-actions>
+            <v-card-text class="text--primary">
+              <div><span> Created On: </span> {{ result.created_at }}</div>
+            </v-card-text>
+
+            <v-btn
+              icon
+              color="orange"
+              @click="$router.push({ name: 'View Facility Resource', params: {id: result.id} })">
+              <v-icon> mdi-plus  </v-icon>
+            </v-btn>
+
+            <v-btn
+              icon
+              color="green"
+              @click="$router.push({ name : 'Edit Facility Resource', params: {id: result.id } })">
+              <v-icon> mdi-pencil </v-icon>
+            </v-btn>
+
+            <v-btn
+              icon
+              color="red"
+              @click=" deleteResource(); $router.push({ name : 'Facility Resources'}); ">
+
+              <v-icon> mdi-delete </v-icon>
+            </v-btn>
+
+          </v-card-actions>
+
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import axios from 'axios'
+import Loader from '../components/core/Loader'
+
+export default {
+  components: { Loader },
+
+  data () {
+    return {
+      results: [],
+      snackbar: false,
+      loading: true,
+      output: '',
+      result: ''
+    }
+  },
+  created () {
+    this.getProtocals()
+  },
+  methods: {
+
+    getProtocals () {
+      axios.get('resources/hcw/protocols')
+        .then((protocals) => {
+          console.log(protocals.data)
+          this.results = protocals.data.data
+
+          this.loading = false
+        })
+        .catch(() => {
+          this.error = true
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
+
+          this.loading = false
+        })
+    },
+
+    deleteResource () {
+      axios.delete('')
+        .then((response) => {
+          console.log(response.data)
+          this.result = resource.data.data
+          this.loading = true
+
+          this.result = 'Deleted Successfully'
+
+          this.snackbar = true
+        })
+        .catch(() => {
+          this.error = true
+          this.result = 'Failed, please try again'
+          this.snackbar = true
+        })
+    }
+  }
+}
+</script>
+
+<style >
+.v-card { margin: 20px; }
+
+</style>
