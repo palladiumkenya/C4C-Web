@@ -205,18 +205,31 @@
       <v-flex
         sm3
         xs8
-        md4
+        md8
         lg12
-      >
-        <highcharts
-          ref="barChart"
-          :options="barOptionsTest"/>
+        >
+        <v-card>
+          <!-- <v-overlay
+            :absolute="true"
+            :value="true"
+          > -->
+            <v-progress-circular
+              v-if="load"
+              :width="3"
+              color="red"
+              indeterminate
+            ></v-progress-circular>
+          <!-- </v-overlay> -->
+          <highcharts
+            ref="barChart"
+            :options="barOptionsTest"/>
+        </v-card>
       </v-flex>
       <!-- End Graphs -->
       <v-flex
         sm3
         xs8
-        md4
+        md8
         lg12
       >
         <highcharts
@@ -362,7 +375,7 @@ export default {
       s: [],
       userz: [],
       usersl: [],
-      load: false,
+      load: true,
       u: 0,
       b: 0,
       scount: 0
