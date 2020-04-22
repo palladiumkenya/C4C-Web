@@ -184,13 +184,60 @@
         </v-layout>
 
         <template>
-
-          <input
-            v-model="startDate"
-            type="date">
-          <input
-            v-model="endDate"
-            type="date">
+          <v-flex xs12 sm6 md2>
+            <v-menu
+              ref="menu1"
+              :close-on-content-click="false"
+              v-model="menu1"
+              :nudge-right="40"
+              :return-value.sync="startDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="startDate"
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="maxDate" :min="minDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="$refs.menu1.save(startDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex xs12 sm6 md2>
+            <v-menu
+              ref="menu"
+              :close-on-content-click="false"
+              v-model="menu"
+              :nudge-right="40"
+              :return-value.sync="endDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="endDate"
+                label="End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="minDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="$refs.menu.save(endDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
         </template>
 
         <template>
@@ -262,7 +309,11 @@ export default {
   },
   data () {
     return {
+      menu: false,
+      menu1: false,
       startDate: '',
+      maxDate: new Date().toISOString().substr(0, 10),
+      minDate: '2016-01-01',
       endDate: '',
       facility: '',
       counties: '',
