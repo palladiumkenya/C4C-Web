@@ -1,6 +1,5 @@
 <template>
   <v-footer
-    v-if="this.$route.path !== '/login'"
     id="core-footer"
     absolute
     height="82"

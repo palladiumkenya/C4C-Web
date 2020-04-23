@@ -116,11 +116,10 @@
                 >
                   <v-btn
                     :disabled="!valid"
-                    :loading="dialog1"
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; "
+                    @click="validateData(); alert=!alert; dialog1=true "
                   >
                     Save
                   </v-btn>

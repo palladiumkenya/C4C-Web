@@ -52,7 +52,7 @@
                       class="ma-2"
                       x-large
                     >
-                      {{ protocol.facility_id }}
+                      {{ protocol.facility_id }} : {{user.hcw.facility_name}}
                     </v-chip>
                   </v-flex>  
 
@@ -122,11 +122,10 @@
                   >
                     <v-btn
                       :disabled="!valid"
-                      :loading="dialog1"
                       class="mx-0 font-weight-light"
                       color="success"
                       type="submit"
-                      @click="validateData(); alert=!alert;"
+                      @click="validateData(); alert=!alert; dialog1=true "
                     >
                       Save
                     </v-btn>
@@ -154,7 +153,7 @@
                       icon = "mdi-alert"
                       dense
                     >
-                      <h6> {{ output.error }} {{ output.message }} {{resp}} </h6>
+                      <h6> {{resp}} {{ output.error }} {{ output.message }} </h6>
                     </v-alert>
 
                   </v-flex>
@@ -193,8 +192,6 @@ export default {
       ],
       dialog1: false,
       result: '',
-      all_facilities: [],
-      facility: 'null',
       facility_id: '',
       protocol : {
         body: '',
@@ -220,11 +217,10 @@ export default {
   watch: {
     dialog1 (val) {
       if (!val) return
-      setTimeout(() => (this.dialog1 = false), 4000)
+      setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
   created () {
-    this.getFacilities()
     this.getProtocol()
   },
   methods: {
@@ -261,15 +257,6 @@ export default {
       this.files.splice(key, 1)
     },
 
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          console.log(facilities.data)
-          this.all_facilities = facilities.data.data
-        })
-        .catch(error => console.log(error.message))
-    },
-
     getProtocol () {
       var id = this.$route.params.id
       axios.get('resources/protocols/details/' + id)
@@ -290,7 +277,7 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('protocal_files[' + i + ']', file)
+        allData.append('protocol_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
       allData.append('title', this.protocol.title)

@@ -11,6 +11,14 @@
       <v-tab>TDAP</v-tab>
         <v-tab>Varicella</v-tab>
       <v-tab>Meningococcal</v-tab>
+
+
+      <!-- Start Cards -->
+
+
+
+
+
       <v-tab-item
         v-for="n in 6"
         :key="n">
@@ -23,8 +31,221 @@
               sm12
               lg12
             >
+<v-container>
+                <v-layout wrap>
 
-                  <h3>Other Diseases Summary</h3>
+        <template>
+        <!-- Start filters -->
+
+        <v-layout >
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+            <template>
+              <v-combobox
+                v-model="counties"
+                :items="all_counties"
+                item-text="name"
+                item-value="id"
+                label="Select County"
+                multiple
+                clerable
+                persistent-hint
+                chips
+                @change="getSubCounties"/>
+            </template>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+            <template>
+              <v-combobox
+                v-model="subcounties"
+                :items="all_subcounties"
+                :disabled="active"
+                item-text="name"
+                item-value="id"
+                label="Select Sub-County"
+                multiple
+                clerable
+                persistent-hint
+                chips
+                @change="facilitySubCounty"/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+
+            <template>
+
+              <v-combobox
+                v-model="facility"
+                :items="fac"
+                item-text="partner"
+                item-value="id"
+                label="Select Partner"
+                multiple
+                clerable
+                disabled
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+
+            <template>
+
+              <v-combobox
+                :items="all_facilities_level"
+                :disabled="active_level"
+                label="Select Facility Level"
+                multiple
+                clerable
+                persistent-hint
+                chips
+                @change="facilityLevel"/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+            <template>
+              <v-combobox
+                v-model="facility"
+                :items="fac"
+                :disabled="active_fac"
+                item-text="name"
+                item-value="id"
+                label="Select Facility"
+                multiple
+                clerable
+                persistent-hint
+                chips
+                @change="facilityFilter"/>
+
+            </template>
+          </v-flex>
+        </v-layout>
+
+        <template>
+          <v-flex
+            xs12
+            sm6
+            md2>
+            <v-menu
+              ref="menu1"
+              :close-on-content-click="false"
+              v-model="menu1"
+              :nudge-right="40"
+              :return-value.sync="startDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="startDate"
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="startDate"
+                :max="maxDate"
+                :min="minDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu1 = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="$refs.menu1.save(startDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex
+            xs12
+            sm6
+            md2>
+            <v-menu
+              ref="menu"
+              :close-on-content-click="false"
+              v-model="menu"
+              :nudge-right="40"
+              :return-value.sync="endDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="endDate"
+                label="End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="endDate"
+                :max="maxDate"
+                :min="minDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="$refs.menu.save(endDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+        </template>
+
+        <template>
+          <v-btn
+            block
+            color="secondary"
+            dark
+            @click="click">Filter</v-btn>
+        </template>
+
+        <!-- End filters -->
+      </template>
+</v-layout>
+</v-container>
+
                   <highcharts :options="AllDiseaseschartOptions"
                    ref="columnChart"/>
 
@@ -129,8 +350,8 @@
     </v-tabs>
   </v-card>
 
-</template>
 
+</template>
 
 <script>
 import { Chart } from 'highcharts-vue'
