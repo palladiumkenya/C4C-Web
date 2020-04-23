@@ -53,12 +53,20 @@
                   md4
                 >
                   <v-combobox
+                    v-if="user.role_id == 1"
                     v-model="role"
                     :rules="[rules.required]"
                     :items="items"
                     label="Role"
                     class="purple-input"
                   />
+                  <v-chip
+                    v-else
+                    class="ma-2"
+                    x-large
+                  >
+                    Role: Health Care Worker
+                  </v-chip>
                 </v-flex>
 
                 <v-flex
@@ -195,10 +203,13 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   //
   data () {
     return {
+      absolute: true,
+      overlay: false,
       show3: false,
       fname: '',
       surname: '',
@@ -237,8 +248,15 @@ export default {
       snackbar: false
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   mounted () {
-
+    if (this.user.role_id === 1){
+      this.role = 3
+    }
   },
   methods: {
     testFill () {
@@ -254,7 +272,7 @@ export default {
         this.pre_out = 'Mobile must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.role_id == '') {
+      } else if (this.role == '') {
         this.pre_out = 'Role must be filled out'
         this.snack('top', 'center')
         return false

@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     getHCW () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('hcw')
           .then((workers) => {
             console.log(workers.data)
@@ -166,7 +166,7 @@ export default {
       }
     },
     async loopT (l) {
-      var i
+      var i, u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -175,6 +175,14 @@ export default {
         } else {
           i = 11
         }
+      }
+      if (this.user.role_id == 5) {
+        for (var a in this.all_hcws){
+          if (this.all_hcws[a].county == this.user.county) {
+            u.push(this.all_hcws[a])
+          }
+        }
+        this.all_hcws = u
       }
     }
   }

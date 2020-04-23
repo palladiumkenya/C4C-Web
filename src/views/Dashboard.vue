@@ -259,17 +259,13 @@
         lg12
         >
         <v-card>
-          <!-- <v-overlay
-            :absolute="true"
-            :value="true"
-          > -->
-            <v-progress-circular
-              v-if="load"
-              :width="3"
-              color="red"
-              indeterminate
-            ></v-progress-circular>
-          <!-- </v-overlay> -->
+          <!-- <v-dialog height="300" width="250" :value="load" hide-overlay transition="true" >
+            <v-card height="300" width="250" color="rgba(100,150,150,0.4)">
+              <v-layout justify-center align-center fill-height>
+                <v-progress-circular :size="80" :width="5" indeterminate color="red"></v-progress-circular>
+              </v-layout>
+            </v-card>
+          </v-dialog> -->
           <highcharts
             ref="barChart"
             :options="barOptionsTest"/>
@@ -432,6 +428,7 @@ export default {
       u: 0,
       b: 0,
       scount: 0,
+      broad: [],
       fac_filt: [],
       exp_filt: [],
       us_filt: [],
@@ -555,17 +552,17 @@ export default {
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
-              for (var u in this.userz) {
-                if (this.userz[u].facility_id == this.all_facilities[f].id) {
-                  this.us_filt.push(this.userz[u])
-                }
-              }
             }
           }
           for (var ex in this.s) {
             if (this.s[ex].county == a[c].name) {
               this.exp_filt.push(this.s[ex])
               // console.log(this.s[ex])
+            }
+          }
+          for (var u in this.userz) {
+            if (this.userz[u].county == a[c].name) {
+              this.us_filt.push(this.userz[u])
             }
           }
         }
@@ -683,7 +680,7 @@ export default {
     },
 
     getExp () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('exposures/all/')
           .then((exp) => {
             this.scount = exp.data.meta.total
@@ -704,7 +701,7 @@ export default {
       }
     },
     async loopT (l) {
-      var i
+      var i , e =[]
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -714,6 +711,15 @@ export default {
           i = 11
         }
       }
+      if (this.user.role_id == 5) {
+        for (var ex in this.s){
+          if (this.s[ex].county ==this.user.hcw.county) {
+            e.push(this.s[ex])
+          }
+        }
+        this.scount = e.length
+        this.s = e
+      } 
       this.getMonth(this.s)
     },
     getMonth (list) {
@@ -737,10 +743,14 @@ export default {
 
 
     getAllUsers () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
         axios.get('hcw')
           .then((exp) => {
-            this.u = exp.data.meta.total
+            if (this.user.role_id == 5){
+              this.u = 'loading...'
+            }else{
+              this.u = exp.data.meta.total
+            }
             this.userz = exp.data.data
             this.link = exp.data.links.next
             this.loopG(this.link)
@@ -759,7 +769,7 @@ export default {
     },
 
     async loopG (l) {
-      var i
+      var i, u =[]
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -768,6 +778,15 @@ export default {
         } else {
           i = 11
         }
+      }
+      if (this.user.role_id == 5) {
+        for (var ex in this.userz){
+          if (this.userz[ex].county ==this.user.hcw.county) {
+            u.push(this.userz[ex])
+          }
+        }
+        this.userz = u 
+        this.u = u.length
       }
       this.getTest(this.userz)
     },
@@ -795,33 +814,44 @@ export default {
     },
 
     getBroadcasts () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
         axios.get('broadcasts/web/all')
           .then((users) => {
-            // console.log(users.data.meta.total)
-            this.b = users.data.meta.total
+            if (this.user.role_id == 5) {
+              this.broad = users.data.data
+              this.loopBroad(users.data.links.next)
+            } else {
+              this.b = users.data.meta.total
+            }
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
           .then((users) => {
-            // console.log(users.data.meta.total)
             this.b = users.data.meta.total
           })
           .catch(error => console.log(error.message))
       }
     },
-
-    getNums (name) {
-      var counter = 0
-      for (var xo in this.userz) {
-        if (moment(this.userz[xo].created_at).format().substr(5, 2) === name) {
-          counter++
+    async loopBroad (l){
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.broad = this.broad.concat(response.data.data)
+        } else {
+          i = 11
         }
       }
-      return counter
+      for (var ex in this.broad){
+        if (this.broad[ex].facility) {
+          if (this.broad[ex].facility.county == this.user.hcw.county) { 
+            this.b += 1
+          }
+        }
+      }
     }
-
   }
 }
 </script>
