@@ -86,7 +86,7 @@
               v-for="sublink in link.subLinks"
               :key="sublink.text">
               <template
-                v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources')">
+                v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources' && sublink.text != 'View Users')">
                 <!-- {{drawerList(sublink.text)}} -->
                 <v-list-tile
                   :to="sublink.to"
