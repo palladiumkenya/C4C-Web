@@ -43,7 +43,7 @@
                       label="Title"
                       class="purple-input"/>
                   </v-flex>
-<!-- 
+
                    <v-flex
                     xs12
                     md8>
@@ -52,9 +52,9 @@
                       class="ma-2"
                       x-large
                     >
-                      {{ user.hcw.facility.name }}
+                      {{ protocol.facility_id }}
                     </v-chip>
-                  </v-flex>  -->
+                  </v-flex>  
 
                   <v-flex xs12>
                     <ckeditor
@@ -126,7 +126,7 @@
                       class="mx-0 font-weight-light"
                       color="success"
                       type="submit"
-                      @click="validateData(); alert=!alert; dialog1=true"
+                      @click="validateData(); alert=!alert;"
                     >
                       Save
                     </v-btn>
@@ -154,7 +154,7 @@
                       icon = "mdi-alert"
                       dense
                     >
-                      <h6> {{ output.error }} {{ output.message }} </h6>
+                      <h6> {{ output.error }} {{ output.message }} {{resp}} </h6>
                     </v-alert>
 
                   </v-flex>
@@ -181,7 +181,6 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      body: '',
       editorConfig: { },
       items: [],
       alert: false,
@@ -197,13 +196,16 @@ export default {
       all_facilities: [],
       facility: 'null',
       facility_id: '',
-      title: '',
+      protocol : {
+        body: '',
+        title: '',
+       },
       file: '',
       showPreview: false,
       imagePreview: '',
       files: [],
       output: '',
-      protocol: [],
+      resp: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -291,15 +293,15 @@ export default {
         allData.append('protocal_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.body)
-      allData.append('facility_id', this.user.hcw.facility.id)
+      allData.append('title', this.protocol.title)
+      allData.append('body', this.protocol.body)
+      allData.append('facility_id', this.protocol.facility_id )
+      allData.append('protocol_id', this.protocol.id)
 
-      var id = this.$route.params.id
 
       axios({
         method: 'POST',
-        url: 'resources/protocols/update/' +id,
+        url: 'resources/protocols/update',
         data: allData,
         headers: {
           'content-type': 'multipart/form-data' }
@@ -308,12 +310,18 @@ export default {
           console.log(response)
           this.output = response.data
           this.alert = true
+
+          this.resp = 'Facility Resource Successfully Added'
+
           this.$router.push('/protocals')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
+
+         this.resp = 'Failed, please try again'
+
         })
     }
   }
