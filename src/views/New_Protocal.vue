@@ -63,6 +63,7 @@
                       v-model="editorData"
                       rules="bodyRules"/>
                   </v-flex>
+                  <ul> <li v-for="error in errors">{{ error }}</li> </ul>
 
                   <v-flex xs12 >
 
@@ -167,18 +168,14 @@ export default {
       editorData: '',
       editorConfig: { },
       items: [],
+      errors: [],
       alert: false,
       valid: true,
       titleRules: [
         v => !!v || 'Title is required'
       ],
-      bodyRules: [
-        v => !!v || 'Fill in the required text'
-      ],
       dialog1: false,
       result: '',
-      all_facilities: [],
-      facility: 'null',
       facility_id: '',
       title: '',
       file: '',
@@ -203,9 +200,7 @@ export default {
       setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
-  created () {
-    this.getFacilities()
-  },
+ 
   methods: {
     validateData () {
       this.$refs.form.validate()
@@ -240,17 +235,12 @@ export default {
       this.files.splice(key, 1)
     },
 
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          console.log(facilities.data)
-           
-          this.all_facilities = facilities.data.data
-        })
-        .catch(error => console.log(error.message))
-    },
-
     postProtocal (e) {
+
+      if (!this.editorData) {
+        this.errors.push("Fill in the text area.");
+      }
+
       e.preventDefault()
 
       let allData = new FormData()
@@ -293,6 +283,10 @@ export default {
 span.remove-file{
   color:red;
   cursor: pointer;
+}
+ul {
+  list-style: none;
+  color: red;
 }
 
 </style>
