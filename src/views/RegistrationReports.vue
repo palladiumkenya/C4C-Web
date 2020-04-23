@@ -28,9 +28,10 @@
                   <v-combobox
                     v-model="counties"
                     :items="all_counties"
-                    item-text="county"
+                    item-text="name"
                     item-value="id"
                     label="Select County"
+                    v-on:change="getSubCounties"
                     multiple
                     clerable
                     persistent-hint
@@ -50,9 +51,11 @@
                   <v-combobox
                     v-model="subcounties"
                     :items="all_subcounties"
-                    item-text="sub_county"
-                    item-value="subcounty"
+                    item-text="name"
+                    item-value="id"
                     label="Select Sub-County"
+                    v-on:change="getFacilitysubcountyfilter"
+                    :disabled="active"
                     multiple
                     clerable
                     persistent-hint
@@ -95,6 +98,8 @@
                   <v-combobox
                     :items="all_facilities_level"
                     label="Select Facility Level"
+                    v-on:change="getFacilitylevelfilter"
+                   :disabled="active_level"
                     multiple
                     clerable
                     persistent-hint
@@ -111,10 +116,12 @@
                 <template>
                   <v-combobox
                     v-model="facility"
-                    :items="all_facilities"
+                    :items="fac"
                     item-text="name"
                     item-value="id"
                     label="Select Facility"
+                    v-on:change="getFacilityfilter"
+                   :disabled="active_fac"
                     multiple
                     clerable
                     persistent-hint
@@ -240,13 +247,19 @@ export default {
   },
   data () {
     return {
+
+      fac: [],
       facility: '',
       counties: '',
       subcounties: '',
+      fac: [],
       all_facilities: [],
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
       all_subcounties: [],
+      active: true,
+      active_fac: true,
+      active_level: true,
 
       value: true,
       value1: true,
@@ -419,7 +432,16 @@ export default {
       mess1: 'Fetching Data.....',
       mess: 'Fetching Data.....',
       mess2: 'Fetching Data.....',
-      s: []
+      s: [],
+      userz: [],
+      load: true,
+      fac_filt: [],
+      fac_filtl: [],
+      fac_filtf: [],
+      reg_filt: [],
+      reg_filtl: [],
+      reg_filtf: [],
+
       // date: [],
       // options: data
       // seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -436,34 +458,34 @@ export default {
     this.getUsers()
     this.getFacilities()
     this.getCounties()
-    this.getSubCounties()
   },
   methods: {
 
-    getCounties () {
+  getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data)
+          console.log(counties.data.data)
           this.all_counties = counties.data.data
-          if (counties.data.links.next != null) {
-            this.link = counties.data, links.next
-            this.loopT(this.link)
-          }
         })
         .catch(error => console.log(error.message))
     },
-
-    getSubCounties () {
-      axios.get('subcounties/3')
-        .then((subcounties) => {
-          console.log(subcounties.data)
-          this.all_subcounties = subcounties.data.data
-          if (subcounties.data.links.next != null) {
-            this.link = subcounties.data, links.next
-            this.loopT(this.link)
-          }
-        })
-        .catch(error => console.log(error.message))
+    getSubCounties (sb) {
+      if (sb.length > 0) {
+        this.active = false
+        this.all_subcounties = []
+        for (var i in sb) {
+          axios.get(`subcounties/${sb[i].id}`)
+            .then((subcounties) => {
+              // console.log(subcounties.data)
+              this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+            })
+            .catch(error => console.log(error.message))
+        }
+        this.getfacilityCountyfilter(sb)
+      } else {
+        this.active = true
+        this.getfacilityCountyfilter(sb)
+      }
     },
 
     getFacilities () {
@@ -478,6 +500,106 @@ export default {
           }
         })
         .catch(error => console.log(error.message))
+    },
+
+     getfacilityCountyfilter (fc) {
+       this.fac_filt = [], this.reg_filt = []
+      if (fc.length > 0) {
+        for (var c in fc) {
+          for (var f in this.all_facilities) {
+            if (this.all_facilities[f].county == fc[c].name) {
+              this.fac_filt.push(this.all_facilities[f])
+              for(var u in this.s){
+                if(this.s[u].facility_id == this.all_facilities[f].id){
+                  this.reg_filt.push(this.s[u])
+                }
+              }
+            }
+          }
+        }
+        this.getsummarydata(this.reg_filt)
+        this.fac = this.fac_filt.sort()
+      } else {
+        this.fac = this.all_facilities
+        this.getsummarydata(this.s)
+        
+      }
+    },
+    getFacilitysubcountyfilter (fsb){
+      this.fac_filtl = [], this.reg_filtl = []
+      this.active_level = false
+      if(fsb.length > 0){
+        for(var t in fsb){
+          for(var u in this.fac_filt){
+            if(this.fac_filt[u].sub_county == fsb[t].name){
+              this.reg_filtl.push(this.fac_filt[u])
+              for(var k in this.s){
+                if(this.s[k].facility_id == this.fac_filt[u].id){
+                  this.reg_filtl.push(this.s[k])
+                }
+              }
+            }
+          }
+          
+        }
+        this.getsummarydata(this.reg_filtl)
+        this.fac = this.fac_filtl.sort()
+      } else {
+        this.fac = this.fac_filt
+        this.getsummarydata(this.reg_filt)
+        this.active_level = true
+        
+      }
+    },
+    getFacilitylevelfilter (fl){
+       this.fac_filtf = [], this.reg_filtf = []
+       this.active_fac = false
+       if(fl.length > 0){
+         for(var l in fl){
+           for(var f in this.fac_filtl){
+             if(this.fac_filtl[f].level == fl[l]){
+               this.fac_filtf.push(this.fac_filtl[f])
+             }else if(fl[l] == 'Level 5 and Above'){
+               if(Number(this.fac_filtl[f].level.slice(6,7) >= 5)){
+                 this.fac_filtf.push(this.fac_filtl[f])
+               }
+             }
+           }
+           for(var k in this.reg_filtl){
+             if(ths.reg_filtl[k].facility_level == fl[l]){
+               this.reg_filtf.push(this.reg_filtl[k])
+             }else if (this.fl[l] == 'Level 5 and Above'){
+               if(Number(this.reg_filtl[f].level.slice(6,7) >= 5)){
+                 this.reg_filtf.push(this.reg_filtl[f])
+               }
+             }
+           }
+         }
+       this.getsummarydata(this.reg_filtf)
+        this.fac = this.fac_filtf.sort()
+      } else {
+        this.fac = this.fac_filtl
+        this.getsummarydata(this.reg_filtl)
+        this.active_fac = true
+        
+      }
+    },
+
+    getFacilityfilter(ff){
+      let al = [],  rg = []
+      if(ff.length > 0){
+        for(var v in ff){
+          for(var k in this.reg_filtf){
+            this.reg_filtf[k].facility_name == ff[v].name
+            rg.push(this.reg_filtf[k])
+
+          }
+        }
+        this.getsummarydata(rg)
+      }
+       else{
+          this.getsummarydata(this.reg_filtf)
+        }
     },
 
     getUsers () {
@@ -578,13 +700,15 @@ export default {
       this.value1 = false
     },
 
-    getsummarydata (){
+    getsummarydata (list){
+      this.load = true
         var reg = []
       for (var r in this.monthOptions.xAxis.categories) {
-        reg.push(this.getNumr(this.monthOptions.xAxis.categories[r]))
+        reg.push(this.getNumr(this.monthOptions.xAxis.categories[r],list))
         
       }
       this.monthOptions.series[0].data = reg
+      this.load = false
     },
 
     getAgeNum (cat) {
@@ -631,10 +755,10 @@ export default {
       return count
     },
 
-    getNumr (name) {
+    getNumr (name, reg) {
       var counter = 0
-      for (var r in this.userz) {
-        var dat = new Date(this.userz[r].updated_at)
+      for (var r in reg) {
+        var dat = new Date(reg[r].created_at)
         var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if (list[dat.getMonth()] === name) {
           console.log(name)
