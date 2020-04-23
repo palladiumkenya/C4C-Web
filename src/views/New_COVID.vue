@@ -58,6 +58,7 @@
                     placeholder="Write here"
                     required/>
                 </v-flex>
+                <ul> <li v-for="error in errors">{{ error }}</li> </ul>
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
@@ -171,6 +172,7 @@ export default {
       ],
       dialog1: false,
       result: '',
+      errors: [],
       output: '',
       alert: false,
       title: '',
@@ -224,6 +226,11 @@ export default {
     },
 
     postCOVID (e) {
+
+      if (!this.editorData) {
+        this.errors.push("Fill in the text area .");
+      }
+
       e.preventDefault()
 
       let allData = new FormData()
@@ -273,6 +280,10 @@ export default {
 span.remove-file{
   color:red;
   cursor: pointer;
+}
+ul {
+  list-style: none;
+  color: red;
 }
 
 </style>
