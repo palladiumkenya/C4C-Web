@@ -200,7 +200,7 @@ export default {
   watch: {
     dialog1 (val) {
       if (!val) return
-      setTimeout(() => (this.dialog1 = false), 4000)
+      setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
   created () {
@@ -258,7 +258,7 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('protocal_files[' + i + ']', file)
+        allData.append('protocol_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
       allData.append('title', this.title)

@@ -115,11 +115,10 @@
                 >
                   <v-btn
                     :disabled="!valid"
-                    :loading="dialog1"
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; "
+                    @click="validateData(); alert=!alert; dialog1=true "
                   >
                     Save
                   </v-btn>
@@ -150,7 +149,7 @@
                     color = "#47a44b"
                     dense
                   >
-                    <h6> {{ output.error }} {{ output.message }} {{resp}} </h6>
+                    <h6> {{resp}} {{ output.error }} {{ output.message }}  </h6>
                   </v-alert>
 
                 </v-flex>
