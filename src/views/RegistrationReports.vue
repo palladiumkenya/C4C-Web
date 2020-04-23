@@ -603,11 +603,10 @@ export default {
     },
 
     getUsers () {
-      if (this.user.role_id === 1) {
-        axios.get('hcw')// facility/9831
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
+        axios.get('hcw')
           .then((exp) => {
             this.s = exp.data.data
-            // console.log(exp.data)
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
@@ -636,7 +635,7 @@ export default {
       }
     },
     async loopT (l) {
-      var i
+      var i, u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -646,9 +645,15 @@ export default {
           i = 11
         }
       }
-      console.log(this.s)
+      if (this.user.role_id == 5) {
+        for (var t in this.s) {
+          if (this.s[t].county == this.user.county){
+            u.push(this.s[t])
+          }
+        }
+        this.s = u
+      }
       this.getAgeData()
-      // this.getTime()
     },
      async loopG (l) {
       var i

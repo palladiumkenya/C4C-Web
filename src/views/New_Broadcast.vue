@@ -34,7 +34,7 @@
               <v-layout wrap>
 
                 <v-flex
-                  v-if="user.role_id === 1"
+                  v-if="user.role_id === 1 || user.role_id == 5"
                   xs12
                 >
                   <v-combobox
@@ -106,36 +106,36 @@
               </v-flex>   
 
               <v-flex
-              xs12
+                xs12
               >
-                   <v-dialog
-                    v-model="dialog1"
-                    max-width="290"
-                    lazy>
-                    <v-card>
-                      <v-card-text class="text-xs-center">
-                        <v-progress-circular
-                          :size="70"
-                          indeterminate
-                          class="primary--text"/>
-                      </v-card-text>
-                    </v-card>
-                  </v-dialog>
+                <v-dialog
+                  v-model="dialog1"
+                  max-width="290"
+                  lazy>
+                  <v-card>
+                    <v-card-text class="text-xs-center">
+                      <v-progress-circular
+                        :size="70"
+                        indeterminate
+                        class="primary--text"/>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
 
-                  <v-alert
-                    :value="alert"
-                    head
-                    type="success"
-                    border="right"
-                    icon = "mdi-alert"
-                    dismissible
-                    text
-                    transition="scale-transition"
-                    color = "#47a44b"
-                    dense
-                  >
-                    <h6> {{ output.error }} {{ output.message }} </h6>
-                  </v-alert>
+                <v-alert
+                  :value="alert"
+                  head
+                  type="success"
+                  border="right"
+                  icon = "mdi-alert"
+                  dismissible
+                  text
+                  transition="scale-transition"
+                  color = "#47a44b"
+                  dense
+                >
+                  <h6> {{ output.error }} {{ output.message }} </h6>
+                </v-alert>
               </v-flex>    
 
               </v-layout>
@@ -200,18 +200,25 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
-          this.all_facilities = facilities.data.data
+          let all_facilities = facilities.data.data
+          if (this.user.role_id == 5){
+            for (var fac in all_facilities) {
+              if (all_facilities[fac].county == this.user.county) {
+                this.all_facilities.push(all_facilities[fac])
+              }
+            } 
+          } else {
+            this.all_facilities = all_facilities
+          }
         })
         .catch(error => console.log(error.message))
     },
 
     postBroadcast (e) {
       e.preventDefault()
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1||this.user.role_id == 5) {
         axios.post('broadcasts/web/create', {
           facility_id: this.facility.id,
-
           cadres: this.cadres.map(item => item.id),
           message: this.message
         })

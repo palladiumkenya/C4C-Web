@@ -518,7 +518,7 @@ export default {
     },
 
     getImmunizations () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1|| this.user.role_id == 5) {
         axios.get('immunizations/all/disease/1')
           .then((exp) => {
             this.s = exp.data.data

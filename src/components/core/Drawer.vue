@@ -51,6 +51,8 @@
               v-text="link.text"
             />
           </v-list-tile>
+          <div v-else-if="(link.text == 'Manage Facility' || link.text == 'Resource Center') && user.role_id == 5">
+          </div>
           <v-list-tile
             v-else-if="!link.subLinks"
             :to="link.to"
@@ -223,11 +225,11 @@ export default {
             //   icon: 'mdi-gamepad',
             //   text: 'Devices'
             // },
-            {
-              to: '/departments',
-              icon: 'mdi-file-tree',
-              text: 'Departments'
-            },
+            // {
+            //   to: '/departments',
+            //   icon: 'mdi-file-tree',
+            //   text: 'Departments'
+            // },
             {
               to: '/checkin',
               icon: 'mdi-crosshairs-gps',
