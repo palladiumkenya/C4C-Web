@@ -86,7 +86,7 @@
               v-for="sublink in link.subLinks"
               :key="sublink.text">
               <template
-                v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources' && sublink.text != 'View Users')">
+                v-if="(user.role_id === 4 || user.role_id === 5) && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources' && sublink.text != 'View Users')">
                 <!-- {{drawerList(sublink.text)}} -->
                 <v-list-tile
                   :to="sublink.to"
@@ -101,7 +101,7 @@
                 </v-list-tile>
               </template>
               <template
-                v-else-if="user.role_id != 4">
+                v-else-if="user.role_id != 4 && user.role_id != 5">
                 <v-list-tile
                   :to="sublink.to"
                   :active-class="color"
