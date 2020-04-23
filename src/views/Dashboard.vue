@@ -204,10 +204,10 @@
                 prepend-icon="mdi-calendar"
                 readonly
               ></v-text-field>
-              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="maxDate" :min="minDate">
+              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
                 <v-spacer></v-spacer>
                 <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="$refs.menu1.save(startDate)">OK</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
               </v-date-picker>
             </v-menu>
           </v-flex>
@@ -231,10 +231,10 @@
                 prepend-icon="mdi-calendar"
                 readonly
               ></v-text-field>
-              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="minDate">
+              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
                 <v-spacer></v-spacer>
                 <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="$refs.menu.save(endDate)">OK</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
               </v-date-picker>
             </v-menu>
           </v-flex>
@@ -311,10 +311,10 @@ export default {
     return {
       menu: false,
       menu1: false,
-      startDate: '',
+      startDate: '2016-01-01',
       maxDate: new Date().toISOString().substr(0, 10),
       minDate: '2016-01-01',
-      endDate: '',
+      endDate: new Date().toISOString().substr(0, 10),
       facility: '',
       counties: '',
       subcounties: '',
@@ -426,11 +426,8 @@ export default {
           }
         ]
       },
-      date: [],
-      date: [],
       s: [],
       userz: [],
-      usersl: [],
       load: true,
       u: 0,
       b: 0,
@@ -477,9 +474,42 @@ export default {
   methods: {
 
     click () {
-    //  EventBus.emit("btn-clicked", {
-    //    newData: [100, 12800, 500]
-    //  });
+      let exp = [], us =[]
+      var dates = {
+        convert:function(d) {
+          return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year,d.month,d.date) :
+            NaN
+          );
+        },
+        inRange:function(d,start,end) {
+          return (
+            isFinite(d=this.convert(d).valueOf()) &&
+            isFinite(start=this.convert(start).valueOf()) &&
+            isFinite(end=this.convert(end).valueOf()) ?
+            start <= d && d <= end :
+            NaN
+          );
+        }
+      }
+      for (var e in this.s) {
+        var i = new Date(this.s[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i,this.startDate,this.endDate)){
+          exp.push(this.s[e])
+        }
+      }
+      for (var u in this.userz) {
+        var i = new Date(this.userz[u].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i,this.startDate,this.endDate)) {
+          us.push(this.userz[u])
+        }
+      }
+      this.getTest(us)
+      this.getMonth(exp)
     },
     getFacilities () {
       axios.get('facilities')
@@ -557,11 +587,6 @@ export default {
           for (var f in this.fac_filt) {
             if (this.fac_filt[f].sub_county == a[c].name) {
               this.fac_filtl.push(this.fac_filt[f])
-              for (var u in this.userz) {
-                if (this.userz[u].facility_id == this.fac_filt[f].id) {
-                  this.us_filtl.push(this.userz[u])
-                }
-              }
             }
           }
           for (var ex in this.exp_filt) {
@@ -569,11 +594,11 @@ export default {
               this.exp_filtl.push(this.exp_filt[ex])
             }
           }
-          // for (var u in this.us_filt) {
-          //   if (this.us_filt[u].sub_county == a[c].name) {
-          //     us.push(this.us_filt[u])
-          //   }
-          // }
+          for (var u in this.us_filt) {
+            if (this.us_filt[u].sub_county == a[c].name) {
+              this.us_filtl.push(this.us_filt[u])
+            }
+          }
         }
         this.getTest(this.us_filtl)
         this.getMonth(this.exp_filtl)
