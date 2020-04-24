@@ -535,7 +535,6 @@ export default {
         for (var i in a) {
           axios.get(`subcounties/${a[i].id}`)
             .then((subcounties) => {
-              // console.log(subcounties.data)
               this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
             })
             .catch(error => console.log(error.message))
@@ -550,7 +549,6 @@ export default {
       this.us_filt =[],this.fac_filt = [], this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
@@ -635,7 +633,7 @@ export default {
             }
           }
           for (var u in this.us_filtl) {
-            if (this.us_filtl[u].facility_level == a[c]) {
+            if (this.us_filtl[u].facility_level === a[c]) {
               this.us_filtf.push(this.us_filtl[u])
             } else if (a[c]== 'Level 5 and Above') {
               if (Number(this.us_filtl[u].facility_level.slice(6,7)) >= 5) {
@@ -662,12 +660,12 @@ export default {
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
-            if (this.exp_filtf[ex].facility_name == a[c].name) {
+            if (this.exp_filtf[ex].facility === a[c].name) {
               e.push(this.exp_filtf[ex])
             }
           }
           for (var u in this.us_filtf) {
-            if (this.us_filtf[u].facility_name == a[c].name) {
+            if (this.us_filtf[u].facility_name === a[c].name) {
               us.push(this.us_filtf[u])
             }
           }

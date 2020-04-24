@@ -89,16 +89,16 @@
 
             <template>
 
-                 <v-combobox
-          :items="all_facilities_level"
-          label="Select Facility Level"
-          v-on:change="getFacilitylevelfilter"
-           :disabled="active_level"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
+              <v-combobox
+                :items="all_facilities_level"
+                label="Select Facility Level"
+                v-on:change="getFacilitylevelfilter"
+                :disabled="active_level"
+                multiple
+                clerable
+                persistent-hint
+                chips>
+              </v-combobox>
                 
             </template>
             </v-flex>
@@ -117,7 +117,6 @@
           item-value="id"
           label="Select Facility"
           v-on:change="getFacilityfilter"
-          :disabled="active_fac"
           multiple
           clerable
           persistent-hint
@@ -870,9 +869,9 @@ export default {
   },
 
   created () {
+    this.getFacilities()
     this.getExp()
     this.getCad()
-    this.getFacilities()
     this.getCounties()
     // this.getExpo()
   },
@@ -896,39 +895,39 @@ export default {
         .catch(error => console.log(error.message))
     },
 
-    getSubCounties (sb) {
-      console.log(sb)
-      if(sb.length > 0){
+    getSubCounties (a) {
+      console.log(a)
+      if(a.length > 0){
         this.active = false
         this.all_subcounties = []
-        for(var x in sb){
-          axios.get(`subcounties/${sb[x].id}`)
+        for(var x in a){
+          axios.get(`subcounties/${a[x].id}`)
           .then((subcounties) => {
             this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
           } )
           .catch(error => console.log(error.message))
         }
-        this.getFacilitycountyfilter(sb)
+        this.getFacilitycountyfilter(a)
       }else{
-         this.active = true
-        this.getFacilitycountyfilter(sb)
+        this.active = true
+        this.getFacilitycountyfilter(a)
       }
     },
 
-    getFacilitycountyfilter (cf){
+    getFacilitycountyfilter (a){
       this.fac_filt = [], this.exp_filt = []
-      if(cf.length > 0){
-        for(var c in cf){
-          for(var a in this.all_facilities){
-            if(this.all_facilities[a].county == cf[c].name){
-              this.fac_filt.push(this.all_facilities[a])
+      if(a.length > 0){
+        for(var c in a){
+          for(var ai in this.all_facilities){
+            if(this.all_facilities[ai].county === a[c].name){
+              this.fac_filt.push(this.all_facilities[ai])
             }
           }
-           for(var e in this.s){
-              if(this.s[e].county == cf[e].name){
-                this.exp_filt.push(this.s[e])
-              }
+          for(var e in this.s){
+            if(this.s[e].county == a[c].name){
+              this.exp_filt.push(this.s[e])
             }
+          }
         } 
         this.getAgeData(this.exp_filt)
         this.fac = this.fac_filt.sort()
@@ -943,16 +942,18 @@ export default {
        this.active_level = false
        if(fsb.length > 0){
          for(var sb in fsb){
+           
            for(var a in this.fac_filt){
-             if(this.fac_filt[a].sub_county == fsb[sb].name){
+             if(this.fac_filt[a].sub_county === fsb[sb].name){
+               console.log(fsb[sb])
                this.fac_filtl.push(this.fac_filt[a])
              }
            }
             for(var e in this.exp_filt){
-               if(this.exp_filt[e].sub_county == this.fsb[sb].name){
-                 this.exp_filtl.push(this.exp_filt[e])
-               }
-             }
+              if(this.exp_filt[e].sub_county === fsb[sb].name){
+                this.exp_filtl.push(this.exp_filt[e])
+              }
+            }
          }
        
          this.getAgeData(this.exp_filtl)
@@ -973,17 +974,17 @@ export default {
           for(var a in this.fac_filtl){
             if(this.fac_filtl[a].level == fl[l]){
               this.fac_filtf.push(this.fac_filtl[a])
-            }else if(fl[l] == 'Level 5 and Above'){
-               if(Number(this.fac_filtl[a].level.slice(6,7)) >= 5){
-                 this.fac_filtf.push(this.fac_filtl[a])
-               }
-             }
+            }else if(fl[l] === 'Level 5 and Above'){
+                if(Number(this.fac_filtl[a].level.slice(6,7)) >= 5){
+                  this.fac_filtf.push(this.fac_filtl[a])
+                }
+              }
           }
           for(var e in this.exp_filtl){
-            if(this.exp_filtl[e].facility_level == fl[l]){
+            if(this.exp_filtl[e].facility_level === fl[l]){
               this.exp_filtf.push(this.exp_filtl[e])
-            }else if(this.fl[l] == 'Level 5 and Above'){
-              if(Number(this.exp_filtl[e].facility_leve.slice(6,7)) >= 5){
+            }else if(fl[l] === 'Level 5 and Above'){
+              if(Number(this.exp_filtl[e].facility_level.slice(6,7)) >= 5){
                 this.exp_filtf.push(this.exp_filtl[e])
               }
             }
@@ -1004,13 +1005,14 @@ export default {
       let al = [], exp = []
       if(f.length > 0){
         for(var s in f){
+          console.log(f[s].name)
           for(var e in this.exp_filtf){
-            if(this.exp_filtf[e].facility_name == f[s].name){
+            if(this.exp_filtf[e].facility === f[s].name){
               exp.push(this.exp_filtf[e])
             }
           }
         }
-        this.getAgeData(rg)
+        this.getAgeData(exp)
       
       }else{
        
@@ -1060,18 +1062,6 @@ export default {
         this.date.push(this.seriesdatasum)
       }
       this.barOptionsSummary.series[0].data = this.date
-    },
-    getDep () {
-      
-      var count = 0
-      for (var v in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[v])
-        this.seriesdata.push(this.getNum(this.seriesname[v]))
-        count += this.getNum(this.seriesname[v])
-        this.locations.push(this.seriesdata)
-      }
-      this.pieOptions.series[0].data = this.locations
     },
     //  getTypes () {
     //   var counter = 0
@@ -1145,8 +1135,7 @@ export default {
         }
         this.s = u
       }
-      this.getDep()
-      this.getAgeData()
+      this.getAgeData(this.s)
      
     },
 
@@ -1159,7 +1148,7 @@ export default {
       this.barOptionsAge.series[0].data = data
       this.value = false
       this.load = false
-      
+
       this.load = true
       var data = []
       for (var i in this.gendOptions.xAxis.categories) {
@@ -1280,7 +1269,7 @@ export default {
     getNum (name, exl) {
       var count = 0
       for (var x in exl) {
-        if (ext[x].exposure_location === name) {
+        if (exl[x].exposure_location === name) {
           count++
         }
       }

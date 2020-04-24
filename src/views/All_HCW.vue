@@ -176,9 +176,9 @@ export default {
           i = 11
         }
       }
-      if (this.user.role_id == 5) {
-        for (var a in this.all_hcws){
-          if (this.all_hcws[a].county == this.user.county) {
+      if (this.user.role_id === 5) {
+        for (var a in this.all_hcws) {
+          if (this.all_hcws[a].county === this.user.county) {
             u.push(this.all_hcws[a])
           }
         }

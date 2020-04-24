@@ -103,7 +103,7 @@
                   <v-card
                     v-for="(file, key) in files"
                     :key="file.id"
-                    class="file-listing">{{ file.name }} 
+                    class="file-listing">{{ file.name }}
                     <span
                       class="remove-file"
                       @click="removeFile(key)"> Remove </span> </v-card>
@@ -149,7 +149,7 @@
                     color = "#47a44b"
                     dense
                   >
-                    <h6> {{resp}} {{ output.error }} {{ output.message }}  </h6>
+                    <h6> {{ resp }} {{ output.error }} {{ output.message }}  </h6>
                   </v-alert>
 
                 </v-flex>
@@ -188,8 +188,8 @@ export default {
       output: '',
       alert: false,
       cme: {
-      body: '',
-      title: '',
+        body: '',
+        title: ''
       },
       file: '',
       showPreview: false,
