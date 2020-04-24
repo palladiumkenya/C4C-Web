@@ -1,9 +1,8 @@
 
 <template>
   <v-card>
-                <v-layout wrap>
-
-        <template>
+    <v-layout wrap>
+      <template>
         <!-- Start filters -->
 
         <v-layout >
@@ -23,7 +22,7 @@
                 clerable
                 persistent-hint
                 chips
-                @change="getSubCounties"/>
+                v-on:change="getSubCounties"/>
             </template>
           </v-flex>
           <v-flex
@@ -608,7 +607,6 @@ export default {
             name: 'Influenza Immunizations',
             data: []
           }
-
         ]
       },
 
@@ -630,8 +628,6 @@ export default {
         xAxis: {
           //
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-
         },
         labels: {
           items: [
@@ -708,14 +704,12 @@ export default {
       influenza: [],
       tdap: [],
       meningococcal: [],
-        varicella: [],
-        disease: [],
-        gender: [],
-
-       s: [],
+      varicella: [],
+      disease: [],
+      gender: [],
+      s: [],
       userz: [],
       load: true,
-
       fac_filt: [],
       exp_filt: [],
       us_filt: [],
@@ -820,27 +814,26 @@ created ()  {
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
-              for (var u in this.userz) {
-                if (this.userz[u].facility_id == this.all_facilities[f].id) {
-                  this.us_filt.push(this.userz[u])
-                }
-              }
             }
           }
           for (var ex in this.n) {
             if (this.n[ex].county == a[c].name) {
               this.exp_filt.push(this.n[ex])
-              // console.log(this.n[ex])
+            }
+          }
+          for (var ex in this.i) {
+            if (this.i[ex].county == a[c].name) {
+              this.us_filt.push(this.i[ex])
             }
           }
         }
-     //   this.getTest(this.us_filt)
-        this.getImmunizationsN(this.exp_filt)
+        this.getMeningococcal(this.exp_filt)
+        this.getInfluenza(this.us_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
-     //   this.getTest(this.userz)
-        this.getImmunizationsN(this.n)
+        this.getMeningococcal(this.n)
+        this.getInfluenza(this.i)
       }
     },
     facilitySubCounty (a) {
@@ -860,7 +853,7 @@ created ()  {
             }
           }
         }
-        this.getImmunizationsN(this.exp_filtl)
+        this.getMeningococcal(this.exp_filtl)
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
@@ -948,12 +941,12 @@ created ()  {
     },
     getImmunizationsI() {
       axios.get('immunizations/all/disease/2')
-              .then((exp) => {
-                this.i = exp.data.data
-                this.link = exp.data.links.next
-                this.loopI(this.link)
-              })
-              .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.i = exp.data.data
+          this.link = exp.data.links.next
+          this.loopI(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
     getImmunizationsT() {
       axios.get('immunizations/all/disease/3')
@@ -991,7 +984,7 @@ created ()  {
           .catch(error => console.log(error.message))
       }
     },
-       getImmunizationsV() {
+    getImmunizationsV() {
       axios.get('immunizations/all/disease/6')
               .then((exp) => {
                 this.v = exp.data.data
@@ -1031,13 +1024,12 @@ created ()  {
       }
       this.CountMeaslesChartOptions.series[0].data = this.seriesdata
     },
-    getInfluenza() {
+    getInfluenza(list) {
       var counter = 0;
       for (var vac in this.seriesname) {
         this.seriesdata = []
         this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNumi(this.seriesname[vac]))
-        counter += this.getNumi(this.seriesname[vac])
+        this.seriesdata.push(this.getNumi(this.seriesname[vac], list))
         this.influenza.push(this.seriesdata)
       }
       this.InfluenzaChartOptions.series[0].data = this.influenza
@@ -1064,19 +1056,17 @@ created ()  {
       }
       this.VaricellaChartOptions.series[0].data = this.varicella
     },
-    getMeningococcal() {
-      var counter = 0;
-      for (var vac in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNumn(this.seriesname[vac]))
-        counter += this.getNumn(this.seriesname[vac])
-        this.meningococcal.push(this.seriesdata)
+    getMeningococcal(list) {
+      this.seriesdata = []
+      for (var vac in this.seriesname) {  
+        //this.seriesdata.push(this.seriesname[vac])
+        this.seriesdata.push(this.getNumn(this.seriesname[vac], list))
+        //this.meningococcal.push(this.seriesdata)
       }
-      this.MeningococcalChartOptions.series[0].data = this.meningococcal
+      this.MeningococcalChartOptions.series[0].data = this.seriesdata
     },
 
-      getNumAll (gender, disease) {
+    getNumAll (gender, disease) {
       var count = 0
       for (var x in this.a) {
         // console.log(this.s[x].type)
@@ -1098,10 +1088,10 @@ created ()  {
       return counter
     },
 
-     getNumi(name) {
+    getNumi(name, l) {
       var counter = 0
-      for (var xo in this.i) {
-        if (this.i[xo].date.slice(0, 3) === name) {
+      for (var xo in l) {
+        if (l[xo].date.slice(0, 3) === name) {
           counter++
         }
       }
@@ -1118,10 +1108,10 @@ created ()  {
       return counter
     },
 
-     getNumn(name) {
+    getNumn(name, list) {
       var counter = 0
-      for (var xo in this.n) {
-        if (this.n[xo].date.slice(0, 3) === name) {
+      for (var xo in list) {
+        if (list[xo].date.slice(0, 3) === name) {
           counter++
         }
       }
@@ -1205,7 +1195,7 @@ created ()  {
         }
       }
 
-      this.getInfluenza()
+      this.getInfluenza(this.i)
     },
 
     async loopTD(l) {
