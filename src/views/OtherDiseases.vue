@@ -1,37 +1,6 @@
 
 <template>
   <v-card>
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Summary Report</v-tab>
-        <v-tab>Measles</v-tab>
-      <v-tab>Influenza</v-tab>
-      <v-tab>TDAP</v-tab>
-        <v-tab>Varicella</v-tab>
-      <v-tab>Meningococcal</v-tab>
-
-
-      <!-- Start Cards -->
-
-
-
-
-
-      <v-tab-item
-        v-for="n in 6"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n==1">
-            <!-- Start Graphs -->
-
-            <v-flex
-              md12
-              sm12
-              lg12
-            >
-<v-container>
                 <v-layout wrap>
 
         <template>
@@ -232,20 +201,50 @@
             </v-menu>
           </v-flex>
         </template>
-
-        <template>
+&nbsp;
+       <template>
           <v-btn
             block
             color="secondary"
             dark
             @click="click">Filter</v-btn>
-        </template>
+       </template>
 
         <!-- End filters -->
       </template>
 </v-layout>
-</v-container>
 
+
+    <v-tabs
+      color="white"
+      centered
+    >
+      <v-tab>Summary Report</v-tab>
+        <v-tab>Measles</v-tab>
+      <v-tab>Influenza</v-tab>
+      <v-tab>TDAP</v-tab>
+        <v-tab>Varicella</v-tab>
+      <v-tab>Meningococcal</v-tab>
+
+
+      <!-- Start Cards -->
+
+
+
+
+
+      <v-tab-item
+        v-for="n in 6"
+        :key="n">
+        <v-container fluid>
+          <v-card-text v-if="n==1">
+            <!-- Start Graphs -->
+
+            <v-flex
+              md12
+              sm12
+              lg12
+            >
                   <highcharts :options="AllDiseaseschartOptions"
                    ref="columnChart"/>
 

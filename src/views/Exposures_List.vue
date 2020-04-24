@@ -205,7 +205,7 @@ export default {
   },
   methods: {
     getExp () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
         axios.get('exposures/all/')
           .then((exp) => {
             this.exposures = exp.data.data
@@ -237,7 +237,7 @@ export default {
     },
 
     async loopT (l) {
-      var i
+      var i, u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -247,8 +247,14 @@ export default {
           i = 11
         }
       }
-
-      console.log(this.exposures)
+      if (this.user.role_id == 5) {
+        for (var i in this.exposures) {
+          if (this.exposures[i].county == this.user.county) {
+            u.push(this.exposures[i])
+          }
+        }
+        this.exposures = u
+      }
     },
     handleDownload () {
       this.downloadLoading = true

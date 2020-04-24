@@ -313,7 +313,6 @@
 
           <v-card-text v-if="n==7">
             <template>
-              <h3>{{ mess }}</h3>
               <div
                 v-if="value" >
                 <v-progress-circular
@@ -341,7 +340,6 @@
           <v-card-text v-if="n==9">
 
             <template>
-              <h3>{{ mess1 }}</h3>
               <div
                 v-if="value1" >
                 <v-progress-circular
@@ -401,12 +399,10 @@ export default {
     })
 
   },
-  // eslint-disable-next-line vue/order-in-components
   components: {
     Exposure_by_time,
     highcharts: Chart
   },
-  // eslint-disable-next-line vue/order-in-components
   data () {
     return {
 
@@ -538,7 +534,7 @@ export default {
 
       barOptionsDevice: {
         xAxis: {
-          categories: ['Syringe/ Needle IM/ SC Injection', 'Syringe /needle blood drawing', 'Phlebotomy needle/vacuum set', 'IV catheter/canula', 'Needle IV Line', 'Unused Needle', 'Lancet', 'Sature Needle', 'Scalpel', 'Capillary Tube', 'Glass Slide', 'Pippete Tip', 'Thermal Gun', 'Scapel', 'Canular', 'Syringe Regular', 'Test', 'Test Syringe', 'Other'],
+          categories: ['syringe/needle IM/SC injection', 'Syringe /needle blood drawing', 'Phlebotomy needle/vacuum set', 'IV catheter/canula', 'Needle on IV-line', 'Unused needle', 'Lancet', 'Sature needle', 'Scalpel', 'Capillary tube', 'Glass slide', 'Pippete tip', 'Other'],
           title: {
             text: 'Devices'
           }
@@ -789,7 +785,7 @@ export default {
 
       barOptions: {
         xAxis: {
-          categories: ['Prick', 'Cuts', 'Spill', 'fluid spill', 'Bite', 'Needle stick injury', 'Human Bite', 'Needle prick', 'Splash on Mucosa', 'Non-intsact skin', 'Other', 'Etc', 'Not Specified'],
+          categories: ['Cuts', 'Bite', 'Needle Stick', 'Splash on Mucosa', 'Non-Intact Skin', 'Other'],
           title: {
             text: 'Exposure Type'
           }
@@ -838,7 +834,7 @@ export default {
 
       barOptionsLocation: {
         xAxis: {
-          categories: ['Medical ward', 'Surgical ward', 'Theatre', 'Maternity', 'Dental clinic', 'OP/MCH', 'Laundry', 'Laboratory', 'Other'],
+          categories: ['Medical ward', 'Surgical ward', 'Theater', 'Maternity', 'Dental clinic', 'OP/MCH', 'Laundry', 'Laboratory', 'Other'],
           title: {
             text: 'Exposure Location'
           }
@@ -912,8 +908,6 @@ export default {
           }
         ]
       },
-
-      cadreDoc: 0,
       s: [],
       locations: [],
       hcw: [],
@@ -1160,7 +1154,7 @@ export default {
     //  },
 
     getExp () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('exposures/all/')
           .then((exp) => {
             this.s = exp.data.data
@@ -1201,7 +1195,7 @@ export default {
     },
 
     async loopT (l) {
-      var i
+      var i,u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -1210,6 +1204,14 @@ export default {
         } else {
           i = 11
         }
+      }
+      if (this.user.role_id == 5) {
+        for (var i in this.s) {
+          if (this.s[i].county == this.user.county) {
+            u.push(this.s[i])
+          }
+        }
+        this.s = u
       }
       this.getDep()
       this.getAgeData()

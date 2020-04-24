@@ -152,11 +152,12 @@ export default {
   },
   methods: {
     getBroadcast () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1|| this.user.role_id == 5) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {
             console.log(broadcast.data)
             this.all_messages = broadcast.data.data
+            this.loopT(broadcast.data.links.next)
           })
           .catch(() => {
             this.result = 'Check your internet connection or retry logging in.'
@@ -167,6 +168,7 @@ export default {
           .then((broadcast) => {
             console.log(broadcast.data)
             this.all_messages = broadcast.data.data
+            this.loopT(broadcast.data.links.next)
           })
           .catch(() => {
             this.snackbar = true
@@ -175,7 +177,7 @@ export default {
       }
     },
     async loopT (l) {
-      var i
+      var i, u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -184,6 +186,16 @@ export default {
         } else {
           i = 11
         }
+      }
+      if(this.user.role_id == 5){
+        for (var ex in this.all_messages){
+          if (this.all_messages[ex].facility) {
+            if (this.all_messages[ex].facility.county == this.user.hcw.county) { 
+              u.push(this.all_messages[ex])
+            }
+          }
+        }
+        this.all_messages = u
       }
     }
   }

@@ -344,7 +344,9 @@ export default {
           exp.push(this.s[e])
         }
       }
-      this.getMonth(exp)
+      this.getHBV(exp)
+      console.log('l')
+      console.log(this.getHBV(exp))
     },
     getFacilities () {
       axios.get('facilities')
@@ -397,7 +399,7 @@ export default {
               }
             }
           }
-          for (var ex in this.hs) {
+          for (var ex in this.s) {
             if (this.s[ex].county == a[c].name) {
               this.exp_filt.push(this.s[ex])
               // console.log(this.s[ex])
@@ -405,12 +407,12 @@ export default {
           }
         }
      //   this.getTest(this.us_filt)
-        this.getMonth(this.exp_filt)
+        this.getHBV(this.exp_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
      //   this.getTest(this.userz)
-        this.getMonth(this.s)
+        this.getHBV(this.s)
       }
     },
     facilitySubCounty (a) {
@@ -436,12 +438,12 @@ export default {
           }
         }
       //  this.getTest(this.us_filtl)
-        this.getMonth(this.exp_filtl)
+        this.getHBV(this.exp_filtl)
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
       //  this.getTest(this.us_filt)
-        this.getMonth(this.exp_filt)
+        this.getHBV(this.exp_filt)
         this.active_level = true
       }
     },
@@ -482,13 +484,13 @@ export default {
 
         }
     //    this.getTest(this.us_filtf)
-        this.getMonth(this.exp_filtf)
+        this.getHBV(this.exp_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.fac = this.fac_filtl
      //   this.getTest(this.us_filtl)
         this.active_fac = true
-        this.getMonth(this.exp_filtl)
+        this.getHBV(this.exp_filtl)
       }
     },
 
@@ -510,10 +512,10 @@ export default {
 
         }
        // this.getTest(us)
-        this.getMonth(e)
+        this.getHBV(e)
       } else {
         //this.getTest(this.us_filtf)
-        this.getMonth(this.exp_filtf)
+        this.getHBV(this.exp_filtf)
       }
     },
 
@@ -545,11 +547,25 @@ export default {
           .catch(error => console.log(error.message))
       }
     },
+ async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.s = this.s.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+      this.getHBV(this.s)
+    //  this.getMonth(this.s)
+    },
     getHBV () {
-      var counter = 0
+      // var counter = 0
       this.seriesdata = []
       for (var vac in this.seriesname) {
-        this.seriesdata.push(this.getNum(vac))
+        this.seriesdata.push(this.getNum(this.seriesname[vac]))
       }
       this.barOptionsHBV.series[0].data = this.seriesdata
     },
@@ -578,35 +594,8 @@ export default {
         }
       }
       return count
-    },
-
-    async loopT (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.s = this.s.concat(response.data.data)
-        } else {
-          i = 11
-        }
-      }
-   //   this.getHBV()
-      this.getMonth(this.s)
-    },
-    getMonth (list) {
-    /*  this.seriesdata = []
-      for (var vac in this.seriesname) {
-        this.seriesdata.push(this.getNum(vac))
-      }
-      this.barOptionsHBV.series[0].data = this.seriesdata*/
-      // console.log(list)
-      var wdata = []
-      for (var i in this.seriesname) {
-        wdata.push(this.getNum(this.barOptionsHBV.xAxis.categories[i], list))
-      }
-      this.barOptionsHBV.series[0].data = wdata
     }
+
   }
 }
 </script>
