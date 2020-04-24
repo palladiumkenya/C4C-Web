@@ -84,7 +84,7 @@ export default {
       output: [],
       all_messages: [],
       search: '',
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [100, 500, 1000],
       headers: [
         {
           sortable: false,
