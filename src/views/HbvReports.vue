@@ -367,7 +367,6 @@ export default {
         for (var i in a) {
           axios.get(`subcounties/${a[i].id}`)
             .then((subcounties) => {
-              // console.log(subcounties.data)
               this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
             })
             .catch(error => console.log(error.message))
@@ -382,30 +381,21 @@ export default {
       this.us_filt =[],this.fac_filt = [], this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
-              for (var u in this.userz) {
-                if (this.userz[u].facility_id == this.all_facilities[f].id) {
-                  this.us_filt.push(this.userz[u])
-                }
-              }
             }
           }
           for (var ex in this.s) {
             if (this.s[ex].county == a[c].name) {
               this.exp_filt.push(this.s[ex])
-              // console.log(this.s[ex])
             }
           }
         }
-     //   this.getTest(this.us_filt)
         this.getHBV(this.exp_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
-     //   this.getTest(this.userz)
         this.getHBV(this.s)
       }
     },
@@ -414,7 +404,6 @@ export default {
       this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.fac_filt) {
             if (this.fac_filt[f].sub_county == a[c].name) {
               this.fac_filtl.push(this.fac_filt[f])
@@ -430,7 +419,6 @@ export default {
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
-      //  this.getTest(this.us_filt)
         this.getHBV(this.exp_filt)
         this.active_level = true
       }
@@ -480,17 +468,9 @@ export default {
               e.push(this.exp_filtf[ex])
             }
           }
-          for (var u in this.us_filtf) {
-            if (this.us_filtf[u].facility_name == a[c].name) {
-              us.push(this.us_filtf[u])
-            }
-          }
-
         }
-       // this.getTest(us)
         this.getHBV(e)
       } else {
-        //this.getTest(this.us_filtf)
         this.getHBV(this.exp_filtf)
       }
     },
