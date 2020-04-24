@@ -82,6 +82,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id != 4"
                 v-model="counties"
                 :items="all_counties"
                 item-text="name"
@@ -101,6 +102,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id != 4"
                 v-model="subcounties"
                 :items="all_subcounties"
                 item-text="name"
@@ -121,10 +123,9 @@
             md6
             lg3
           >
-
             <template>
-
               <v-combobox
+                v-if="user.role_id != 4"
                 v-model="facility"
                 :items="fac"
                 item-text="partner"
@@ -144,10 +145,9 @@
             md6
             lg3
           >
-
             <template>
-
               <v-combobox
+                v-if="user.role_id != 4"
                 :items="all_facilities_level"
                 label="Select Facility Level"
                 v-on:change="facilityLevel"
@@ -167,6 +167,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id != 4"
                 v-model="facility"
                 :items="fac"
                 item-text="name"
@@ -707,6 +708,7 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
+          this.getMonth(this.s)
         } else {
           i = 11
         }
@@ -775,6 +777,7 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.userz = this.userz.concat(response.data.data)
+          this.getTest(this.userz)
         } else {
           i = 11
         }
