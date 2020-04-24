@@ -103,6 +103,7 @@
                 xs12
                 md6>
                 <v-select
+                
                   v-model="user.cadre"
                   :hint="user.cadre"
                   :items="all_cadres"
@@ -110,7 +111,7 @@
                   label="Cadre"
                   item-value="id"
                   required
-                >
+                > {{user.cadre}}
                 </v-select>  {{user.cadre}}   
               </v-flex> 
 

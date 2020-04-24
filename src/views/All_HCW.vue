@@ -94,7 +94,7 @@ export default {
       snackbar: false,
       output: '',
       result: '',
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [100, 500, 1000],
       headers: [
         {
           sortable: false,
