@@ -149,7 +149,7 @@
                     color = "#47a44b"
                     dense
                   >
-                    <h6> {{ resp }} {{ output.error }} {{ output.message }}  </h6>
+                    <h6> {{ output.error }} {{ output.message }}  </h6>
                   </v-alert>
 
                 </v-flex>
@@ -282,8 +282,6 @@ export default {
           this.output = response.data
           console.log(response)
 
-          this.resp = 'Public Resource Successfully Added'
-
           this.alert = true
 
           this.$router.push('/cmes')
@@ -293,7 +291,6 @@ export default {
           console.log(error)
           this.alert = true
 
-          this.resp = 'Failed, please try again'
         })
     }
 

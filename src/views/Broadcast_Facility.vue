@@ -111,7 +111,7 @@ export default {
       result: '',
       search: '',
       snackbar: false,
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [100, 500, 1000],
       all_messages: [],
       headers: [
         {
