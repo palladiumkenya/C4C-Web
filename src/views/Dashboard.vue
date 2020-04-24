@@ -241,14 +241,13 @@
           </v-flex>
         </template>
 
-        <template>
+        <v-flex xs12 sm6 md2 lg2>
           <v-btn
             block
             color="secondary"
-            dark
-            @click="click">Filter</v-btn>
-        </template>
-
+            @click="click">Filter
+          </v-btn>
+        </v-flex>
         <!-- End filters -->
       </template>
 
@@ -297,7 +296,7 @@ import axios from 'axios'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import { EventBus } from './../event-bus.js'
 
@@ -453,7 +452,8 @@ export default {
       return this.scount
     },
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      e: 'auth/expo'
     })
   },
 
@@ -464,7 +464,7 @@ export default {
         name: 'login'
       })
     }
-    this.getExp()
+    if (this.e.length == 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length}
     this.getBroadcasts()
     this.getAllUsers()
     this.getFacilities()
@@ -709,7 +709,8 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
-          this.getMonth(this.s)
+          this.storeExp(this.s)
+          this.getMonth(this.e)
         } else {
           i = 11
         }
@@ -723,8 +724,12 @@ export default {
         this.scount = e.length
         this.s = e
       } 
+      
       this.getMonth(this.s)
     },
+    ...mapActions({
+      storeExp: 'auth/storeExp'
+    }),
     getMonth (list) {
       // console.log(list)
       var wdata = []
@@ -857,5 +862,6 @@ export default {
       }
     }
   }
+  
 }
 </script>

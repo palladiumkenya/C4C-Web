@@ -866,9 +866,6 @@ export default {
       exp_filtl: [],
       exp_filtf: [],
 
-      seriesname: ['Theater', 'Theater', 'Theater'],
-      seriesdata: []
-
     }
   },
 
@@ -876,7 +873,6 @@ export default {
     this.getExp()
     this.getCad()
     this.getFacilities()
-    this.getCountt()
     this.getCounties()
     // this.getExpo()
   },
@@ -901,12 +897,12 @@ export default {
     },
 
     getSubCounties (sb) {
-
+      console.log(sb)
       if(sb.length > 0){
         this.active = false
         this.all_subcounties = []
         for(var x in sb){
-          axios.get(`subcounties/${sb[i].id}`)
+          axios.get(`subcounties/${sb[x].id}`)
           .then((subcounties) => {
             this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
           } )
@@ -1066,7 +1062,7 @@ export default {
       this.barOptionsSummary.series[0].data = this.date
     },
     getDep () {
-      // eslint-disable-next-line no-unused-vars
+      
       var count = 0
       for (var v in this.seriesname) {
         this.seriesdata = []
@@ -1151,57 +1147,70 @@ export default {
       }
       this.getDep()
       this.getAgeData()
-     // this.getSum()
+     
     },
 
     getAgeData (list) {
-      //
+      this.load = true
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
-        data.push(this.getAgeNum(i))
+        data.push(this.getAgeNum(i,list))
       }
       this.barOptionsAge.series[0].data = data
       this.value = false
-
+      this.load = false
+      
+      this.load = true
       var data = []
       for (var i in this.gendOptions.xAxis.categories) {
-        data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
+        data.push(this.getGend(this.gendOptions.xAxis.categories[i],list))
       }
       this.gendOptions.series[0].data = data
       this.value1 = false
-
+      this.load = false
+      
+      this.load = true
       var data = []
       for (var i in this.barOptionsDevice.xAxis.categories) {
-        data.push(this.getDevice(this.barOptionsDevice.xAxis.categories[i]))
+        data.push(this.getDevice(this.barOptionsDevice.xAxis.categories[i],list))
       }
       this.barOptionsDevice.series[0].data = data
-      // this.value1 = false
-
+      this.value1 = false
+      this.load = false
+      
+      this.load = true
       var datac = []
       for (var i in this.barOptionsCadre.xAxis.categories) {
-        datac.push(this.getNumc(this.barOptionsCadre.xAxis.categories[i]))
+        datac.push(this.getNumc(this.barOptionsCadre.xAxis.categories[i],list))
       }
       this.barOptionsCadre.series[0].data = datac
-      // this.valuec = false
-
+      this.valuec = false
+      this.load = false
+      
+      this.load = true
       var data = []
       for (var i in this.barOptionsLocation.xAxis.categories) {
-        data.push(this.getNum(this.barOptionsLocation.xAxis.categories[i]))
+        data.push(this.getNum(this.barOptionsLocation.xAxis.categories[i],list))
       }
       this.barOptionsLocation.series[0].data = data
-
+      this.load = false
+      
+      this.load = true
       var data = []
       for (var i in this.barOptions.xAxis.categories) {
-        data.push(this.getNums(this.barOptions.xAxis.categories[i]))
+        data.push(this.getNums(this.barOptions.xAxis.categories[i],list))
       }
       this.barOptions.series[0].data = data
       this.valuet = false
-
+      this.load = false
+      
+      this.load = true
       var data = []
       for (var i in this.barOptionsHour.xAxis.categories) {
-        data.push(this.getNumh(this.barOptionsHour.xAxis.categories[i]))
+        data.push(this.getNumh(this.barOptionsHour.xAxis.categories[i],list))
       }
       this.barOptionsHour.series[0].data = data
+      this.load = false
 
       this.load = true
       var data = []
@@ -1211,10 +1220,10 @@ export default {
       this.barOptionsTime.series[0].data = data
       this.load = false
     },
-    getAgeNum (cat) {
+    getAgeNum (cat, ag) {
       var count = 0
-      for (var x in this.s) {
-        var date = new Date(this.s[x].dob)
+      for (var x in ag) {
+        var date = new Date(ag[x].dob)
         var diff_ms = Date.now() - date.getTime()
         var age_dt = new Date(diff_ms)
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
@@ -1239,19 +1248,19 @@ export default {
       }
       return count
     },
-    getGend (cat) {
+    getGend (cat, g) {
       var count = 0
-      for (var x in this.s) {
-        if (this.s[x].gender === cat) {
+      for (var x in g) {
+        if (g[x].gender === cat) {
           count++
         }
       }
       return count
     },
-    getGp (cat, num) {
+    getGp (cat, num, g) {
       var count = 0
-      for (var x in this.s) {
-        if (this.s[x].gender === cat && this.s[x].gender === num) {
+      for (var x in g) {
+        if (g[x].gender === cat && g[x].gender === num) {
           count++
            console.log((count / 100 ) * (cat + num))
         }
@@ -1259,37 +1268,37 @@ export default {
 
     },
 
-    getDevice (cat) {
+    getDevice (cat, d) {
       var count = 0
-      for (var x in this.s) {
-        if (this.s[x].device_used === cat) {
+      for (var x in d) {
+        if (d[x].device_used === cat) {
           count++
         }
       }
       return count
     },
-    getNum (name) {
+    getNum (name, exl) {
       var count = 0
-      for (var x in this.s) {
-        if (this.s[x].exposure_location === name) {
+      for (var x in exl) {
+        if (ext[x].exposure_location === name) {
           count++
         }
       }
       return count
     },
-    getNums (cat) {
+    getNums (cat, ext) {
       var counter = 0
-      for (var xo in this.s) {
-        if (this.s[xo].exposure_type === cat) {
+      for (var xo in ext) {
+        if (ext[xo].exposure_type === cat) {
           counter++
         }
       }
       return counter
     },
-    getNumc (name) {
+    getNumc (name, c) {
       var counter = 0
-      for (var xc in this.s) {
-        if (this.s[xc].cadre === name) {
+      for (var xc in c) {
+        if (c[xc].cadre === name) {
           counter++
         }
       }
@@ -1305,22 +1314,20 @@ export default {
       return counter
     },
 
-    getNumsum (name) {
+    getNumsum (name, d) {
       var counter = 0
-      for (var xsum in this.s) {
-        if (this.s[xsum].date.slice(0, 3) === name) {
+      for (var xsum in d) {
+        if (d[xsum].date.slice(0, 3) === name) {
           counter++
         }
       }
       return counter
     },
 
-    getNumh (name) {
+    getNumh (name, t) {
       var counter = 0
-      for (var xh in this.s) {
-        if (moment(this.s[xh].created_at).format().substr(11, 2) === name) {
-          console.log('l')
-          // console.log(moment(this.s[xh].created_at).format('LT'))
+      for (var xh in t) {
+        if (moment(t[xh].created_at).format().substr(11, 2) === name) {
           counter++
         }
       }

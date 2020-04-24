@@ -304,12 +304,6 @@ export default {
     })
   },
   created () {
-    if (this.user === null) {
-      alert('Not admin')
-      this.$router.replace({
-        name: 'login'
-      })
-    }
     this.getImmunizations()
     this.getFacilities()
     this.getCounties()
@@ -373,7 +367,6 @@ export default {
         for (var i in a) {
           axios.get(`subcounties/${a[i].id}`)
             .then((subcounties) => {
-              // console.log(subcounties.data)
               this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
             })
             .catch(error => console.log(error.message))
@@ -388,30 +381,21 @@ export default {
       this.us_filt =[],this.fac_filt = [], this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
-              for (var u in this.userz) {
-                if (this.userz[u].facility_id == this.all_facilities[f].id) {
-                  this.us_filt.push(this.userz[u])
-                }
-              }
             }
           }
           for (var ex in this.s) {
             if (this.s[ex].county == a[c].name) {
               this.exp_filt.push(this.s[ex])
-              // console.log(this.s[ex])
             }
           }
         }
-     //   this.getTest(this.us_filt)
         this.getHBV(this.exp_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
-     //   this.getTest(this.userz)
         this.getHBV(this.s)
       }
     },
@@ -420,7 +404,6 @@ export default {
       this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.fac_filt) {
             if (this.fac_filt[f].sub_county == a[c].name) {
               this.fac_filtl.push(this.fac_filt[f])
@@ -431,25 +414,18 @@ export default {
               this.exp_filtl.push(this.exp_filt[ex])
             }
           }
-          for (var u in this.us_filt) {
-            if (this.us_filt[u].sub_county == a[c].name) {
-              this.us_filtl.push(this.us_filt[u])
-            }
-          }
         }
-      //  this.getTest(this.us_filtl)
         this.getHBV(this.exp_filtl)
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
-      //  this.getTest(this.us_filt)
         this.getHBV(this.exp_filt)
         this.active_level = true
       }
     },
 
     facilityLevel (a) {
-      this.fac_filtf = [], this.exp_filtf = [], this.us_filtf = []
+      this.fac_filtf = [], this.exp_filtf = []
       this.active_fac = false
       console.log(a)
       if (a.length > 0) {
@@ -472,23 +448,11 @@ export default {
               }
             }
           }
-          for (var u in this.us_filtl) {
-            if (this.us_filtl[u].facility_level == a[c]) {
-              this.us_filtf.push(this.us_filtl[u])
-            } else if (a[c]== 'Level 5 and Above') {
-              if (Number(this.us_filtl[u].facility_level.slice(6,7)) >= 5) {
-                this.us_filtf.push(this.us_filtl[u])
-              }
-            }
-          }
-
         }
-    //    this.getTest(this.us_filtf)
         this.getHBV(this.exp_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.fac = this.fac_filtl
-     //   this.getTest(this.us_filtl)
         this.active_fac = true
         this.getHBV(this.exp_filtl)
       }
@@ -504,23 +468,15 @@ export default {
               e.push(this.exp_filtf[ex])
             }
           }
-          for (var u in this.us_filtf) {
-            if (this.us_filtf[u].facility_name == a[c].name) {
-              us.push(this.us_filtf[u])
-            }
-          }
-
         }
-       // this.getTest(us)
         this.getHBV(e)
       } else {
-        //this.getTest(this.us_filtf)
         this.getHBV(this.exp_filtf)
       }
     },
 
     getImmunizations () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
         axios.get('immunizations/all/disease/1')
           .then((exp) => {
             this.s = exp.data.data
@@ -528,12 +484,11 @@ export default {
               this.link = exp.data.links.next
               this.loopT(this.link)
             } else {
-              this.getHBV()
+              this.getHBV(this.s)
             }
           })
           .catch(error => console.log(error.message))
-      }
-      if (this.user.role_id === 4) {
+      } else if (this.user.role_id === 4) {
         axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/1`)
           .then((exp) => {
             this.s = exp.data.data
@@ -541,13 +496,13 @@ export default {
               this.link = exp.data.links.next
               this.loopT(this.link)
             } else {
-              this.getHBV()
+              this.getHBV(this.s)
             }
           })
           .catch(error => console.log(error.message))
       }
     },
- async loopT (l) {
+    async loopT (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
@@ -559,20 +514,18 @@ export default {
         }
       }
       this.getHBV(this.s)
-    //  this.getMonth(this.s)
     },
-    getHBV () {
-      // var counter = 0
+    getHBV (list) {
       this.seriesdata = []
       for (var vac in this.seriesname) {
-        this.seriesdata.push(this.getNum(this.seriesname[vac]))
+        this.seriesdata.push(this.getNum(this.seriesname[vac], list))
       }
       this.barOptionsHBV.series[0].data = this.seriesdata
     },
-    getNum (name) {
+    getNum (name, list) {
       var a = [], b = [], prev, count = 0, arr = []
-      for (var f in this.s) {
-        arr.push(this.s[f].user_id)
+      for (var f in list) {
+        arr.push(list[f].user_id)
       }
       arr.sort()
       for (var i = 0; i < arr.length; i++) {
