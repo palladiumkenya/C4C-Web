@@ -241,14 +241,13 @@
           </v-flex>
         </template>
 
-        <template>
+        <v-flex xs12 sm6 md2 lg2>
           <v-btn
             block
             color="secondary"
-            dark
-            @click="click">Filter</v-btn>
-        </template>
-
+            @click="click">Filter
+          </v-btn>
+        </v-flex>
         <!-- End filters -->
       </template>
 
