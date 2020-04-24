@@ -15,7 +15,7 @@
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
             <!-- Start filters -->
-
+          <template>
             <v-layout >
               <v-flex
                 xs12
@@ -131,15 +131,62 @@
               </v-flex>
             </v-layout>
 
-            <template>
-
-              <input
+             <template>
+          <v-flex xs12 sm6 md2>
+            <v-menu
+              ref="menu1"
+              :close-on-content-click="false"
+              v-model="menu1"
+              :nudge-right="40"
+              :return-value.sync="startDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
                 v-model="startDate"
-                type="date">
-              <input
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex xs12 sm6 md2>
+            <v-menu
+              ref="menu"
+              :close-on-content-click="false"
+              v-model="menu"
+              :nudge-right="40"
+              :return-value.sync="endDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
                 v-model="endDate"
-                type="date">
-            </template>
+                label="End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+        </template>
 
             <template>
               <v-btn
@@ -147,6 +194,8 @@
                 color="secondary"
                 dark>Filter</v-btn>
             </template>
+
+      </template>
 
             <!-- End filters -->
 
@@ -260,6 +309,12 @@ export default {
       active: true,
       active_fac: true,
       active_level: true,
+       menu: false,
+      menu1: false,
+      startDate: '2016-01-01',
+      maxDate: new Date().toISOString().substr(0, 10),
+      minDate: '2016-01-01',
+      endDate: new Date().toISOString().substr(0, 10),
 
       value: true,
       value1: true,
@@ -488,16 +543,11 @@ export default {
       }
     },
 
-    getFacilities () {
+     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          // this.all_counties = facilities.data.data
-          if (facilities.data.links.next != null) {
-            this.link = facilities.data, links.next
-            this.loopT(this.link)
-          }
         })
         .catch(error => console.log(error.message))
     },
@@ -509,13 +559,13 @@ export default {
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == fc[c].name) {
               this.fac_filt.push(this.all_facilities[f])
-              for(var u in this.s){
-                if(this.s[u].facility_id == this.all_facilities[f].id){
-                  this.reg_filt.push(this.s[u])
-                }
-              }
             }
           }
+            for(var u in this.s){
+                if(this.s[u].county == this.fc[c].name){
+                  this.reg_filt.push(this.s[u])
+                }
+           }
         }
         this.getsummarydata(this.reg_filt)
         this.fac = this.fac_filt.sort()
@@ -532,14 +582,14 @@ export default {
         for(var t in fsb){
           for(var u in this.fac_filt){
             if(this.fac_filt[u].sub_county == fsb[t].name){
-              this.reg_filtl.push(this.fac_filt[u])
-              for(var k in this.s){
-                if(this.s[k].facility_id == this.fac_filt[u].id){
+              this.fac_filtl.push(this.fac_filt[u])
+            }
+          }
+            for(var k in this.s){
+                if(this.s[k].sub_county == this.fsb[t].name){
                   this.reg_filtl.push(this.s[k])
                 }
               }
-            }
-          }
           
         }
         this.getsummarydata(this.reg_filtl)
@@ -559,8 +609,8 @@ export default {
            for(var f in this.fac_filtl){
              if(this.fac_filtl[f].level == fl[l]){
                this.fac_filtf.push(this.fac_filtl[f])
-             }else if(fl[l] == 'Level 5 and Above'){
-               if(Number(this.fac_filtl[f].level.slice(6,7) >= 5)){
+             }else if(fl[l]== 'Level 5 and Above'){
+               if(Number(this.fac_filtl[f].level.slice(6,7)) >= 5){
                  this.fac_filtf.push(this.fac_filtl[f])
                }
              }
@@ -569,7 +619,7 @@ export default {
              if(ths.reg_filtl[k].facility_level == fl[l]){
                this.reg_filtf.push(this.reg_filtl[k])
              }else if (this.fl[l] == 'Level 5 and Above'){
-               if(Number(this.reg_filtl[f].level.slice(6,7) >= 5)){
+               if(Number(this.reg_filtl[f].level.slice(6,7)) >= 5){
                  this.reg_filtf.push(this.reg_filtl[f])
                }
              }
@@ -600,6 +650,38 @@ export default {
        else{
           this.getsummarydata(this.reg_filtf)
         }
+    },
+
+    click (){
+      let reg = []
+      var dates = {
+        convert:function(d) {
+          return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year,d.month,d.date) :
+            NaN
+          );
+        },
+        inRange:function(d,start,end) {
+          return (
+            isFinite(d=this.convert(d).valueOf()) &&
+            isFinite(start=this.convert(start).valueOf()) &&
+            isFinite(end=this.convert(end).valueOf()) ?
+            start <= d && d <= end :
+            NaN
+          );
+        }
+      }
+       for (var r in this.s) {
+        var i = new Date(this.s[r].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i,this.startDate,this.endDate)) {
+          reg.push(this.s[r])
+        }
+      }
+      this.getsummarydata(reg)
     },
 
     getUsers () {
