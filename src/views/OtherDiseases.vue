@@ -1,37 +1,6 @@
 
 <template>
   <v-card>
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Summary Report</v-tab>
-        <v-tab>Measles</v-tab>
-      <v-tab>Influenza</v-tab>
-      <v-tab>TDAP</v-tab>
-        <v-tab>Varicella</v-tab>
-      <v-tab>Meningococcal</v-tab>
-
-
-      <!-- Start Cards -->
-
-
-
-
-
-      <v-tab-item
-        v-for="n in 6"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n==1">
-            <!-- Start Graphs -->
-
-            <v-flex
-              md12
-              sm12
-              lg12
-            >
-<v-container>
                 <v-layout wrap>
 
         <template>
@@ -232,20 +201,50 @@
             </v-menu>
           </v-flex>
         </template>
-
-        <template>
+&nbsp;
+       <template>
           <v-btn
             block
             color="secondary"
             dark
             @click="click">Filter</v-btn>
-        </template>
+       </template>
 
         <!-- End filters -->
       </template>
 </v-layout>
-</v-container>
 
+
+    <v-tabs
+      color="white"
+      centered
+    >
+      <v-tab>Summary Report</v-tab>
+        <v-tab>Measles</v-tab>
+      <v-tab>Influenza</v-tab>
+      <v-tab>TDAP</v-tab>
+        <v-tab>Varicella</v-tab>
+      <v-tab>Meningococcal</v-tab>
+
+
+      <!-- Start Cards -->
+
+
+
+
+
+      <v-tab-item
+        v-for="n in 6"
+        :key="n">
+        <v-container fluid>
+          <v-card-text v-if="n==1">
+            <!-- Start Graphs -->
+
+            <v-flex
+              md12
+              sm12
+              lg12
+            >
                   <highcharts :options="AllDiseaseschartOptions"
                    ref="columnChart"/>
 
@@ -659,6 +658,8 @@ export default {
         xAxis: {
           //
           categories: ['Dose 1', 'Dose 2']
+
+
         },
         labels: {
           items: [
@@ -680,8 +681,11 @@ export default {
             name: 'Measles Immunizations',
             data: []
           }
+
         ]
       },
+
+
       seriesname: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       seriesnames: [1, 2],
       seriesdata: [1,2],
@@ -694,131 +698,68 @@ export default {
         gender: []
     }
   },
-  created ()  {
+created ()  {
     this.getImmunizationsM()
-    this.getImmunizationsI()
-    this.getImmunizationsT()
-    this.getImmunizationsN()
-    this.getImmunizationsV()
+  this.getImmunizationsI()
+  this.getImmunizationsT()
+  this.getImmunizationsN()
+  this.getImmunizationsV()
     this.getAllImmunizations()
   },
   methods: {
     getAllImmunizations() {
-      if (this.user.role_id == 1|| this.user.role_id ==5){
-        axios.get('immunizations/all')
-          .then((exp) => {
-            this.a = exp.data.data
-            this.link = exp.data.links.next
-            this.loopA(this.link)
-          })
-          .catch(error => console.log(error.message))
-      } else if (this.user.role_id == 4){
-        axios.get(`immunizations/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.a = exp.data.data
-            console.log(this.a)
-            if (exp.data.links.next) {
-              this.link = exp.data.links.next
-              this.loopA(this.link)
-            } else { this.getAllDiseases() }
-          })
-          .catch(error => console.log(error.message))
-      }
+      axios.get('immunizations/all')
+              .then((exp) => {
+                this.a = exp.data.data
+                this.link = exp.data.links.next
+                this.loopA(this.link)
+              })
+              .catch(error => console.log(error.message))
     },
     getImmunizationsM() {
-      if (this.user.role_id == 1|| this.user.role_id == 5) {
-        axios.get('immunizations/all/disease/4')
-          .then((exp) => {
-            this.s = exp.data.data
-            this.link = exp.data.links.next
-            this.loopT(this.link)
-          })
-          .catch(error => console.log(error.message))
-      } else if (this.user.role_id == 4) {
-        axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/4`)
-          .then((exp) => {
-            this.s = exp.data.data
-            this.link = exp.data.links.next
-            this.loopT(this.link)
-          })
-          .catch(error => console.log(error.message))
-      }
+      axios.get('immunizations/all/disease/4')
+              .then((exp) => {
+                this.s = exp.data.data
+                this.link = exp.data.links.next
+                this.loopT(this.link)
+              })
+              .catch(error => console.log(error.message))
     },
     getImmunizationsI() {
-      if (this.user.role_id == 1|| this.user.role_id == 5) {
-        axios.get('immunizations/all/disease/2')
-          .then((exp) => {
-            this.i = exp.data.data
-            this.link = exp.data.links.next
-            this.loopI(this.link)
-          })
-          .catch(error => console.log(error.message))
-      } else if (this.user.role_id == 4) {
-        axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/2`)
-          .then((exp) => {
-            this.i = exp.data.data
-            this.link = exp.data.links.next
-            this.loopI(this.link)
-          })
-          .catch(error => console.log(error.message))
-        }
+      axios.get('immunizations/all/disease/2')
+              .then((exp) => {
+                this.i = exp.data.data
+                this.link = exp.data.links.next
+                this.loopI(this.link)
+              })
+              .catch(error => console.log(error.message))
     },
     getImmunizationsT() {
-      if (this.user.role_id == 1|| this.user.role_id == 5) {
-        axios.get('immunizations/all/disease/3')
-          .then((exp) => {
-            this.t = exp.data.data
-            this.link = exp.data.links.next
-            this.loopTD(this.link)
-          })
-          .catch(error => console.log(error.message))
-        } else if (this.user.role_id == 4) {
-          axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/3`)
-            .then((exp) => {
-              this.t = exp.data.data
-              this.link = exp.data.links.next
-              this.loopTD(this.link)
-            })
-            .catch(error => console.log(error.message))
-        }
+      axios.get('immunizations/all/disease/3')
+              .then((exp) => {
+                this.t = exp.data.data
+                this.link = exp.data.links.next
+                this.loopTD(this.link)
+              })
+              .catch(error => console.log(error.message))
     },
     getImmunizationsN() {
-      if (this.user.role_id == 1|| this.user.role_id == 5) {
-        axios.get('immunizations/all/disease/5')
-          .then((exp) => {
-            this.n = exp.data.data
-            this.link = exp.data.links.next
-            this.loopN(this.link)
-          })
-          .catch(error => console.log(error.message))
-      } else if (this.user.role_id == 4) {
-         axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/5`)
-          .then((exp) => {
-            this.n = exp.data.data
-            this.link = exp.data.links.next
-            this.loopN(this.link)
-          })
-          .catch(error => console.log(error.message))
-      }
+      axios.get('immunizations/all/disease/5')
+              .then((exp) => {
+                this.n = exp.data.data
+                this.link = exp.data.links.next
+                this.loopN(this.link)
+              })
+              .catch(error => console.log(error.message))
     },
-    getImmunizationsV() {
-      if (this.user.role_id == 1|| this.user.role_id == 5) {
-        axios.get('immunizations/all/disease/6')
-          .then((exp) => {
-            this.v = exp.data.data
-            this.link = exp.data.links.next
-            this.loopV(this.link)
-          })
-          .catch(error => console.log(error.message))
-      } else if (this.user.role_id == 4) {
-        axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/6`)
-          .then((exp) => {
-            this.v = exp.data.data
-            this.link = exp.data.links.next
-            this.loopV(this.link)
-          })
-          .catch(error => console.log(error.message))
-      }
+       getImmunizationsV() {
+      axios.get('immunizations/all/disease/6')
+              .then((exp) => {
+                this.v = exp.data.data
+                this.link = exp.data.links.next
+                this.loopV(this.link)
+              })
+              .catch(error => console.log(error.message))
     },
       getAllDiseases () {
       var count = 0
@@ -873,7 +814,7 @@ export default {
       }
       this.TDAPChartOptions.series[0].data = this.tdap
     },
-    getVaricella() {
+       getVaricella() {
       var counter = 0;
       for (var vac in this.seriesname) {
         this.seriesdata = []
@@ -899,9 +840,9 @@ export default {
       getNumAll (gender, disease) {
       var count = 0
       for (var x in this.a) {
-        console.log(gender)
+        // console.log(this.s[x].type)
         if (this.a[x].gender === gender && this.a[x].disease === disease) {
-          count++
+            count++
         }
       }
       return count
@@ -947,7 +888,7 @@ export default {
       }
       return counter
     },
-    getNumv(name) {
+        getNumv(name) {
       var counter = 0
       for (var xo in this.v) {
         if (this.v[xo].date.slice(0, 3) === name) {
@@ -956,7 +897,7 @@ export default {
       }
       return counter
     },
-    getNumCount (name) {
+        getNumCount (name) {
       var a = [], b = [], prev, count = 0, arr = []
       for (var f in this.s){
         arr.push(this.s[f].user_id)
@@ -981,7 +922,7 @@ export default {
       return count
     },
 
-    async loopA(l) {
+     async loopA(l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {

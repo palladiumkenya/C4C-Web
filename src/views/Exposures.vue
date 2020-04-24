@@ -20,7 +20,7 @@
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
             <!-- Start filters -->
-
+       <template>
            <v-layout >
               <v-flex
                xs12
@@ -36,6 +36,7 @@
           item-value="id"
           :items="all_counties"
           label="Select County"
+          v-on:change="getSubCounties"
           multiple
           clerable
           persistent-hint
@@ -55,10 +56,12 @@
 
                  <v-combobox
          v-model="subcounties"
+          :items="all_subcounties"
           item-text="name"
           item-value="id"
-          :items="all_subcounties"
           label="Select Sub-County"
+          :disabled="active"
+          v-on:change="getFacilitysubcountyfilter"
           multiple
           clerable
           persistent-hint
@@ -103,6 +106,8 @@
                  <v-combobox
           :items="all_facilities_level"
           label="Select Facility Level"
+          v-on:change="getFacilitylevelfilter"
+           :disabled="active_level"
           multiple
           clerable
           persistent-hint
@@ -120,10 +125,12 @@
             <template>
                  <v-combobox
           v-model="facility"
+          :items="fac"
           item-text="name"
           item-value="id"
-          :items="all_facilities"
           label="Select Facility"
+          v-on:change="getFacilityfilter"
+          :disabled="active_fac"
           multiple
           clerable
           persistent-hint
@@ -135,15 +142,67 @@
            </v-layout>
     
 
-            <template>
-
-              <input type="date" v-model="startDate">
-              <input type="date" v-model="endDate">
-            </template>
+             <template>
+          <v-flex xs12 sm6 md2>
+            <v-menu
+              ref="menu1"
+              :close-on-content-click="false"
+              v-model="menu1"
+              :nudge-right="40"
+              :return-value.sync="startDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="startDate"
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex xs12 sm6 md2>
+            <v-menu
+              ref="menu"
+              :close-on-content-click="false"
+              v-model="menu"
+              :nudge-right="40"
+              :return-value.sync="endDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="endDate"
+                label="End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+        </template>
 
                 <template>
                   <v-btn block color="secondary" dark>Filter</v-btn>
                 </template>
+       </template>
                
             <!-- End filters -->
             <highcharts
@@ -230,13 +289,6 @@
            </v-flex>
            </v-layout>
     
-
-            <template>
-
-              <input type="date" v-model="startDate">
-              <input type="date" v-model="endDate">
-            </template>
-
                 <template>
                   <v-btn block color="secondary" dark>Filter</v-btn>
                 </template>
@@ -354,15 +406,24 @@ export default {
   data () {
     return {
 
-      //my test filter area
-      //valid: false,
+      
      facility: '',
        counties: '',
        subcounties: '',
-    all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
        all_facilities: [],
        all_subcounties: [],
        all_counties: [],
+       fac: [],
+       active: true,
+       active_fac: true,
+       active_level: true,
+       menu: false,
+      menu1: false,
+      startDate: '2016-01-01',
+      maxDate: new Date().toISOString().substr(0, 10),
+      minDate: '2016-01-01',
+      endDate: new Date().toISOString().substr(0, 10),
     
       startDate: null,
       endDate: null,
@@ -857,6 +918,13 @@ export default {
       users: [],
       gender: [],
       hours: [],
+       load: true,
+      fac_filt: [],
+      fac_filtl: [],
+      fac_filtf: [],
+      exp_filt: [],
+      exp_filtl: [],
+      exp_filtf: [],
 
       seriesname: ['Theater', 'Theater', 'Theater'],
       seriesdata: []
@@ -870,7 +938,6 @@ export default {
     this.getFacilities()
     this.getCountt()
     this.getCounties()
-    this.getSubCounties()
     // this.getExpo()
   },
   methods: {
@@ -880,7 +947,6 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          //this.all_counties = facilities.data.data
           if (facilities.data.links.next != null) {
             this.link = facilities.data, links.next
             this.loopT(this.link)
@@ -892,29 +958,166 @@ export default {
     getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data)
+          console.log(counties.data.data)
           this.all_counties = counties.data.data
-          if (counties.data.links.next != null) {
-            this.link = counties.data, links.next
-            this.loopT(this.link)
-          }
         })
         .catch(error => console.log(error.message))
     },
 
-    getSubCounties () {
-      axios.get('subcounties/3')
-        .then((subcounties) => {
-          console.log(subcounties.data)
-          this.all_subcounties = subcounties.data.data
-          if (subcounties.data.links.next != null) {
-            this.link = subcounties.data, links.next
-            this.loopT(this.link)
-          }
-        })
-        .catch(error => console.log(error.message))
+    getSubCounties (sb) {
+
+      if(sb.length > 0){
+        this.active = false
+        this.all_facilities = []
+        for(var x in sb){
+          axios.get(`subcounties/${sb[i].id}`)
+          .then((subcounties) => {
+            this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+          } )
+          .catch(error => console.log(error.message))
+        }
+        this.getFacilitycountyfilter(sb)
+      }else{
+        this.getFacilitycountyfilter(sb)
+        this.active = true
+      }
     },
 
+    getFacilitycountyfilter (cf){
+      this.fac_filt = [], this.exp_filt = []
+      if(cf.length > 0){
+        for(var c in cf){
+          for(var a in this.all_facilities){
+            if(this.all_facilities[a].county == cf[c].name){
+              this.fac_filt.push(this.all_facilities[a])
+              for(var e in this.s){
+              if(this.s[e].facility_id == cf[e].id){
+                this.exp_filt.push(this.s[e])
+              }
+            }
+            }
+          }
+        } 
+        this.getAgeData(this.exp_filt)
+        this.fac = this.exp_filt.sort()
+      }else{
+      
+        this.getAgeData(this.s)
+        this.fac = this.s
+      }
+    },
+    getFacilitysubcountyfilter (fsb){
+       this.exp_filtl = [], this.fac_filtl = []
+       this.active_level = true
+       if(fsb.length > 0){
+         for(var sb in fsb){
+           for(var a in this.fac_filt){
+             if(this.fac_filt[a].sub_county == fsb[sb].name){
+               this.fac_filtl.push(this.fac_filt[a])
+             }
+             for(var e in thi.exp_filt){
+               if(this.exp_filt[e].level == this.fsb[sb].id){
+                 this.exp_filtl.push(this.exp_filt[e])
+               }
+             }
+           }
+         }
+       
+         this.getAgeData(this.exp_filtl)
+         this.fac = this.fac_filtl.sort()
+       }else{
+         
+         this.getAgeData(this.exp_filt)
+         this.fac = this.fac_filt
+         this.active_level = true
+       }
+    },
+
+    getFacilitylevelfilter (fl){
+      this.fac_filtf = [], this.exp_filtf = []
+      this.active_fac = false
+      if(fl.length > 0){
+        for(var l in fl){
+          for(var a in this.fac_filtl){
+            if(this.fac_filtl[a].level == fl[l]){
+              this.fac_filtf.push(this.fac_filtl[a])
+            }else if(fl[l] == 'Level 5 and Above'){
+               if(Number(this.fac_filtl[a].level.slice(6,7)) >= 5){
+                 this.fac_filtf.push(this.fac_filtl[a])
+               }
+             }
+          }
+          for(var e in this.exp_filtl){
+            if(this.exp_filtl[e].facility_level == fl[l]){
+              this.exp_filtf.push(this.exp_filtl[e])
+            }else if(this.fl[l] == 'Level 5 and Above'){
+              if(Number(this.exp_filtl[e].facility_leve.slice(6,7)) >= 5){
+                this.exp_filtf.push(this.exp_filtl[e])
+              }
+            }
+          }
+        }
+       
+        this.getAgeData(this.exp_filtf)
+        this.fac = this.fac_filtf.sort()
+      }else{
+       
+        this.getAgeData(this.exp_filtl)
+        this.fac = this.fac_filtl
+        this.active_fac = true
+      }
+    },
+
+    getFacilityfilter (f){
+      let al = [], exp = []
+      if(f.length > 0){
+        for(var s in f){
+          for(var e in this.fac_filtf){
+            if(this.fac_filtf[e].facility_name == f[s].name){
+              exp.push(this.fac_filtf[e])
+            }
+          }
+        }
+        this.getAgeData(rg)
+      
+      }else{
+       
+        this.getAgeData(this.exp_filtf)
+      }
+
+    },
+    click () {
+      let expo = []
+      var dates = {
+        convert:function(d) {
+          return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year,d.month,d.date) :
+            NaN
+          );
+        },
+        inRange:function(d,start,end) {
+          return (
+            isFinite(d=this.convert(d).valueOf()) &&
+            isFinite(start=this.convert(start).valueOf()) &&
+            isFinite(end=this.convert(end).valueOf()) ?
+            start <= d && d <= end :
+            NaN
+          );
+        }
+      }
+       for (var e in this.s) {
+        var i = new Date(this.s[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i,this.startDate,this.endDate)) {
+          expo.push(this.s[e])
+        }
+      }
+      this.getAgeData(expo)
+    },
+    
     getSum () {
       var counter = 0
       for (var vac in this.seriesnamesum) {
@@ -1012,10 +1215,10 @@ export default {
       }
       this.getDep()
       this.getAgeData()
-      this.getSum()
+     // this.getSum()
     },
 
-    getAgeData () {
+    getAgeData (list) {
       //
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
@@ -1064,11 +1267,13 @@ export default {
       }
       this.barOptionsHour.series[0].data = data
 
+      this.load = true
       var data = []
       for (var i in this.barOptionsTime.xAxis.categories) {
-        data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+        data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i],list))
       }
       this.barOptionsTime.series[0].data = data
+      this.load = false
     },
     getAgeNum (cat) {
       var count = 0
@@ -1154,10 +1359,10 @@ export default {
       }
       return counter
     },
-    getNumt (name) {
+    getNumt (name, expo) {
       var counter = 0
-      for (var xt in this.s) {
-        if (this.s[xt].exposure_date.slice(0, 3) === name) {
+      for (var xt in expo) {
+        if (expo[xt].exposure_date.slice(0, 3) === name) {
           counter++
         }
       }
