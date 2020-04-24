@@ -1,26 +1,15 @@
 <template>
+
   <v-card>
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Summary</v-tab>
-      <v-tab>Report By Cadre</v-tab>
-      <v-tab>Report By Age</v-tab>
-      <v-tab>Report By Gender</v-tab>
-      <v-tab-item
-        v-for="n in 4"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n==1">
-            <!-- Start Graphs -->
-            <!-- Start filters -->
+
+      <!-- Start filters -->
           <template>
             <v-layout >
               <v-flex
                 xs12
-                md6
-                lg3
+                md2
+                sm6
+                lg2
               >
 
                 <template>
@@ -42,8 +31,9 @@
 
               <v-flex
                 xs12
-                md6
-                lg3
+                md2
+                sm6
+                lg2
               >
 
                 <template>
@@ -66,8 +56,9 @@
 
               <v-flex
                 xs12
-                md6
-                lg3
+                md2
+                sm6
+                lg2
               >
 
                 <template>
@@ -89,8 +80,9 @@
 
               <v-flex
                 xs12
-                md6
-                lg3
+                md2
+                sm6
+                lg2
               >
 
                 <template>
@@ -110,8 +102,9 @@
 
               <v-flex
                 xs12
-                md6
-                lg3
+                sm6
+                md2
+                lg2
               >
                 <template>
                   <v-combobox
@@ -129,10 +122,10 @@
 
                 </template>
               </v-flex>
-            </v-layout>
+            
 
              <template>
-          <v-flex xs12 sm6 md2>
+          <v-flex xs12 sm6 md2 lg2>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -159,7 +152,7 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2>
+          <v-flex xs12 sm6 md2 lg2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -187,6 +180,7 @@
             </v-menu>
           </v-flex>
         </template>
+        </v-layout>
 
             <template>
               <v-btn
@@ -198,6 +192,21 @@
       </template>
 
             <!-- End filters -->
+    <v-tabs
+      color="teal lighten-5"
+      centered
+    >
+      <v-tab>Summary</v-tab>
+      <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Age</v-tab>
+      <v-tab>Report By Gender</v-tab>
+      <v-tab-item
+        v-for="n in 4"
+        :key="n">
+        <v-container fluid>
+          <v-card-text v-if="n==1">
+            <!-- Start Graphs -->
+          
 
             <v-flex
               md12
@@ -283,7 +292,7 @@
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
 import VueHighcharts from 'vue2-highcharts'
-// import SeriesLabel from "highcharts/modules/series-label";
+import exportingInit from 'highcharts/modules/exporting'
 import Highcharts from 'highcharts'
 import { mapGetters } from 'vuex'
 
@@ -568,10 +577,12 @@ export default {
            }
         }
         this.getsummarydata(this.reg_filt)
+        this.getAgeData(this.reg_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
         this.getsummarydata(this.s)
+        this.getAgeData(this.s)
         
       }
     },
@@ -593,10 +604,12 @@ export default {
           
         }
         this.getsummarydata(this.reg_filtl)
+        this.getAgeData(this.reg_filtl)
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
         this.getsummarydata(this.reg_filt)
+        this.getAgeData(this.reg_filt)
         this.active_level = true
         
       }
@@ -626,10 +639,12 @@ export default {
            }
          }
        this.getsummarydata(this.reg_filtf)
+       this.getAgeData(this.reg_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.fac = this.fac_filtl
         this.getsummarydata(this.reg_filtl)
+        this.getAgeData(this.reg_filtl)
         this.active_fac = true
         
       }
@@ -646,9 +661,11 @@ export default {
           }
         }
         this.getsummarydata(rg)
+        this.getAgeData(rg)
       }
        else{
           this.getsummarydata(this.reg_filtf)
+          this.getAgeData(this.reg_filtf)
         }
     },
 
@@ -682,6 +699,7 @@ export default {
         }
       }
       this.getsummarydata(reg)
+      this.getAgeData(reg)
     },
 
     getUsers () {
@@ -753,37 +771,32 @@ export default {
       
     },
 
-    getAgeData () {
-      //
+    getAgeData (list) {
+     this.load = true
       var data = []
       for (var i in this.barOptions.xAxis.categories) {
-        data.push(this.getAgeNum(i))
+        data.push(this.getAgeNum(i,list))
       }
       this.barOptions.series[0].data = data
-
-      // this.mess = 'Data fetched'
-      //  this.value = false
-      // this.mess = 'Data fetched'
+      this.load = false
       this.value = false
-
+      
+      this.load = true
       data = []
       for (var i in this.gendOptions.xAxis.categories) {
-        data.push(this.getGend(this.gendOptions.xAxis.categories[i]))
+        data.push(this.getGend(this.gendOptions.xAxis.categories[i],list))
       }
       this.gendOptions.series[0].data = data
-      // this.mess1 = 'Data fetched'
+      this.load = false
       this.value1 = false
-
+      
+      this.load = true
       data = []
       for (var i in this.cadrOptions.xAxis.categories) {
-        data.push(this.getCadre(this.cadrOptions.xAxis.categories[i]))
+        data.push(this.getCadre(this.cadrOptions.xAxis.categories[i],list))
       }
       this.cadrOptions.series[0].data = data
-
-      // this.mess1 = 'Data fetched'
-      // this.value1 = false
-
-      // this.mess1 = 'Data fetched'
+      this.load = false
       this.value1 = false
     },
 
@@ -798,10 +811,10 @@ export default {
       this.load = false
     },
 
-    getAgeNum (cat) {
+    getAgeNum (cat, a) {
       var count = 0
-      for (var x in this.s) {
-        var date = new Date(this.s[x].dob)
+      for (var x in a) {
+        var date = new Date(a[x].dob)
         var diff_ms = Date.now() - date.getTime()
         var age_dt = new Date(diff_ms)
         var age = Math.abs(age_dt.getUTCFullYear() - 1970)
@@ -823,19 +836,19 @@ export default {
       }
       return count
     },
-    getGend (cat) {
+    getGend (cat, g) {
       var count = 0
-      for (var x in this.s) {
-        if (this.s[x].gender === cat) {
+      for (var x in g) {
+        if (g[x].gender === cat) {
           count++
         }
       }
       return count
     },
-    getCadre (cat) {
+    getCadre (cat, c) {
       var count = 0
-      for (var x in this.s) {
-        if (this.s[x].cadre === cat) {
+      for (var x in c) {
+        if (c[x].cadre === cat) {
           count++
         }
       }

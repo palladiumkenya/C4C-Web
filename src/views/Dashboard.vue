@@ -184,7 +184,7 @@
         </v-layout>
 
         <template>
-          <v-flex xs12 sm6 md2>
+          <v-flex xs12 sm6 md2 lg2>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -211,7 +211,7 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2>
+          <v-flex xs12 sm6 md2 lg2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -294,6 +294,7 @@
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
 import Highcharts from 'highcharts'
+import exportingInit from 'highcharts/modules/exporting'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 
