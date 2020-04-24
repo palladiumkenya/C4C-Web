@@ -254,7 +254,7 @@ export default {
     })
   },
   mounted () {
-    if (this.user.role_id === 1){
+    if (this.user.role_id != 1){
       this.role = 3
     }
   },
