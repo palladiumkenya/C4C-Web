@@ -4,7 +4,8 @@ export default{
   namespaced: true,
   state: {
     token: null,
-    user: {}
+    user: {},
+    exp: []
   },
   getters: {
     authenticated (state) {
@@ -12,6 +13,9 @@ export default{
     },
     user (state) {
       return state.user
+    },
+    expo (state) {
+      return state.exp
     }
   },
   mutations: {
@@ -20,6 +24,9 @@ export default{
     },
     SET_USER (state, data) {
       state.user = data
+    },
+    SET_EXP (state, data) {
+      state.exp = data
     }
   },
   actions: {
@@ -66,6 +73,9 @@ export default{
         commit('SET_USER', null)
         commit('SET_TOKEN', null)
       })
+    },
+    storeExp ({ commit }, exposures) {
+      commit('SET_EXP', exposures)
     }
   }
 }
