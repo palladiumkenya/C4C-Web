@@ -1,40 +1,23 @@
 <template>
   <v-card>
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Summary Report</v-tab>
-      <v-tab>Report By Type</v-tab>
-      <v-tab>Report By Location</v-tab>
-      <v-tab>Report By Device</v-tab>
-      <v-tab>Report By Cadre</v-tab>
-      <v-tab>Report By Month</v-tab>
-      <v-tab>Report By Age</v-tab>
-      <v-tab>Report By Hours</v-tab>
-      <v-tab>Report By Gender</v-tab>
-      <v-tab-item
-        v-for="n in 9"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n==1">
-            <!-- Start Graphs -->
-            <!-- Start filters -->
+
+   <!-- Start filters -->
        <template>
            <v-layout >
               <v-flex
                xs12
                   md6
-                  lg3
+                  sm6
+                  lg2
                   >
 
             <template>
 
                  <v-combobox
          v-model="counties"
+         :items="all_counties"
           item-text="name"
           item-value="id"
-          :items="all_counties"
           label="Select County"
           v-on:change="getSubCounties"
           multiple
@@ -49,7 +32,8 @@
                <v-flex
                xs12
                   md6
-                  lg3
+                  sm6
+                  lg2
                   >
 
             <template>
@@ -74,7 +58,8 @@
               <v-flex
                xs12
                   md6
-                  lg3
+                  sm6
+                  lg2
                   >
 
             <template>
@@ -97,8 +82,9 @@
 
               <v-flex
                xs12
+               sm6
                   md6
-                  lg3
+                  lg2
                   >
 
             <template>
@@ -119,8 +105,9 @@
 
            <v-flex
            xs12
+           sm6
              md6
-            lg3
+            lg2
            >
             <template>
                  <v-combobox
@@ -139,11 +126,9 @@
                 
             </template>
            </v-flex>
-           </v-layout>
-    
-
+           
              <template>
-          <v-flex xs12 sm6 md2>
+          <v-flex xs12 sm6 md2 lg2> 
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -170,7 +155,7 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2>
+          <v-flex xs12 sm6 md2 lg2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -198,6 +183,7 @@
             </v-menu>
           </v-flex>
         </template>
+        </v-layout>
 
                 <template>
                   <v-btn block color="secondary" dark>Filter</v-btn>
@@ -205,6 +191,27 @@
        </template>
                
             <!-- End filters -->
+
+    <v-tabs
+      color="teal lighten-5"
+      centered
+    >
+      <v-tab>Summary Report</v-tab>
+      <v-tab>Report By Type</v-tab>
+      <v-tab>Report By Location</v-tab>
+      <v-tab>Report By Device</v-tab>
+      <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Month</v-tab>
+      <v-tab>Report By Age</v-tab>
+      <v-tab>Report By Hours</v-tab>
+      <v-tab>Report By Gender</v-tab>
+      <v-tab-item
+        v-for="n in 9"
+        :key="n">
+        <v-container fluid>
+          <v-card-text v-if="n==1">
+            <!-- Start Graphs -->
+         
             <highcharts
                   ref="barChart"
                   :options="barOptionsTime"/>
@@ -240,60 +247,6 @@
           <!-- Start Exposure Cadre -->
 
           <v-card-text v-if="n==5">
-
-            <v-layout wrap>
-               <v-flex
-               xs12
-                  md6
-                  lg3
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="facility"
-          item-text="name"
-          item-value="id"
-          :items="all_subcounties"
-          label="Select Sub-County"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-           <v-flex
-             md6
-            lg3
-           >
-            <template>
-            <v-flex
-            xs12
-            >
-                 <v-combobox
-          v-model="facility"
-          item-text="name"
-          item-value="id"
-          :items="all_facilities"
-          label="Select Facility"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                </v-flex>
-            </template>
-           </v-flex>
-           </v-layout>
-    
-                <template>
-                  <v-btn block color="secondary" dark>Filter</v-btn>
-                </template>
-               
-            
                 <highcharts
                   ref="barChart"
                   :options="barOptionsCadre"/>
@@ -380,16 +333,6 @@ export default {
 
   computed: {
 
-  // getCounties() {
-   //   return this.all_facilities.reduce((seed, current) => {
-      //  return Object.assign(seed, {
-       //   [current.county]: current
-      //  });
-     // });
-      //console.log(current.county)
-    //},
-
-
     cadreCount () {
       return this.c
     },
@@ -424,9 +367,6 @@ export default {
       maxDate: new Date().toISOString().substr(0, 10),
       minDate: '2016-01-01',
       endDate: new Date().toISOString().substr(0, 10),
-    
-      startDate: null,
-      endDate: null,
        //end
 
       value: true,
@@ -947,10 +887,6 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
-          if (facilities.data.links.next != null) {
-            this.link = facilities.data, links.next
-            this.loopT(this.link)
-          }
         })
         .catch(error => console.log(error.message))
     },
@@ -968,7 +904,7 @@ export default {
 
       if(sb.length > 0){
         this.active = false
-        this.all_facilities = []
+        this.all_subcounties = []
         for(var x in sb){
           axios.get(`subcounties/${sb[i].id}`)
           .then((subcounties) => {
@@ -978,8 +914,8 @@ export default {
         }
         this.getFacilitycountyfilter(sb)
       }else{
+         this.active = true
         this.getFacilitycountyfilter(sb)
-        this.active = true
       }
     },
 
@@ -990,37 +926,37 @@ export default {
           for(var a in this.all_facilities){
             if(this.all_facilities[a].county == cf[c].name){
               this.fac_filt.push(this.all_facilities[a])
-              for(var e in this.s){
-              if(this.s[e].facility_id == cf[e].id){
+            }
+          }
+           for(var e in this.s){
+              if(this.s[e].county == cf[e].name){
                 this.exp_filt.push(this.s[e])
               }
             }
-            }
-          }
         } 
         this.getAgeData(this.exp_filt)
-        this.fac = this.exp_filt.sort()
+        this.fac = this.fac_filt.sort()
       }else{
       
         this.getAgeData(this.s)
-        this.fac = this.s
+        this.fac = this.all_facilities
       }
     },
     getFacilitysubcountyfilter (fsb){
        this.exp_filtl = [], this.fac_filtl = []
-       this.active_level = true
+       this.active_level = false
        if(fsb.length > 0){
          for(var sb in fsb){
            for(var a in this.fac_filt){
              if(this.fac_filt[a].sub_county == fsb[sb].name){
                this.fac_filtl.push(this.fac_filt[a])
              }
-             for(var e in thi.exp_filt){
-               if(this.exp_filt[e].level == this.fsb[sb].id){
+           }
+            for(var e in this.exp_filt){
+               if(this.exp_filt[e].sub_county == this.fsb[sb].name){
                  this.exp_filtl.push(this.exp_filt[e])
                }
              }
-           }
          }
        
          this.getAgeData(this.exp_filtl)
@@ -1072,9 +1008,9 @@ export default {
       let al = [], exp = []
       if(f.length > 0){
         for(var s in f){
-          for(var e in this.fac_filtf){
-            if(this.fac_filtf[e].facility_name == f[s].name){
-              exp.push(this.fac_filtf[e])
+          for(var e in this.exp_filtf){
+            if(this.exp_filtf[e].facility_name == f[s].name){
+              exp.push(this.exp_filtf[e])
             }
           }
         }
