@@ -866,9 +866,6 @@ export default {
       exp_filtl: [],
       exp_filtf: [],
 
-      seriesname: ['Theater', 'Theater', 'Theater'],
-      seriesdata: []
-
     }
   },
 
@@ -876,7 +873,6 @@ export default {
     this.getExp()
     this.getCad()
     this.getFacilities()
-    this.getCountt()
     this.getCounties()
     // this.getExpo()
   },
@@ -901,12 +897,12 @@ export default {
     },
 
     getSubCounties (sb) {
-
+      console.log(sb)
       if(sb.length > 0){
         this.active = false
         this.all_subcounties = []
         for(var x in sb){
-          axios.get(`subcounties/${sb[i].id}`)
+          axios.get(`subcounties/${sb[x].id}`)
           .then((subcounties) => {
             this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
           } )
