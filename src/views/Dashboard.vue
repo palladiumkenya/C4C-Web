@@ -306,6 +306,7 @@ export default {
   },
   data () {
     return {
+      partner:[],
       isLoading: true,
       fullPage: false,
       menu: false,
@@ -470,7 +471,6 @@ export default {
       })
     }
     if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length}
-    console.log(this.all_users)
     if (this.us_no === 0 ) {
       this.getAllUsers()
     } else if (this.all_users.length !== this.us_no) {

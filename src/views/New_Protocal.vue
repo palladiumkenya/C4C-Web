@@ -49,13 +49,23 @@
                     md8>
                     <label>Facility:</label>
                     <v-chip
+                      v-if="user.role_id === 4"
                       class="ma-2"
                       x-large
                     >
-                      {{ user.hcw.facility.name }}
+                      {{ user.hcw.facility_name }}
                     </v-chip>
-                  </v-flex> 
-                  
+                    <v-combobox
+                      v-else-if="user.role_id === 1"
+                      v-model="facility"
+                      :items="all_facilities"
+                      item-text="name"
+                      item-value="id"
+                      clearable
+                      persistent-hint
+                      chips/>
+
+                  </v-flex>
                   <v-flex xs12>
                     <ckeditor
                       id="editorData"
@@ -63,7 +73,14 @@
                       v-model="editorData"
                       rules="bodyRules"/>
                   </v-flex>
-                  <ul> <li v-for="error in errors">{{ error }}</li> </ul>
+                  <ul> 
+                    <li 
+                      v-for="error in errors"
+                      :key="error"
+                    >
+                      {{ error }}
+                    </li>
+                  </ul>
 
                   <v-flex xs12 >
 
@@ -179,6 +196,8 @@ export default {
       facility_id: '',
       title: '',
       file: '',
+      all_facilities: [],
+      facility: '',
       showPreview: false,
       imagePreview: '',
       files: [],
@@ -194,6 +213,9 @@ export default {
       user: 'auth/user'
     })
   },
+  created () {
+    this.getFacilities()
+  },
   watch: {
     dialog1 (val) {
       if (!val) return
@@ -204,6 +226,15 @@ export default {
   methods: {
     validateData () {
       this.$refs.form.validate()
+    },
+
+    getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
     },
 
     handleFiles () {
@@ -253,7 +284,11 @@ export default {
       allData.append('image_file', this.file)
       allData.append('title', this.title)
       allData.append('body', this.editorData)
-      allData.append('facility_id', this.user.hcw.facility.id)
+      if (this.user.role_id === 4) {
+        allData.append('facility_id', this.user.hcw.facility.id)
+      } else if (this.user.role_id === 1) {
+        allData.append('facility_id', this.facility.id)
+      }
 
       axios({
         method: 'POST',

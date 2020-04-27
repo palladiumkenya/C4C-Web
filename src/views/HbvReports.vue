@@ -322,6 +322,9 @@ export default {
     this.getCounties()
   },
   methods: {
+    onCancel() {
+      console.log('User cancelled the loader.')
+    },
     click () {
       let exp = []
       var dates = {
@@ -528,7 +531,7 @@ export default {
         }
       }
       this.getHBV(this.s)
-      this.isLoading =false
+      this.isLoading = false
     },
     getHBV (list) {
       this.seriesdata = []
