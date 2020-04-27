@@ -1,9 +1,8 @@
 
 <template>
   <v-card>
-                <v-layout wrap>
-
-        <template>
+    <v-layout wrap>
+      <template>
         <!-- Start filters -->
 
         <v-layout >
@@ -23,7 +22,7 @@
                 clerable
                 persistent-hint
                 chips
-                @change="getSubCounties"/>
+                v-on:change="getSubCounties"/>
             </template>
           </v-flex>
           <v-flex
@@ -365,16 +364,31 @@ exportingInit(Highcharts)
 
 
 export default {
-  computed: {
-    ...mapGetters({
-      user: 'auth/user'
-    })
-  },
   components: {
     highcharts: Chart
   },
   data() {
     return {
+
+       menu: false,
+      menu1: false,
+      startDate: '2016-01-01',
+      maxDate: new Date().toISOString().substr(0, 10),
+      minDate: '2016-01-01',
+      endDate: new Date().toISOString().substr(0, 10),
+      facility: '',
+      counties: '',
+      subcounties: '',
+      fac: [],
+      all_facilities: [],
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_counties: [],
+      all_subcounties: [],
+      active: true,
+      active_fac: true,
+      active_level: true,
+
+      
          AllDiseaseschartOptions: {
         xAxis: {
           categories: ['MALE', 'FEMALE' ],
@@ -593,7 +607,6 @@ export default {
             name: 'Influenza Immunizations',
             data: []
           }
-
         ]
       },
 
@@ -615,8 +628,6 @@ export default {
         xAxis: {
           //
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-
         },
         labels: {
           items: [
@@ -693,10 +704,27 @@ export default {
       influenza: [],
       tdap: [],
       meningococcal: [],
-        varicella: [],
-        disease: [],
-        gender: []
+      varicella: [],
+      disease: [],
+      gender: [],
+      s: [],
+      userz: [],
+      load: true,
+      fac_filt: [],
+      exp_filt: [],
+      us_filt: [],
+      fac_filtl: [],
+      exp_filtl: [],
+      us_filtl: [],
+      fac_filtf: [],
+      exp_filtf: [],
+      us_filtf: []
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
 created ()  {
     this.getImmunizationsM()
@@ -705,8 +733,194 @@ created ()  {
   this.getImmunizationsN()
   this.getImmunizationsV()
     this.getAllImmunizations()
+  this.getFacilities()
+    this.getCounties()
   },
   methods: {
+    click () {
+      let exp = []
+      var dates = {
+        convert:function(d) {
+          return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year,d.month,d.date) :
+            NaN
+          );
+        },
+        inRange:function(d,start,end) {
+          return (
+            isFinite(d=this.convert(d).valueOf()) &&
+            isFinite(start=this.convert(start).valueOf()) &&
+            isFinite(end=this.convert(end).valueOf()) ?
+            start <= d && d <= end :
+            NaN
+          );
+        }
+      }
+      for (var e in this.n) {
+        var i = new Date(this.n[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i,this.startDate,this.endDate)){
+          exp.push(this.n[e])
+        }
+      }
+      this.getImmunizationsN(exp)
+      console.log('l')
+      console.log(this.getImmunizationsN(exp))
+    },
+    getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+    getCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          console.log(counties.data.data)
+          this.all_counties = counties.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getSubCounties (a) {
+      console.log(a)
+      if (a.length > 0) {
+        this.active = false
+        this.all_subcounties = []
+        for (var i in a) {
+          axios.get(`subcounties/${a[i].id}`)
+            .then((subcounties) => {
+              // console.log(subcounties.data)
+              this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+            })
+            .catch(error => console.log(error.message))
+        }
+        this.facilityCounty(a)
+      } else {
+        this.active = true
+        this.facilityCounty(a)
+      }
+    },
+    facilityCounty (a) {
+      this.us_filt =[],this.fac_filt = [], this.exp_filt = []
+      if (a.length > 0) {
+        for (var c in a) {
+          // console.log(a[c].name)
+          for (var f in this.all_facilities) {
+            if (this.all_facilities[f].county == a[c].name) {
+              this.fac_filt.push(this.all_facilities[f])
+            }
+          }
+          for (var ex in this.n) {
+            if (this.n[ex].county == a[c].name) {
+              this.exp_filt.push(this.n[ex])
+            }
+          }
+          for (var ex in this.i) {
+            if (this.i[ex].county == a[c].name) {
+              this.us_filt.push(this.i[ex])
+            }
+          }
+        }
+        this.getMeningococcal(this.exp_filt)
+        this.getInfluenza(this.us_filt)
+        this.fac = this.fac_filt.sort()
+      } else {
+        this.fac = this.all_facilities
+        this.getMeningococcal(this.n)
+        this.getInfluenza(this.i)
+      }
+    },
+    facilitySubCounty (a) {
+      this.exp_filtl = [], this.fac_filtl = [], this.us_filtl = []
+      this.active_level = false
+      if (a.length > 0) {
+        for (var c in a) {
+          // console.log(a[c].name)
+          for (var f in this.fac_filt) {
+            if (this.fac_filt[f].sub_county == a[c].name) {
+              this.fac_filtl.push(this.fac_filt[f])
+            }
+          }
+          for (var ex in this.exp_filt) {
+            if (this.exp_filt[ex].sub_county == a[c].name) {
+              this.exp_filtl.push(this.exp_filt[ex])
+            }
+          }
+        }
+        this.getMeningococcal(this.exp_filtl)
+        this.fac = this.fac_filtl.sort()
+      } else {
+        this.fac = this.fac_filt
+      //  this.getTest(this.us_filt)
+        this.getImmunizationsN(this.exp_filt)
+        this.active_level = true
+      }
+    },
+
+    facilityLevel (a) {
+      this.fac_filtf = [], this.exp_filtf = []
+      this.active_fac = false
+      console.log(a)
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var f in this.fac_filtl) {
+            if (this.fac_filtl[f].level == a[c]) {
+              this.fac_filtf.push(this.fac_filtl[f])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.fac_filtl[f].level.slice(6,7)) >= 5) {
+                this.fac_filtf.push(this.fac_filtl[f])
+              }
+            }
+          }
+          for (var ex in this.exp_filtl) {
+            if (this.exp_filtl[ex].facility_level == a[c]) {
+              this.exp_filtf.push(this.exp_filtl[ex])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.exp_filtl[ex].facility_level.slice(6,7)) >= 5) {
+                this.exp_filtf.push(this.exp_filtl[ex])
+              }
+            }
+          }
+        }
+        this.getImmunizationsN(this.exp_filtf)
+        this.fac = this.fac_filtf.sort()
+      } else {
+        this.fac = this.fac_filtl
+        this.active_fac = true
+        this.getImmunizationsN(this.exp_filtl)
+      }
+    },
+
+    facilityFilter (a) {
+      let b = [], e = [], us = []
+
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var ex in this.exp_filtf) {
+            if (this.exp_filtf[ex].facility_name == a[c].name) {
+              e.push(this.exp_filtf[ex])
+            }
+          }
+          for (var u in this.us_filtf) {
+            if (this.us_filtf[u].facility_name == a[c].name) {
+              us.push(this.us_filtf[u])
+            }
+          }
+
+        }
+       // this.getTest(us)
+        this.getImmunizationsN(e)
+      } else {
+        //this.getTest(this.us_filtf)
+        this.getImmunizationsN(this.exp_filtf)
+      }
+    },
     getAllImmunizations() {
       axios.get('immunizations/all')
               .then((exp) => {
@@ -727,12 +941,12 @@ created ()  {
     },
     getImmunizationsI() {
       axios.get('immunizations/all/disease/2')
-              .then((exp) => {
-                this.i = exp.data.data
-                this.link = exp.data.links.next
-                this.loopI(this.link)
-              })
-              .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.i = exp.data.data
+          this.link = exp.data.links.next
+          this.loopI(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
     getImmunizationsT() {
       axios.get('immunizations/all/disease/3')
@@ -743,16 +957,34 @@ created ()  {
               })
               .catch(error => console.log(error.message))
     },
-    getImmunizationsN() {
-      axios.get('immunizations/all/disease/5')
-              .then((exp) => {
-                this.n = exp.data.data
-                this.link = exp.data.links.next
-                this.loopN(this.link)
-              })
-              .catch(error => console.log(error.message))
+    getImmunizationsN () {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
+        axios.get('immunizations/all/disease/5')
+          .then((exp) => {
+            this.n = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              this.loopN(this.link)
+            } else {
+              this.getMeningococcal(this.n)
+            }
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/5`)
+          .then((exp) => {
+            this.n = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              this.loopN(this.link)
+            } else {
+              this.getMeningococcal(this.n)
+            }
+          })
+          .catch(error => console.log(error.message))
+      }
     },
-       getImmunizationsV() {
+    getImmunizationsV() {
       axios.get('immunizations/all/disease/6')
               .then((exp) => {
                 this.v = exp.data.data
@@ -792,13 +1024,12 @@ created ()  {
       }
       this.CountMeaslesChartOptions.series[0].data = this.seriesdata
     },
-    getInfluenza() {
+    getInfluenza(list) {
       var counter = 0;
       for (var vac in this.seriesname) {
         this.seriesdata = []
         this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNumi(this.seriesname[vac]))
-        counter += this.getNumi(this.seriesname[vac])
+        this.seriesdata.push(this.getNumi(this.seriesname[vac], list))
         this.influenza.push(this.seriesdata)
       }
       this.InfluenzaChartOptions.series[0].data = this.influenza
@@ -825,19 +1056,17 @@ created ()  {
       }
       this.VaricellaChartOptions.series[0].data = this.varicella
     },
-    getMeningococcal() {
-      var counter = 0;
-      for (var vac in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNumn(this.seriesname[vac]))
-        counter += this.getNumn(this.seriesname[vac])
-        this.meningococcal.push(this.seriesdata)
+    getMeningococcal(list) {
+      this.seriesdata = []
+      for (var vac in this.seriesname) {  
+        //this.seriesdata.push(this.seriesname[vac])
+        this.seriesdata.push(this.getNumn(this.seriesname[vac], list))
+        //this.meningococcal.push(this.seriesdata)
       }
-      this.MeningococcalChartOptions.series[0].data = this.meningococcal
+      this.MeningococcalChartOptions.series[0].data = this.seriesdata
     },
 
-      getNumAll (gender, disease) {
+    getNumAll (gender, disease) {
       var count = 0
       for (var x in this.a) {
         // console.log(this.s[x].type)
@@ -859,10 +1088,10 @@ created ()  {
       return counter
     },
 
-     getNumi(name) {
+    getNumi(name, l) {
       var counter = 0
-      for (var xo in this.i) {
-        if (this.i[xo].date.slice(0, 3) === name) {
+      for (var xo in l) {
+        if (l[xo].date.slice(0, 3) === name) {
           counter++
         }
       }
@@ -879,10 +1108,10 @@ created ()  {
       return counter
     },
 
-     getNumn(name) {
+    getNumn(name, list) {
       var counter = 0
-      for (var xo in this.n) {
-        if (this.n[xo].date.slice(0, 3) === name) {
+      for (var xo in list) {
+        if (list[xo].date.slice(0, 3) === name) {
           counter++
         }
       }
@@ -966,7 +1195,7 @@ created ()  {
         }
       }
 
-      this.getInfluenza()
+      this.getInfluenza(this.i)
     },
 
     async loopTD(l) {
@@ -986,20 +1215,18 @@ created ()  {
       this.getTDAP()
     },
 
-    async loopN(l) {
+   async loopN (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
-          let response = await axios.get(l);
-          l = response.data.links.next;
-
+          let response = await axios.get(l)
+          l = response.data.links.next
           this.n = this.n.concat(response.data.data)
         } else {
           i = 11
         }
       }
-
-      this.getMeningococcal()
+      this.getMeningococcal(this.n)
     },
 
     async loopV(l) {

@@ -296,7 +296,7 @@ import axios from 'axios'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import { EventBus } from './../event-bus.js'
 
@@ -452,7 +452,8 @@ export default {
       return this.scount
     },
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      e: 'auth/expo'
     })
   },
 
@@ -463,7 +464,7 @@ export default {
         name: 'login'
       })
     }
-    this.getExp()
+    if (this.e.length == 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length}
     this.getBroadcasts()
     this.getAllUsers()
     this.getFacilities()
@@ -534,7 +535,6 @@ export default {
         for (var i in a) {
           axios.get(`subcounties/${a[i].id}`)
             .then((subcounties) => {
-              // console.log(subcounties.data)
               this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
             })
             .catch(error => console.log(error.message))
@@ -549,7 +549,6 @@ export default {
       this.us_filt =[],this.fac_filt = [], this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
@@ -634,7 +633,7 @@ export default {
             }
           }
           for (var u in this.us_filtl) {
-            if (this.us_filtl[u].facility_level == a[c]) {
+            if (this.us_filtl[u].facility_level === a[c]) {
               this.us_filtf.push(this.us_filtl[u])
             } else if (a[c]== 'Level 5 and Above') {
               if (Number(this.us_filtl[u].facility_level.slice(6,7)) >= 5) {
@@ -661,12 +660,12 @@ export default {
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
-            if (this.exp_filtf[ex].facility_name == a[c].name) {
+            if (this.exp_filtf[ex].facility === a[c].name) {
               e.push(this.exp_filtf[ex])
             }
           }
           for (var u in this.us_filtf) {
-            if (this.us_filtf[u].facility_name == a[c].name) {
+            if (this.us_filtf[u].facility_name === a[c].name) {
               us.push(this.us_filtf[u])
             }
           }
@@ -708,7 +707,8 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
-          this.getMonth(this.s)
+          this.storeExp(this.s)
+          this.getMonth(this.e)
         } else {
           i = 11
         }
@@ -722,8 +722,12 @@ export default {
         this.scount = e.length
         this.s = e
       } 
+      
       this.getMonth(this.s)
     },
+    ...mapActions({
+      storeExp: 'auth/storeExp'
+    }),
     getMonth (list) {
       // console.log(list)
       var wdata = []
@@ -856,5 +860,6 @@ export default {
       }
     }
   }
+  
 }
 </script>

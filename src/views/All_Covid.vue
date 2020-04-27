@@ -1,8 +1,5 @@
 <template>
   <v-container grid-list-lg>
-    <v-layout
-      row
-      wrap>
 
       <v-flex
         xs12
@@ -40,21 +37,25 @@
         <Loader />
       </v-flex>
 
-      <v-row dense v-else>
+      <v-row 
+      cols="12" 
+      dense 
+      v-else>
 
-      <v-col
+      <v-col 
         v-for="(result, index) in results"
         :key="result.id"
-        cols="12"
+        
         dark>
 
         <v-card 
         class="mx-auto"
         outlined>
 
-
             <div class="d-flex flex-no-wrap justify-space-between">
               <v-img
+              height="150px"
+              max-width="200px"
               :src="result.file || 'sunshine.jpg' "
               class="white--text align-end"
               
@@ -91,13 +92,10 @@
 
           </div>
           </v-card>
-
-      
       
       </v-col>
     </v-row>
 
-    </v-layout>
   </v-container>
 </template>
 

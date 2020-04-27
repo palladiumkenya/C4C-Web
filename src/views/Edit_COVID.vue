@@ -63,7 +63,7 @@
                   <input
                     id="file"
                     ref="file"
-                    value="covid19.file"
+                    value="file"
                     accept="image/*"
                     type="file"
                     @change="handleImageChange()">
@@ -85,7 +85,7 @@
                 <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
-                    value="covid19.files"
+                    value="files"
                     id="files"
                     ref="files"
                     type="file"
@@ -150,7 +150,7 @@
                     color = "#47a44b"
                     dense
                   >
-                    <h6> {{ output.error }} {{ output.message }} {{resp}} </h6>
+                    <h6> {{ output.error }} {{ output.message }} </h6>
                   </v-alert>
 
                 </v-flex>
@@ -219,7 +219,7 @@ export default {
     handleImageChange (e) {
       this.file = this.$refs.file.files[0]
 
-    console.log(event.target.covid19.files[0].name) //here is the original name
+    console.log(event.target.files[0].name) //here is the original name
 
       let reader = new FileReader()
 
@@ -287,16 +287,12 @@ export default {
           console.log(response)
           this.alert = true
 
-          this.resp = 'COVID 19 Resource Successfully Added'
-
           this.$router.push('covid19_resources')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
-
-          this.resp = 'Failed, please try again'
 
         })
     }

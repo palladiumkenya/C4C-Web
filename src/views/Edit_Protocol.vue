@@ -153,7 +153,7 @@
                       icon = "mdi-alert"
                       dense
                     >
-                      <h6> {{resp}} {{ output.error }} {{ output.message }} </h6>
+                      <h6> {{ output.error }} {{ output.message }} </h6>
                     </v-alert>
 
                   </v-flex>
@@ -298,16 +298,12 @@ export default {
           this.output = response.data
           this.alert = true
 
-          this.resp = 'Facility Resource Successfully Added'
-
           this.$router.push('/protocals')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
-
-         this.resp = 'Failed, please try again'
 
         })
     }
