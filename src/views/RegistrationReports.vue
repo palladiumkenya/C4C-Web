@@ -64,8 +64,8 @@
                 <template>
 
                   <v-combobox
-                    v-model="facility"
-                    :items="all_facilities"
+                    v-model="partner"
+                    :items="all_partner"
                     item-text="partner"
                     item-value="sub_county"
                     label="Select Partner"
@@ -123,7 +123,7 @@
                 </template>
               </v-flex>
             
-
+            </v-layout>
              <template>
           <v-flex xs12 sm6 md2 lg2>
             <v-menu
@@ -180,7 +180,7 @@
             </v-menu>
           </v-flex>
         </template>
-        </v-layout>
+       
 
             <template>
               <v-btn
@@ -214,15 +214,7 @@
               lg12
             >
               <template>
-                <h3>{{ mess2 }}</h3>
-                <div
-                  v-if="value2" >
-                  <v-progress-circular
-                    :size="50"
-                    color="primary"
-                    indeterminate
-                  />
-                </div>
+            
                 <highcharts
                   ref="barChart"
                   :options="monthOptions"/>
@@ -230,55 +222,48 @@
 
             </v-flex>
           </v-card-text>
+
           <v-card-text v-if="n==2">
+            <v-flex
+              md12
+              sm12
+              lg12
+            >
             <template>
-              <h3>{{ mess1 }}</h3>
-              <div
-                v-if="value1" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
-              </div>
               <highcharts
                 ref="barChart"
                 :options="cadrOptions"/>
             </template>
+            </v-flex>
           </v-card-text>
 
           <v-card-text v-if="n==3">
+            <v-flex
+              md12
+              sm12
+              lg12
+            >
             <template>
-              <h3>{{ mess }}</h3>
-              <div
-                v-if="value" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
-              </div>
+        
               <highcharts
                 ref="barChart"
                 :options="barOptions"/>
             </template>
+            </v-flex>
           </v-card-text>
 
           <v-card-text v-if="n==4">
-            <template>
-              <h3>{{ mess1 }}</h3>
-              <div
-                v-if="value1" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
-              </div>
+            <v-flex
+              md12
+              sm12
+              lg12
+            >
+        
               <highcharts
                 ref="barChart"
                 :options="gendOptions"/>
-            </template>
+            </v-flex>
+            
           </v-card-text>
 
         </v-container>
@@ -325,21 +310,19 @@ export default {
       minDate: '2016-01-01',
       endDate: new Date().toISOString().substr(0, 10),
 
-      value: true,
-      value1: true,
-      value2: true,
+     
 
       monthOptions: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months Range'
+            text: 'Months - Year'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'No of Registration',
+            text: 'No. of HCWS registered',
             align: 'high'
           },
           labels: {
@@ -369,14 +352,13 @@ export default {
         },
 
         title: {
-          text: 'Monthly Registration Trends '
+          text: 'HCWS registered on C4C by Month '
         },
         series: [
 
           {
             type: 'column',
             colorByPoint: true,
-            name: 'Registration in Numbers',
             data: []
           }
         ]
@@ -392,11 +374,21 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Registered HCWS',
             align: 'high'
           },
           labels: {
-            overflow: 'justify'
+            overflow: 'justify',
+             items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
           }
         },
         plotOptions: {
@@ -429,7 +421,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Registered HCWS',
             align: 'high'
           },
           labels: {
@@ -466,11 +458,21 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Registered HCWS',
             align: 'high'
           },
           labels: {
-            overflow: 'justify'
+            overflow: 'justify',
+             items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
           }
         },
         plotOptions: {
@@ -493,9 +495,6 @@ export default {
           }
         ]
       },
-      mess1: 'Fetching Data.....',
-      mess: 'Fetching Data.....',
-      mess2: 'Fetching Data.....',
       s: [],
       userz: [],
       load: true,
@@ -566,12 +565,12 @@ export default {
       if (fc.length > 0) {
         for (var c in fc) {
           for (var f in this.all_facilities) {
-            if (this.all_facilities[f].county == fc[c].name) {
+            if (this.all_facilities[f].county === fc[c].name) {
               this.fac_filt.push(this.all_facilities[f])
             }
           }
             for(var u in this.s){
-                if(this.s[u].county == this.fc[c].name){
+                if(this.s[u].county === fc[c].name){
                   this.reg_filt.push(this.s[u])
                 }
            }
@@ -592,13 +591,13 @@ export default {
       if(fsb.length > 0){
         for(var t in fsb){
           for(var u in this.fac_filt){
-            if(this.fac_filt[u].sub_county == fsb[t].name){
+            if(this.fac_filt[u].sub_county === fsb[t].name){
               this.fac_filtl.push(this.fac_filt[u])
             }
           }
-            for(var k in this.s){
-                if(this.s[k].sub_county == this.fsb[t].name){
-                  this.reg_filtl.push(this.s[k])
+            for(var k in this.reg_filt){
+                if(this.reg_filt[k].sub_county === fsb[t].name){
+                  this.reg_filtl.push(this.reg_filt[k])
                 }
               }
           
@@ -620,20 +619,20 @@ export default {
        if(fl.length > 0){
          for(var l in fl){
            for(var f in this.fac_filtl){
-             if(this.fac_filtl[f].level == fl[l]){
+             if(this.fac_filtl[f].level === fl[l]){
                this.fac_filtf.push(this.fac_filtl[f])
-             }else if(fl[l]== 'Level 5 and Above'){
+             }else if(fl[l] === 'Level 5 and Above'){
                if(Number(this.fac_filtl[f].level.slice(6,7)) >= 5){
                  this.fac_filtf.push(this.fac_filtl[f])
                }
              }
            }
            for(var k in this.reg_filtl){
-             if(ths.reg_filtl[k].facility_level == fl[l]){
+             if(this.reg_filtl[k].facility_level == fl[l]){
                this.reg_filtf.push(this.reg_filtl[k])
-             }else if (this.fl[l] == 'Level 5 and Above'){
-               if(Number(this.reg_filtl[f].level.slice(6,7)) >= 5){
-                 this.reg_filtf.push(this.reg_filtl[f])
+             }else if (fl[l] === 'Level 5 and Above'){
+               if(Number(this.reg_filtl[k].facility_level.slice(6,7)) >= 5){
+                 this.reg_filtf.push(this.reg_filtl[k])
                }
              }
            }
@@ -741,6 +740,8 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
+          this.getsummarydata(this.s)
+          this.getAgeData(this.s)
         } else {
           i = 11
         }
@@ -753,7 +754,8 @@ export default {
         }
         this.s = u
       }
-      this.getAgeData()
+      this.getsummarydata(this.s)
+      this.getAgeData(this.s)
     },
      async loopG (l) {
       var i
@@ -762,12 +764,13 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.userz = this.userz.concat(response.data.data)
+          this.getsummarydata(this.s)
         //  this.userl = this.userl.concat(response.data.data)
         } else {
           i = 11
         }
       }
-       this.getsummarydata()
+       this.getsummarydata(this.s)
       
     },
 
@@ -779,7 +782,6 @@ export default {
       }
       this.barOptions.series[0].data = data
       this.load = false
-      this.value = false
       
       this.load = true
       data = []
@@ -788,7 +790,6 @@ export default {
       }
       this.gendOptions.series[0].data = data
       this.load = false
-      this.value1 = false
       
       this.load = true
       data = []
@@ -797,7 +798,7 @@ export default {
       }
       this.cadrOptions.series[0].data = data
       this.load = false
-      this.value1 = false
+      
     },
 
     getsummarydata (list){

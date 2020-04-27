@@ -22,7 +22,7 @@
                 clerable
                 persistent-hint
                 chips
-                v-on:change="getSubCounties"/>
+                @change="getSubCounties"/>
             </template>
           </v-flex>
           <v-flex
@@ -200,37 +200,31 @@
             </v-menu>
           </v-flex>
         </template>
-&nbsp;
-       <template>
+        &nbsp;
+        <template>
           <v-btn
             block
             color="secondary"
             dark
             @click="click">Filter</v-btn>
-       </template>
+        </template>
 
         <!-- End filters -->
       </template>
-</v-layout>
-
+    </v-layout>
 
     <v-tabs
       color="white"
       centered
     >
       <v-tab>Summary Report</v-tab>
-        <v-tab>Measles</v-tab>
+      <v-tab>Measles</v-tab>
       <v-tab>Influenza</v-tab>
       <v-tab>TDAP</v-tab>
-        <v-tab>Varicella</v-tab>
+      <v-tab>Varicella</v-tab>
       <v-tab>Meningococcal</v-tab>
 
-
       <!-- Start Cards -->
-
-
-
-
 
       <v-tab-item
         v-for="n in 6"
@@ -244,13 +238,12 @@
               sm12
               lg12
             >
-                  <highcharts :options="AllDiseaseschartOptions"
-                   ref="columnChart"/>
-
+              <highcharts
+                ref="columnChart"
+                :options="AllDiseaseschartOptions"/>
 
             </v-flex>
           </v-card-text>
-
 
           <v-card-text v-if="n==2">
             <!-- Start Graphs -->
@@ -261,12 +254,14 @@
               lg12
             >
 
-                  <h3>Miseasles Summary</h3>
-                <highcharts :options="CountMeaslesChartOptions"
-                   ref="columnChart"/>
+              <h3>Miseasles Summary</h3>
+              <highcharts
+                ref="columnChart"
+                :options="CountMeaslesChartOptions"/>
 
-                <highcharts :options="MeaslesChartOptions"
-                   ref="columnChart"/>
+              <highcharts
+                ref="columnChart"
+                :options="MeaslesChartOptions"/>
 
             </v-flex>
           </v-card-text>
@@ -278,17 +273,15 @@
               lg12
             >
 
-
-                  <h3>Influenza Summary</h3>
-                  <highcharts :options="InfluenzaChartOptions"
-                   ref="columnChart"/>
-
-
+              <h3>Influenza Summary</h3>
+              <highcharts
+                ref="columnChart"
+                :options="InfluenzaChartOptions"/>
 
             </v-flex>
           </v-card-text>
           <v-card-text v-if="n==4">
-             <!-- Start Graphs -->
+            <!-- Start Graphs -->
 
             <v-flex
               md12
@@ -296,18 +289,16 @@
               lg12
             >
 
-
-                  <h3>TDAP Summary</h3>
-                  <highcharts :options="TDAPChartOptions"
-                   ref="columnChart"/>
-
-
+              <h3>TDAP Summary</h3>
+              <highcharts
+                ref="columnChart"
+                :options="TDAPChartOptions"/>
 
             </v-flex>
           </v-card-text>
 
-             <v-card-text v-if="n==5">
-             <!-- Start Graphs -->
+          <v-card-text v-if="n==5">
+            <!-- Start Graphs -->
 
             <v-flex
               md12
@@ -315,18 +306,16 @@
               lg12
             >
 
-
-                  <h3>Varicella Summary</h3>
-                  <highcharts :options="VaricellaChartOptions"
-                   ref="columnChart"/>
-
-
+              <h3>Varicella Summary</h3>
+              <highcharts
+                ref="columnChart"
+                :options="VaricellaChartOptions"/>
 
             </v-flex>
           </v-card-text>
 
-            <v-card-text v-if="n==6">
-             <!-- Start Graphs -->
+          <v-card-text v-if="n==6">
+            <!-- Start Graphs -->
 
             <v-flex
               md12
@@ -334,12 +323,10 @@
               lg12
             >
 
-
-                  <h3>Meningococcal Summary</h3>
-                  <highcharts :options="MeningococcalChartOptions"
-                              ref="columnChart" />
-
-
+              <h3>Meningococcal Summary</h3>
+              <highcharts
+                ref="columnChart"
+                :options="MeningococcalChartOptions" />
 
             </v-flex>
           </v-card-text>
@@ -347,7 +334,6 @@
       </v-tab-item>
     </v-tabs>
   </v-card>
-
 
 </template>
 
@@ -362,15 +348,14 @@ import moment from 'moment'
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
 
-
 export default {
   components: {
     highcharts: Chart
   },
-  data() {
+  data () {
     return {
 
-       menu: false,
+      menu: false,
       menu1: false,
       startDate: '2016-01-01',
       maxDate: new Date().toISOString().substr(0, 10),
@@ -388,8 +373,7 @@ export default {
       active_fac: true,
       active_level: true,
 
-      
-         AllDiseaseschartOptions: {
+      AllDiseaseschartOptions: {
         xAxis: {
           categories: ['MALE', 'FEMALE' ],
           title: {
@@ -436,7 +420,6 @@ export default {
         ]
       },
 
-
       MeningococcalChartOptions: {
         chart: {
           type: 'column',
@@ -471,7 +454,7 @@ export default {
         series: [
 
           {
-            //type: 'column',
+            // type: 'column',
             colorByPoint: true,
             name: 'Meningococcal Immunizations',
             data: []
@@ -480,7 +463,7 @@ export default {
         ]
       },
 
-         VaricellaChartOptions: {
+      VaricellaChartOptions: {
         chart: {
           type: 'column',
           options3d: {
@@ -514,7 +497,7 @@ export default {
         series: [
 
           {
-            //type: 'column',
+            // type: 'column',
             colorByPoint: true,
             name: 'Varicella Immunizations',
             data: []
@@ -522,7 +505,6 @@ export default {
 
         ]
       },
-
 
       TDAPChartOptions: {
         chart: {
@@ -558,7 +540,7 @@ export default {
         series: [
 
           {
-            //type: 'column',
+            // type: 'column',
             colorByPoint: true,
             name: 'TDAP Immunizations',
             data: []
@@ -566,7 +548,6 @@ export default {
 
         ]
       },
-
 
       InfluenzaChartOptions: {
         chart: {
@@ -602,14 +583,13 @@ export default {
         series: [
 
           {
-            //type: 'column',
+            // type: 'column',
             colorByPoint: true,
             name: 'Influenza Immunizations',
             data: []
           }
         ]
       },
-
 
       MeaslesChartOptions: {
         chart: {
@@ -644,7 +624,7 @@ export default {
         series: [
 
           {
-            //type: 'column',
+            // type: 'column',
             colorByPoint: true,
             name: 'Measles Immunizations',
             data: []
@@ -670,7 +650,6 @@ export default {
           //
           categories: ['Dose 1', 'Dose 2']
 
-
         },
         labels: {
           items: [
@@ -687,7 +666,7 @@ export default {
         series: [
 
           {
-            //type: 'column',
+            // type: 'column',
             colorByPoint: true,
             name: 'Measles Immunizations',
             data: []
@@ -696,10 +675,9 @@ export default {
         ]
       },
 
-
       seriesname: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       seriesnames: [1, 2],
-      seriesdata: [1,2],
+      seriesdata: [1, 2],
       measles: [],
       influenza: [],
       tdap: [],
@@ -726,49 +704,87 @@ export default {
       user: 'auth/user'
     })
   },
-created ()  {
+  created () {
     this.getImmunizationsM()
-  this.getImmunizationsI()
-  this.getImmunizationsT()
-  this.getImmunizationsN()
-  this.getImmunizationsV()
+    this.getImmunizationsI()
+    this.getImmunizationsT()
+    this.getImmunizationsN()
+    this.getImmunizationsV()
     this.getAllImmunizations()
-  this.getFacilities()
+    this.getFacilities()
     this.getCounties()
   },
   methods: {
     click () {
-      let exp = []
+      let exp = [], exp1 = [], exp2 = [], exp3 = [], exp4 = [], exp5 = []
       var dates = {
-        convert:function(d) {
+        convert: function (d) {
           return (
-            d.constructor === Date ? d :
-            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
-            d.constructor === Number ? new Date(d) :
-            d.constructor === String ? new Date(d) :
-            typeof d === "object" ? new Date(d.year,d.month,d.date) :
-            NaN
-          );
+            d.constructor === Date ? d
+              : d.constructor === Array ? new Date(d[0], d[1], d[2])
+                : d.constructor === Number ? new Date(d)
+                  : d.constructor === String ? new Date(d)
+                    : typeof d === 'object' ? new Date(d.year, d.month, d.date)
+                      : NaN
+          )
         },
-        inRange:function(d,start,end) {
+        inRange: function (d, start, end) {
           return (
-            isFinite(d=this.convert(d).valueOf()) &&
-            isFinite(start=this.convert(start).valueOf()) &&
-            isFinite(end=this.convert(end).valueOf()) ?
-            start <= d && d <= end :
-            NaN
-          );
+            isFinite(d = this.convert(d).valueOf()) &&
+            isFinite(start = this.convert(start).valueOf()) &&
+            isFinite(end = this.convert(end).valueOf())
+              ? start <= d && d <= end
+              : NaN
+          )
         }
       }
       for (var e in this.n) {
         var i = new Date(this.n[e].created_at).toISOString().substr(0, 10)
-        if (dates.inRange(i,this.startDate,this.endDate)){
+        if (dates.inRange(i, this.startDate, this.endDate)) {
           exp.push(this.n[e])
         }
       }
       this.getImmunizationsN(exp)
-      console.log('l')
-      console.log(this.getImmunizationsN(exp))
+
+      for (var e in this.v) {
+        var i = new Date(this.v[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i, this.startDate, this.endDate)) {
+          exp1.push(this.v[e])
+        }
+      }
+      this.getImmunizationsV(exp1)
+
+      for (var e in this.i) {
+        var i = new Date(this.i[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i, this.startDate, this.endDate)) {
+          exp2.push(this.i[e])
+        }
+      }
+      this.getImmunizationsI(exp2)
+
+      for (var e in this.t) {
+        var i = new Date(this.t[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i, this.startDate, this.endDate)) {
+          exp3.push(this.t[e])
+        }
+      }
+      this.getImmunizationsT(exp3)
+
+      for (var e in this.s) {
+        var i = new Date(this.s[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i, this.startDate, this.endDate)) {
+          exp4.push(this.s[e])
+        }
+      }
+      this.getImmunizationsM(exp4)
+
+      for (var e in this.a) {
+        var i = new Date(this.a[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i, this.startDate, this.endDate)) {
+          exp5.push(this.a[e])
+        }
+      }
+      this.getAllImmunizations(exp5)
     },
     getFacilities () {
       axios.get('facilities')
@@ -807,7 +823,8 @@ created ()  {
       }
     },
     facilityCounty (a) {
-      this.us_filt =[],this.fac_filt = [], this.exp_filt = []
+      this.us_filt = [], this.fac_filt = [], this.exp_filt = [], this.measles_filt = [],
+      this.tdap_filt = [], this.vericella_filt = [], this.all_filt = []
       if (a.length > 0) {
         for (var c in a) {
           // console.log(a[c].name)
@@ -826,18 +843,47 @@ created ()  {
               this.us_filt.push(this.i[ex])
             }
           }
+          for (var ex in this.t) {
+            if (this.t[ex].county == a[c].name) {
+              this.tdap_filt.push(this.t[ex])
+            }
+          }
+          for (var ex in this.s) {
+            if (this.s[ex].county == a[c].name) {
+              this.measles_filt.push(this.s[ex])
+            }
+            for (var ex in this.v) {
+              if (this.v[ex].county == a[c].name) {
+                this.vericella_filt.push(this.v[ex])
+              }
+            }
+            for (var ex in this.a) {
+              if (this.a[ex].county == a[c].name) {
+                this.all_filt.push(this.a[ex])
+              }
+            }
+          }
         }
         this.getMeningococcal(this.exp_filt)
         this.getInfluenza(this.us_filt)
+        this.getAllDiseases(this.all_filt)
+        this.getVaricella(this.vericella_filt)
+        this.getMeasles(this.measles_filt)
+        this.getTDAP(this.tdap_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
         this.getMeningococcal(this.n)
         this.getInfluenza(this.i)
+        this.getAllDiseases(this.a)
+        this.getVaricella(this.v)
+        this.getMeasles(this.s)
+        this.getTDAP(this.t)
       }
     },
     facilitySubCounty (a) {
-      this.exp_filtl = [], this.fac_filtl = [], this.us_filtl = []
+      this.exp_filtl = [], this.fac_filtl = [], this.measles_filtl = [], this.us_filtl = [],
+      this.tdap_filtl = [], this.vericella_filtl = [], this.all_filtl = []
       this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
@@ -852,19 +898,56 @@ created ()  {
               this.exp_filtl.push(this.exp_filt[ex])
             }
           }
+          for (var ex in this.measles_filt) {
+            if (this.measles_filt[ex].sub_county == a[c].name) {
+              this.measles_filtl.push(this.measles_filt[ex])
+            }
+          }
+          for (var ex in this.us_filt) {
+            if (this.us_filt[ex].sub_county == a[c].name) {
+              this.us_filtl.push(this.us_filt[ex])
+            }
+          }
+          for (var ex in this.vericella_filt) {
+            if (this.vericella_filt[ex].sub_county == a[c].name) {
+              this.vericella_filtl.push(this.vericella_filt[ex])
+            }
+          }
+          for (var ex in this.tdap_filt) {
+            if (this.tdap_filt[ex].sub_county == a[c].name) {
+              this.tdap_filtl.push(this.tdap_filt[ex])
+            }
+          }
+          for (var ex in this.all_filt) {
+            if (this.all_filt[ex].sub_county == a[c].name) {
+              this.all_filtl.push(this.all_filt[ex])
+            }
+          }
         }
         this.getMeningococcal(this.exp_filtl)
+        this.getInfluenza(this.us_filtl)
+        this.getAllDiseases(this.all_filtl)
+        this.getVaricella(this.vericella_filtl)
+        this.getMeasles(this.measles_filtl)
+        this.getTDAP(this.tdap_filtl)
+
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
-      //  this.getTest(this.us_filt)
-        this.getImmunizationsN(this.exp_filt)
+        //  this.getTest(this.us_filt)
+        this.getMeningococcal(this.exp_filt)
+        this.getInfluenza(this.us_filt)
+        this.getAllDiseases(this.all_filt)
+        this.getVaricella(this.vericella_filt)
+        this.getMeasles(this.measles_filt)
+        this.getTDAP(this.tdap_filt)
         this.active_level = true
       }
     },
 
     facilityLevel (a) {
-      this.fac_filtf = [], this.exp_filtf = []
+      this.fac_filtf = [], this.exp_filtf = [], this.measles_filtf = [], this.us_filtf = [],
+      this.tdap_filtf = [], this.vericella_filtf = [], this.all_filtf = []
       this.active_fac = false
       console.log(a)
       if (a.length > 0) {
@@ -872,8 +955,8 @@ created ()  {
           for (var f in this.fac_filtl) {
             if (this.fac_filtl[f].level == a[c]) {
               this.fac_filtf.push(this.fac_filtl[f])
-            } else if (a[c]== 'Level 5 and Above') {
-              if (Number(this.fac_filtl[f].level.slice(6,7)) >= 5) {
+            } else if (a[c] == 'Level 5 and Above') {
+              if (Number(this.fac_filtl[f].level.slice(6, 7)) >= 5) {
                 this.fac_filtf.push(this.fac_filtl[f])
               }
             }
@@ -881,24 +964,79 @@ created ()  {
           for (var ex in this.exp_filtl) {
             if (this.exp_filtl[ex].facility_level == a[c]) {
               this.exp_filtf.push(this.exp_filtl[ex])
-            } else if (a[c]== 'Level 5 and Above') {
-              if (Number(this.exp_filtl[ex].facility_level.slice(6,7)) >= 5) {
+            } else if (a[c] == 'Level 5 and Above') {
+              if (Number(this.exp_filtl[ex].facility_level.slice(6, 7)) >= 5) {
                 this.exp_filtf.push(this.exp_filtl[ex])
+              }
+            }
+          }
+          for (var ex in this.measles_filtl) {
+            if (this.measles_filtl[ex].facility_level == a[c]) {
+              this.measles_filtf.push(this.measles_filtl[ex])
+            } else if (a[c] == 'Level 5 and Above') {
+              if (Number(this.measles_filtl[ex].facility_level.slice(6, 7)) >= 5) {
+                this.measles_filtf.push(this.measles_filtl[ex])
+              }
+            }
+          }
+          for (var ex in this.vericella_filtl) {
+            if (this.vericella_filtl[ex].facility_level == a[c]) {
+              this.vericella_filtf.push(this.vericella_filtl[ex])
+            } else if (a[c] == 'Level 5 and Above') {
+              if (Number(this.vericella_filtl[ex].facility_level.slice(6, 7)) >= 5) {
+                this.vericella_filtf.push(this.vericella_filtl[ex])
+              }
+            }
+          }
+          for (var ex in this.tdap_filtl) {
+            if (this.tdap_filtl[ex].facility_level == a[c]) {
+              this.tdap_filtf.push(this.tdap_filtl[ex])
+            } else if (a[c] == 'Level 5 and Above') {
+              if (Number(this.tdap_filtl[ex].facility_level.slice(6, 7)) >= 5) {
+                this.tdap_filtf.push(this.tdap_filtl[ex])
+              }
+            }
+          }
+          for (var ex in this.us_filtl) {
+            if (this.us_filtl[ex].facility_level == a[c]) {
+              this.us_filtf.push(this.us_filtl[ex])
+            } else if (a[c] == 'Level 5 and Above') {
+              if (Number(this.us_filtl[ex].facility_level.slice(6, 7)) >= 5) {
+                this.us_filtf.push(this.us_filtl[ex])
+              }
+            }
+          }
+          for (var ex in this.all_filtl) {
+            if (this.all_filtl[ex].facility_level == a[c]) {
+              this.all_filtf.push(this.all_filtl[ex])
+            } else if (a[c] == 'Level 5 and Above') {
+              if (Number(this.all_filtl[ex].facility_level.slice(6, 7)) >= 5) {
+                this.all_filtf.push(this.all_filtl[ex])
               }
             }
           }
         }
         this.getImmunizationsN(this.exp_filtf)
+        this.getInfluenza(this.us_filtf)
+        this.getAllDiseases(this.all_filtf)
+        this.getVaricella(this.vericella_filtf)
+        this.getMeasles(this.measles_filtf)
+        this.getTDAP(this.tdap_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.fac = this.fac_filtl
         this.active_fac = true
         this.getImmunizationsN(this.exp_filtl)
+        this.getInfluenza(this.us_filtl)
+        this.getAllDiseases(this.all_filtl)
+        this.getVaricella(this.vericella_filtl)
+        this.getMeasles(this.measles_filtl)
+        this.getTDAP(this.tdap_filtl)
       }
     },
 
     facilityFilter (a) {
-      let b = [], e = [], us = []
+      let g = [], e = [], us = [], h = [], j = [], k = []
 
       if (a.length > 0) {
         for (var c in a) {
@@ -912,34 +1050,63 @@ created ()  {
               us.push(this.us_filtf[u])
             }
           }
-
+          for (var ux in this.measles_filtf) {
+            if (this.measles_filtf[ux].facility_name == a[c].name) {
+              g.push(this.measles_filtf[ux])
+            }
+          }
+          for (var vx in this.vericella_filtf) {
+            if (this.vericella_filtf[vx].facility_name == a[c].name) {
+              j.push(this.vericella_filtf[vx])
+            }
+          }
+          for (var tx in this.tdap_filtf) {
+            if (this.tdap_filtf[tx].facility_name == a[c].name) {
+              h.push(this.tdap_filtf[tx])
+            }
+          }
+          for (var ax in this.all_filtf) {
+            if (this.all_filtf[u].facility_name == a[c].name) {
+              k.push(this.all_filtf[u])
+            }
+          }
         }
-       // this.getTest(us)
+        // this.getTest(us)
         this.getImmunizationsN(e)
+        this.getInfluenza(us)
+        this.getAllDiseases(k)
+        this.getVaricella(j)
+        this.getMeasles(g)
+        this.getTDAP(h)
       } else {
-        //this.getTest(this.us_filtf)
+        // this.getTest(this.us_filtf)
         this.getImmunizationsN(this.exp_filtf)
+        this.getInfluenza(this.us_filtf)
+        this.getAllDiseases(this.all_filtf)
+        this.getVaricella(this.vericella_filtf)
+        this.getMeasles(this.measles_filtf)
+        this.getTDAP(this.tdap_filtf)
       }
     },
-    getAllImmunizations() {
+    getAllImmunizations () {
       axios.get('immunizations/all')
-              .then((exp) => {
-                this.a = exp.data.data
-                this.link = exp.data.links.next
-                this.loopA(this.link)
-              })
-              .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.a = exp.data.data
+          this.link = exp.data.links.next
+          this.loopA(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
-    getImmunizationsM() {
+    getImmunizationsM () {
       axios.get('immunizations/all/disease/4')
-              .then((exp) => {
-                this.s = exp.data.data
-                this.link = exp.data.links.next
-                this.loopT(this.link)
-              })
-              .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.s = exp.data.data
+          this.link = exp.data.links.next
+          this.loopT(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
-    getImmunizationsI() {
+    getImmunizationsI () {
       axios.get('immunizations/all/disease/2')
         .then((exp) => {
           this.i = exp.data.data
@@ -948,14 +1115,14 @@ created ()  {
         })
         .catch(error => console.log(error.message))
     },
-    getImmunizationsT() {
+    getImmunizationsT () {
       axios.get('immunizations/all/disease/3')
-              .then((exp) => {
-                this.t = exp.data.data
-                this.link = exp.data.links.next
-                this.loopTD(this.link)
-              })
-              .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.t = exp.data.data
+          this.link = exp.data.links.next
+          this.loopTD(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
     getImmunizationsN () {
       if (this.user.role_id === 1 || this.user.role_id == 5) {
@@ -984,111 +1151,89 @@ created ()  {
           .catch(error => console.log(error.message))
       }
     },
-    getImmunizationsV() {
+    getImmunizationsV () {
       axios.get('immunizations/all/disease/6')
-              .then((exp) => {
-                this.v = exp.data.data
-                this.link = exp.data.links.next
-                this.loopV(this.link)
-              })
-              .catch(error => console.log(error.message))
+        .then((exp) => {
+          this.v = exp.data.data
+          this.link = exp.data.links.next
+          this.loopV(this.link)
+        })
+        .catch(error => console.log(error.message))
     },
-      getAllDiseases () {
-      var count = 0
-      for (var i in this.AllDiseaseschartOptions.series) {
-        this.seriesdata = []
-        for (var v in this.AllDiseaseschartOptions.xAxis.categories) {
-          this.seriesdata.push(this.getNumAll(this.AllDiseaseschartOptions.xAxis.categories[v], this.AllDiseaseschartOptions.series[i].name[0]))
-          count += this.getNumAll(this.AllDiseaseschartOptions.xAxis.categories[v], this.AllDiseaseschartOptions.series[i].name[0])
-        }
-        this.AllDiseaseschartOptions.series[i].data = this.seriesdata
-      }
-    },
-    getMeasles() {
-      var counter = 0;
-      for (var vac in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNum(this.seriesname[vac]))
-        counter += this.getNum(this.seriesname[vac])
-        this.measles.push(this.seriesdata)
-      }
-      this.MeaslesChartOptions.series[0].data = this.measles
-    },
-    getMeaslesCount () {
-      // var counter = 0
+    getAllDiseases (lists) {
       this.seriesdata = []
-      for (var vac in this.seriesnames) {
-        this.seriesdata.push(this.getNumCount(vac))
+      for (var vac in this.seriesname) {
+        this.seriesdata.push(this.getNumAll(this.seriesname[vac], lists))
+      }
+      this.AllDiseaseschartOptions.series[0].data = this.seriesdata
 
+    },
+    getMeasles (list) {
+      this.seriesdata = []
+      for (var vac in this.seriesname) {
+        this.seriesdata.push(this.getNumn(this.seriesname[vac], list))
+      }
+      this.MeaslesChartOptions.series[0].data = this.seriesdata
+    },
+    getMeaslesCount (lists) {
+      this.seriesdata = []
+      for (var vac in this.seriesname) {
+        this.seriesdata.push(this.getNumCount(this.seriesname[vac], lists))
       }
       this.CountMeaslesChartOptions.series[0].data = this.seriesdata
     },
-    getInfluenza(list) {
-      var counter = 0;
-      for (var vac in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNumi(this.seriesname[vac], list))
-        this.influenza.push(this.seriesdata)
-      }
-      this.InfluenzaChartOptions.series[0].data = this.influenza
-    },
-    getTDAP() {
-      var counter = 0;
-      for (var vac in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNumt(this.seriesname[vac]))
-        counter += this.getNumt(this.seriesname[vac])
-        this.tdap.push(this.seriesdata)
-      }
-      this.TDAPChartOptions.series[0].data = this.tdap
-    },
-       getVaricella() {
-      var counter = 0;
-      for (var vac in this.seriesname) {
-        this.seriesdata = []
-        this.seriesdata.push(this.seriesname[vac])
-        this.seriesdata.push(this.getNumv(this.seriesname[vac]))
-        counter += this.getNumv(this.seriesname[vac])
-        this.varicella.push(this.seriesdata)
-      }
-      this.VaricellaChartOptions.series[0].data = this.varicella
-    },
-    getMeningococcal(list) {
+    getInfluenza (list) {
       this.seriesdata = []
-      for (var vac in this.seriesname) {  
-        //this.seriesdata.push(this.seriesname[vac])
+      for (var vac in this.seriesname) {
+        this.seriesdata.push(this.getNumt(this.seriesname[vac], list))
+      }
+      this.InfluenzaChartOptions.series[0].data = this.seriesdata
+    },
+    getTDAP (list) {
+      this.seriesdata = []
+      for (var vac in this.seriesname) {
+        this.seriesdata.push(this.getNumt(this.seriesname[vac], list))
+      }
+      this.TDAPChartOptions.series[0].data = this.seriesdata
+    },
+    getVaricella (list) {
+      this.seriesdata = []
+      for (var vac in this.seriesname) {
         this.seriesdata.push(this.getNumn(this.seriesname[vac], list))
-        //this.meningococcal.push(this.seriesdata)
+      }
+      this.VaricellaChartOptions.series[0].data = this.seriesdata
+    },
+    getMeningococcal (list) {
+      this.seriesdata = []
+      for (var vac in this.seriesname) {
+        this.seriesdata.push(this.getNumn(this.seriesname[vac], list))
       }
       this.MeningococcalChartOptions.series[0].data = this.seriesdata
     },
 
-    getNumAll (gender, disease) {
+    getNumAll (gender, disease, lists) {
       var count = 0
-      for (var x in this.a) {
+      for (var x in lists) {
         // console.log(this.s[x].type)
-        if (this.a[x].gender === gender && this.a[x].disease === disease) {
-            count++
+        if (lists[x].gender === gender && lists[x].disease === disease) {
+          count++
         }
       }
       return count
     },
 
-    getNum(name) {
+    getNum (name) {
       var counter = 0
       for (var xo in this.s) {
         if (this.s[xo].date.slice(0, 3) === name) {
           counter++
-        console.log(this.s[xo].date.slice(0, 3))
+          console.log(this.s[xo].date.slice(0, 3))
         }
       }
       return counter
     },
 
-    getNumi(name, l) {
+    getNumi (name, l) {
       var counter = 0
       for (var xo in l) {
         if (l[xo].date.slice(0, 3) === name) {
@@ -1098,17 +1243,7 @@ created ()  {
       return counter
     },
 
-     getNumt(name) {
-      var counter = 0
-      for (var xo in this.t) {
-        if (this.t[xo].date.slice(0, 3) === name) {
-          counter++
-        }
-      }
-      return counter
-    },
-
-    getNumn(name, list) {
+    getNumt (name, list) {
       var counter = 0
       for (var xo in list) {
         if (list[xo].date.slice(0, 3) === name) {
@@ -1117,7 +1252,17 @@ created ()  {
       }
       return counter
     },
-        getNumv(name) {
+
+    getNumn (name, list) {
+      var counter = 0
+      for (var xo in list) {
+        if (list[xo].date.slice(0, 3) === name) {
+          counter++
+        }
+      }
+      return counter
+    },
+    getNumv (name) {
       var counter = 0
       for (var xo in this.v) {
         if (this.v[xo].date.slice(0, 3) === name) {
@@ -1126,70 +1271,68 @@ created ()  {
       }
       return counter
     },
-        getNumCount (name) {
+    getNumCount (name, lists) {
       var a = [], b = [], prev, count = 0, arr = []
-      for (var f in this.s){
-        arr.push(this.s[f].user_id)
+      for (var f in lists) {
+        arr.push(lists[f].user_id)
       }
       arr.sort()
-      for ( var i = 0; i < arr.length; i++ ) {
-        if ( arr[i] !== prev ) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] !== prev) {
           a.push(arr[i])
           b.push(1)
         } else {
-          b[b.length-1]++
+          b[b.length - 1]++
         }
         prev = arr[i]
       }
-      for (var u in b){
-         if (b[u] === 1 && name == 0){
+      for (var u in b) {
+        if (b[u] === 1 && name == 0) {
           count++
-        }  else if (name == 1 && b[u] === 2) {
+        } else if (name == 1 && b[u] === 2) {
           count++
         }console.log(a)
       }
       return count
     },
 
-     async loopA(l) {
+    async loopA (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
-          let response = await axios.get(l);
-          l = response.data.links.next;
-          this.a = this.a.concat(response.data.data);
-
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.a = this.a.concat(response.data.data)
+          this.getAllDiseases()
         } else {
           i = 11
         }
       }
-      this.getAllDiseases()
+      this.getAllDiseases(this.a)
     },
 
-    async loopT(l) {
+    async loopT (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
-          let response = await axios.get(l);
-          l = response.data.links.next;
-          this.s = this.s.concat(response.data.data);
-
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.s = this.s.concat(response.data.data)
         } else {
           i = 11
         }
       }
-      this.getMeasles()
-      this.getMeaslesCount()
+      this.getMeasles(this.s)
+      this.getMeaslesCount(this.s)
     },
 
-    async loopI(l) {
+    async loopI (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
-          let response = await axios.get(l);
-          l = response.data.links.next;
-          this.i = this.i.concat(response.data.data);
-
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.i = this.i.concat(response.data.data)
         } else {
           i = 11
         }
@@ -1198,24 +1341,23 @@ created ()  {
       this.getInfluenza(this.i)
     },
 
-    async loopTD(l) {
+    async loopTD (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
-          let response = await axios.get(l);
-          l = response.data.links.next;
+          let response = await axios.get(l)
+          l = response.data.links.next
 
-          this.t = this.t.concat(response.data.data);
-
+          this.t = this.t.concat(response.data.data)
         } else {
           i = 11
         }
       }
 
-      this.getTDAP()
+      this.getTDAP(this.t)
     },
 
-   async loopN (l) {
+    async loopN (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
@@ -1229,12 +1371,12 @@ created ()  {
       this.getMeningococcal(this.n)
     },
 
-    async loopV(l) {
+    async loopV (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
-          let response = await axios.get(l);
-          l = response.data.links.next;
+          let response = await axios.get(l)
+          l = response.data.links.next
 
           this.v = this.v.concat(response.data.data)
         } else {
@@ -1242,9 +1384,9 @@ created ()  {
         }
       }
 
-      this.getVaricella()
+      this.getVaricella(this.v)
     }
   }
 }
-//end
+// end
 </script>
