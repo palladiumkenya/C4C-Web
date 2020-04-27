@@ -103,7 +103,7 @@
                     >
                       <v-card-text>
                         facility: {{ props.item.facility }} <br>
-                        facility: {{ props.item.pep_date }} <br>
+                        Pep Date: {{ props.item.pep_date }} <br>
                         patient hiv status: {{ props.item.patient_hiv_status }} <br>
                         patient hbv status: {{ props.item.patient_hbv_status }}
                       </v-card-text>
@@ -113,7 +113,6 @@
                       md4
                     >
                       <v-card-text>
-
                         device purpose: {{ props.item.device_purpose }} <br>
                         previous exposures: {{ props.item.previous_exposures }} <br>
                         exposure result of: <div v-if="props.item.result_of"> {{ props.item.result_of }}</div> <small v-else>Not specified</small> <br>
@@ -190,71 +189,78 @@ export default {
       ],
       exposures: [],
       downloadLoading: false,
-      filename: 'Exposures',
+      filename: `Exposures ${new Date().toISOString()}`,
       autoWidth: true,
       bookType: 'xlsx'
     }
   },
   computed: {
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      e: 'auth/expo'
     })
   },
   created () {
-    this.getExp()
+    this.exposures = this.e
   },
   methods: {
-    getExp () {
-      if (this.user.role_id === 1) {
-        axios.get('exposures/all/')
-          .then((exp) => {
-            this.exposures = exp.data.data
-            this.link = exp.data.links.next
-            if (this.link) {
-              this.loopT(this.link)
-            }
-          })
-          .catch(() => {
-            this.error = true
-            this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true
-          })
-      } else if (this.user.role_id === 4) {
-        axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.exposures = exp.data.data
-            this.link = exp.data.links.next
-            if (this.link) {
-              this.loopT(this.link)
-            }
-          })
-          .catch(() => {
-            this.error = true
-            this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true
-          })
-      }
-    },
+    // getExp () {
+    //   if (this.user.role_id === 1 || this.user.role_id == 5) {
+    //     axios.get('exposures/all/')
+    //       .then((exp) => {
+    //         this.exposures = exp.data.data
+    //         this.link = exp.data.links.next
+    //         if (this.link) {
+    //           this.loopT(this.link)
+    //         }
+    //       })
+    //       .catch(() => {
+    //         this.error = true
+    //         this.result = 'Check your internet connection or retry logging in.'
+    //         this.snackbar = true
+    //       })
+    //   } else if (this.user.role_id === 4) {
+    //     axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+    //       .then((exp) => {
+    //         this.exposures = exp.data.data
+    //         this.link = exp.data.links.next
+    //         if (this.link) {
+    //           this.loopT(this.link)
+    //         }
+    //       })
+    //       .catch(() => {
+    //         this.error = true
+    //         this.result = 'Check your internet connection or retry logging in.'
+    //         this.snackbar = true
+    //       })
+    //   }
+    // },
 
-    async loopT (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.exposures = this.exposures.concat(response.data.data)
-        } else {
-          i = 11
-        }
-      }
-
-      console.log(this.exposures)
-    },
+    // async loopT (l) {
+    //   var i, u = []
+    //   for (i = 0; i < 1;) {
+    //     if (l != null) {
+    //       let response = await axios.get(l)
+    //       l = response.data.links.next
+    //       this.exposures = this.exposures.concat(response.data.data)
+    //     } else {
+    //       i = 11
+    //     }
+    //   }
+    //   if (this.user.role_id == 5) {
+    //     for (var i in this.exposures) {
+    //       if (this.exposures[i].county == this.user.county) {
+    //         u.push(this.exposures[i])
+    //       }
+    //     }
+    //     this.exposures = u
+    //   }
+    // },
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Cadre', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Date']
-        const filterVal = ['cadre', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'exposure_date']
+        const tHeader = ['Gender','Cadre', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Patient HIV Status', 'Patient HBV Status', 'Pep initiated', 'Pep Date','Exposure Date']
+        const filterVal = ['gender','cadre', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'patient_hiv_status', 'patient_hbv_status', 'pep_initiated', 'pep_date', 'exposure_date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -269,8 +275,10 @@ export default {
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'cadre') {
-          return v[j].name
+        // console.log(v[j])
+        if (v[j] === null) {
+          console.log(v[j])
+          return 'Not Specified'
         } else {
           return v[j]
         }

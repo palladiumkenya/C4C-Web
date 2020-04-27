@@ -1,6 +1,5 @@
 <template>
   <v-footer
-    v-if="this.$route.path !== '/login'"
     id="core-footer"
     absolute
     height="82"
@@ -31,7 +30,7 @@
 export default {
   data: () => ({
     links: [
-      { name: 'Home', Link: '/#' },
+      { name: 'Home', Link: '/' },
       { name: 'About Us', Link: 'https://www.mhealthkenya.org/why-choose-us' },
       { name: 'Publication', Link: 'https://www.mhealthkenya.org/news-publications' }
     ]

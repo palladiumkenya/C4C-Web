@@ -44,7 +44,7 @@
                       class="purple-input"/>
                   </v-flex>
 
-                  <!-- <v-flex
+                   <v-flex
                     xs12
                     md8>
                     <label>Facility:</label>
@@ -52,9 +52,9 @@
                       class="ma-2"
                       x-large
                     >
-                      {{ user.hcw.facility.name }}
+                      {{ protocol.facility_id }} : {{user.hcw.facility_name}}
                     </v-chip>
-                  </v-flex> -->
+                  </v-flex>  
 
                   <v-flex xs12>
                     <ckeditor
@@ -122,11 +122,10 @@
                   >
                     <v-btn
                       :disabled="!valid"
-                      :loading="dialog1"
                       class="mx-0 font-weight-light"
                       color="success"
                       type="submit"
-                      @click="validateData(); alert=!alert; dialog1=true"
+                      @click="validateData(); alert=!alert; dialog1=true "
                     >
                       Save
                     </v-btn>
@@ -181,7 +180,6 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      body: '',
       editorConfig: { },
       items: [],
       alert: false,
@@ -194,16 +192,17 @@ export default {
       ],
       dialog1: false,
       result: '',
-      all_facilities: [],
-      facility: 'null',
       facility_id: '',
-      title: '',
+      protocol : {
+        body: '',
+        title: '',
+       },
       file: '',
       showPreview: false,
       imagePreview: '',
       files: [],
       output: '',
-      protocol: [],
+      resp: '',
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -218,11 +217,10 @@ export default {
   watch: {
     dialog1 (val) {
       if (!val) return
-      setTimeout(() => (this.dialog1 = false), 4000)
+      setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
   created () {
-    this.getFacilities()
     this.getProtocol()
   },
   methods: {
@@ -259,15 +257,6 @@ export default {
       this.files.splice(key, 1)
     },
 
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          console.log(facilities.data)
-          this.all_facilities = facilities.data.data
-        })
-        .catch(error => console.log(error.message))
-    },
-
     getProtocol () {
       var id = this.$route.params.id
       axios.get('resources/protocols/details/' + id)
@@ -288,30 +277,34 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('protocal_files[' + i + ']', file)
+        allData.append('protocol_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.body)
-      allData.append('facility_id', this.user.hcw.facility.id)
+      allData.append('title', this.protocol.title)
+      allData.append('body', this.protocol.body)
+      allData.append('facility_id', this.protocol.facility_id )
+      allData.append('protocol_id', this.protocol.id)
+
 
       axios({
         method: 'POST',
-        url: 'resources/protocols/create',
+        url: 'resources/protocols/update',
         data: allData,
         headers: {
-          'content-type': 'multipart/form-data; boundary=${form._boundary' }
+          'content-type': 'multipart/form-data' }
       })
         .then((response) => {
           console.log(response)
           this.output = response.data
           this.alert = true
+
           this.$router.push('/protocals')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
+
         })
     }
   }

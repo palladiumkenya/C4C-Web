@@ -18,7 +18,7 @@
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
-            <div/> 
+            <div/>
             <p class="display-1 text--primary">
               Add A New COVID 19 Resource
             </p>
@@ -58,6 +58,8 @@
                     placeholder="Write here"
                     required/>
                 </v-flex>
+                <ul> <li v-for="error in errors"
+                :key="error">{{ error }}</li> </ul>
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
@@ -171,6 +173,7 @@ export default {
       ],
       dialog1: false,
       result: '',
+      errors: [],
       output: '',
       alert: false,
       title: '',
@@ -224,6 +227,10 @@ export default {
     },
 
     postCOVID (e) {
+      if (!this.editorData) {
+        this.errors.push('Fill in the text area .')
+      }
+
       e.preventDefault()
 
       let allData = new FormData()
@@ -273,6 +280,10 @@ export default {
 span.remove-file{
   color:red;
   cursor: pointer;
+}
+ul {
+  list-style: none;
+  color: red;
 }
 
 </style>

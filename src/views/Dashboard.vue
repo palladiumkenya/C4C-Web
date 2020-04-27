@@ -82,6 +82,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id != 4"
                 v-model="counties"
                 :items="all_counties"
                 item-text="name"
@@ -93,7 +94,6 @@
                 persistent-hint
                 chips/>
             </template>
-            <!-- {{ getSubCounties(counties) }} -->
           </v-flex>
           <v-flex
             xs12
@@ -102,6 +102,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id != 4"
                 v-model="subcounties"
                 :items="all_subcounties"
                 item-text="name"
@@ -122,11 +123,10 @@
             md6
             lg3
           >
-
             <template>
-
               <v-combobox
-                v-model="facility"
+                v-if="user.role_id != 4"
+                v-model="partner"
                 :items="fac"
                 item-text="partner"
                 item-value="id"
@@ -145,12 +145,13 @@
             md6
             lg3
           >
-
             <template>
-
               <v-combobox
+                v-if="user.role_id != 4"
                 :items="all_facilities_level"
                 label="Select Facility Level"
+                v-on:change="facilityLevel"
+                :disabled="active_level"
                 multiple
                 clerable
                 persistent-hint
@@ -166,11 +167,14 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id != 4"
                 v-model="facility"
                 :items="fac"
                 item-text="name"
                 item-value="id"
                 label="Select Facility"
+                v-on:change="facilityFilter"
+                :disabled="active_fac"
                 multiple
                 clerable
                 persistent-hint
@@ -181,42 +185,95 @@
         </v-layout>
 
         <template>
-
-          <input
-            v-model="startDate"
-            type="date">
-          <input
-            v-model="endDate"
-            type="date">
+          <v-flex xs12 sm6 md2 lg2>
+            <v-menu
+              ref="menu1"
+              :close-on-content-click="false"
+              v-model="menu1"
+              :nudge-right="40"
+              :return-value.sync="startDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="startDate"
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex xs12 sm6 md2 lg2>
+            <v-menu
+              ref="menu"
+              :close-on-content-click="false"
+              v-model="menu"
+              :nudge-right="40"
+              :return-value.sync="endDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="endDate"
+                label="End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
         </template>
 
-        <template>
+        <v-flex xs12 sm6 md2 lg2>
           <v-btn
             block
             color="secondary"
-            dark
-            @click="click">Filter</v-btn>
-        </template>
-
+            @click="click">Filter
+          </v-btn>
+        </v-flex>
         <!-- End filters -->
       </template>
 
       <!-- Start Graphs -->
       <v-flex
         sm3
-        xs8
-        md4
+        xs12
+        md12
         lg12
-      >
-        <highcharts
-          ref="barChart"
-          :options="barOptionsTest"/>
+        >
+        <div class="card vld-parent">
+          <loading :active.sync="isLoading"
+          :can-cancel="false"
+          loader='bars'
+          color="#007bff"
+          :is-full-page="fullPage"></loading>
+          <highcharts
+            ref="barChart"
+            :options="barOptionsTest"/>
+        </div>
       </v-flex>
       <!-- End Graphs -->
       <v-flex
         sm3
         xs8
-        md4
+        md8
         lg12
       >
         <highcharts
@@ -234,20 +291,31 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 import Highcharts from 'highcharts'
+import exportingInit from 'highcharts/modules/exporting'
 import moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import { EventBus } from './../event-bus.js'
 
 export default {
   components: {
+    Loading,
     highcharts: Chart
   },
   data () {
     return {
-      startDate: '',
-      endDate: '',
+      partner:[],
+      isLoading: true,
+      fullPage: false,
+      menu: false,
+      menu1: false,
+      startDate: '2016-01-01',
+      maxDate: new Date().toISOString().substr(0, 10),
+      minDate: '2016-01-01',
+      endDate: new Date().toISOString().substr(0, 10),
       facility: '',
       counties: '',
       subcounties: '',
@@ -257,6 +325,8 @@ export default {
       all_counties: [],
       all_subcounties: [],
       active: true,
+      active_fac: true,
+      active_level: true,
       barOptionsTime: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -357,15 +427,22 @@ export default {
           }
         ]
       },
-      date: [],
-      date: [],
       s: [],
       userz: [],
-      usersl: [],
-      load: false,
+      load: true,
       u: 0,
       b: 0,
-      scount: 0
+      scount: 0,
+      broad: [],
+      fac_filt: [],
+      exp_filt: [],
+      us_filt: [],
+      fac_filtl: [],
+      exp_filtl: [],
+      us_filtl: [],
+      fac_filtf: [],
+      exp_filtf: [],
+      us_filtf: [],
     }
   },
   computed: {
@@ -379,7 +456,11 @@ export default {
       return this.scount
     },
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      e: 'auth/expo',
+      all_users: 'auth/us_all',
+      us_no: 'auth/us_no',
+      next_link: 'auth/next_link'
     })
   },
 
@@ -390,36 +471,61 @@ export default {
         name: 'login'
       })
     }
-    // EventBus.on("btn-clicked", data => {
-    // this.barOptionsTime.series[0].data = data.newData;
-    // });
-    this.getExp()
+    if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length; this.s = this.e}
+    if (this.us_no === 0 ) {
+      this.getAllUsers()
+    } else if (this.all_users.length !== this.us_no) {
+      this.u = this.us_no
+      this.loopG(this.next_link)
+    } else {
+      this.userz = this.all_users
+      this.u = this.us_no
+      this.getTest(this.all_users)
+      this.isLoading = false
+    }
     this.getBroadcasts()
-    this.getAllUsers()
+    // this.getAllUsers()
     this.getFacilities()
     this.getCounties()
-    // this.getSubCounties()
-
-    this.filterCounty()
-    this.filterSubCounty()
   },
   methods: {
-
     click () {
-    //  EventBus.emit("btn-clicked", {
-    //    newData: [100, 12800, 500]
-    //  });
-    },
-    filterSubCounty () {
-      document.getElementById('selectSubCounty').addEventListener('change', function () {
-        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
-      })
-    },
-
-    filterCounty () {
-      document.getElementById('selectCounty').addEventListener('change', function () {
-        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
-      })
+      let exp = [], us =[]
+      var dates = {
+        convert:function(d) {
+          return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year,d.month,d.date) :
+            NaN
+          );
+        },
+        inRange:function(d,start,end) {
+          return (
+            isFinite(d=this.convert(d).valueOf()) &&
+            isFinite(start=this.convert(start).valueOf()) &&
+            isFinite(end=this.convert(end).valueOf()) ?
+            start <= d && d <= end :
+            NaN
+          );
+        }
+      }
+      for (var e in this.s) {
+        var i = new Date(this.s[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i,this.startDate,this.endDate)){
+          exp.push(this.s[e])
+        }
+      }
+      for (var u in this.userz) {
+        var i = new Date(this.userz[u].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i,this.startDate,this.endDate)) {
+          us.push(this.userz[u])
+        }
+      }
+      this.getTest(us)
+      this.getMonth(exp)
     },
     getFacilities () {
       axios.get('facilities')
@@ -439,48 +545,46 @@ export default {
     },
 
     getSubCounties (a) {
-      console.log(a)
-      if (a) {
+      if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
         for (var i in a) {
           axios.get(`subcounties/${a[i].id}`)
             .then((subcounties) => {
-              // console.log(subcounties.data)
               this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
             })
             .catch(error => console.log(error.message))
         }
         this.facilityCounty(a)
+      } else {
+        this.active = true
+        this.facilityCounty(a)
       }
     },
     facilityCounty (a) {
-      let b = [], e = [], us = []
-
-      // console.log(a)
+      this.us_filt =[],this.fac_filt = [], this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
-              b.push(this.all_facilities[f])
+              this.fac_filt.push(this.all_facilities[f])
             }
           }
           for (var ex in this.s) {
             if (this.s[ex].county == a[c].name) {
-              e.push(this.s[ex])
+              this.exp_filt.push(this.s[ex])
               // console.log(this.s[ex])
             }
           }
           for (var u in this.userz) {
             if (this.userz[u].county == a[c].name) {
-              us.push(this.userz[u])
+              this.us_filt.push(this.userz[u])
             }
           }
         }
-        this.getTest(us)
-        this.getMonth(e)
-        this.fac = b.sort()
+        this.getTest(this.us_filt)
+        this.getMonth(this.exp_filt)
+        this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
         this.getTest(this.userz)
@@ -488,41 +592,111 @@ export default {
       }
     },
     facilitySubCounty (a) {
-      let b = [], e = [], us = []
-
-      console.log(a)
+      this.exp_filtl = [], this.fac_filtl = [], this.us_filtl = []
+      this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
           // console.log(a[c].name)
-          for (var f in this.all_facilities) {
-            if (this.all_facilities[f].sub_county == a[c].name) {
-              b.push(this.all_facilities[f])
+          for (var f in this.fac_filt) {
+            if (this.fac_filt[f].sub_county == a[c].name) {
+              this.fac_filtl.push(this.fac_filt[f])
             }
           }
-          for (var ex in this.s) {
-            if (this.s[ex].sub_county == a[c].name) {
-              e.push(this.s[ex])
-              console.log(this.s[ex])
+          for (var ex in this.exp_filt) {
+            if (this.exp_filt[ex].sub_county == a[c].name) {
+              this.exp_filtl.push(this.exp_filt[ex])
             }
           }
-          for (var u in this.userz) {
-            if (this.userz[u].sub_county == a[c].name) {
-              us.push(this.userz[u])
+          for (var u in this.us_filt) {
+            if (this.us_filt[u].sub_county == a[c].name) {
+              this.us_filtl.push(this.us_filt[u])
             }
           }
         }
+        this.getTest(this.us_filtl)
+        this.getMonth(this.exp_filtl)
+        this.fac = this.fac_filtl.sort()
+      } else {
+        this.fac = this.fac_filt
+        this.getTest(this.us_filt)
+        this.getMonth(this.exp_filt)
+        this.active_level = true
+      }
+    },
+
+    facilityLevel (a) {
+      this.fac_filtf = [], this.exp_filtf = [], this.us_filtf = []
+      this.active_fac = false
+      console.log(a)
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var f in this.fac_filtl) {
+            if (this.fac_filtl[f].level == a[c]) {
+              this.fac_filtf.push(this.fac_filtl[f])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.fac_filtl[f].level.slice(6,7)) >= 5) {
+                this.fac_filtf.push(this.fac_filtl[f])
+              }
+            }
+          }
+          for (var ex in this.exp_filtl) {
+            if (this.exp_filtl[ex].facility_level == a[c]) {
+              this.exp_filtf.push(this.exp_filtl[ex])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.exp_filtl[ex].facility_level.slice(6,7)) >= 5) {
+                this.exp_filtf.push(this.exp_filtl[ex])
+              }
+            }
+          }
+          for (var u in this.us_filtl) {
+            if (this.us_filtl[u].facility_level === a[c]) {
+              this.us_filtf.push(this.us_filtl[u])
+            } else if (a[c]== 'Level 5 and Above') {
+              if (Number(this.us_filtl[u].facility_level.slice(6,7)) >= 5) {
+                this.us_filtf.push(this.us_filtl[u])
+              }
+            }
+          }
+          
+        }
+        this.getTest(this.us_filtf)
+        this.getMonth(this.exp_filtf)
+        this.fac = this.fac_filtf.sort()
+      } else {
+        this.fac = this.fac_filtl
+        this.getTest(this.us_filtl)
+        this.active_fac = true
+        this.getMonth(this.exp_filtl)
+      }
+    },
+
+    facilityFilter (a) {
+      let b = [], e = [], us = []
+
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var ex in this.exp_filtf) {
+            if (this.exp_filtf[ex].facility === a[c].name) {
+              e.push(this.exp_filtf[ex])
+            }
+          }
+          for (var u in this.us_filtf) {
+            if (this.us_filtf[u].facility_name === a[c].name) {
+              us.push(this.us_filtf[u])
+            }
+          }
+          
+        }
         this.getTest(us)
         this.getMonth(e)
-        this.fac = b.sort()
       } else {
-        this.fac = this.all_facilities
-        this.getTest(this.userz)
-        this.getMonth(this.s)
+        this.getTest(this.us_filtf)
+        this.getMonth(this.exp_filtf)
       }
     },
 
     getExp () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('exposures/all/')
           .then((exp) => {
             this.scount = exp.data.meta.total
@@ -543,18 +717,31 @@ export default {
       }
     },
     async loopT (l) {
-      var i
+      var i , e =[]
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
+          this.storeExp(this.s)
+          this.getMonth(this.e)
         } else {
           i = 11
         }
       }
+      if (this.user.role_id === 5) {
+        for (var ex in this.s){
+          if (this.s[ex].county ==this.user.hcw.county) {
+            e.push(this.s[ex])
+          }
+        }
+        this.scount = e.length
+        this.s = e
+      } 
+      
       this.getMonth(this.s)
     },
+    
     getMonth (list) {
       // console.log(list)
       var wdata = []
@@ -574,14 +761,24 @@ export default {
       return counter
     },
 
+    ...mapActions({
+      storeExp: 'auth/storeExp',
+      storeAllUsers: 'auth/storeUser',
+      storeUsNo: 'auth/storeUsNo'
+    }),
 
     getAllUsers () {
-      if (this.user.role_id === 1) {
-        axios.get('users')
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
+        axios.get('hcw')
           .then((exp) => {
-            this.u = exp.data.meta.total
+            if (this.user.role_id === 5){
+              this.u = 'loading...'
+            }else{
+              this.u = exp.data.meta.total
+              this.storeUsNo(exp.data)
+            }
             this.userz = exp.data.data
-            console.log(exp.data.data)
+            this.storeAllUsers(this.userz)
             this.link = exp.data.links.next
             this.loopG(this.link)
           })
@@ -592,6 +789,7 @@ export default {
             this.u = exp.data.meta.total
             this.userz = exp.data.data
             this.link = exp.data.links.next
+            this.storeAllUsers(this.userz)
             this.loopG(this.link)
           })
           .catch(error => console.log(error.message))
@@ -599,17 +797,32 @@ export default {
     },
 
     async loopG (l) {
-      var i
+      var i, u =[]
+      this.userz = this.all_users
+      console.log(this.userz)
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
           this.userz = this.userz.concat(response.data.data)
+          this.storeAllUsers(this.userz)
+          this.storeUsNo(response.data)
+          this.getTest(this.userz)
         } else {
           i = 11
         }
       }
+      if (this.user.role_id == 5) {
+        for (var ex in this.userz){
+          if (this.userz[ex].county ==this.user.hcw.county) {
+            u.push(this.userz[ex])
+          }
+        }
+        this.userz = u 
+        this.u = u.length
+      }
       this.getTest(this.userz)
+      this.isLoading = false
     },
 
     getTest (list) {
@@ -619,7 +832,6 @@ export default {
         reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r], list))
       }
       this.barOptionsTest.series[0].data = reg
-      this.load = false
     },
     
     getNumr (name, li) {
@@ -635,33 +847,45 @@ export default {
     },
 
     getBroadcasts () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
         axios.get('broadcasts/web/all')
           .then((users) => {
-            // console.log(users.data.meta.total)
-            this.b = users.data.meta.total
+            if (this.user.role_id == 5) {
+              this.broad = users.data.data
+              this.loopBroad(users.data.links.next)
+            } else {
+              this.b = users.data.meta.total
+            }
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
           .then((users) => {
-            // console.log(users.data.meta.total)
             this.b = users.data.meta.total
           })
           .catch(error => console.log(error.message))
       }
     },
-
-    getNums (name) {
-      var counter = 0
-      for (var xo in this.userz) {
-        if (moment(this.userz[xo].created_at).format().substr(5, 2) === name) {
-          counter++
+    async loopBroad (l){
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.broad = this.broad.concat(response.data.data)
+        } else {
+          i = 11
         }
       }
-      return counter
+      for (var ex in this.broad){
+        if (this.broad[ex].facility) {
+          if (this.broad[ex].facility.county == this.user.hcw.county) { 
+            this.b += 1
+          }
+        }
+      }
     }
-
   }
+  
 }
 </script>

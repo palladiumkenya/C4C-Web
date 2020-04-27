@@ -11,7 +11,6 @@
       <v-flex
         md12
       >
-
         <v-snackbar
           v-model="snackbar"
           :timeout="12000"
@@ -43,8 +42,17 @@
               single-line
               hide-details
             />
+            <v-flex
+              xs12
+              md2>
+              <v-btn
+                :loading="downloadLoading"
+                color="primary"
+                @click="handleDownload">
+                <v-icon left>mdi-download</v-icon>Export Excel
+              </v-btn>
+            </v-flex>
           </v-card-title>
-
           <v-data-table
             :headers="headers"
             :items="all_hcws"
@@ -94,7 +102,7 @@ export default {
       snackbar: false,
       output: '',
       result: '',
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [100, 500, 1000],
       headers: [
         {
           sortable: false,
@@ -126,20 +134,34 @@ export default {
           text: 'Date Of Birth',
           value: 'dob'
         }
-      ]
+      ],
+      downloadLoading: false,
+      filename: `Health care workers ${new Date().toISOString()}`,
+      autoWidth: true,
+      bookType: 'xlsx'
     }
   },
   computed: {
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      all_users: 'auth/us_all',
+      us_no: 'auth/us_no',
+      next_link: 'auth/next_link'
     })
   },
   created () {
-    this.getHCW()
+    if (this.us_no === 0) {
+      this.getHCW()
+    } else if (this.all_users.length !== this.us_no) {
+      this.all_hcws = this.all_users
+      this.loopT(this.next_link)
+    } else {
+      this.all_hcws = this.all_users
+    }
   },
   methods: {
     getHCW () {
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('hcw')
           .then((workers) => {
             console.log(workers.data)
@@ -167,6 +189,7 @@ export default {
     },
     async loopT (l) {
       var i
+      var u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -176,7 +199,42 @@ export default {
           i = 11
         }
       }
+      if (this.user.role_id === 5) {
+        for (var a in this.all_hcws) {
+          if (this.all_hcws[a].county === this.user.county) {
+            u.push(this.all_hcws[a])
+          }
+        }
+        this.all_hcws = u
+      }
+    },
+    handleDownload () {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['First Name', 'Surname', 'Cadre', 'Department', 'Facility', 'DOB']
+        const filterVal = ['first_name', 'surname', 'cadre', 'facility_name', 'department', 'dob']
+        const list = this.all_hcws
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson (filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'cadre') {
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
     }
   }
 }
 </script>
+  

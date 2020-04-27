@@ -25,7 +25,7 @@
           </v-card-text>
 
           <v-form
-            ref="form"
+           ref="form"
             v-model="valid"
             lazy-validation
             @submit="editCovid19">
@@ -85,13 +85,12 @@
                 <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
-                    value="covid19.files"
+                    value="files"
                     id="files"
                     ref="files"
                     type="file"
                     multiple
                     @change="handleFiles()">
-                    {{covid19.files.file_name}}
 
                   <v-list
                       v-for="file in covid19.files"
@@ -117,11 +116,10 @@
                 >
                   <v-btn
                     :disabled="!valid"
-                    :loading="dialog1"
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; dialog1=true"
+                    @click="validateData(); alert=!alert; dialog1=true "
                   >
                     Save
                   </v-btn>
@@ -176,11 +174,9 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      body: '',
       editorConfig: {
         // The configuration of the editor.
       },
-      valid: true,
       titleRules: [
         v => !!v || 'Title is required'
       ],
@@ -189,14 +185,19 @@ export default {
       ],
       dialog1: false,
       result: '',
+      valid: true,
       output: '',
       alert: false,
-      title: '',
+      covid19: {
+              body: '',
+              title: '',
+      },
       file: '',
+      files: [],
       showPreview: false,
       imagePreview: '',
-      files: [],
-      covid19: ''
+      covid19: '',
+      resp: ''
     }
   },
   watch: {
@@ -211,13 +212,14 @@ export default {
     },
 
   methods: {
-
     validateData () {
       this.$refs.form.validate()
     },
 
     handleImageChange (e) {
       this.file = this.$refs.file.files[0]
+
+    console.log(event.target.files[0].name) //here is the original name
 
       let reader = new FileReader()
 
@@ -267,28 +269,31 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('cme_files[' + i + ']', file)
+        allData.append('resource_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.body)
+      allData.append('title', this.covid19.title)
+      allData.append('body', this.covid19.body)
+      allData.append('special_resource_id', this.covid19.id)
 
       axios({
         method: 'POST',
-        url: 'resources/cmes/create',
+        url: 'resources/special/update',
         data: allData,
-        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
+        headers: { 'Content-Type': `multipart/form-data` }
       })
         .then((response) => {
           this.output = response.data
           console.log(response)
           this.alert = true
-          this.$router.push('/cmes')
+
+          this.$router.push('covid19_resources')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
+
         })
     }
 

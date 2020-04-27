@@ -53,12 +53,20 @@
                   md4
                 >
                   <v-combobox
+                    v-if="user.role_id == 1"
                     v-model="role"
                     :rules="[rules.required]"
                     :items="items"
                     label="Role"
                     class="purple-input"
                   />
+                  <v-chip
+                    v-else
+                    class="ma-2"
+                    x-large
+                  >
+                    Role: Health Care Worker
+                  </v-chip>
                 </v-flex>
 
                 <v-flex
@@ -126,6 +134,15 @@
                 <v-flex
                   xs12
                   md6
+                >
+                  <v-text-field
+                    v-model="affl"
+                    label="Enter affliation"
+                    class="green-input"/>
+                </v-flex>
+                <v-flex
+                  xs12
+                  md6
                   text-xs-left
                 >
                   <router-link to="/bulk-signup">
@@ -186,10 +203,13 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   //
   data () {
     return {
+      absolute: true,
+      overlay: false,
       show3: false,
       fname: '',
       surname: '',
@@ -199,6 +219,7 @@ export default {
       cnf_pass: '',
       msisdn: '',
       email: '',
+      affl: '',
       output: '',
       pre_out: '',
       rules: {
@@ -227,8 +248,15 @@ export default {
       snackbar: false
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   mounted () {
-
+    if (this.user.role_id != 1){
+      this.role = 3
+    }
   },
   methods: {
     testFill () {
@@ -244,7 +272,7 @@ export default {
         this.pre_out = 'Mobile must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.role_id == '') {
+      } else if (this.role == '') {
         this.pre_out = 'Role must be filled out'
         this.snack('top', 'center')
         return false
@@ -282,7 +310,8 @@ export default {
           gender: this.gendInp,
           email: this.email,
           password: this.password,
-          password_confirmation: this.cnf_pass }
+          password_confirmation: this.cnf_pass,
+          message: `Welcome ${this.fname} to Caring For the Carer(C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
         )
           .then((response) => {
             this.output = response.data

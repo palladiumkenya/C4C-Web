@@ -1,10 +1,15 @@
 import axios from 'axios'
+let users_data = []
 
 export default{
   namespaced: true,
   state: {
     token: null,
-    user: {}
+    user: {},
+    exp: [],
+    us_all: null,
+    us_no: 0,
+    link_next: null
   },
   getters: {
     authenticated (state) {
@@ -12,6 +17,18 @@ export default{
     },
     user (state) {
       return state.user
+    },
+    expo (state) {
+      return state.exp
+    },
+    us_all (state) {
+      return state.us_all
+    },
+    us_no (state) {
+      return state.us_no
+    },
+    next_link (state) {
+      return state.link_next
     }
   },
   mutations: {
@@ -20,6 +37,18 @@ export default{
     },
     SET_USER (state, data) {
       state.user = data
+    },
+    SET_EXP (state, data) {
+      state.exp = data
+    },
+    SET_US_DATA (state, data) {
+      state.us_all = data
+    },
+    SET_US_NO (state, data) {
+      state.us_no = data
+    },
+    SET_LINK (state, data) {
+      state.link_next = data
     }
   },
   actions: {
@@ -46,7 +75,7 @@ export default{
         //   commit('SET_USER', null)
         //   commit('SET_TOKEN', null)
         // } else
-        if (response.data.data.role_id != 3) {
+        if (response.data.data.role_id !== 3) {
           commit('SET_USER', response.data.data)
         } else if (response.data.data.role_id === 3) {
           console.log('failed 3')
@@ -66,6 +95,16 @@ export default{
         commit('SET_USER', null)
         commit('SET_TOKEN', null)
       })
+    },
+    storeExp ({ commit }, exposures) {
+      commit('SET_EXP', exposures)
+    },
+    storeUser ({ commit }, us) {
+      commit('SET_US_DATA', us)
+    },
+    storeUsNo ({ commit }, us_no) {
+      commit('SET_US_NO', us_no.meta.total)
+      commit('SET_LINK', us_no.links.next)
     }
   }
 }

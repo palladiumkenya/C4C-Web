@@ -24,7 +24,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div> {{ output.error }} {{ result }}</div>
+      <div> {{ output.error }} {{ resp }}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -39,12 +39,12 @@
 
     <v-row
       v-else
+      cols="12"
       dense>
 
       <v-col
-        v-for="result in results"
+        v-for="(result, index) in results"
         :key="result.id"
-        cols="12"
         dark>
 
         <v-card
@@ -76,7 +76,7 @@
             <v-btn
               icon
               color="red"
-              @click=" deleteResource(); $router.push({ name : 'Facility Resources'}); ">
+              @click=" deleteResource(result.id, index); loading=true ">
 
               <v-icon> mdi-delete </v-icon>
             </v-btn>
@@ -102,7 +102,7 @@ export default {
       snackbar: false,
       loading: true,
       output: '',
-      result: ''
+      resp: ''
     }
   },
   created () {
@@ -120,28 +120,30 @@ export default {
         })
         .catch(() => {
           this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
+          this.resp = 'Check your internet connection or retry logging in.'
           this.snackbar = true
 
           this.loading = false
         })
     },
 
-    deleteResource () {
-      axios.delete('')
+    deleteResource(id, index) {
+      axios.delete('resources/protocols/delete/' + id)
         .then((response) => {
           console.log(response.data)
-          this.result = resource.data.data
-          this.loading = true
 
-          this.result = 'Deleted Successfully'
+          this.results.splice(index, 1)
+
+          this.loading = false
+
+          this.resp = 'Deleted Successfully'
 
           this.snackbar = true
         })
-        .catch(() => {
+        .catch((error) => {
           this.error = true
-          this.result = 'Failed, please try again'
-          this.snackbar = true
+          this.resp = 'Failed, please try again'
+          this.snackbar = false
         })
     }
   }

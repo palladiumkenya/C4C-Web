@@ -49,13 +49,23 @@
                     md8>
                     <label>Facility:</label>
                     <v-chip
+                      v-if="user.role_id === 4"
                       class="ma-2"
                       x-large
                     >
-                      {{ user.hcw.facility.name }}
+                      {{ user.hcw.facility_name }}
                     </v-chip>
-                  </v-flex> 
-                  
+                    <v-combobox
+                      v-else-if="user.role_id === 1"
+                      v-model="facility"
+                      :items="all_facilities"
+                      item-text="name"
+                      item-value="id"
+                      clearable
+                      persistent-hint
+                      chips/>
+
+                  </v-flex>
                   <v-flex xs12>
                     <ckeditor
                       id="editorData"
@@ -63,6 +73,14 @@
                       v-model="editorData"
                       rules="bodyRules"/>
                   </v-flex>
+                  <ul> 
+                    <li 
+                      v-for="error in errors"
+                      :key="error"
+                    >
+                      {{ error }}
+                    </li>
+                  </ul>
 
                   <v-flex xs12 >
 
@@ -167,21 +185,19 @@ export default {
       editorData: '',
       editorConfig: { },
       items: [],
+      errors: [],
       alert: false,
       valid: true,
       titleRules: [
         v => !!v || 'Title is required'
       ],
-      bodyRules: [
-        v => !!v || 'Fill in the required text'
-      ],
       dialog1: false,
       result: '',
-      all_facilities: [],
-      facility: 'null',
       facility_id: '',
       title: '',
       file: '',
+      all_facilities: [],
+      facility: '',
       showPreview: false,
       imagePreview: '',
       files: [],
@@ -197,18 +213,28 @@ export default {
       user: 'auth/user'
     })
   },
-  watch: {
-    dialog1 (val) {
-      if (!val) return
-      setTimeout(() => (this.dialog1 = false), 4000)
-    }
-  },
   created () {
     this.getFacilities()
   },
+  watch: {
+    dialog1 (val) {
+      if (!val) return
+      setTimeout(() => (this.dialog1 = false), 8000)
+    }
+  },
+ 
   methods: {
     validateData () {
       this.$refs.form.validate()
+    },
+
+    getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
     },
 
     handleFiles () {
@@ -240,17 +266,12 @@ export default {
       this.files.splice(key, 1)
     },
 
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          console.log(facilities.data)
-           
-          this.all_facilities = facilities.data.data
-        })
-        .catch(error => console.log(error.message))
-    },
-
     postProtocal (e) {
+
+      if (!this.editorData) {
+        this.errors.push("Fill in the text area.");
+      }
+
       e.preventDefault()
 
       let allData = new FormData()
@@ -258,12 +279,16 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('protocal_files[' + i + ']', file)
+        allData.append('protocol_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
       allData.append('title', this.title)
       allData.append('body', this.editorData)
-      allData.append('facility_id', this.user.hcw.facility.id)
+      if (this.user.role_id === 4) {
+        allData.append('facility_id', this.user.hcw.facility.id)
+      } else if (this.user.role_id === 1) {
+        allData.append('facility_id', this.facility.id)
+      }
 
       axios({
         method: 'POST',
@@ -293,6 +318,10 @@ export default {
 span.remove-file{
   color:red;
   cursor: pointer;
+}
+ul {
+  list-style: none;
+  color: red;
 }
 
 </style>
