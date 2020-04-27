@@ -131,40 +131,48 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      all_users: 'auth/us_all',
+      us_no: 'auth/us_no',
+      next_link: 'auth/next_link'
     })
   },
   created () {
-    this.getHCW()
+    if (this.all_users.length !== this.us_no) {
+      this.all_hcws = this.all_users
+      this.loopT(this.next_link)
+    } else {
+      this.all_hcws = this.all_users
+    }
   },
   methods: {
-    getHCW () {
-      if (this.user.role_id === 1 || this.user.role_id === 5) {
-        axios.get('hcw')
-          .then((workers) => {
-            console.log(workers.data)
-            this.all_hcws = workers.data.data
-            this.loopT(workers.data.links.next)
-          })
-          .catch(() => {
-            this.error = true
-            this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true
-          })
-      } else if (this.user.role_id === 4) {
-        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-          .then((workers) => {
-            console.log(workers.data)
-            this.all_hcws = workers.data.data
-            this.loopT(workers.data.links.next)
-          })
-          .catch(() => {
-            this.error = true
-            this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true
-          })
-      }
-    },
+    // getHCW () {
+    //   if (this.user.role_id === 1 || this.user.role_id === 5) {
+    //     axios.get('hcw')
+    //       .then((workers) => {
+    //         console.log(workers.data)
+    //         this.all_hcws = workers.data.data
+    //         this.loopT(workers.data.links.next)
+    //       })
+    //       .catch(() => {
+    //         this.error = true
+    //         this.result = 'Check your internet connection or retry logging in.'
+    //         this.snackbar = true
+    //       })
+    //   } else if (this.user.role_id === 4) {
+    //     axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+    //       .then((workers) => {
+    //         console.log(workers.data)
+    //         this.all_hcws = workers.data.data
+    //         this.loopT(workers.data.links.next)
+    //       })
+    //       .catch(() => {
+    //         this.error = true
+    //         this.result = 'Check your internet connection or retry logging in.'
+    //         this.snackbar = true
+    //       })
+    //   }
+    // },
     async loopT (l) {
       var i, u = []
       for (i = 0; i < 1;) {
