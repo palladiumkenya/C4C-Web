@@ -230,9 +230,16 @@
               lg12
             >
             <template>
+               <div class="card vld-parent">
+          <loading :active.sync="isLoading" 
+          :can-cancel="false" 
+          :on-cancel="onCancel"
+          loader='bars'
+          :is-full-page="fullPage"></loading>
               <highcharts
                 ref="barChart"
                 :options="cadrOptions"/>
+               </div>
             </template>
             </v-flex>
           </v-card-text>
@@ -244,10 +251,17 @@
               lg12
             >
             <template>
-        
+            <div class="card vld-parent">
+          <loading :active.sync="isLoading" 
+          :can-cancel="false" 
+          :on-cancel="onCancel"
+          loader='bars'
+          :is-full-page="fullPage"></loading>
+          
               <highcharts
                 ref="barChart"
                 :options="barOptions"/>
+            </div>
             </template>
             </v-flex>
           </v-card-text>
@@ -258,10 +272,16 @@
               sm12
               lg12
             >
-        
+           <div class="card vld-parent">
+          <loading :active.sync="isLoading" 
+          :can-cancel="false" 
+          :on-cancel="onCancel"
+          loader='bars'
+          :is-full-page="fullPage"></loading>
               <highcharts
                 ref="barChart"
                 :options="gendOptions"/>
+           </div>
             </v-flex>
             
           </v-card-text>
@@ -279,6 +299,8 @@ import axios from 'axios'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import VueHighcharts from 'vue2-highcharts'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import exportingInit from 'highcharts/modules/exporting'
 import Highcharts from 'highcharts'
 import { mapGetters } from 'vuex'
@@ -287,6 +309,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
+    Loading,
     highcharts: Chart,
     VueHighcharts,
     Loading
@@ -408,6 +431,7 @@ export default {
         series: [
           {
             name: 'Numbers',
+            colorByPoint: true,
             data: []
           }
         ]
@@ -445,6 +469,7 @@ export default {
         series: [
           {
             name: 'Numbers',
+            colorByPoint: true,
             data: []
           }
         ]
@@ -492,6 +517,7 @@ export default {
         series: [
           {
             name: 'Numbers',
+            colorByPoint: true,
             data: []
           }
         ]
@@ -533,7 +559,6 @@ export default {
     this.getCounties()
   },
   methods: {
-
     getCounties () {
       axios.get('counties')
         .then((counties) => {
