@@ -471,13 +471,14 @@ export default {
         name: 'login'
       })
     }
-    if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length}
+    if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length; this.s = this.e}
     if (this.us_no === 0 ) {
       this.getAllUsers()
     } else if (this.all_users.length !== this.us_no) {
       this.u = this.us_no
       this.loopG(this.next_link)
     } else {
+      this.userz = this.all_users
       this.u = this.us_no
       this.getTest(this.all_users)
       this.isLoading = false

@@ -204,15 +204,13 @@
           
 
             <v-flex
-              sm3
               xs12
               md12
               lg12
               >
               <div class="card vld-parent">
                 <loading :active.sync="isLoading" 
-                :can-cancel="false" 
-                :on-cancel="onCancel"
+                :can-cancel="false"
                 color="#007bff"
                 :is-full-page="fullPage"></loading>
             
@@ -232,8 +230,7 @@
             <template>
                <div class="card vld-parent">
           <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
+          :can-cancel="false"
           loader='bars'
           :is-full-page="fullPage"></loading>
               <highcharts
@@ -250,19 +247,15 @@
               sm12
               lg12
             >
-            <template>
             <div class="card vld-parent">
-          <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
-          loader='bars'
-          :is-full-page="fullPage"></loading>
-          
-              <highcharts
-                ref="barChart"
-                :options="barOptions"/>
+              <loading :active.sync="isLoading" 
+              :can-cancel="false"
+              loader='bars'
+              :is-full-page="fullPage"></loading>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptions"/>
             </div>
-            </template>
             </v-flex>
           </v-card-text>
 
@@ -272,16 +265,16 @@
               sm12
               lg12
             >
-           <div class="card vld-parent">
-          <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
-          loader='bars'
-          :is-full-page="fullPage"></loading>
-              <highcharts
-                ref="barChart"
-                :options="gendOptions"/>
-           </div>
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                loader='bars'
+                :is-full-page="fullPage"></loading>
+                  <highcharts
+                    ref="barChart"
+                    :options="gendOptions"/>
+            </div>
             </v-flex>
             
           </v-card-text>
@@ -528,7 +521,6 @@ export default {
       reg_filt: [],
       reg_filtl: [],
       reg_filtf: [],
-
     }
   },
   computed: {

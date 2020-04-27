@@ -210,20 +210,18 @@
         <v-container fluid>
           <v-card-text v-if="n==1">
             <!-- Start Graphs -->
-         
             <highcharts
-                  ref="barChart"
-                  :options="barOptionsTime"/>
+              ref="barChart"
+              :options="barOptionsTime"/>
 
           </v-card-text>
 
           <!-- Start Exposure Type -->
-
           <v-card-text v-if="n==2">
 
             <highcharts
-                  ref="barChart"
-                  :options="barOptions"/>
+              ref="barChart"
+              :options="barOptions"/>
 
           </v-card-text>
 
@@ -246,9 +244,9 @@
           <!-- Start Exposure Cadre -->
 
           <v-card-text v-if="n==5">
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsCadre"/>
+            <highcharts
+              ref="barChart"
+              :options="barOptionsCadre"/>
 
           </v-card-text>
 
@@ -362,7 +360,7 @@ export default {
        active_level: true,
        menu: false,
       menu1: false,
-      startDate: '2016-01-01',
+      startDate: '2019-04-01',
       maxDate: new Date().toISOString().substr(0, 10),
       minDate: '2016-01-01',
       endDate: new Date().toISOString().substr(0, 10),
@@ -371,59 +369,6 @@ export default {
       value: true,
       value1: true,
       valuec: true,
-
-      barOptionsSummary: {
-        chart: {
-          type: 'column',
-          options3d: {
-            enabled: true,
-            alpha: 45
-          }
-        },
-        title: {
-          text: 'Total Health Care Worker Exposure Trends'
-        },
-        subtitle: {
-          // text: 'by Cadre'
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            title: {
-              text: 'Month - Year',
-            }
-
-          },
-          labels: {
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          },
-          series: [
-
-            {
-              // type: 'column',
-              colorByPoint: true,
-              name: 'Exposures',
-              data: []
-            }
-
-          ]
-        }
-      },
-
       gendOptions: {
         xAxis: {
           categories: ['MALE', 'FEMALE', 'UNDEFINED'],
@@ -624,8 +569,6 @@ export default {
           }
         ]
       },
-
-      // ends
 
       barOptionsTime: {
         xAxis: {
@@ -876,6 +819,7 @@ export default {
     this.getExp()
     this.getCad()
     this.getCounties()
+    this.dateRange('2020-01-20', this.endDate)
     // this.getExpo()
   },
   methods: {
@@ -1054,30 +998,6 @@ export default {
       }
       this.getAgeData(expo)
     },
-    
-    getSum () {
-      var counter = 0
-      for (var vac in this.seriesnamesum) {
-        this.seriesdatasum = []
-        this.seriesdatasum.push(this.seriesnamesum[vac])
-        this.seriesdatasum.push(this.getNumsum(this.seriesnamesum[vac]))
-        counter += this.getNumsum(this.seriesnamesum[vac])
-        this.date.push(this.seriesdatasum)
-      }
-      this.barOptionsSummary.series[0].data = this.date
-    },
-    //  getTypes () {
-    //   var counter = 0
-    //   for (var va in this.seriesnames) {
-    ///   this.seriesdatas = []
-    //  this.seriesdatas.push(this.seriesnames[va])
-    //  this.seriesdatas.push(this.getNums(this.seriesnames[va]))
-    // counter += this.getNums(this.seriesnames[va])
-    //  this.type.push(this.seriesdatas)
-    // }
-    // this.barOptions.series[0].data = this.type
-    //  },
-
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('exposures/all/')
@@ -1088,7 +1008,7 @@ export default {
               // this.c = exp.data.cadre.meta.total // total cadre
               this.loopT(this.link)
             } else {
-              this.getAgeData()
+              this.getAgeData(this.s)
             }
           })
           .catch(error => console.log(error.message))
@@ -1101,7 +1021,7 @@ export default {
               // this.c = exp.data.cadre.meta.total // total cadre
               this.loopT(this.link)
             } else {
-              this.getAgeData()
+              this.getAgeData(this.s)
             }
           })
           .catch(error => console.log(error.message))
@@ -1112,8 +1032,6 @@ export default {
       axios.get('cadres')
         .then((cad) => {
           this.cadres = cad.data.data
-          // this.link = cad.data.links.next
-          // this.loopT(this.link)
           console.log(cad.data.data)
         })
         .catch(error => console.log(error.message))
@@ -1139,7 +1057,6 @@ export default {
         this.s = u
       }
       this.getAgeData(this.s)
-     
     },
 
     getAgeData (list) {
@@ -1206,6 +1123,7 @@ export default {
 
       this.load = true
       var data = []
+      this.barOptionsTime.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var i in this.barOptionsTime.xAxis.categories) {
         data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i],list))
       }
@@ -1298,8 +1216,13 @@ export default {
     },
     getNumt (name, expo) {
       var counter = 0
+      var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       for (var xt in expo) {
-        if (expo[xt].exposure_date.slice(0, 3) === name) {
+        var m = c.indexOf(expo[xt].exposure_date.slice(0,3))+1
+        if (m<10) {m='0'+m}
+        console.log(m)
+        var d = [expo[xt].exposure_date.slice(8,13).trim(),m].join('-')
+        if (d === name) {
           counter++
         }
       }
@@ -1324,6 +1247,24 @@ export default {
         }
       }
       return counter
+    },
+    dateRange(startDate, endDate) {
+      var start      = startDate.split('-');
+      var end        = endDate.split('-');
+      var startYear  = parseInt(start[0]);
+      var endYear    = parseInt(end[0]);
+      var dates      = [];
+
+      for(var i = startYear; i <= endYear; i++) {
+        var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
+        var startMon = i === startYear ? parseInt(start[1])-1 : 0;
+        for(var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j+1) {
+          var month = j+1;
+          var displayMonth = month < 10 ? '0'+month : month;
+          dates.push([i, displayMonth].join('-'));
+        }
+      }
+      return dates
     }
   }
 }
