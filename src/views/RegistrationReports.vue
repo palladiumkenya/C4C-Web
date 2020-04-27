@@ -296,8 +296,6 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import VueHighcharts from 'vue2-highcharts'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -309,7 +307,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    Loading,
     highcharts: Chart,
     VueHighcharts,
     Loading
