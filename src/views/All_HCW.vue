@@ -11,7 +11,6 @@
       <v-flex
         md12
       >
-
         <v-snackbar
           v-model="snackbar"
           :timeout="12000"
@@ -43,8 +42,17 @@
               single-line
               hide-details
             />
+            <v-flex
+              xs12
+              md2>
+              <v-btn
+                :loading="downloadLoading"
+                color="primary"
+                @click="handleDownload">
+                <v-icon left>mdi-download</v-icon>Export Excel
+              </v-btn>
+            </v-flex>
           </v-card-title>
-
           <v-data-table
             :headers="headers"
             :items="all_hcws"
@@ -126,7 +134,11 @@ export default {
           text: 'Date Of Birth',
           value: 'dob'
         }
-      ]
+      ],
+      downloadLoading: false,
+      filename: `Health care workers ${new Date().toISOString()}`,
+      autoWidth: true,
+      bookType: 'xlsx'
     }
   },
   computed: {
@@ -138,7 +150,9 @@ export default {
     })
   },
   created () {
-    if (this.all_users.length !== this.us_no) {
+    if (this.us_no === 0) {
+      this.getHCW()
+    } else if (this.all_users.length !== this.us_no) {
       this.all_hcws = this.all_users
       this.loopT(this.next_link)
     } else {
@@ -146,35 +160,36 @@ export default {
     }
   },
   methods: {
-    // getHCW () {
-    //   if (this.user.role_id === 1 || this.user.role_id === 5) {
-    //     axios.get('hcw')
-    //       .then((workers) => {
-    //         console.log(workers.data)
-    //         this.all_hcws = workers.data.data
-    //         this.loopT(workers.data.links.next)
-    //       })
-    //       .catch(() => {
-    //         this.error = true
-    //         this.result = 'Check your internet connection or retry logging in.'
-    //         this.snackbar = true
-    //       })
-    //   } else if (this.user.role_id === 4) {
-    //     axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-    //       .then((workers) => {
-    //         console.log(workers.data)
-    //         this.all_hcws = workers.data.data
-    //         this.loopT(workers.data.links.next)
-    //       })
-    //       .catch(() => {
-    //         this.error = true
-    //         this.result = 'Check your internet connection or retry logging in.'
-    //         this.snackbar = true
-    //       })
-    //   }
-    // },
+    getHCW () {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
+        axios.get('hcw')
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            this.loopT(workers.data.links.next)
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            this.loopT(workers.data.links.next)
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      }
+    },
     async loopT (l) {
-      var i, u = []
+      var i
+      var u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -192,6 +207,32 @@ export default {
         }
         this.all_hcws = u
       }
+    },
+    handleDownload () {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['First Name', 'Surname', 'Cadre', 'Department', 'Facility', 'DOB']
+        const filterVal = ['first_name', 'surname', 'cadre', 'facility_name', 'department', 'dob']
+        const list = this.all_hcws
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson (filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'cadre') {
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
     }
   }
 }
