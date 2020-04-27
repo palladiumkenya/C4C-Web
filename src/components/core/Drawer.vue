@@ -51,6 +51,8 @@
               v-text="link.text"
             />
           </v-list-tile>
+          <div v-else-if="(link.text == 'Manage Facility' || link.text == 'Resource Center') && user.role_id == 5">
+          </div>
           <v-list-tile
             v-else-if="!link.subLinks"
             :to="link.to"
@@ -86,7 +88,7 @@
               v-for="sublink in link.subLinks"
               :key="sublink.text">
               <template
-                v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources')">
+                v-if="(user.role_id === 4 || user.role_id === 5) && (sublink.text != 'Facility Admins' && sublink.text != 'Public Resources' && sublink.text != 'View Users')">
                 <!-- {{drawerList(sublink.text)}} -->
                 <v-list-tile
                   :to="sublink.to"
@@ -101,7 +103,7 @@
                 </v-list-tile>
               </template>
               <template
-                v-else-if="user.role_id != 4">
+                v-else-if="user.role_id != 4 && user.role_id != 5">
                 <v-list-tile
                   :to="sublink.to"
                   :active-class="color"
@@ -223,11 +225,11 @@ export default {
             //   icon: 'mdi-gamepad',
             //   text: 'Devices'
             // },
-            {
-              to: '/departments',
-              icon: 'mdi-file-tree',
-              text: 'Departments'
-            },
+            // {
+            //   to: '/departments',
+            //   icon: 'mdi-file-tree',
+            //   text: 'Departments'
+            // },
             {
               to: '/checkin',
               icon: 'mdi-crosshairs-gps',

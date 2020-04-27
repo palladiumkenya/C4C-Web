@@ -53,11 +53,11 @@
                     id="editorData"
                     :editor="editor"
                     v-model="editorData"
-                    :rules="bodyRules"
                     :config="editorConfig"
-                    placeholder="Write here"
                     required/>
                 </v-flex>
+                <ul> <li v-for="error in errors">{{ error }}</li> </ul>
+
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
@@ -163,15 +163,14 @@ export default {
         // The configuration of the editor.
       },
       valid: true,
+      errors: [],
       titleRules: [
         v => !!v || 'Title is required'
-      ],
-      bodyRules: [
-        v => !!v || 'Fill in the required text'
       ],
       dialog1: false,
       result: '',
       output: '',
+      resp: '',
       alert: false,
       title: '',
       file: '',
@@ -183,7 +182,7 @@ export default {
   watch: {
     dialog1 (val) {
       if (!val) return
-      setTimeout(() => (this.dialog1 = false), 4000)
+      setTimeout(() => (this.dialog1 = false), 5000)
     }
   },
 
@@ -224,6 +223,10 @@ export default {
     },
 
     postCME (e) {
+      if (!this.editorData) {
+        this.errors.push("Fill in the text area .");
+      }
+
       e.preventDefault()
 
       let allData = new FormData()
@@ -247,11 +250,14 @@ export default {
         .then((response) => {
           this.output = response.data
           console.log(response)
+
           this.alert = true
-          this.$router.push('/cmes')
+
+          //this.$router.push('/cmes')
         })
         .catch(error => {
           this.output = error
+
           console.log(error)
           this.alert = true
         })
@@ -273,6 +279,11 @@ export default {
 span.remove-file{
   color:red;
   cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  color: red;
 }
 
 </style>

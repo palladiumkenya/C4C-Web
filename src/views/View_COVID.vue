@@ -45,7 +45,7 @@ export default {
   methods: {
     getResource () {
       var id = this.$route.params.id
-      axios.get('resources/cmes/' + id)
+      axios.get('resources/special/' + id)
         .then((resource) => {
           console.log(resource.data)
           this.result = resource.data.data

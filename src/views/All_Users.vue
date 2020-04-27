@@ -59,11 +59,13 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.first_name }}</td>
-                <td>{{ props.item.surname }}</td>
+                <td>{{ props.item.id }}</td>
+                <td>{{ props.item.county }}</td>
+                <td>{{ props.item.sub_county }}</td>
                 <td>{{ props.item.role.name }}</td>
-                <td>{{ props.item.msisdn }}</td>
+                <td>{{ props.item.cadre }}</td>
                 <td>{{ props.item.gender }}</td>
+
               </tr>
             </template>
             <v-alert
@@ -89,7 +91,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [100, 500, 1000],
       output: '',
       search: '',
       result: '',
@@ -97,24 +99,30 @@ export default {
       all_users: [],
       headers: [
         {
-          sortable: false,
-          text: 'First Name',
-          value: 'first_name'
+          sortable: true,
+          text: 'ID',
+          value: 'id'
         },
         {
           sortable: false,
-          text: 'Surname',
-          value: 'surname'
+          text: 'County',
+          value: 'county'
         },
+          {
+            sortable: false,
+            text: 'Sub County',
+            value: 'sub_county'
+          },
         {
           sortable: true,
           text: 'Role',
           value: 'role_name'
         },
+      
         {
           sortable: false,
-          text: 'Phone Number',
-          value: 'msisdn'
+          text: 'Cadre',
+          value: 'cadre'
         },
         {
           sortable: false,
