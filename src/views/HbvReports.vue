@@ -187,14 +187,22 @@
         <!-- End filters -->
       </template>
       <template>
-        <v-card>
-          <h3/>
-          <highcharts
-            ref="columnChart"
-            :options="barOptionsHBV"/>
-
-        </v-card>
-
+        <v-flex
+          xs12
+          md12
+          >
+          <div class="card vld-parent">
+            <loading :active.sync="isLoading" 
+            :can-cancel="false" 
+            :on-cancel="onCancel"
+            loader='dots'
+            :is-full-page="fullPage"></loading>
+            <h3/>
+            <highcharts
+              ref="columnChart"
+              :options="barOptionsHBV"/>
+          </div>
+        </v-flex>
       </template>
 
     </v-layout>
@@ -204,6 +212,8 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import Highcharts from 'highcharts'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -212,10 +222,13 @@ import { EventBus } from './../event-bus.js'
 
 export default {
   components: {
+    Loading,
     highcharts: Chart
   },
   data () {
     return {
+      isLoading: true,
+      fullPage: false,
       menu: false,
       menu1: false,
       startDate: '2016-01-01',
@@ -509,16 +522,18 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
+          this.getHBV(this.s)
         } else {
           i = 11
         }
       }
       this.getHBV(this.s)
+      this.isLoading =false
     },
     getHBV (list) {
       this.seriesdata = []
       for (var vac in this.seriesname) {
-        this.seriesdata.push(this.getNum(this.seriesname[vac], list))
+        this.seriesdata.push(this.getNum(vac, list))
       }
       this.barOptionsHBV.series[0].data = this.seriesdata
     },
