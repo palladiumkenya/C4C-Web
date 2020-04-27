@@ -126,7 +126,7 @@
             <template>
               <v-combobox
                 v-if="user.role_id != 4"
-                v-model="facility"
+                v-model="partner"
                 :items="fac"
                 item-text="partner"
                 item-value="id"
