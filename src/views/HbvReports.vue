@@ -87,17 +87,32 @@ export default {
   },
   methods: {
     getImmunizations () {
-      axios.get('immunizations/all/disease/1')
-        .then((exp) => {
-          this.s = exp.data.data
-          if (exp.data.links.next != null) {
-            this.link = exp.data.links.next
-            this.loopT(this.link)
-          } else {
-            this.getHBV()
-          }
-        })
-        .catch(error => console.log(error.message))
+      if (this.user.role_id === 1) {
+        axios.get('immunizations/all/disease/1')
+          .then((exp) => {
+            this.s = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              this.loopT(this.link)
+            } else {
+              this.getHBV()
+            }
+          })
+          .catch(error => console.log(error.message))
+      }
+      if (this.user.role_id === 4) {
+        axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/1`)
+          .then((exp) => {
+            this.s = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              this.loopT(this.link)
+            } else {
+              this.getHBV()
+            }
+          })
+          .catch(error => console.log(error.message))
+      }
     },
     getHBV () {
       var counter = 0

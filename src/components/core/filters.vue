@@ -13,15 +13,16 @@
             xs12
           >
             <v-combobox
-              v-model="county"
+              v-model="selectedcounty"
               :items="all_counties"
               :search-input.sync="search"
               item-text="county"
-              item-value="id"
+              item-value="sub_county"
               multiple
               chips
               label="Select County"
               required
+              @change="onSelect"
             />
           </v-flex>
 
@@ -42,9 +43,9 @@
           >
             <v-combobox
               v-model="facility"
-              :items="all_facilities"
+              :items="all_counties"
               :search-input.sync="search"
-              item-text="sub_county"
+              item-text="selectedcounty"
               item-value="id"
               multiple
               chips
@@ -141,7 +142,16 @@
           md6
           lg10
         >
-           <core-DatePicker/>
+          <template>
+
+            <input
+              v-model="startDate"
+              type="date"
+              label="From">
+            <input
+              v-model="endDate"
+              type="date">
+          </template>
         </v-flex>
 
       </template>
@@ -152,19 +162,30 @@
 </template>
 
 <script>
-  import axios from 'axios'
-   import format from 'date-fns/format'
-  import {mapGetters, mapState} from 'vuex'
+import axios from 'axios'
+import format from 'date-fns/format'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
-
 
   data () {
     return {
       facility: '',
+      selectedcounty: '',
       county: '',
       all_counties: [],
       all_facilities: []
+    }
+  },
+
+  computed: {
+    getCounties () {
+      return this.all_facilities.reduce((seed, current) => {
+        return Object.assign(seed, {
+          [current.county]: current
+        })
+      })
+      console.log(current.county)
     }
   },
 
@@ -186,15 +207,20 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-    getCounty (name) {
-      var count = 0
-      for (var c in this.facilities) {
-        if (this.facilities(c).county === name) {
-          count++
-        }
+
+    onSelect (e) {
+      if (e.length == 0) {
+        this.all_facilities.forEach((item) => item.disabled = false)
+      } else {
+        let chosen = this.all_facilities.filter((item) => item.id == e[0])
+        this.all_facilities.forEach((item) => {
+          if (item.sub_county != chosen[0].sub_county) {
+            item.disabled = true
+          }
+        })
       }
-      return counter
     }
+
   }
 }
 </script>

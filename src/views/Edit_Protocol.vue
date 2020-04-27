@@ -1,4 +1,5 @@
 <template>
+  <div id="ScrollableDiv">
     <v-container
       fill-height
       fluid
@@ -14,20 +15,19 @@
           <v-card>
 
             <v-card-text>
+              <div/>
               <p class="display-1 text--primary">
 
-                Add A New Facility Resource
+                Edit Facility Resource
               </p>
-              <div class="text--primary">
-                Kindly fill all the required fields
-              </div>
+
             </v-card-text>
 
             <v-form
               ref="form"
               v-model="valid"
               lazy-validation
-              @submit="postProtocal">
+              @submit="editProtocal">
               <v-container py-0>
                 <v-layout wrap>
 
@@ -38,13 +38,13 @@
                     <v-text-field
                       id="title"
                       :rules="titleRules"
-                      v-model="title"
+                      v-model="protocol.title"
                       required
                       label="Title"
                       class="purple-input"/>
                   </v-flex>
 
-                   <v-flex
+                  <!-- <v-flex
                     xs12
                     md8>
                     <label>Facility:</label>
@@ -54,13 +54,13 @@
                     >
                       {{ user.hcw.facility.name }}
                     </v-chip>
-                  </v-flex> 
-                  
+                  </v-flex> -->
+
                   <v-flex xs12>
                     <ckeditor
                       id="editorData"
                       :editor="editor"
-                      v-model="editorData"
+                      v-model="protocol.body"
                       rules="bodyRules"/>
                   </v-flex>
 
@@ -75,6 +75,14 @@
                       type="file"
                       @change="handleImageChange()">
 
+                    <v-img
+                      :src="protocol.file"
+                      class="white--text align-end"
+                      max-height="400px"
+                    />
+
+                  </v-flex>
+                  <v-flex xs12>
                     <img
                       v-show="showPreview"
                       :src="imagePreview">
@@ -89,6 +97,15 @@
                       type="file"
                       multiple
                       @change="handleFiles()">
+
+                    <v-list
+                      v-for="file in protocol.files"
+                      :key="file"
+                      class="file-listing"> {{ file.file_name }}
+                      <span
+                        class="remove-file"
+                        @click="removeFile(key)"> Remove </span>
+                    </v-list>
 
                     <v-card
                       v-for="(file, key) in files"
@@ -111,7 +128,7 @@
                       type="submit"
                       @click="validateData(); alert=!alert; dialog1=true"
                     >
-                      Submit
+                      Save
                     </v-btn>
 
                     <v-dialog
@@ -151,7 +168,7 @@
       </v-layout>
 
     </v-container>
-  
+  </div>
 </template>
 
 <script>
@@ -164,7 +181,7 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      editorData: '',
+      body: '',
       editorConfig: { },
       items: [],
       alert: false,
@@ -186,6 +203,7 @@ export default {
       imagePreview: '',
       files: [],
       output: '',
+      protocol: [],
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -205,6 +223,7 @@ export default {
   },
   created () {
     this.getFacilities()
+    this.getProtocol()
   },
   methods: {
     validateData () {
@@ -244,13 +263,24 @@ export default {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
-           
           this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
     },
 
-    postProtocal (e) {
+    getProtocol () {
+      var id = this.$route.params.id
+      axios.get('resources/protocols/details/' + id)
+        .then((response) => {
+          this.protocol = response.data.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    editProtocal (e) {
       e.preventDefault()
 
       let allData = new FormData()
@@ -262,7 +292,7 @@ export default {
       }
       allData.append('image_file', this.file)
       allData.append('title', this.title)
-      allData.append('body', this.editorData)
+      allData.append('body', this.body)
       allData.append('facility_id', this.user.hcw.facility.id)
 
       axios({
@@ -270,11 +300,10 @@ export default {
         url: 'resources/protocols/create',
         data: allData,
         headers: {
-          'content-type': `multipart/form-data` }
+          'content-type': 'multipart/form-data; boundary=${form._boundary' }
       })
         .then((response) => {
           console.log(response)
-         
           this.output = response.data
           this.alert = true
           this.$router.push('/protocals')

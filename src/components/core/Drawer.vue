@@ -33,7 +33,6 @@
           </v-list-tile-title>
         </v-list-tile>
         <v-divider/>
-        {{user.role_id}}
         <div
           v-for="(link, i) in links"
           :key="i"
@@ -86,22 +85,9 @@
             <div
               v-for="sublink in link.subLinks"
               :key="sublink.text">
-            <template
-              v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'CME')">
-              <v-list-tile
-                :to="sublink.to"
-                :active-class="color"
-                class="v-list-item"
-                avatar
-              >
-                <v-list-tile-action>
-                <v-icon>{{ sublink.icon }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-title v-text="sublink.text" />
-              </v-list-tile>
-              </template>
               <template
-                v-else>
+                v-if="user.role_id === 4 && (sublink.text != 'Facility Admins' && sublink.text != 'COVID 19 Resources' && sublink.text != 'Public Resources')">
+                <!-- {{drawerList(sublink.text)}} -->
                 <v-list-tile
                   :to="sublink.to"
                   :active-class="color"
@@ -109,10 +95,24 @@
                   avatar
                 >
                   <v-list-tile-action>
-                  <v-icon>{{ sublink.icon }}</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-title v-text="sublink.text" />
-              </v-list-tile>
+                    <v-icon>{{ sublink.icon }}</v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-title v-text="sublink.text" />
+                </v-list-tile>
+              </template>
+              <template
+                v-else-if="user.role_id != 4">
+                <v-list-tile
+                  :to="sublink.to"
+                  :active-class="color"
+                  class="v-list-item"
+                  avatar
+                >
+                  <v-list-tile-action>
+                    <v-icon>{{ sublink.icon }}</v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-title v-text="sublink.text" />
+                </v-list-tile>
               </template>
             </div>
           </v-list-group>
@@ -254,11 +254,11 @@ export default {
               icon: 'mdi-archive',
               text: 'Facility Resources'
             },
-            {
-              to: '/covid19_resources',
-              icon: 'mdi-alert-decagram',
-              text: 'COVID 19 Resources'
-            }
+             {
+               to: '/covid19_resources',
+               icon: 'mdi-alert-decagram',
+               text: 'COVID 19 Resources'
+             }
           ]
         },
         {
@@ -298,13 +298,14 @@ export default {
     ...mapActions({
       logoutAction: 'auth/signout'
     }),
-    drawerList (){
-      if (this.user.role_id === 4){
-        this.links[6].subLinks.splice(2, 1)
-        this.links[7].subLinks.splice(2, 1)
-        this.links[7].subLinks.splice(0, 1)
-        console.log(this.links[7].subLinks)
-      }
+    drawerList (ii) {
+      console.log(ii)
+      // if (this.user.role_id === 4){
+      //   this.links[6].subLinks.splice(2, 1)
+      //   this.links[7].subLinks.splice(2, 1)
+      //   this.links[7].subLinks.splice(0, 1)
+      //   console.log(this.links[7].subLinks)
+      // }
     },
     logout () {
       this.logoutAction().then(() => {

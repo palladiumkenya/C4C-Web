@@ -13,14 +13,12 @@
         md4
         lg4
       >
-
         <template>
           <v-card
             class="mx-auto"
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1" >mdi-account-group</v-icon>
               <h2 align="center">{{ usersCount }}</h2>
@@ -28,23 +26,19 @@
             </v-card-text>
           </v-card>
         </template>
-
       </v-flex>
-
       <v-flex
         sm3
         xs8
         md4
         lg4
       >
-
         <template>
           <v-card
             class="mx-auto"
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1">mdi-file-chart</v-icon>
               <h2 align="center">{{ exposuresCount }}</h2>
@@ -52,9 +46,7 @@
             </v-card-text>
           </v-card>
         </template>
-
       </v-flex>
-
       <v-flex
         sm3
         xs8
@@ -68,7 +60,6 @@
             color="#4B9FD2"
             dark
           >
-
             <v-card-text>
               <v-icon class="mr-1">mdi-message</v-icon>
               <h2 align="center">{{ broadcastsCount }}</h2>
@@ -78,36 +69,142 @@
         </template>
 
       </v-flex>
-
       <!-- End Cards -->
 
       <template>
-
         <!-- Start filters -->
 
-               <core-filters/>
-                <v-flex
-          md6
-          lg12
-        >
-          <v-btn
-            :loading="loading2"
-            :disabled="loading2"
-            block
-            color="success"
-            @click="loader = 'loading2'"
+        <v-layout >
+          <v-flex
+            xs12
+            md6
+            lg3
           >
-            Filter
-            <template v-slot:loader/>
-          </v-btn>
-        </v-flex>
-            <!-- End filters -->
+            <template>
+              <v-combobox
+                v-model="counties"
+                :items="all_counties"
+                item-text="name"
+                item-value="id"
+                label="Select County"
+                v-on:change="getSubCounties"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+            </template>
+            <!-- {{ getSubCounties(counties) }} -->
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+            <template>
+              <v-combobox
+                v-model="subcounties"
+                :items="all_subcounties"
+                item-text="name"
+                item-value="id"
+                label="Select Sub-County"
+                :disabled="active"
+                v-on:change="facilitySubCounty"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+
+            <template>
+
+              <v-combobox
+                v-model="facility"
+                :items="fac"
+                item-text="partner"
+                item-value="id"
+                label="Select Partner"
+                multiple
+                clerable
+                disabled
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+
+            <template>
+
+              <v-combobox
+                :items="all_facilities_level"
+                label="Select Facility Level"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+            <template>
+              <v-combobox
+                v-model="facility"
+                :items="fac"
+                item-text="name"
+                item-value="id"
+                label="Select Facility"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+        </v-layout>
+
+        <template>
+
+          <input
+            v-model="startDate"
+            type="date">
+          <input
+            v-model="endDate"
+            type="date">
+        </template>
+
+        <template>
+          <v-btn
+            block
+            color="secondary"
+            dark
+            @click="click">Filter</v-btn>
+        </template>
+
+        <!-- End filters -->
       </template>
 
-
       <!-- Start Graphs -->
-
-  <v-flex
+      <v-flex
+        sm3
+        xs8
         md4
         lg12
       >
@@ -115,9 +212,10 @@
           ref="barChart"
           :options="barOptionsTest"/>
       </v-flex>
-
       <!-- End Graphs -->
       <v-flex
+        sm3
+        xs8
         md4
         lg12
       >
@@ -127,9 +225,7 @@
       </v-flex>
       <!-- Start Maps -->
 
-
       <!-- Start Tables -->
-
 
     </v-layout>
   </v-container>
@@ -141,13 +237,26 @@ import axios from 'axios'
 import Highcharts from 'highcharts'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
+
+import { EventBus } from './../event-bus.js'
+
 export default {
   components: {
     highcharts: Chart
   },
   data () {
     return {
-
+      startDate: '',
+      endDate: '',
+      facility: '',
+      counties: '',
+      subcounties: '',
+      fac: [],
+      all_facilities: [],
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_counties: [],
+      all_subcounties: [],
+      active: true,
       barOptionsTime: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -182,14 +291,11 @@ export default {
             }
           }
         },
-
         chart: {
           type: 'column'
         },
-
         title: {
           text: 'Monthly Exposure Rate'
-
         },
         series: [
           {
@@ -198,12 +304,10 @@ export default {
             colorByPoint: true,
             name: 'No of Reported Exposures',
             data: []
-          },
+          }
 
         ]
-        
       },
-
       barOptionsTest: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -238,52 +342,39 @@ export default {
             }
           }
         },
-
         chart: {
           type: 'column'
         },
-
         title: {
           text: 'Monthly Registration Trends '
         },
         series: [
-          
-           {
+          {
             type: 'column',
             colorByPoint: true,
             name: 'Registration in Numbers',
             data: []
           }
         ]
-        
       },
-      
-
       date: [],
-
       date: [],
       s: [],
       userz: [],
       usersl: [],
+      load: false,
       u: 0,
       b: 0,
       scount: 0
     }
-    
   },
   computed: {
     broadcastsCount () {
       return this.b
     },
-
-    // all facility exposures # computed
-
     usersCount () {
       return this.u
     },
-
-    // hcws with exposures # computed
-
     exposuresCount () {
       return this.scount
     },
@@ -299,72 +390,157 @@ export default {
         name: 'login'
       })
     }
+    // EventBus.on("btn-clicked", data => {
+    // this.barOptionsTime.series[0].data = data.newData;
+    // });
     this.getExp()
-    this.getUsers()
     this.getBroadcasts()
     this.getAllUsers()
+    this.getFacilities()
+    this.getCounties()
+    // this.getSubCounties()
 
+    this.filterCounty()
+    this.filterSubCounty()
   },
   methods: {
 
+    click () {
+    //  EventBus.emit("btn-clicked", {
+    //    newData: [100, 12800, 500]
+    //  });
+    },
+    filterSubCounty () {
+      document.getElementById('selectSubCounty').addEventListener('change', function () {
+        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
+      })
+    },
+
+    filterCounty () {
+      document.getElementById('selectCounty').addEventListener('change', function () {
+        barOptionsTime.xAxis[0].setExtremes(Number(this.value), barOptionsTime.xAxis[0].max)
+      })
+    },
+    getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+    getCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          console.log(counties.data.data)
+          this.all_counties = counties.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getSubCounties (a) {
+      console.log(a)
+      if (a) {
+        this.active = false
+        this.all_subcounties = []
+        for (var i in a) {
+          axios.get(`subcounties/${a[i].id}`)
+            .then((subcounties) => {
+              // console.log(subcounties.data)
+              this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+            })
+            .catch(error => console.log(error.message))
+        }
+        this.facilityCounty(a)
+      }
+    },
+    facilityCounty (a) {
+      let b = [], e = [], us = []
+
+      // console.log(a)
+      if (a.length > 0) {
+        for (var c in a) {
+          // console.log(a[c].name)
+          for (var f in this.all_facilities) {
+            if (this.all_facilities[f].county == a[c].name) {
+              b.push(this.all_facilities[f])
+            }
+          }
+          for (var ex in this.s) {
+            if (this.s[ex].county == a[c].name) {
+              e.push(this.s[ex])
+              // console.log(this.s[ex])
+            }
+          }
+          for (var u in this.userz) {
+            if (this.userz[u].county == a[c].name) {
+              us.push(this.userz[u])
+            }
+          }
+        }
+        this.getTest(us)
+        this.getMonth(e)
+        this.fac = b.sort()
+      } else {
+        this.fac = this.all_facilities
+        this.getTest(this.userz)
+        this.getMonth(this.s)
+      }
+    },
+    facilitySubCounty (a) {
+      let b = [], e = [], us = []
+
+      console.log(a)
+      if (a.length > 0) {
+        for (var c in a) {
+          // console.log(a[c].name)
+          for (var f in this.all_facilities) {
+            if (this.all_facilities[f].sub_county == a[c].name) {
+              b.push(this.all_facilities[f])
+            }
+          }
+          for (var ex in this.s) {
+            if (this.s[ex].sub_county == a[c].name) {
+              e.push(this.s[ex])
+              console.log(this.s[ex])
+            }
+          }
+          for (var u in this.userz) {
+            if (this.userz[u].sub_county == a[c].name) {
+              us.push(this.userz[u])
+            }
+          }
+        }
+        this.getTest(us)
+        this.getMonth(e)
+        this.fac = b.sort()
+      } else {
+        this.fac = this.all_facilities
+        this.getTest(this.userz)
+        this.getMonth(this.s)
+      }
+    },
+
     getExp () {
-      axios.get('exposures/all/')
-        .then((exp) => {
-          this.scount = exp.data.meta.total
-          this.s = exp.data.data
-          console.log(exp.data.data)
-          this.link = exp.data.links.next
-          this.loopT(this.link)
-        })
-        .catch(error => console.log(error.message))
-    },
-
-    getMonth () {
-
-      var wdata = []
-      for (var i in this.barOptionsTime.xAxis.categories) {
-        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i]))
+      if (this.user.role_id === 1) {
+        axios.get('exposures/all/')
+          .then((exp) => {
+            this.scount = exp.data.meta.total
+            this.s = exp.data.data
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.scount = exp.data.meta.total
+            this.s = exp.data.data
+            this.link = exp.data.links.next
+            this.loopT(this.link)
+          })
+          .catch(error => console.log(error.message))
       }
-      this.barOptionsTime.series[0].data = wdata
-    },
-   
-    getTest ()
-    {
-       var reg = []
-      for (var r in this.barOptionsTest.xAxis.categories) {
-        reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r]))
-        
-      }
-     this.barOptionsTest.series[0].data = reg
-      }
-     
-    },
-
-    getUsers () {
-      axios.get('users')
-        .then((users) => {
-          this.u = users.data.meta.total
-        })
-        .catch(error => console.log(error.message))
-    },
-    getAllUsers () {
-      axios.get('users')
-        .then((exp) => {
-          this.userz = exp.data.data
-          console.log(exp.data.data)
-          this.link = exp.data.links.next
-          this.loopG(this.link)
-        })
-        .catch(error => console.log(error.message))
-    },
-
-    getBroadcasts () {
-      axios.get('broadcasts/web/all')
-        .then((users) => {
-          // console.log(users.data.meta.total)
-          this.b = users.data.meta.total
-        })
-        .catch(error => console.log(error.message))
     },
     async loopT (l) {
       var i
@@ -373,19 +549,53 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
-
-           //this.userz = this.userz.concat(response.data.data)
-
-           this.userz = this.userz.concat(response.data.data)
-
         } else {
           i = 11
         }
       }
+      this.getMonth(this.s)
+    },
+    getMonth (list) {
+      // console.log(list)
+      var wdata = []
+      for (var i in this.barOptionsTime.xAxis.categories) {
+        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i],list))
+      }
+      this.barOptionsTime.series[0].data = wdata
+    },
 
-      this.getMonth()
-      this.getReg()
+    getNumt (name, sa) {
+      var counter = 0
+      for (var xt in sa) {
+        if (sa[xt].exposure_date.slice(0, 3) === name) {
+          counter++
+        }
+      }
+      return counter
+    },
 
+
+    getAllUsers () {
+      if (this.user.role_id === 1) {
+        axios.get('users')
+          .then((exp) => {
+            this.u = exp.data.meta.total
+            this.userz = exp.data.data
+            console.log(exp.data.data)
+            this.link = exp.data.links.next
+            this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.u = exp.data.meta.total
+            this.userz = exp.data.data
+            this.link = exp.data.links.next
+            this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+      }
     },
 
     async loopG (l) {
@@ -395,40 +605,51 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.userz = this.userz.concat(response.data.data)
-        //  this.userl = this.userl.concat(response.data.data)
         } else {
           i = 11
         }
       }
-     this.getTest()
-     // this.getReg
-      this.getRegistrations()
-      this.getLocations()
-
+      this.getTest(this.userz)
     },
 
-    getNumt (name) {
-      var counter = 0
-      for (var xt in this.s) {
-        if (this.s[xt].exposure_date.slice(0, 3) === name) {
-          console.log(name)
-          counter++
-        }
+    getTest (list) {
+      this.load = true
+      var reg = []
+      for (var r in this.barOptionsTest.xAxis.categories) {
+        reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r], list))
       }
-      return counter
+      this.barOptionsTest.series[0].data = reg
+      this.load = false
     },
-
-    getNumr (name) {
+    
+    getNumr (name, li) {
       var counter = 0
-      for (var r in this.userz) {
-        var dat = new Date(this.userz[r].updated_at)
-        var list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      for (var r in li) {
+        var dat = new Date(li[r].created_at)
+        var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if (list[dat.getMonth()] === name) {
-          console.log(name)
           counter++
         }
       }
       return counter
+    },
+
+    getBroadcasts () {
+      if (this.user.role_id === 1) {
+        axios.get('broadcasts/web/all')
+          .then((users) => {
+            // console.log(users.data.meta.total)
+            this.b = users.data.meta.total
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
+        axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
+          .then((users) => {
+            // console.log(users.data.meta.total)
+            this.b = users.data.meta.total
+          })
+          .catch(error => console.log(error.message))
+      }
     },
 
     getNums (name) {
@@ -442,5 +663,5 @@ export default {
     }
 
   }
-
+}
 </script>

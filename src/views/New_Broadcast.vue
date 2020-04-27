@@ -9,7 +9,7 @@
     >
       <v-flex
         xs12
-        md10
+        md11
       >
         <material-card
           color="green"
@@ -34,6 +34,7 @@
               <v-layout wrap>
 
                 <v-flex
+                  v-if="user.role_id === 1"
                   xs12
                 >
                   <v-combobox
@@ -49,6 +50,17 @@
                     label="Select Facility"
                     required
                   />
+                </v-flex>
+                <v-flex
+                  v-else
+                >
+                  <label>Facility:</label>
+                  <v-chip
+                    class="ma-2"
+                    x-large
+                  >
+                    {{ user.hcw.facility.name }}
+                  </v-chip>
                 </v-flex>
 
                 <v-flex
@@ -82,37 +94,52 @@
                   />
                 </v-flex>
 
+              <v-flex
+              xs12
+              >
                 <v-btn
                   :disabled="!valid"
                   class="mr-4 success"
                   type="submit"
-                  @click="validate(); ">
+                  @click="validate(); dialog1=true; alert=!alert; ">
                   submit</v-btn>
+              </v-flex>   
+
+              <v-flex
+              xs12
+              >
+                   <v-dialog
+                    v-model="dialog1"
+                    max-width="290"
+                    lazy>
+                    <v-card>
+                      <v-card-text class="text-xs-center">
+                        <v-progress-circular
+                          :size="70"
+                          indeterminate
+                          class="primary--text"/>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+
+                  <v-alert
+                    :value="alert"
+                    head
+                    type="success"
+                    border="right"
+                    icon = "mdi-alert"
+                    dismissible
+                    text
+                    transition="scale-transition"
+                    color = "#47a44b"
+                    dense
+                  >
+                    <h6> {{ output.error }} {{ output.message }} </h6>
+                  </v-alert>
+              </v-flex>    
 
               </v-layout>
-              <v-snackbar
-                :color="color"
-                :bottom="bottom"
-                :top="top"
-                :left="left"
-                :right="right"
-                v-model="snackbar"
-                dark
-              >
-                <v-icon
-                  color="white"
-                  class="mr-3"
-                >
-                  mdi-bell-plus
-                </v-icon>
-                <div> {{ output.message }}<br> {{ output.errors }} </div>
-                <v-icon
-                  size="16"
-                  @click="snackbar = false"
-                >
-                  mdi-close-circle
-                </v-icon>
-              </v-snackbar>
+              
 
             </v-container>
           </v-form>
@@ -125,6 +152,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -132,17 +160,8 @@ export default {
       all_cadres: [],
       all_facilities: [],
       valid: true,
-      color: null,
-      colors: [
-        'success',
-        'error'
-      ],
-      top: true,
-      bottom: false,
-      left: false,
-      right: false,
-      resp: false,
-      snackbar: false,
+      alert: false,
+      dialog1: false,
       search: null,
       facility: '',
       output: '',
@@ -153,6 +172,11 @@ export default {
       }
 
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
   created () {
     this.getCadres()
@@ -184,23 +208,39 @@ export default {
 
     postBroadcast (e) {
       e.preventDefault()
+      if (this.user.role_id === 1) {
+        axios.post('broadcasts/web/create', {
+          facility_id: this.facility.id,
 
-      axios.post('broadcasts/web/create', {
-        facility_id: this.facility.id,
+          cadres: this.cadres.map(item => item.id),
+          message: this.message
+        })
+          .then((response) => {
+            this.output = response.data
+            this.alert = true
+            this.$router.push('/broadcast')
+          })
+          .catch(error => {
+            this.output = error
+            this.alert = true
+          })
+      } else if (this.role_id === 4) {
+        axios.post('broadcasts/web/create', {
+          facility_id: this.user.hcw.facility_id,
 
-        cadres: this.cadres.map(item => item.id),
-        message: this.message
-      })
-        .then((response) => {
-          this.output = response.data
-          this.resp = Boolean(response.data.success)
-          this.snack('top', 'center')
-          this.$router.push('/broadcast')
+          cadres: this.cadres.map(item => item.id),
+          message: this.message
         })
-        .catch(error => {
-          this.output = error
-          this.snack('top', 'center')
-        })
+          .then((response) => {
+            this.output = response.data
+            this.alert = true
+            this.$router.push('/broadcast')
+          })
+          .catch(error => {
+            this.output = error
+            this.alert = true
+          })
+      }
     },
     snack (...args) {
       this.top = false

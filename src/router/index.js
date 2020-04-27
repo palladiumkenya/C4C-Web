@@ -46,17 +46,6 @@ const router = new Router({
   }
 })
 
-// router.beforeResolve ((to, from, next) => {
-//   if (to.name) {
-//       NProgress.start()
-//   }
-//   next()
-// }),
-
-// router.afterEach((to, from) => {
-//     NProgress.done()
-// })
-
 Vue.use(Meta)
 
 // Bootstrap Analytics
@@ -73,3 +62,4 @@ if (process.env.GOOGLE_ANALYTICS) {
 }
 
 export default router
+

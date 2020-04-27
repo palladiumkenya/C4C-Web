@@ -12,26 +12,25 @@
         md12
       >
 
-      <v-snackbar
-        color="error"
-        v-model="snackbar"
-        :timeout="12000"
-        top>
-        <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{ output.error }} {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-      </v-snackbar>
-
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="12000"
+          color="error"
+          top>
+          <v-icon
+            color="white"
+            class="mr-3"
+          >
+            mdi-bell-plus
+          </v-icon>
+          <div> {{ output.error }} {{ result }}</div>
+          <v-icon
+            size="16"
+            @click="snackbar = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-snackbar>
 
         <material-card
           color="green"
@@ -73,6 +72,8 @@
             :items="exposures"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
+            loading
+            loading-text="Loading... Please wait"
           >
             <template
               slot="items"
@@ -97,29 +98,29 @@
                 <v-container py-0>
                   <v-layout wrap>
                     <v-flex
-                        xs12
-                        md6
-                      >
-                    <v-card-text>
-                      facility: {{props.item.facility}} <br>
-                      facility: {{props.item.pep_date}} <br>
-                      patient hiv status: {{ props.item.patient_hiv_status }} <br>
-                      patient hbv status: {{ props.item.patient_hbv_status }}
-                    </v-card-text>
-                    </v-flex>
-                      <v-flex
-                        xs12
-                        md4
-                      >
+                      xs12
+                      md6
+                    >
                       <v-card-text>
-                        
-                      device purpose: {{ props.item.device_purpose }} <br>
-                      previous exposures: {{ props.item.previous_exposures }} <br>
-                      exposure result of: <div v-if="props.item.result_of"> {{ props.item.result_of }}</div> <small v-else>Not specified</small> <br>
-                      exposure description: {{ props.item.exposure_description }}
+                        facility: {{ props.item.facility }} <br>
+                        facility: {{ props.item.pep_date }} <br>
+                        patient hiv status: {{ props.item.patient_hiv_status }} <br>
+                        patient hbv status: {{ props.item.patient_hbv_status }}
                       </v-card-text>
-                      </v-flex>
-                    
+                    </v-flex>
+                    <v-flex
+                      xs12
+                      md4
+                    >
+                      <v-card-text>
+
+                        device purpose: {{ props.item.device_purpose }} <br>
+                        previous exposures: {{ props.item.previous_exposures }} <br>
+                        exposure result of: <div v-if="props.item.result_of"> {{ props.item.result_of }}</div> <small v-else>Not specified</small> <br>
+                        exposure description: {{ props.item.exposure_description }}
+                      </v-card-text>
+                    </v-flex>
+
                   </v-layout>
                 </v-container>
               </v-card>
@@ -148,11 +149,9 @@ export default {
       rowsPerPageItems: [50, 250, 500],
       search: '',
       link: '',
-      output: [],
-
+      output: '',
       result: '',
       snackbar: false,
-
       headers: [
         {
           text: 'No.',
@@ -205,8 +204,8 @@ export default {
     this.getExp()
   },
   methods: {
-  getExp () {
-      if (this.user.role_id === 1){
+    getExp () {
+      if (this.user.role_id === 1) {
         axios.get('exposures/all/')
           .then((exp) => {
             this.exposures = exp.data.data
@@ -215,9 +214,12 @@ export default {
               this.loopT(this.link)
             }
           })
-          .catch(error => console.log(error.message))
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
       } else if (this.user.role_id === 4) {
-        console.log(this.user.hcw.facility_id)
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {
             this.exposures = exp.data.data
@@ -227,9 +229,9 @@ export default {
             }
           })
           .catch(() => {
-          this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
-          this.snackbar = true
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
           })
       }
     },

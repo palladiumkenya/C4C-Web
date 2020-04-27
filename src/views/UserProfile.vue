@@ -16,8 +16,8 @@
           title="Edit Profile"
           text="Complete your profile"
         >
+        
           <v-card-text>
-            <div/>
             <p class="display-1 text--primary">
               User Profile
             </p>
@@ -29,83 +29,91 @@
                 xs12
                 md4
               >
-                <label>First Name:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large
+                
+                <v-text-field
+                  label="First Name"
+                  v-model="user.first_name"
                 >
-                  {{ user.first_name }}
-                </v-chip>
+                </v-text-field>
               </v-flex>
+
               <v-flex
                 xs12
                 md4
               >
-                <label>Surname:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large>
-                  {{ user.surname }}
-                </v-chip>
+                <v-text-field
+                  label="First Name"
+                  v-model="user.surname"
+                >
+                </v-text-field>
               </v-flex>
+
               <v-flex
                 xs12
                 md4
               >
-                <label>Gender:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large>
-                  {{ user.gender }}
-                </v-chip>
+              <v-select
+                v-model="user.gender"
+                :items="gender"
+                label="Gender"
+                required
+              > 
+              </v-select>
               </v-flex>
+
               <v-flex
                 xs12
                 md6
               >
-                <label>Email:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large
-                >
-                  {{ user.email }}
-                </v-chip>
+               <v-text-field
+                v-model="user.email"
+                label="E-mail"
+                required
+              >
+              </v-text-field>
               </v-flex>
+
               <v-flex
                 xs12
                 md6
               >
-                <label>Role:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large
-                >
-                  {{ user.role.name }}
-                </v-chip>
-              </v-flex>
-              <v-flex
-                xs12
-                md12
+                <v-select
+                v-model="user.role.name"
+                :items="roles"
+                label="Role"
+                required
               >
-                <label>Account created on:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large
-                >
-                  {{ user.created_at }}
-                </v-chip>
+              </v-select>
               </v-flex>
+
               <v-flex
                 xs12
-                md8>
-                <label>Facility:</label>
-                <v-chip
-                  class="ma-2"
-                  x-large
-                >
-                  {{ user.hcw.facility.name }}
-                </v-chip>
+                md6>
+                <v-select
+                  v-model="user.hcw.facility_name"
+                  :items="all_facilities"
+                  item-value="id"
+                  item-text="name"
+                  label="Facility"
+                  required
+                > </v-select> {{user.hcw.facility_name}}
               </v-flex>
+
+              <v-flex
+                xs12
+                md6>
+                <v-select
+                  v-model="user.cadre"
+                  :hint="user.cadre"
+                  :items="all_cadres"
+                  item-text="name"
+                  label="Cadre"
+                  item-value="id"
+                  required
+                >
+                </v-select>  {{user.cadre}}   
+              </v-flex> 
+
               <v-flex
                 xs12
                 text-xs-right
@@ -117,6 +125,7 @@
                   Update Profile
                 </v-btn>
               </v-flex>
+
             </v-layout>
           </v-container>
         </material-card>
@@ -152,18 +161,57 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 export default {
   //
   data () {
     return {
-      logo: 'c4c_new.png'
+      logo: 'c4c_new.png',
+      gender: [
+        'MALE',
+        'FEMALE',
+        'UNDEFINED'
+      ],
+      roles: [
+        'Super Admin',
+        'Partner Admin',
+        'Health care worker',
+        'Facility Admin'
+      ],
+      all_facilities : [],
+      all_cadres: []
     }
   },
   computed: {
     ...mapGetters({
       user: 'auth/user'
     })
-  }
+  },
+  created () {
+    this.getFacilities()
+    this.getCadres()
+
+  },
+
+  methods : {
+    getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getCadres () {
+      axios.get('cadres')
+        .then((cadres) => {
+          console.log(cadres.data)
+          this.all_cadres = cadres.data.data
+        })
+        .catch(error => console.log(error.message))
+    }
+  }  
 }
 </script>

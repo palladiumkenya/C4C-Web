@@ -12,25 +12,25 @@
         md12
       >
 
-      <v-snackbar
-        color="error"
-        v-model="snackbar"
-        :timeout="12000"
-        top>
-        <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{ output.errors }} {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-      </v-snackbar>
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="12000"
+          color="error"
+          top>
+          <v-icon
+            color="white"
+            class="mr-3"
+          >
+            mdi-bell-plus
+          </v-icon>
+          <div> {{ output.errors }} {{ result }}</div>
+          <v-icon
+            size="16"
+            @click="snackbar = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-snackbar>
 
         <v-card>
           <v-card-title>
@@ -50,7 +50,8 @@
             :items="all_hcws"
             :rows-per-page-items="rowsPerPageItems"
             :search="search"
-            show-actions
+            loading
+            loading-text="Loading... Please wait"
             item-key="id"
           >
             <template
@@ -59,10 +60,10 @@
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.first_name }}</td>
                 <td>{{ props.item.surname }}</td>
-                <td>{{ props.item.facility.name }}</td>
-                <td>{{ props.item.facility.county }}</td>
+                <td>{{ props.item.facility_name }}</td>
+                <!-- <td>{{ props.item.facility.county }}</td> -->
                 <td>{{ props.item.department }}</td>
-                <td>{{ props.item.cadre.name }}</td>
+                <td>{{ props.item.cadre }}</td>
                 <td>{{ props.item.dob }}</td>
               </tr>
             </template>
@@ -89,6 +90,7 @@ export default {
   data () {
     return {
       all_hcws: [],
+      search: '',
       snackbar: false,
       output: '',
       result: '',
@@ -111,18 +113,13 @@ export default {
         },
         {
           sortable: false,
-          text: 'County',
-          value: 'facility.county'
-        },
-        {
-          sortable: false,
           text: 'Department',
           value: 'department'
         },
         {
           sortable: false,
           text: 'Cadre',
-          value: 'cadre.name'
+          value: 'cadre'
         },
         {
           sortable: false,
@@ -142,17 +139,31 @@ export default {
   },
   methods: {
     getHCW () {
-      axios.get('hcw')
-        .then((workers) => {
-          console.log(workers.data)
-          this.all_hcws = workers.data.data
-          this.loopT(workers.data.links.next)
-        })
-        .catch(() => {
-          this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
-          this.snackbar = true
-        })
+      if (this.user.role_id === 1) {
+        axios.get('hcw')
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            this.loopT(workers.data.links.next)
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((workers) => {
+            console.log(workers.data)
+            this.all_hcws = workers.data.data
+            this.loopT(workers.data.links.next)
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      }
     },
     async loopT (l) {
       var i

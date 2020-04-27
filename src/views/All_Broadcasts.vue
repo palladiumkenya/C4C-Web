@@ -43,6 +43,8 @@
             :items="all_messages"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
+            loading
+            loading-text="Loading... Please wait"
             show-actions
             item-key="id"
           >
@@ -50,7 +52,7 @@
               slot="items"
               slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
-                <td>{{ props.item.cadre.name }}</td>
+                <td>{{ props.item.cadre.id }}</td>
                 <td>{{ props.item.created_by }}</td>
                 <td>{{ props.item.approved_by }}</td>
                 <td>{{ props.item.facility.name }}</td>
@@ -124,14 +126,6 @@ export default {
   },
   methods: {
     getBroadcast () {
-      axios.get('broadcasts/web/all')
-        .then((broadcast) => {
-          console.log(broadcast.data)
-          this.all_messages = broadcast.data.data
-          this.loopT(broadcast.data.links.next)
-        })
-        .catch(error => console.log(error.message))
-
       if (this.user.role_id === 1) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {
@@ -140,7 +134,7 @@ export default {
             this.loopT(broadcast.data.links.next)
           })
           .catch(error => console.log(error.message))
-      } else if (this.user.role_id === 4){
+      } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
           .then((broadcast) => {
             // console.log(broadcast.data)
@@ -149,7 +143,6 @@ export default {
           })
           .catch(error => console.log(error.message))
       }
-
     },
     async loopT (l) {
       var i
@@ -163,7 +156,6 @@ export default {
         }
       }
       console.log(this.all_messages)
-
     }
   }
 }

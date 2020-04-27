@@ -20,7 +20,7 @@
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Add Continuous Medical Education Content
+              Add A New Public Resource
             </p>
             <div class="text--primary">
               Kindly fill all the required fields
@@ -129,7 +129,6 @@
                     border="right"
                     icon = "mdi-alert"
                     dismissible
-                      ="======"
                     text
                     transition="scale-transition"
                     color = "#47a44b"
@@ -243,7 +242,7 @@ export default {
         method: 'POST',
         url: 'resources/cmes/create',
         data: allData,
-        headers: { 'Content-Type': `multipart/form-data; boundary=${form._boundary}` }
+        headers: { 'Content-Type': `multipart/form-data` }
       })
         .then((response) => {
           this.output = response.data
