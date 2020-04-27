@@ -316,13 +316,13 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months Range'
+            text: 'Months - Year'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'No of Registration',
+            text: 'No. of HCWS registered',
             align: 'high'
           },
           labels: {
@@ -352,14 +352,13 @@ export default {
         },
 
         title: {
-          text: 'Monthly Registration Trends '
+          text: 'HCWS registered on C4C by Month '
         },
         series: [
 
           {
             type: 'column',
             colorByPoint: true,
-            name: 'Registration in Numbers',
             data: []
           }
         ]
@@ -375,7 +374,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Registered HCWS',
             align: 'high'
           },
           labels: {
@@ -422,7 +421,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Registered HCWS',
             align: 'high'
           },
           labels: {
@@ -459,7 +458,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Registered HCWS',
             align: 'high'
           },
           labels: {

@@ -389,11 +389,14 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposed Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            title: {
+              text: 'Month - Year',
+            }
 
           },
           labels: {
@@ -431,7 +434,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -482,7 +485,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -533,7 +536,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -583,7 +586,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -628,13 +631,13 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months Range'
+            text: 'Month - Year'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -683,7 +686,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -732,7 +735,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -781,7 +784,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Health Care Workers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
