@@ -254,22 +254,19 @@
       <!-- Start Graphs -->
       <v-flex
         sm3
-        xs8
-        md8
+        xs12
+        md12
         lg12
         >
-        <v-card>
-          <!-- <v-dialog height="300" width="250" :value="load" hide-overlay transition="true" >
-            <v-card height="300" width="250" color="rgba(100,150,150,0.4)">
-              <v-layout justify-center align-center fill-height>
-                <v-progress-circular :size="80" :width="5" indeterminate color="red"></v-progress-circular>
-              </v-layout>
-            </v-card>
-          </v-dialog> -->
+        <div class="card vld-parent">
+          <loading :active.sync="isLoading" 
+          :can-cancel="false" 
+          :on-cancel="onCancel"
+          :is-full-page="fullPage"></loading>
           <highcharts
             ref="barChart"
             :options="barOptionsTest"/>
-        </v-card>
+        </div>
       </v-flex>
       <!-- End Graphs -->
       <v-flex
@@ -293,6 +290,8 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import moment from 'moment'
@@ -302,10 +301,13 @@ import { EventBus } from './../event-bus.js'
 
 export default {
   components: {
+    Loading,
     highcharts: Chart
   },
   data () {
     return {
+      isLoading: true,
+      fullPage: false,
       menu: false,
       menu1: false,
       startDate: '2016-01-01',
@@ -453,7 +455,10 @@ export default {
     },
     ...mapGetters({
       user: 'auth/user',
-      e: 'auth/expo'
+      e: 'auth/expo',
+      all_users: 'auth/us_all',
+      us_no: 'auth/us_no',
+      next_link: 'auth/next_link'
     })
   },
 
@@ -464,14 +469,27 @@ export default {
         name: 'login'
       })
     }
-    if (this.e.length == 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length}
+    if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length}
+    console.log(this.all_users)
+    if (this.us_no === 0 ) {
+      this.getAllUsers()
+    } else if (this.all_users.length !== this.us_no) {
+      this.u = this.us_no
+      this.loopG(this.next_link)
+    } else {
+      this.u = this.us_no
+      this.getTest(this.all_users)
+      this.isLoading = false
+    }
     this.getBroadcasts()
-    this.getAllUsers()
+    // this.getAllUsers()
     this.getFacilities()
     this.getCounties()
   },
   methods: {
-
+    onCancel() {
+      console.log('User cancelled the loader.')
+    },
     click () {
       let exp = [], us =[]
       var dates = {
@@ -528,7 +546,6 @@ export default {
     },
 
     getSubCounties (a) {
-      console.log(a)
       if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
@@ -713,7 +730,7 @@ export default {
           i = 11
         }
       }
-      if (this.user.role_id == 5) {
+      if (this.user.role_id === 5) {
         for (var ex in this.s){
           if (this.s[ex].county ==this.user.hcw.county) {
             e.push(this.s[ex])
@@ -725,9 +742,7 @@ export default {
       
       this.getMonth(this.s)
     },
-    ...mapActions({
-      storeExp: 'auth/storeExp'
-    }),
+    
     getMonth (list) {
       // console.log(list)
       var wdata = []
@@ -747,17 +762,24 @@ export default {
       return counter
     },
 
+    ...mapActions({
+      storeExp: 'auth/storeExp',
+      storeAllUsers: 'auth/storeUser',
+      storeUsNo: 'auth/storeUsNo'
+    }),
 
     getAllUsers () {
-      if (this.user.role_id === 1 || this.user.role_id == 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('hcw')
           .then((exp) => {
-            if (this.user.role_id == 5){
+            if (this.user.role_id === 5){
               this.u = 'loading...'
             }else{
               this.u = exp.data.meta.total
+              this.storeUsNo(exp.data)
             }
             this.userz = exp.data.data
+            this.storeAllUsers(this.userz)
             this.link = exp.data.links.next
             this.loopG(this.link)
           })
@@ -768,6 +790,7 @@ export default {
             this.u = exp.data.meta.total
             this.userz = exp.data.data
             this.link = exp.data.links.next
+            this.storeAllUsers(this.userz)
             this.loopG(this.link)
           })
           .catch(error => console.log(error.message))
@@ -776,11 +799,15 @@ export default {
 
     async loopG (l) {
       var i, u =[]
+      this.userz = this.all_users
+      console.log(this.userz)
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
           this.userz = this.userz.concat(response.data.data)
+          this.storeAllUsers(this.userz)
+          this.storeUsNo(response.data)
           this.getTest(this.userz)
         } else {
           i = 11
@@ -796,6 +823,7 @@ export default {
         this.u = u.length
       }
       this.getTest(this.userz)
+      this.isLoading = false
     },
 
     getTest (list) {
@@ -805,7 +833,6 @@ export default {
         reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r], list))
       }
       this.barOptionsTest.series[0].data = reg
-      this.load = false
     },
     
     getNumr (name, li) {
