@@ -501,6 +501,7 @@ export default {
               this.loopT(this.link)
             } else {
               this.getHBV(this.s)
+              this.isLoading = false
             }
           })
           .catch(error => console.log(error.message))
@@ -513,6 +514,7 @@ export default {
               this.loopT(this.link)
             } else {
               this.getHBV(this.s)
+              this.isLoading = false
             }
           })
           .catch(error => console.log(error.message))

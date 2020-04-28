@@ -672,11 +672,11 @@ export default {
 
     facilityFilter (a) {
       let b = [], e = [], us = []
-
+      console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
-            if (this.exp_filtf[ex].facility === a[c].name) {
+            if (this.exp_filtf[ex].facility_id === a[c].id) {
               e.push(this.exp_filtf[ex])
             }
           }

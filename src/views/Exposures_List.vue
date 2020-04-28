@@ -201,61 +201,65 @@ export default {
     })
   },
   created () {
-    this.exposures = this.e
+    if (this.exposures.length === 0) {
+      this.getExp()
+    } else{
+      this.exposures = this.e
+    }
   },
   methods: {
-    // getExp () {
-    //   if (this.user.role_id === 1 || this.user.role_id == 5) {
-    //     axios.get('exposures/all/')
-    //       .then((exp) => {
-    //         this.exposures = exp.data.data
-    //         this.link = exp.data.links.next
-    //         if (this.link) {
-    //           this.loopT(this.link)
-    //         }
-    //       })
-    //       .catch(() => {
-    //         this.error = true
-    //         this.result = 'Check your internet connection or retry logging in.'
-    //         this.snackbar = true
-    //       })
-    //   } else if (this.user.role_id === 4) {
-    //     axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
-    //       .then((exp) => {
-    //         this.exposures = exp.data.data
-    //         this.link = exp.data.links.next
-    //         if (this.link) {
-    //           this.loopT(this.link)
-    //         }
-    //       })
-    //       .catch(() => {
-    //         this.error = true
-    //         this.result = 'Check your internet connection or retry logging in.'
-    //         this.snackbar = true
-    //       })
-    //   }
-    // },
+    getExp () {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
+        axios.get('exposures/all/')
+          .then((exp) => {
+            this.exposures = exp.data.data
+            this.link = exp.data.links.next
+            if (this.link) {
+              this.loopT(this.link)
+            }
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      } else if (this.user.role_id === 4) {
+        axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.exposures = exp.data.data
+            this.link = exp.data.links.next
+            if (this.link) {
+              this.loopT(this.link)
+            }
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      }
+    },
 
-    // async loopT (l) {
-    //   var i, u = []
-    //   for (i = 0; i < 1;) {
-    //     if (l != null) {
-    //       let response = await axios.get(l)
-    //       l = response.data.links.next
-    //       this.exposures = this.exposures.concat(response.data.data)
-    //     } else {
-    //       i = 11
-    //     }
-    //   }
-    //   if (this.user.role_id == 5) {
-    //     for (var i in this.exposures) {
-    //       if (this.exposures[i].county == this.user.county) {
-    //         u.push(this.exposures[i])
-    //       }
-    //     }
-    //     this.exposures = u
-    //   }
-    // },
+    async loopT (l) {
+      var i, u = []
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.exposures = this.exposures.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      }
+      if (this.user.role_id == 5) {
+        for (var i in this.exposures) {
+          if (this.exposures[i].county == this.user.county) {
+            u.push(this.exposures[i])
+          }
+        }
+        this.exposures = u
+      }
+    },
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {

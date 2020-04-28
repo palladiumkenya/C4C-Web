@@ -1,132 +1,118 @@
 <template>
   <v-card>
+    <template>
+      <v-layout>
+        <v-flex
+          xs12
+          md6
+          sm6
+          lg2
+          >
+          <template>
 
-   <!-- Start filters -->
-       <template>
-           <v-layout >
-              <v-flex
-               xs12
-                  md6
-                  sm6
-                  lg2
-                  >
-
-            <template>
-
-                 <v-combobox
-         v-model="counties"
-         :items="all_counties"
-          item-text="name"
-          item-value="id"
-          label="Select County"
-          v-on:change="getSubCounties"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-               <v-flex
-               xs12
-                  md6
-                  sm6
-                  lg2
-                  >
-
-            <template>
-
-                 <v-combobox
-         v-model="subcounties"
-          :items="all_subcounties"
-          item-text="name"
-          item-value="id"
-          label="Select Sub-County"
-          :disabled="active"
-          v-on:change="getFacilitysubcountyfilter"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-                  md6
-                  sm6
-                  lg2
-                  >
-
-            <template>
-
-                 <v-combobox
-          v-model="facility"
-          item-text="partner"
-          item-value="id"
-          :items="all_facilities"
-          label="Select Partner"
-          multiple
-          disabled
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-            </v-flex>
-
-              <v-flex
-               xs12
-               sm6
-                  md6
-                  lg2
-                  >
-
-            <template>
-
-              <v-combobox
-                :items="all_facilities_level"
-                label="Select Facility Level"
-                v-on:change="getFacilitylevelfilter"
-                :disabled="active_level"
-                multiple
-                clerable
-                persistent-hint
-                chips>
-              </v-combobox>
-                
-            </template>
-            </v-flex>
-
-           <v-flex
-           xs12
-           sm6
-             md6
-            lg2
-           >
-            <template>
-                 <v-combobox
-          v-model="facility"
-          :items="fac"
-          item-text="name"
-          item-value="id"
-          label="Select Facility"
-          v-on:change="getFacilityfilter"
-          multiple
-          clerable
-          persistent-hint
-          chips>
-          </v-combobox>
-                
-            </template>
-           </v-flex>
-           
-             <template>
+            <v-combobox
+              v-if="user.role_id === 1"
+              v-model="counties"
+              :items="all_counties"
+              item-text="name"
+              item-value="id"
+              label="Select County"
+              v-on:change="getSubCounties"
+              multiple
+              clerable
+              persistent-hint
+              chips>
+            </v-combobox>
+          </template>
+        </v-flex>
+        <v-flex
+          xs12
+          md6
+          sm6
+          lg2
+          >
+          <template>
+            <v-combobox
+              v-if="user.role_id !== 4"
+              v-model="subcounties"
+              :items="all_subcounties"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              :disabled="active"
+              v-on:change="getFacilitysubcountyfilter"
+              multiple
+              clerable
+              persistent-hint
+              chips>
+            </v-combobox>
+          </template>
+        </v-flex>
+        <v-flex
+          xs12
+          md6
+          sm6
+          lg2
+          >
+          <template>
+            <v-combobox
+              v-if="user.role_id !== 4"
+              v-model="facility"
+              item-text="partner"
+              item-value="id"
+              :items="all_facilities"
+              label="Select Partner"
+              multiple
+              disabled
+              clerable
+              persistent-hint
+              chips>
+            </v-combobox>
+          </template>
+        </v-flex>
+        <v-flex
+          xs12
+          sm6
+          md6
+          lg2
+          >
+          <template>
+            <v-combobox
+              v-if="user.role_id !== 4"
+              :items="all_facilities_level"
+              label="Select Facility Level"
+              v-on:change="getFacilitylevelfilter"
+              :disabled="active_level"
+              multiple
+              clerable
+              persistent-hint
+              chips>
+            </v-combobox>
+          </template>
+        </v-flex>
+        <v-flex
+          xs12
+          sm6
+          md6
+          lg2
+          >
+          <template>
+            <v-combobox
+              v-if="user.role_id !== 4"
+              v-model="facility"
+              :items="fac"
+              item-text="name"
+              item-value="id"
+              label="Select Facility"
+              v-on:change="getFacilityfilter"
+              multiple
+              clerable
+              persistent-hint
+              chips>
+            </v-combobox>
+          </template>
+        </v-flex>
+        <template>
           <v-flex xs12 sm6 md2 lg2> 
             <v-menu
               ref="menu1"
@@ -139,7 +125,7 @@
               offset-y
               full-width
               min-width="290px"
-            >
+              >
               <v-text-field
                 slot="activator"
                 v-model="startDate"
@@ -182,14 +168,12 @@
             </v-menu>
           </v-flex>
         </template>
-        </v-layout>
-
-                <template>
-                  <v-btn block color="secondary" dark>Filter</v-btn>
-                </template>
-       </template>
-               
-            <!-- End filters -->
+      </v-layout>
+      <template>
+        <v-btn block color="secondary" dark>Filter</v-btn>
+      </template>
+    </template>
+    <!-- End filters -->
 
     <v-tabs
       color="teal lighten-5"
@@ -251,16 +235,13 @@
           </v-card-text>
 
           <!-- Start Exposure Time -->
-
           <v-card-text v-if="n==6">
-
             <highcharts
               ref="barChart"
               :options="barOptionsTime"/>
           </v-card-text>
 
           <!--Start Exposure Age -->
-
           <v-card-text v-if="n==7">
             <template>
               <div
@@ -275,7 +256,6 @@
                 ref="barChart"
                 :options="barOptionsAge"/>
             </template>
-
           </v-card-text>
 
           <!-- Start Exposure Hour -->
@@ -288,7 +268,6 @@
 
           <!-- Start Gender -->
           <v-card-text v-if="n==9">
-
             <template>
               <div
                 v-if="value1" >
@@ -320,7 +299,6 @@ import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
-import Exposure_by_time from './Exposure_by_time'
 //import json from '../map.json'
 
 // SeriesLabel(Highcharts);
@@ -340,25 +318,22 @@ export default {
 
   },
   components: {
-    Exposure_by_time,
     highcharts: Chart
   },
   data () {
     return {
-
-      
-     facility: '',
-       counties: '',
-       subcounties: '',
-       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
-       all_facilities: [],
-       all_subcounties: [],
-       all_counties: [],
-       fac: [],
-       active: true,
-       active_fac: true,
-       active_level: true,
-       menu: false,
+      facility: '',
+      counties: '',
+      subcounties: '',
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_facilities: [],
+      all_subcounties: [],
+      all_counties: [],
+      fac: [],
+      active: true,
+      active_fac: true,
+      active_level: true,
+      menu: false,
       menu1: false,
       startDate: '2019-04-01',
       maxDate: new Date().toISOString().substr(0, 10),
@@ -608,7 +583,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Exposures by Months'
+          text: 'Exposures Report by Months'
         },
         series: [
           {
@@ -761,34 +736,6 @@ export default {
           {
             colorByPoint: true,
             name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-      pieOptions: {
-        chart: {
-          type: 'pie',
-          options3d: {
-            enabled: true,
-            alpha: 45
-          }
-        },
-        title: {
-          text: 'Exposures By Location in Facility'
-        },
-        subtitle: {
-          text: 'by location'
-        },
-        plotOptions: {
-          pie: {
-            innerSize: 100,
-            depth: 45
-          }
-        },
-        series: [
-          {
-            name: 'Exposures Count',
             data: []
           }
         ]
