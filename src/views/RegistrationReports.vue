@@ -470,7 +470,7 @@ export default {
       },
       cadrOptions: {
         xAxis: {
-          categories: ['Doctor', 'Clinical officer', 'Nurse', 'Student', 'Laboratory Technologist', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+          categories: ['Cleaner', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Nurse', 'Other-Specify', 'Student', 'VCT Counsellor', 'Waste Handler'],
           title: {
             text: 'Cadre'
           }

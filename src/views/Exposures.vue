@@ -396,7 +396,7 @@ export default {
 
       barOptionsDevice: {
         xAxis: {
-          categories: ['syringe/needle IM/SC injection', 'Syringe /needle blood drawing', 'Phlebotomy needle/vacuum set', 'IV catheter/canula', 'Needle on IV-line', 'Unused needle', 'Lancet', 'Sature needle', 'Scalpel', 'Capillary tube', 'Glass slide', 'Pippete tip', 'Other'],
+          categories: ['Capillary tube', 'Glass slide', 'IV catheter/canula', 'Lancet', 'Needle on IV-line', 'Phlebotomy needle/vacuum set', 'Pippete tip', 'Sature needle', 'Scalpel', 'Syringe /needle blood drawing', 'syringe/needle IM/SC injection', 'Unused needle', 'Other'],
           title: {
             text: 'Devices'
           }
@@ -596,7 +596,7 @@ export default {
 
       barOptionsCadre: {
         xAxis: {
-          categories: ['Nurse', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Student', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+          categories: ['Cleaner', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Nurse', 'Other-Specify', 'Student', 'VCT Counsellor', 'Waste Handler'],
           title: {
             text: 'Cadre'
           }
@@ -645,7 +645,7 @@ export default {
 
       barOptions: {
         xAxis: {
-          categories: ['Cuts', 'Bite', 'Needle Stick', 'Splash on Mucosa', 'Non-Intact Skin', 'Other'],
+          categories: ['Bite', 'Cuts', 'Needle Stick', 'Non-Intact Skin', 'Splash on Mucosa', 'Other'],
           title: {
             text: 'Exposure Type'
           }
@@ -694,7 +694,7 @@ export default {
 
       barOptionsLocation: {
         xAxis: {
-          categories: ['Medical ward', 'Surgical ward', 'Theater', 'Maternity', 'Dental clinic', 'OP/MCH', 'Laundry', 'Laboratory', 'Other'],
+          categories: ['Dental clinic', 'Laboratory', 'Laundry', 'Maternity', 'Medical ward', 'OP/MCH', 'Surgical ward', 'Theater', 'Other'],
           title: {
             text: 'Exposure Location'
           }
