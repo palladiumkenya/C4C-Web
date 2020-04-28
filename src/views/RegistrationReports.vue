@@ -4,12 +4,16 @@
 
       <!-- Start filters -->
           <template>
-            <v-layout >
+            <v-container
+              fill-height
+              fluid
+              grid-list-xl
+            >
+            <v-layout wrap>
               <v-flex
                 xs12
-                md2
-                sm6
-                lg2
+                md6
+                lg3
               >
 
                 <template>
@@ -30,10 +34,9 @@
               </v-flex>
 
               <v-flex
-                xs12
-                md2
-                sm6
-                lg2
+               xs12
+               md6
+               lg3
               >
 
                 <template>
@@ -56,9 +59,8 @@
 
               <v-flex
                 xs12
-                md2
-                sm6
-                lg2
+                md6
+                lg3
               >
 
                 <template>
@@ -80,9 +82,8 @@
 
               <v-flex
                 xs12
-                md2
-                sm6
-                lg2
+                md6
+                lg3
               >
 
                 <template>
@@ -102,9 +103,8 @@
 
               <v-flex
                 xs12
-                sm6
-                md2
-                lg2
+                md6
+                lg3
               >
                 <template>
                   <v-combobox
@@ -123,7 +123,7 @@
                 </template>
               </v-flex>
             
-            </v-layout>
+           
              <template>
           <v-flex xs12 sm6 md2 lg2>
             <v-menu
@@ -183,14 +183,17 @@
        
 
             <template>
+              <v-flex xs12 sm6 md2 lg2>
               <v-btn
                 block
                 color="secondary"
                 dark>Filter</v-btn>
+              </v-flex>
             </template>
-
+        </v-layout>
+            </v-container>
       </template>
-
+      
             <!-- End filters -->
     <v-tabs
       color="teal lighten-5"
@@ -310,6 +313,7 @@ import Highcharts from 'highcharts'
 import { mapGetters } from 'vuex'
 
 // SeriesLabel(Highcharts);
+exportingInit(Highcharts)
 
 export default {
   components: {

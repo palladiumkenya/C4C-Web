@@ -299,6 +299,8 @@ import { mapGetters, mapActions } from 'vuex'
 
 import { EventBus } from './../event-bus.js'
 
+exportingInit(Highcharts)
+
 export default {
   components: {
     Loading,
@@ -330,7 +332,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months Range'
+            text: 'Months - Year'
           }
         },
         yAxis: {
@@ -381,7 +383,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months Range'
+            text: 'Months - Year'
           }
         },
         yAxis: {

@@ -3,12 +3,16 @@
 
    <!-- Start filters -->
        <template>
-           <v-layout >
+         <v-container
+              fill-height
+              fluid
+              grid-list-xl
+            >
+           <v-layout wrap>
               <v-flex
                xs12
                   md6
-                  sm6
-                  lg2
+                  lg3
                   >
 
             <template>
@@ -32,7 +36,6 @@
                <v-flex
                xs12
                   md6
-                  sm6
                   lg2
                   >
 
@@ -58,7 +61,6 @@
               <v-flex
                xs12
                   md6
-                  sm6
                   lg2
                   >
 
@@ -82,7 +84,6 @@
 
               <v-flex
                xs12
-               sm6
                   md6
                   lg2
                   >
@@ -105,7 +106,6 @@
 
            <v-flex
            xs12
-           sm6
              md6
             lg2
            >
@@ -182,11 +182,14 @@
             </v-menu>
           </v-flex>
         </template>
-        </v-layout>
 
                 <template>
+                  <v-flex xs12 sm6 md2 lg2>
                   <v-btn block color="secondary" dark>Filter</v-btn>
+                  </v-flex>
                 </template>
+                </v-layout>
+         </v-container>
        </template>
                
             <!-- End filters -->
