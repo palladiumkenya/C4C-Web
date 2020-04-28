@@ -163,6 +163,7 @@
                   <v-btn
                     type="submit"
                     class="mx-0 font-weight-light"
+                    large
                     color="success"
                   >
                     Submit

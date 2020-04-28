@@ -56,7 +56,7 @@
                     :config="editorConfig"
                     required/>
                 </v-flex>
-                <ul> <li v-for="error in errors">{{ error }}</li> </ul>
+                <ul> <li v-for="error in errors" :key="error">{{ error }}</li> </ul>
 
 
                 <v-flex xs12 >
@@ -182,7 +182,7 @@ export default {
   watch: {
     dialog1 (val) {
       if (!val) return
-      setTimeout(() => (this.dialog1 = false), 5000)
+      setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
 

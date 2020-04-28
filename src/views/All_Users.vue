@@ -66,8 +66,6 @@
                 <td>{{ props.item.cadre }}</td>
                 <td>{{ props.item.gender }}</td>
 
-               <!-- <td v-for="hcw in props.item.hcw" >{{ props.item.hcw.facility_name }}</td>  -->
-
               </tr>
             </template>
             <v-alert

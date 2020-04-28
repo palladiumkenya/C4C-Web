@@ -203,7 +203,7 @@ export default {
   watch: {
     dialog1 (val) {
       if (!val) return
-      setTimeout(() => (this.dialog1 = false), 4000)
+      setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
 
@@ -287,7 +287,7 @@ export default {
           console.log(response)
           this.alert = true
 
-          this.$router.push('covid19_resources')
+          this.$router.push('/covid19_resources')
         })
         .catch(error => {
           this.output = error

@@ -13,7 +13,7 @@
               <v-flex
                 xs12
                 md6
-                lg3
+                lg2
               >
 
                 <template>
@@ -60,11 +60,10 @@
               <v-flex
                 xs12
                 md6
-                lg3
+                lg2
               >
 
                 <template>
-
                   <v-combobox
                     v-model="partner"
                     :items="all_partner"
@@ -83,7 +82,7 @@
               <v-flex
                 xs12
                 md6
-                lg3
+                lg2
               >
 
                 <template>
@@ -104,7 +103,7 @@
               <v-flex
                 xs12
                 md6
-                lg3
+                lg2
               >
                 <template>
                   <v-combobox
@@ -180,7 +179,6 @@
             </v-menu>
           </v-flex>
         </template>
-       
 
             <template>
               <v-flex xs12 sm6 md2 lg2>
@@ -192,6 +190,7 @@
             </template>
         </v-layout>
             </v-container>
+
       </template>
       
             <!-- End filters -->
@@ -212,23 +211,20 @@
           
 
             <v-flex
+              xs12
               md12
-              sm12
               lg12
-            >
-              <template>
-               <div class="card vld-parent">
-          <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
-          loader='bars'
-          :is-full-page="fullPage"></loading>
+              >
+              <div class="card vld-parent">
+                <loading :active.sync="isLoading" 
+                :can-cancel="false"
+                color="#007bff"
+                :is-full-page="fullPage"></loading>
+            
                 <highcharts
                   ref="barChart"
                   :options="monthOptions"/>
-               </div>
-              </template>
-
+              </div>
             </v-flex>
           </v-card-text>
 
@@ -241,8 +237,7 @@
             <template>
                <div class="card vld-parent">
           <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
+          :can-cancel="false"
           loader='bars'
           :is-full-page="fullPage"></loading>
               <highcharts
@@ -259,19 +254,15 @@
               sm12
               lg12
             >
-            <template>
             <div class="card vld-parent">
-          <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
-          loader='bars'
-          :is-full-page="fullPage"></loading>
-          
-              <highcharts
-                ref="barChart"
-                :options="barOptions"/>
+              <loading :active.sync="isLoading" 
+              :can-cancel="false"
+              loader='bars'
+              :is-full-page="fullPage"></loading>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptions"/>
             </div>
-            </template>
             </v-flex>
           </v-card-text>
 
@@ -281,16 +272,16 @@
               sm12
               lg12
             >
-           <div class="card vld-parent">
-          <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
-          loader='bars'
-          :is-full-page="fullPage"></loading>
-              <highcharts
-                ref="barChart"
-                :options="gendOptions"/>
-           </div>
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                loader='bars'
+                :is-full-page="fullPage"></loading>
+                  <highcharts
+                    ref="barChart"
+                    :options="gendOptions"/>
+            </div>
             </v-flex>
             
           </v-card-text>
@@ -317,13 +308,16 @@ exportingInit(Highcharts)
 
 export default {
   components: {
-    Loading,
     highcharts: Chart,
-    VueHighcharts
+    VueHighcharts,
+    Loading
   },
   data () {
     return {
-      
+      isLoading: true,
+      fullPage: false,
+      all_partner: [],
+      partner: [],
       fac: [],
       facility: '',
       counties: '',
@@ -336,16 +330,12 @@ export default {
       active: true,
       active_fac: true,
       active_level: true,
-       menu: false,
+      menu: false,
       menu1: false,
       startDate: '2016-01-01',
       maxDate: new Date().toISOString().substr(0, 10),
       minDate: '2016-01-01',
       endDate: new Date().toISOString().substr(0, 10),
-      isLoading: true,
-      fullPage: false,
-     
-
       monthOptions: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -384,12 +374,10 @@ export default {
         chart: {
           type: 'column'
         },
-
         title: {
           text: 'HCWS registered on C4C by Month '
         },
         series: [
-
           {
             type: 'column',
             colorByPoint: true,
@@ -541,29 +529,34 @@ export default {
       reg_filt: [],
       reg_filtl: [],
       reg_filtf: [],
-
-      // date: [],
-      // options: data
-      // seriesnamet: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-
     }
   },
   computed: {
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      all_users: 'auth/us_all',
+      us_no: 'auth/us_no',
+      next_link: 'auth/next_link'
     })
   },
 
   created () {
-    this.getUsers()
+    if (this.us_no === 0) {
+      this.getUsers()
+    } else if (this.all_users.length !== this.us_no) {
+      this.s = this.all_users
+      this.loopT(this.next_link)
+    } else {
+      this.s = this.all_users
+      this.getsummarydata(this.s)
+      this.getAgeData(this.s)
+      this.isLoading = false
+    }
     this.getFacilities()
     this.getCounties()
   },
   methods: {
-     onCancel() {
-      console.log('User cancelled the loader.')
-    },
-  getCounties () {
+    getCounties () {
       axios.get('counties')
         .then((counties) => {
           console.log(counties.data.data)
@@ -695,7 +688,6 @@ export default {
           for(var k in this.reg_filtf){
             this.reg_filtf[k].facility_name == ff[v].name
             rg.push(this.reg_filtf[k])
-
           }
         }
         this.getsummarydata(rg)
@@ -797,25 +789,9 @@ export default {
       this.getAgeData(this.s)
       this.isLoading = false
     },
-     async loopG (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.userz = this.userz.concat(response.data.data)
-          this.getsummarydata(this.s)
-        //  this.userl = this.userl.concat(response.data.data)
-        } else {
-          i = 11
-        }
-      }
-       this.getsummarydata(this.s)
-      
-    },
 
     getAgeData (list) {
-     this.load = true
+      this.load = true
       var data = []
       for (var i in this.barOptions.xAxis.categories) {
         data.push(this.getAgeNum(i,list))

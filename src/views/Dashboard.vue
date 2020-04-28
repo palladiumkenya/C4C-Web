@@ -259,9 +259,10 @@
         lg12
         >
         <div class="card vld-parent">
-          <loading :active.sync="isLoading" 
-          :can-cancel="false" 
-          :on-cancel="onCancel"
+          <loading :active.sync="isLoading"
+          :can-cancel="false"
+          loader='bars'
+          color="#007bff"
           :is-full-page="fullPage"></loading>
           <highcharts
             ref="barChart"
@@ -290,8 +291,8 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import axios from 'axios'
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import moment from 'moment'
@@ -472,13 +473,14 @@ export default {
         name: 'login'
       })
     }
-    if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length}
+    if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length; this.s = this.e}
     if (this.us_no === 0 ) {
       this.getAllUsers()
     } else if (this.all_users.length !== this.us_no) {
       this.u = this.us_no
       this.loopG(this.next_link)
     } else {
+      this.userz = this.all_users
       this.u = this.us_no
       this.getTest(this.all_users)
       this.isLoading = false
@@ -489,9 +491,6 @@ export default {
     this.getCounties()
   },
   methods: {
-    onCancel() {
-      console.log('User cancelled the loader.')
-    },
     click () {
       let exp = [], us =[]
       var dates = {
