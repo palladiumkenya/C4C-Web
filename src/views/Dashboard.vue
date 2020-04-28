@@ -367,7 +367,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Monthly Exposure Rate'
+          text: 'Monthly Exposure'
         },
         series: [
           {
