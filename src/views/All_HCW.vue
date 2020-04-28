@@ -69,7 +69,6 @@
                 <td>{{ props.item.first_name }}</td>
                 <td>{{ props.item.surname }}</td>
                 <td>{{ props.item.facility_name }}</td>
-                <!-- <td>{{ props.item.facility.county }}</td> -->
                 <td>{{ props.item.department }}</td>
                 <td>{{ props.item.cadre }}</td>
                 <td>{{ props.item.dob }}</td>

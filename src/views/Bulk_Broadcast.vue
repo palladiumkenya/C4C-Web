@@ -120,7 +120,7 @@ export default {
     return {
       valid: true,
       dialog1: false,
-      alert: true,
+      alert: false,
       output: '',
       phoneNumbers: [],
       message: '',
