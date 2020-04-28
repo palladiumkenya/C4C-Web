@@ -33,6 +33,8 @@
         xs12
         text-xs-right
       >
+
+      <div v-if="user.role_id === 1 || user.role_id === 2">
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
@@ -40,7 +42,17 @@
         >
           Send A Bulk Broadcast
         </v-btn>
-
+        
+         <v-btn
+          class="mx-0 font-weight-light "
+          color="success"
+          @click="$router.push('new_broadcast')"
+        >
+          Send A New Broadcast
+        </v-btn>
+      </div>
+        
+      <div v-else>
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
@@ -48,6 +60,8 @@
         >
           Send A New Broadcast
         </v-btn>
+      </div>
+
       </v-flex>
 
       <v-flex
@@ -150,6 +164,7 @@ export default {
   created () {
     this.getBroadcast()
   },
+
   methods: {
     getBroadcast () {
       if (this.user.role_id === 1|| this.user.role_id == 5) {

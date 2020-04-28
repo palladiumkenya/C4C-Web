@@ -7,9 +7,9 @@
       <v-btn
         class="mx-0 font-weight-light "
         color="success"
-        @click="$router.push('add_protocal');"
+        @click="$router.push('add_protocol');"
       >
-        Add A New Facility Protocal
+        Add A New Facility Protocol
       </v-btn>
     </v-flex>
 
@@ -106,15 +106,15 @@ export default {
     }
   },
   created () {
-    this.getProtocals()
+    this.getProtocols()
   },
   methods: {
 
-    getProtocals () {
+    getProtocols () {
       axios.get('resources/hcw/protocols')
-        .then((protocals) => {
-          console.log(protocals.data)
-          this.results = protocals.data.data
+        .then((protocols) => {
+          console.log(protocols.data)
+          this.results = protocols.data.data
 
           this.loading = false
         })
