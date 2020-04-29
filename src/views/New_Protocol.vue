@@ -59,11 +59,13 @@
                       v-else-if="user.role_id === 1"
                       v-model="facility"
                       :items="all_facilities"
+                      :loading="load"
+                      :disabled="load"
                       item-text="name"
                       item-value="id"
                       clearable
                       persistent-hint
-                      chips/>
+                      chips />
 
                   </v-flex>
                   <v-flex xs12>
@@ -202,6 +204,7 @@ export default {
       imagePreview: '',
       files: [],
       output: '',
+      load:true,
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -233,6 +236,7 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
+          this.load = false
         })
         .catch(error => console.log(error.message))
     },
