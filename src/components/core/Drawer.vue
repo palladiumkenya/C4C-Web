@@ -263,11 +263,11 @@ export default {
              }
           ]
         },
-        {
-          to: '/feed-back',
-          icon: 'mdi-bullhorn',
-          text: 'Feedback'
-        },
+        // {
+        //   to: '/feed-back',
+        //   icon: 'mdi-bullhorn',
+        //   text: 'Feedback'
+        // },
         {
           icon: 'mdi-clipboard-outline',
           text: 'Logout'

@@ -9,7 +9,7 @@
     >
       <v-flex
         xs12
-        md10
+        md11
       >
         <material-card>
           <v-card-text>
@@ -35,6 +35,8 @@
                     item-value=""
                     label="Facility"
                     class="purple-input"
+                    :loading="load"
+                    loader-height="15"
                   />
                 </v-flex>
                 <v-flex
@@ -68,7 +70,6 @@
         </material-card> <br>
 
         <material-card>
-          <v-layout wrap>
             <v-card-text>
               <div/>
               <p class="display-1 text--primary">
@@ -94,15 +95,14 @@
               </v-btn>
             </v-card-text>
 
-            <template>
-
-              <v-data-table xs12
+              <v-data-table 
                 :headers="headers"
                 :items="items"
                 :loading="true"
                 :rows-per-page-items="rowsPerPageItems"
                 class="elevation-1"
-              ><template
+              >
+              <template
                 slot="headerCell"
                 slot-scope="{ header }"
               >
@@ -111,18 +111,21 @@
                   v-text="header.text"
                 />
               </template>
-                <template
+
+
+              <template
                   slot="items"
                   slot-scope="{ item }"
                 >
+                <tr>
                   <td>{{ item.first_name }}</td>
                   <td>{{ item.surname }}</td>
                   <td>{{ item.email }}</td>
                   <td>{{ item.created_at }}</td>
+                </tr>  
                 </template>
               </v-data-table>
-            </template>
-          </v-layout>
+
         </material-card>
       </v-flex>
 
@@ -162,6 +165,7 @@ export default {
       rowsPerPageItems: [50, 250, 500],
       switch1: true,
       name: '',
+      load:true,
       all_users: [],
       facility_id: '',
       facilities: [],
@@ -274,7 +278,9 @@ export default {
             p.value = this.facilities_all[k]
             this.facilities.push(p)
           }
+          this.load = false
         })
+      
     },
 
     DeviceList () {

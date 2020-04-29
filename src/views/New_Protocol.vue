@@ -59,11 +59,13 @@
                       v-else-if="user.role_id === 1"
                       v-model="facility"
                       :items="all_facilities"
+                      :loading="load"
+                      :disabled="load"
                       item-text="name"
                       item-value="id"
                       clearable
                       persistent-hint
-                      chips/>
+                      chips />
 
                   </v-flex>
                   <v-flex xs12>
@@ -202,6 +204,7 @@ export default {
       imagePreview: '',
       files: [],
       output: '',
+      load:true,
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -233,6 +236,7 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
+          this.load = false
         })
         .catch(error => console.log(error.message))
     },
@@ -275,6 +279,7 @@ export default {
       e.preventDefault()
 
       let allData = new FormData()
+      console.log(this.user)
 
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
@@ -285,7 +290,7 @@ export default {
       allData.append('title', this.title)
       allData.append('body', this.editorData)
       if (this.user.role_id === 4) {
-        allData.append('facility_id', this.user.hcw.facility.id)
+        allData.append('facility_id', this.user.hcw.facility_id)
       } else if (this.user.role_id === 1) {
         allData.append('facility_id', this.facility.id)
       }
@@ -302,7 +307,7 @@ export default {
          
           this.output = response.data
           this.alert = true
-          this.$router.push('/protocals')
+          this.$router.push('/protocols')
         })
         .catch(error => {
           this.output = error

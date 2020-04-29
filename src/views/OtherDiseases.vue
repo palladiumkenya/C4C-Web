@@ -254,7 +254,7 @@
               lg12
             >
 
-              <h3>Miseasles Summary</h3>
+              <h3>Measles Summary</h3>
               <highcharts
                 ref="columnChart"
                 :options="CountMeaslesChartOptions"/>

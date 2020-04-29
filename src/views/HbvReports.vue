@@ -527,7 +527,6 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
-          this.getHBV(this.s)
         } else {
           i = 11
         }
@@ -556,11 +555,12 @@ export default {
           b[b.length - 1]++
         }
         prev = arr[i]
-      }
+        
+      }console.log(b.length)
       for (var u in b) {
-        if (b[u] === 1 && name == 0) {
+        if (name == 0 && b[u]) {
           count++
-        } else if (name == 1 && b[u] === 2) {
+        } else if (name == 1 && b[u] === 2 || b[u] === 3) {
           count++
         } else if (name == 2 && b[u] === 3) {
           count++
