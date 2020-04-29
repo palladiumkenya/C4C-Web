@@ -1,4 +1,3 @@
-
 <template>
   <v-card>
     <v-layout wrap>
@@ -254,7 +253,7 @@
               lg12
             >
 
-              <h3>Measles Summary</h3>
+              <h3>Miseasles Summary</h3>
               <highcharts
                 ref="columnChart"
                 :options="CountMeaslesChartOptions"/>
@@ -677,7 +676,8 @@ export default {
 
       seriesname: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       seriesnames: [1, 2],
-      seriesdata: [1, 2],
+      seriesnamec: ['MALE', 'FEMALE'],
+      seriesdata: [],
       measles: [],
       influenza: [],
       tdap: [],
@@ -716,7 +716,7 @@ export default {
   },
   methods: {
     click () {
-      let exp = [], exp1 = [], exp2 = [], exp3 = [], exp4 = [], exp5 = []
+      let exp = [], exp1 = [], exp2 = [], exp3 = [], exp4 = [], exp5 = [], exp6 = []
       var dates = {
         convert: function (d) {
           return (
@@ -869,6 +869,7 @@ export default {
         this.getAllDiseases(this.all_filt)
         this.getVaricella(this.vericella_filt)
         this.getMeasles(this.measles_filt)
+        this.getMeaslesCount(this.measles_filt)
         this.getTDAP(this.tdap_filt)
         this.fac = this.fac_filt.sort()
       } else {
@@ -878,6 +879,7 @@ export default {
         this.getAllDiseases(this.a)
         this.getVaricella(this.v)
         this.getMeasles(this.s)
+        this.getMeaslesCount(this.s)
         this.getTDAP(this.t)
       }
     },
@@ -929,6 +931,7 @@ export default {
         this.getAllDiseases(this.all_filtl)
         this.getVaricella(this.vericella_filtl)
         this.getMeasles(this.measles_filtl)
+        this.getMeaslesCount(this.measles_filtl)
         this.getTDAP(this.tdap_filtl)
 
         this.fac = this.fac_filtl.sort()
@@ -940,6 +943,7 @@ export default {
         this.getAllDiseases(this.all_filt)
         this.getVaricella(this.vericella_filt)
         this.getMeasles(this.measles_filt)
+        this.getMeaslesCount(this.measles_filt)
         this.getTDAP(this.tdap_filt)
         this.active_level = true
       }
@@ -1016,21 +1020,23 @@ export default {
             }
           }
         }
-        this.getImmunizationsN(this.exp_filtf)
+        this.getMeningococcal(this.exp_filtf)
         this.getInfluenza(this.us_filtf)
         this.getAllDiseases(this.all_filtf)
         this.getVaricella(this.vericella_filtf)
         this.getMeasles(this.measles_filtf)
+        this.getMeaslesCount(this.measles_filtf)
         this.getTDAP(this.tdap_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.fac = this.fac_filtl
         this.active_fac = true
-        this.getImmunizationsN(this.exp_filtl)
+        this.getMeningococcal(this.exp_filtl)
         this.getInfluenza(this.us_filtl)
         this.getAllDiseases(this.all_filtl)
         this.getVaricella(this.vericella_filtl)
         this.getMeasles(this.measles_filtl)
+        this.getMeaslesCount(this.measles_filtl)
         this.getTDAP(this.tdap_filtl)
       }
     },
@@ -1072,19 +1078,21 @@ export default {
           }
         }
         // this.getTest(us)
-        this.getImmunizationsN(e)
+        this.getMeningococcal(e)
         this.getInfluenza(us)
         this.getAllDiseases(k)
         this.getVaricella(j)
         this.getMeasles(g)
+        this.getMeaslesCount(g)
         this.getTDAP(h)
       } else {
         // this.getTest(this.us_filtf)
-        this.getImmunizationsN(this.exp_filtf)
+        this.getMeningococcal(this.exp_filtf)
         this.getInfluenza(this.us_filtf)
         this.getAllDiseases(this.all_filtf)
         this.getVaricella(this.vericella_filtf)
         this.getMeasles(this.measles_filtf)
+        this.getMeaslesCount(this.measles_filtf)
         this.getTDAP(this.tdap_filtf)
       }
     },
@@ -1160,13 +1168,16 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-    getAllDiseases (lists) {
-      this.seriesdata = []
-      for (var vac in this.seriesname) {
-        this.seriesdata.push(this.getNumAll(this.seriesname[vac], lists))
+    getAllDiseases (list) {
+      var count = 0
+      for (var i in this.AllDiseaseschartOptions.series) {
+        this.seriesdata = []
+        for (var v in this.AllDiseaseschartOptions.xAxis.categories) {
+          this.seriesdata.push(this.getNumAll(this.AllDiseaseschartOptions.xAxis.categories[v], this.AllDiseaseschartOptions.series[i].name[0], list))
+          count += this.getNumAll(this.AllDiseaseschartOptions.xAxis.categories[v], this.AllDiseaseschartOptions.series[i].name[0], list)
+        }
+        this.AllDiseaseschartOptions.series[i].data = this.seriesdata
       }
-      this.AllDiseaseschartOptions.series[0].data = this.seriesdata
-
     },
     getMeasles (list) {
       this.seriesdata = []
@@ -1175,10 +1186,10 @@ export default {
       }
       this.MeaslesChartOptions.series[0].data = this.seriesdata
     },
-    getMeaslesCount (lists) {
+    getMeaslesCount (list) {
       this.seriesdata = []
-      for (var vac in this.seriesname) {
-        this.seriesdata.push(this.getNumCount(this.seriesname[vac], lists))
+      for (var vac in this.seriesnames) {
+      this.seriesdata.push(this.getNumCount(vac, list))
       }
       this.CountMeaslesChartOptions.series[0].data = this.seriesdata
     },
@@ -1211,11 +1222,11 @@ export default {
       this.MeningococcalChartOptions.series[0].data = this.seriesdata
     },
 
-    getNumAll (gender, disease, lists) {
+    getNumAll (gender, disease, list) {
       var count = 0
-      for (var x in lists) {
+      for (var x in list) {
         // console.log(this.s[x].type)
-        if (lists[x].gender === gender && lists[x].disease === disease) {
+        if (list[x].gender === gender && list[x].disease === disease) {
           count++
         }
       }
@@ -1271,10 +1282,10 @@ export default {
       }
       return counter
     },
-    getNumCount (name, lists) {
+    getNumCount (name, list) {
       var a = [], b = [], prev, count = 0, arr = []
-      for (var f in lists) {
-        arr.push(lists[f].user_id)
+      for (var f in list) {
+        arr.push(list[f].user_id)
       }
       arr.sort()
       for (var i = 0; i < arr.length; i++) {
