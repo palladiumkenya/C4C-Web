@@ -527,7 +527,6 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.s = this.s.concat(response.data.data)
-          this.getHBV(this.s)
         } else {
           i = 11
         }
