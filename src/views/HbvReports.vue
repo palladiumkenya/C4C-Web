@@ -260,7 +260,7 @@ export default {
         },
         xAxis: {
           //
-          categories: ['Dose 3', 'Dose 2', 'Dose 1']
+          categories: ['Dose 1', 'Dose 2', 'Dose 3']
           //  categories: ['01', '02', '03', '04', '05','06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ]
 
         },
@@ -558,11 +558,11 @@ export default {
         prev = arr[i]
       }
       for (var u in b) {
-        if (b[u] === 3 && name == 0) {
+        if (b[u] === 1 && name == 0) {
           count++
         } else if (name == 1 && b[u] === 2) {
           count++
-        } else if (name == 2 && b[u] === 1) {
+        } else if (name == 2 && b[u] === 3) {
           count++
         }
       }

@@ -39,16 +39,16 @@ export default {
     }
   },
   created () {
-    this.getProtocal()
+    this.getProtocol()
   },
 
   methods: {
-    getProtocal () {
+    getProtocol () {
       var id = this.$route.params.id
       axios.get('resources/protocols/details/' + id)
-        .then((protocal) => {
-          console.log(protocal.data)
-          this.result = protocal.data.data
+        .then((protocol) => {
+          console.log(protocol.data)
+          this.result = protocol.data.data
         })
         .catch(error => console.log(error.message))
     }

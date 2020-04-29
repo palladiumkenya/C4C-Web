@@ -252,7 +252,7 @@ export default {
               icon: 'mdi-animation'
             },
             {
-              to: '/protocals',
+              to: '/protocols',
               icon: 'mdi-archive',
               text: 'Facility Resources'
             },

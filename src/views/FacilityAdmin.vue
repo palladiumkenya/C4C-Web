@@ -96,7 +96,7 @@
 
             <template>
 
-              <v-data-table
+              <v-data-table xs12
                 :headers="headers"
                 :items="items"
                 :loading="true"

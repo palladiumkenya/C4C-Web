@@ -105,7 +105,6 @@
                 <v-select
                 
                   v-model="user.cadre"
-                  :hint="user.cadre"
                   :items="all_cadres"
                   item-text="name"
                   label="Cadre"
