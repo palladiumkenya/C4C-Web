@@ -11,33 +11,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  created: function() {
-    // Create a cache when component/app is created
-    this.cachedFormData = this.formDataForComparison();
-    
-    document.addEventListener('beforeunload', this.handlerClose);
-  },
+  
   computed: {
     ...mapGetters({
       user: 'auth/user'
     })
-      
-  },
-  methods: {
-    ...mapActions({
-      logoutAction: 'auth/signout'
-    }),
-    handlerClose: function() {
-      this.logoutAction().then(() => {
-      this.$router.replace({
-        name: 'login'
-      })
-      })
-      localStorage.removeItem('token');
-    }
   }
 }
 
