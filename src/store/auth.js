@@ -94,6 +94,10 @@ export default{
       return axios.get('auth/logout').then(() => {
         commit('SET_USER', null)
         commit('SET_TOKEN', null)
+        commit('SET_US_DATA', null)
+        commit('SET_EXP', [])
+        commit('SET_LINK', null)
+        commit('SET_US_NO', 0)
       })
     },
     storeExp ({ commit }, exposures) {

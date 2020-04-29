@@ -300,6 +300,8 @@ import { mapGetters, mapActions } from 'vuex'
 
 import { EventBus } from './../event-bus.js'
 
+exportingInit(Highcharts)
+
 export default {
   components: {
     Loading,
@@ -331,7 +333,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months Range'
+            text: 'Months - Year'
           }
         },
         yAxis: {
@@ -365,7 +367,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Monthly Exposure Rate'
+          text: 'Monthly Exposure'
         },
         series: [
           {
@@ -382,7 +384,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months Range'
+            text: 'Months - Year'
           }
         },
         yAxis: {
@@ -672,11 +674,11 @@ export default {
 
     facilityFilter (a) {
       let b = [], e = [], us = []
-
+      console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
-            if (this.exp_filtf[ex].facility === a[c].name) {
+            if (this.exp_filtf[ex].facility_id === a[c].id) {
               e.push(this.exp_filtf[ex])
             }
           }

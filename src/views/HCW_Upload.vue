@@ -133,7 +133,7 @@
                 </v-flex>
                 <v-flex
                   xs12
-                  md6
+                  md12
                 >
                   <v-text-field
                     v-model="affl"
@@ -312,7 +312,7 @@ export default {
           email: this.email,
           password: this.password,
           password_confirmation: this.cnf_pass,
-          message: `Welcome ${this.fname} to Caring For the Carer(C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
+          message: `Welcome ${this.fname} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
         )
           .then((response) => {
             this.output = response.data

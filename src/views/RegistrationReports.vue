@@ -4,17 +4,20 @@
 
       <!-- Start filters -->
           <template>
-            <v-layout >
+            <v-container
+              fill-height
+              fluid
+              grid-list-xl
+            >
+            <v-layout wrap>
               <v-flex
                 xs12
-                md2
-                sm6
+                md6
                 lg2
               >
-
                 <template>
-
                   <v-combobox
+                    v-if="user.role_id === 1"
                     v-model="counties"
                     :items="all_counties"
                     item-text="name"
@@ -28,17 +31,14 @@
 
                 </template>
               </v-flex>
-
               <v-flex
-                xs12
-                md2
-                sm6
-                lg2
+               xs12
+               md6
+               lg3
               >
-
                 <template>
-
                   <v-combobox
+                    v-if="user.role_id !== 4"
                     v-model="subcounties"
                     :items="all_subcounties"
                     item-text="name"
@@ -50,19 +50,18 @@
                     clerable
                     persistent-hint
                     chips/>
-
                 </template>
               </v-flex>
 
               <v-flex
                 xs12
-                md2
-                sm6
+                md6
                 lg2
               >
 
                 <template>
                   <v-combobox
+                    v-if="user.role_id !== 4"
                     v-model="partner"
                     :items="all_partner"
                     item-text="partner"
@@ -79,18 +78,18 @@
 
               <v-flex
                 xs12
-                md2
-                sm6
+                md6
                 lg2
               >
 
                 <template>
 
                   <v-combobox
+                    v-if="user.role_id !== 4"
                     :items="all_facilities_level"
                     label="Select Facility Level"
                     v-on:change="getFacilitylevelfilter"
-                   :disabled="active_level"
+                    :disabled="active_level"
                     multiple
                     clerable
                     persistent-hint
@@ -101,12 +100,12 @@
 
               <v-flex
                 xs12
-                sm6
-                md2
+                md6
                 lg2
               >
                 <template>
                   <v-combobox
+                    v-if="user.role_id !== 4"
                     v-model="facility"
                     :items="fac"
                     item-text="name"
@@ -118,39 +117,36 @@
                     clerable
                     persistent-hint
                     chips/>
-
                 </template>
               </v-flex>
-            
-            </v-layout>
-             <template>
-          <v-flex xs12 sm6 md2 lg2>
-            <v-menu
-              ref="menu1"
-              :close-on-content-click="false"
-              v-model="menu1"
-              :nudge-right="40"
-              :return-value.sync="startDate"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="startDate"
-                label="Start Date"
-                prepend-icon="mdi-calendar"
-                readonly
-              ></v-text-field>
-              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
-              </v-date-picker>
-            </v-menu>
-          </v-flex>
+            <template>
+              <v-flex xs12 sm6 md2 lg2>
+              <v-menu
+                ref="menu1"
+                :close-on-content-click="false"
+                v-model="menu1"
+                :nudge-right="40"
+                :return-value.sync="startDate"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="startDate"
+                  label="Start Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                ></v-text-field>
+                <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
+                  <v-spacer></v-spacer>
+                  <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+           </v-flex>
           <v-flex xs12 sm6 md2 lg2>
             <v-menu
               ref="menu"
@@ -179,13 +175,20 @@
             </v-menu>
           </v-flex>
         </template>
-            <v-btn
-              block
-              color="secondary"
-              dark>Filter</v-btn>
+
+            <template>
+              <v-flex xs12 sm6 md2 lg2>
+              <v-btn
+                block
+                color="secondary"
+                dark>Filter</v-btn>
+              </v-flex>
+            </template>
+        </v-layout>
+            </v-container>
 
       </template>
-
+      
             <!-- End filters -->
     <v-tabs
       color="teal lighten-5"
@@ -297,6 +300,7 @@ import Highcharts from 'highcharts'
 import { mapGetters } from 'vuex'
 
 // SeriesLabel(Highcharts);
+exportingInit(Highcharts)
 
 export default {
   components: {
@@ -466,7 +470,7 @@ export default {
       },
       cadrOptions: {
         xAxis: {
-          categories: ['Doctor', 'Clinical officer', 'Nurse', 'Student', 'Laboratory Technologist', 'Cleaner', 'Waste Handler', 'VCT Counsellor', 'Other-Specify'],
+          categories: ['Cleaner', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Nurse', 'Other-Specify', 'Student', 'VCT Counsellor', 'Waste Handler'],
           title: {
             text: 'Cadre'
           }

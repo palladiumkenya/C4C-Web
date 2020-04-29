@@ -309,9 +309,9 @@ export default [
     view: 'Edit_CME'
   },
   {
-    path: '/view_Protocal/:id',
+    path: '/view_Protocol/:id',
     name: 'View Facility Resource',
-    view: 'View_Protocal',
+    view: 'View_Protocol',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -322,9 +322,9 @@ export default [
     }
   },
   {
-    path: '/protocals',
+    path: '/protocols',
     name: 'Facility Resources',
-    view: 'All_Protocals',
+    view: 'All_Protocols',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -335,9 +335,9 @@ export default [
     }
   },
   {
-    path: '/add_protocal',
+    path: '/add_protocol',
     name: 'Add Facility Resource',
-    view: 'New_Protocal',
+    view: 'New_Protocol',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({

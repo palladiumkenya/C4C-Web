@@ -227,7 +227,7 @@ export default {
           email: this.tableData[v].email,
           password: this.tableData[v].password.toString(),
           password_confirmation: this.tableData[v].password.toString(),
-          message: `Welcome ${this.tableData[v].first_name} to Caring For the Carer(C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
+          message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
         )
           .then((response) => {
             this.output = response.data
