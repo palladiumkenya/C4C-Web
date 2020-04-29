@@ -418,7 +418,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Monthly Registration Trends '
+          text: 'Registration by Month'
         },
         series: [
           {

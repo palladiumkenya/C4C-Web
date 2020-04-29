@@ -11,12 +11,27 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   computed: {
     ...mapGetters({
       user: 'auth/user'
     })
+  },
+  beforeDestroy () {
+    this.logoutAction().then(() => {
+      this.pre_out = 'Logged out!'
+      this.$router.replace({
+        name: 'login'
+      })
+    })
+    localStorage.removeItem('token');
+  },
+  methods: {
+    ...mapActions({
+      logoutAction: 'auth/signout'
+    }),
   }
 }
 </script>
