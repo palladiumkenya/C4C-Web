@@ -432,7 +432,7 @@ export default {
       },
       gendOptions: {
         xAxis: {
-          categories: ['MALE', 'FEMALE', 'UNDEFINED'],
+          categories: ['MALE', 'FEMALE'],
           title: {
             text: 'Gender'
           }
