@@ -549,7 +549,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Month - Year'
+            text: 'Year -  Month'
           }
         },
         yAxis: {

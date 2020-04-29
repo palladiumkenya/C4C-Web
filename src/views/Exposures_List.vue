@@ -183,7 +183,7 @@ export default {
           value: 'pep_initiated'
         },
         {
-          text: 'Date',
+          text: 'Exposure Date',
           value: 'exposure_date'
         }
       ],
