@@ -35,6 +35,8 @@
                     item-value=""
                     label="Facility"
                     class="purple-input"
+                    :loading="load"
+                    loader-height="15"
                   />
                 </v-flex>
                 <v-flex
@@ -163,6 +165,7 @@ export default {
       rowsPerPageItems: [50, 250, 500],
       switch1: true,
       name: '',
+      load:true,
       all_users: [],
       facility_id: '',
       facilities: [],
@@ -275,7 +278,9 @@ export default {
             p.value = this.facilities_all[k]
             this.facilities.push(p)
           }
+          this.load = false
         })
+      
     },
 
     DeviceList () {
