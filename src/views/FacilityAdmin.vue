@@ -36,7 +36,6 @@
                     label="Facility"
                     class="purple-input"
                     :loading="load"
-                    loader-height="15"
                   />
                 </v-flex>
                 <v-flex
