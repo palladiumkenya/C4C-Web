@@ -50,7 +50,20 @@
                 </v-layout>
               </v-container>
             </v-form>
-            
+            <v-dialog v-model="loading" fullscreen full-width>
+              <v-container fluid fill-height style="background-color: rgba(255, 255, 255, 0.5);">
+                <v-layout justify-center align-center>
+                  <v-progress-circular
+                    :rotate="360"
+                    :size="100"
+                    :width="8"
+                    :value="value"
+                    color="teal" >
+                    {{ value }} %
+                  </v-progress-circular>
+                </v-layout>
+              </v-container>
+            </v-dialog>
             <v-data-table
               :headers="tableHead"
               :items="tableData.slice(0, 500)"
@@ -119,11 +132,15 @@
 <script>
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import axios from 'axios'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 export default {
   name: 'BulkSignup',
-  components: { UploadExcelComponent },
+  components: { Loading, UploadExcelComponent },
   data () {
     return {
+      value: 0,
+      loading: false,
       affl: '',
       is_data: true,
       output: '',
@@ -214,10 +231,13 @@ export default {
           return
         }
       }
+      this.loading = true
       this.pushData()
     },
     pushData () {
       for (var v in this.tableData) {
+        console.log(v)
+        this.value = Math.round((v / this.tableData.length) * 100)
         axios.post('auth/signup', {
           first_name: this.tableData[v].first_name,
           surname: this.tableData[v].surname,
@@ -244,7 +264,7 @@ export default {
             this.snack('top', 'center')
           })
       }
-      console.log('Good')
+      this.loading = false
     },
     beforeUpload (file) {
       const isLt1M = file.size / 1024 / 1024 < 1
