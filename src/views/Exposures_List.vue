@@ -88,13 +88,16 @@
                 <td>{{ props.item.exposure_location }}</td>
                 <td>{{ Boolean(props.item.pep_initiated) }}</td>
                 <td>{{ props.item.exposure_date }}</td>
-
+                <td>
+                  <v-icon v-if="props.expanded">mdi-arrow-down</v-icon>
+                  <v-icon v-else>mdi-arrow-right</v-icon>
+                </td>
               </tr>
             </template>
             <template
               slot="expand"
               slot-scope="props">
-              <v-card flat>
+              <v-card outlined :dark="true">
                 <v-container py-0>
                   <v-layout wrap>
                     <v-flex
@@ -115,7 +118,7 @@
                       <v-card-text>
                         device purpose: {{ props.item.device_purpose }} <br>
                         previous exposures: {{ props.item.previous_exposures }} <br>
-                        exposure result of: <div v-if="props.item.result_of"> {{ props.item.result_of }}</div> <small v-else>Not specified</small> <br>
+                        exposure result of: <span v-text="props.item.result_of ? props.item.result_of : 'Not specified'"></span> <br>
                         exposure description: {{ props.item.exposure_description }}
                       </v-card-text>
                     </v-flex>
