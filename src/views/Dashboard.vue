@@ -468,12 +468,6 @@ export default {
   },
 
   created () {
-    if (this.user === null) {
-      alert('Not Admin')
-      this.$router.replace({
-        name: 'login'
-      })
-    }
     if (this.auth === null) {
       alert('Not Logged in')
       this.$router.replace({
@@ -706,7 +700,8 @@ export default {
 
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        axios.get('exposures/all/')
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.scount = exp.data.meta.total
             this.s = exp.data.data
