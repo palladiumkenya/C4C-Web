@@ -213,7 +213,7 @@ export default {
   methods: {
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id == 5) {
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
         axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.exposures = exp.data.data
