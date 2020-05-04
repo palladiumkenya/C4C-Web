@@ -82,6 +82,7 @@
                 <td>{{ exposures.indexOf(props.item)+1 }}</td>
                 <td>{{ props.item.gender }}</td>
                 <td>{{ props.item.cadre }}</td>
+                <td>{{ props.item.facility }}</td>
                 <td v-if="props.item.device_used">{{ props.item.device_used }}</td>
                 <td v-else>Not Specified</td>
                 <td>{{ props.item.exposure_type }}</td>
@@ -148,7 +149,7 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [100, 500, 1000],
       search: '',
       link: '',
       output: '',
@@ -167,6 +168,10 @@ export default {
         {
           text: 'Cadre',
           value: 'cadre'
+        },
+        {
+          text: 'Facility',
+          value: 'facility'
         },
         {
           text: 'Device',
@@ -267,8 +272,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Gender','Cadre', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Patient HIV Status', 'Patient HBV Status', 'Pep initiated', 'Pep Date','Exposure Date']
-        const filterVal = ['gender','cadre', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'patient_hiv_status', 'patient_hbv_status', 'pep_initiated', 'pep_date', 'exposure_date']
+        const tHeader = ['Gender','Cadre', 'Facility', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Patient HIV Status', 'Patient HBV Status', 'Pep initiated', 'Pep Date','Exposure Date']
+        const filterVal = ['gender','cadre', 'facility', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'patient_hiv_status', 'patient_hbv_status', 'pep_initiated', 'pep_date', 'exposure_date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
