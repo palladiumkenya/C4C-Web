@@ -234,10 +234,17 @@
               sm12
               lg12
             >
-              <highcharts
-                ref="columnChart"
-                :options="AllDiseaseschartOptions"/>
-
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  color="#007bff"
+                  :is-full-page="false">
+                </loading>
+                  <highcharts
+                    ref="columnChart"
+                    :options="AllDiseaseschartOptions"/>
+              </div>
             </v-flex>
           </v-card-text>
 
@@ -336,6 +343,8 @@
 <script>
 import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
@@ -346,11 +355,12 @@ exportingInit(Highcharts)
 
 export default {
   components: {
+    Loading,
     highcharts: Chart
   },
   data () {
     return {
-
+      isLoading: true,
       menu: false,
       menu1: false,
       startDate: '2016-01-01',
@@ -1311,12 +1321,13 @@ export default {
           let response = await axios.get(l)
           l = response.data.links.next
           this.a = this.a.concat(response.data.data)
-          this.getAllDiseases()
+          this.getAllDiseases(this.a)
         } else {
           i = 11
         }
       }
       this.getAllDiseases(this.a)
+      this.isLoading = false
     },
 
     async loopT (l) {
