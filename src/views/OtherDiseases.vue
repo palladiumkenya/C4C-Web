@@ -3,26 +3,24 @@
     <v-layout wrap>
       <template>
         <!-- Start filters -->
-
         <v-layout >
           <v-flex
             xs12
             md6
             lg3
           >
-            <template>
-              <v-combobox
-                v-model="counties"
-                :items="all_counties"
-                item-text="name"
-                item-value="id"
-                label="Select County"
-                multiple
-                clerable
-                persistent-hint
-                chips
-                @change="getSubCounties"/>
-            </template>
+            <v-combobox
+              v-if="user.role_id === 1"
+              v-model="counties"
+              :items="all_counties"
+              item-text="name"
+              item-value="id"
+              label="Select County"
+              multiple
+              clerable
+              persistent-hint
+              chips
+              @change="getSubCounties"/>
           </v-flex>
           <v-flex
             xs12
@@ -31,6 +29,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id !== 4"
                 v-model="subcounties"
                 :items="all_subcounties"
                 :disabled="active"
@@ -55,6 +54,7 @@
             <template>
 
               <v-combobox
+                v-if="user.role_id !== 4"
                 v-model="facility"
                 :items="fac"
                 item-text="partner"
@@ -74,10 +74,8 @@
             md6
             lg3
           >
-
-            <template>
-
               <v-combobox
+                v-if="user.role_id !== 4"
                 :items="all_facilities_level"
                 :disabled="active_level"
                 label="Select Facility Level"
@@ -86,8 +84,6 @@
                 persistent-hint
                 chips
                 @change="facilityLevel"/>
-
-            </template>
           </v-flex>
 
           <v-flex
@@ -97,6 +93,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id !== 4"
                 v-model="facility"
                 :items="fac"
                 :disabled="active_fac"
