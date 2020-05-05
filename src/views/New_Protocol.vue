@@ -293,9 +293,9 @@ export default {
       allData.append('image_file', this.file)
       allData.append('title', this.title)
       allData.append('body', this.editorData)
-      if (this.user.role_id === 4) {
+      if (this.user.role.id === 4) {
         allData.append('facility_id', this.user.hcw.facility_id)
-      } else if (this.user.role_id === 1) {
+      } else if (this.user.role.id === 1) {
         allData.append('facility_id', this.facility.id)
       }
 
