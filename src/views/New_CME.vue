@@ -31,7 +31,7 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit="postCME">
+            @submit.prevent="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -41,7 +41,7 @@
                 >
                   <v-text-field
                     id="title"
-                    :rules="titleRules"
+                    :rules="[v => !!v || 'Title is required']"
                     v-model="title"
                     required
                     label="Title"
@@ -55,9 +55,10 @@
                     v-model="editorData"
                     :config="editorConfig"
                     required/>
+                     <div v-if="editorData === '' " >
+                        <v-text style=color:red>Text area is required </v-text>
+                      </div>
                 </v-flex>
-                <ul> <li v-for="error in errors" :key="error">{{ error }}</li> </ul>
-
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
@@ -103,7 +104,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; dialog1=true"
+                    @click="validate(); alert=!alert; dialog1=true"
                   >
                     Submit
                   </v-btn>
@@ -164,9 +165,6 @@ export default {
       },
       valid: true,
       errors: [],
-      titleRules: [
-        v => !!v || 'Title is required'
-      ],
       dialog1: false,
       result: '',
       output: '',
@@ -188,7 +186,7 @@ export default {
 
   methods: {
 
-    validateData () {
+    validate () {
       this.$refs.form.validate()
     },
 
@@ -223,10 +221,6 @@ export default {
     },
 
     postCME (e) {
-      if (!this.editorData) {
-        this.errors.push("Fill in the text area .");
-      }
-
       e.preventDefault()
 
       let allData = new FormData()
@@ -253,7 +247,7 @@ export default {
 
           this.alert = true
 
-          //this.$router.push('/cmes')
+          this.$router.push('/cmes')
         })
         .catch(error => {
           this.output = error

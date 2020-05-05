@@ -35,19 +35,18 @@
       </v-icon>
     </v-snackbar>
 
-    <v-flex v-if="loading">
+    <div v-if="loading">
       <Loader />
-    </v-flex>
+    </div>
 
-    <v-row
+  
+    <v-flex
       v-else
       cols="12"
-      dense>
-
-      <v-col
-        v-for="(result, index) in results"
-        :key="result.id"
-        dark>
+      dense
+      v-for="(result, index) in results"
+      :key="result.id"
+      dark>
 
         <v-card
           class="mx-auto">
@@ -86,9 +85,8 @@
           </v-card-actions>
 
         </v-card>
-      </v-col>
 
-    </v-row>
+    </v-flex>
   </v-container>
 </template>
 

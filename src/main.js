@@ -19,6 +19,7 @@ import router from '@/router'
 import store from './store'
 import { mapActions } from 'vuex'
 import axios from 'axios'
+
 Vue.use(VuetifyDaterangePicker)
 
 require('@/store/subscriber')

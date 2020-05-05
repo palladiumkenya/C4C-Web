@@ -43,16 +43,13 @@
         <Loader />
       </v-flex>
 
-      <v-row 
+      <v-flex 
       cols="12" 
       dense 
-      v-else>
-
-      <v-col 
-        v-for="(result, index) in results"
-        :key="result.id"
-        
-        dark>
+      v-else
+      v-for="(result, index) in results"
+      :key="result.id"
+      dark>
 
         <v-card 
         class="mx-auto"
@@ -99,8 +96,7 @@
           </div>
           </v-card>
       
-      </v-col>
-    </v-row>
+      </v-flex>
 
   </v-container>
 </template>
