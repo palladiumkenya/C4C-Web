@@ -4,6 +4,8 @@
       <v-flex
         xs12
         text-xs-right>
+
+        <div v-if="role_id == 1 || role_id == 2">
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
@@ -11,6 +13,10 @@
 
           Add A New COVID 19 Resource
         </v-btn>
+        </div>
+
+        <div v-else>
+        </div>
       </v-flex>
 
       <v-snackbar
@@ -111,6 +117,7 @@ export default {
       results: [],
       snackbar: false,
       output: '',
+      role_id: '',
       resp: '',
       loading: true
     }

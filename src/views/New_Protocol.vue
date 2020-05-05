@@ -48,15 +48,18 @@
                     xs12
                     md8>
                     <label>Facility:</label>
+
+                    <div v-if="user.role.id === 4">
                     <v-chip
-                      v-if="user.role_id === 4"
                       class="ma-2"
                       x-large
                     >
                       {{ user.hcw.facility_name }}
                     </v-chip>
+                    </div>
+
+                   <div v-else-if="user.role.id === 1 || user.role.id === 2">
                     <v-combobox
-                      v-else-if="user.role_id === 1"
                       v-model="facility"
                       :items="all_facilities"
                       :loading="load"
@@ -66,6 +69,7 @@
                       clearable
                       persistent-hint
                       chips />
+                   </div>  
 
                   </v-flex>
                   <v-flex xs12>
