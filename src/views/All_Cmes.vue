@@ -8,7 +8,7 @@
         xs12
         text-xs-right>
 
-        <div v-if="role_id == 1 || role_id == 2">
+        <div v-if="user.role_id === 1 || user.role_id === 2">
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
@@ -105,6 +105,7 @@
 <script>
 import axios from 'axios'
 import Loader from '../components/core/Loader'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { Loader },
@@ -121,6 +122,11 @@ export default {
   },
   created () {
     this.getResources()
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
 
   methods: {
