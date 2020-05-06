@@ -31,7 +31,7 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit="postCOVID">
+            @submit.prevent="postCOVID">
             <v-container py-0>
               <v-layout wrap>
 
@@ -41,7 +41,7 @@
                 >
                   <v-text-field
                     id="title"
-                    :rules="titleRules"
+                    :rules="[v => !!v || 'Title is required']"
                     v-model="title"
                     required
                     label="Title"
@@ -53,13 +53,15 @@
                     id="editorData"
                     :editor="editor"
                     v-model="editorData"
-                    :rules="bodyRules"
                     :config="editorConfig"
                     placeholder="Write here"
                     required/>
+
+                    <div v-if="editorData === '' " >
+                        <v-text style=color:red>Text area is required </v-text>
+                      </div>
+
                 </v-flex>
-                <ul> <li v-for="error in errors"
-                :key="error">{{ error }}</li> </ul>
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
@@ -165,12 +167,6 @@ export default {
         // The configuration of the editor.
       },
       valid: true,
-      titleRules: [
-        v => !!v || 'Title is required'
-      ],
-      bodyRules: [
-        v => !!v || 'Fill in the required text'
-      ],
       dialog1: false,
       result: '',
       errors: [],
@@ -227,10 +223,6 @@ export default {
     },
 
     postCOVID (e) {
-      if (!this.editorData) {
-        this.errors.push('Fill in the text area .')
-      }
-
       e.preventDefault()
 
       let allData = new FormData()
