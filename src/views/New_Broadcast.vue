@@ -52,14 +52,14 @@
                   />
                 </v-flex>
                 <v-flex
-                  v-else
+                  v-else-if="user.role.id === 4"
                 >
                   <label>Facility:</label>
                   <v-chip
                     class="ma-2"
                     x-large
                   >
-                    {{ user.hcw.facility_name }}
+                    {{ user.hcw.facility_name }} 
                   </v-chip>
                 </v-flex>
 
@@ -99,6 +99,7 @@
               >
                 <v-btn
                   :disabled="!valid"
+                  :loading="dialog1"
                   class="mr-4 success"
                   type="submit"
                   @click="validate(); dialog1=true; alert=!alert; ">
@@ -178,6 +179,14 @@ export default {
       user: 'auth/user'
     })
   },
+
+  watch: {
+    dialog1 (val) {
+      if (!val) return
+      setTimeout(() => (this.dialog1 = false), 8000)
+    }
+  },
+
   created () {
     this.getCadres()
     this.getFacilities()
@@ -231,7 +240,7 @@ export default {
             this.output = error
             this.alert = true
           })
-      } else if (this.role_id === 4) {
+      } else if (this.user.role_id === 4) {
         axios.post('broadcasts/web/create', {
           facility_id: this.user.hcw.facility_id,
 
@@ -240,6 +249,7 @@ export default {
         })
           .then((response) => {
             this.output = response.data
+            console.log(response.data)
             this.alert = true
             this.$router.push('/broadcast')
           })
