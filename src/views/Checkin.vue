@@ -98,7 +98,7 @@
             </v-alert>
           </v-data-table>
         </material-card>
-        <div class="maps">
+        <!-- <div class="maps">
           <l-map
             :zoom="zoom"
             :center="LatLng(-1.285790, 36.820030)">
@@ -107,7 +107,8 @@
               :attribution="attribution"/>
             <l-marker :lat-lng="LatLng(-1.285790, 36.820030)"/>
           </l-map>
-        </div>
+        </div> -->
+        <div class="map" id="map"></div>
       </v-flex>
     </v-layout>
     <v-snackbar
@@ -125,6 +126,7 @@ import axios from 'axios'
 import { mapGetters } from 'vuex'
 import L from 'leaflet'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import * as data from "../vendor/data"
 
 export default {
   components: {
@@ -134,9 +136,11 @@ export default {
   },
   data () {
     return {
+      areaOptions: data.AreaData,
+      map: null,
       zoom: 11,
       center: L.latLng(0, 0),
-      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       marker: L.latLng(0, 0),
       rowsPerPageItems: [50, 250, 500],
@@ -175,11 +179,39 @@ export default {
       user: 'auth/user'
     })
   },
-  created () {
+  mounted () {
+    console.log(this.areaOptions)
     this.getChec()
-    console.log(`data ${this.user}`)
+   
+      this.DataMap()
+    
   },
   methods: {
+    DataMap () {
+      var mapboxAccessToken = 'pk.eyJ1IjoiY2JyaWFuIiwiYSI6ImNrOXdkczl0dzA0dTQzcG84MzZvOTBsbnEifQ.hq0XQRnT1xKdkOTauXcfLw';
+      this.map = L.map('map').setView([37.8, -96], 4);
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+          id: 'mapbox/light-v9',
+          tileSize: 512,
+          zoomOffset: -1
+      }).addTo(this.map);
+
+      //L.geoJson(statesData).addTo(map);
+
+
+      // this.map = L.map('map', {
+      //   center: [0.944, 35],
+      //   zoom: 5
+      // });
+      // L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png').addTo(this.map);
+      //  for (var v in this.areaOptions) {
+      //    var poly = L.geoJson(this.areaOptions[v]);
+      //   poly.setStyle({
+      //     fillColor: data.colorArray[v]
+      //   });
+      //   poly.addTo(this.map);
+      // }
+    },
     getChec () {
       axios.get(`check_in/history/facility/${this.user.hcw.facility_id}`)
         .then((exp) => {
@@ -253,6 +285,7 @@ export default {
 </script>
 <style scoped>
   .maps {
-    height: 300px
+    height: 700px
   }
+  .map { height: 600px }
 </style>>
