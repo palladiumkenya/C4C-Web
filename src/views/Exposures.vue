@@ -396,7 +396,7 @@ export default {
 
       barOptionsDevice: {
         xAxis: {
-          categories: ['Capillary tube', 'Glass slide', 'IV catheter/canula', 'Lancet', 'Needle on IV-line', 'Phlebotomy needle/vacuum set', 'Pippete tip', 'Sature needle', 'Scalpel', 'Syringe /needle blood drawing', 'syringe/needle IM/SC injection', 'Unused needle', 'Other'],
+          categories: ['Capillary tube', 'Glass slide', 'IV catheter/canula', 'Lancet', 'Needle on IV-line', 'Phlebotomy needle/vacuum set', 'Pippete tip', 'Sature needle', 'Scalpel', 'Syringe /needle blood drawing', 'syringe/needle IM/SC injection', 'Unused needle', 'Other', 'Not Specified'],
           title: {
             text: 'Devices'
           }
@@ -947,7 +947,7 @@ export default {
     },
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        axios.get('exposures/all/')
+        axios.get(`exposures/all/`)
           .then((exp) => {
             this.s = exp.data.data
             if (exp.data.links.next != null) {
