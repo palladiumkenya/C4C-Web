@@ -184,6 +184,12 @@ export default {
       this.tableHeader = header
       this.is_data = false
       for (var r in results) {
+        if (String(results[r].mobile).slice(0,3) != '254' && String(results[r].mobile).slice(0,1) === '7') {
+          results[r].mobile = '254'+ String(results[r].mobile)
+        } else if (String(results[r].mobile).length < 5) {
+          console.log(results.splice(r,1))
+          break;
+        }
         this.phoneNo.push(results[r].mobile)
       }
     },

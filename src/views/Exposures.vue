@@ -1,17 +1,20 @@
 <template>
   <v-card>
-    <template>
-      <v-layout>
+    <container
+      fill-height
+      fluid
+      grid-list-xl
+      py-0>
+      <v-layout
+        justify-center
+        wrap>
         <v-flex
+          v-if="user.role_id === 1"
           xs12
-          md6
-          sm6
-          lg2
+          md2
           >
           <template>
-
             <v-combobox
-              v-if="user.role_id === 1"
               v-model="counties"
               :items="all_counties"
               item-text="name"
@@ -19,21 +22,19 @@
               label="Select County"
               v-on:change="getSubCounties"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          md6
-          sm6
-          lg2
+          md3
           >
           <template>
             <v-combobox
-              v-if="user.role_id !== 4"
               v-model="subcounties"
               :items="all_subcounties"
               item-text="name"
@@ -42,21 +43,19 @@
               :disabled="active"
               v-on:change="getFacilitysubcountyfilter"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          md6
-          sm6
-          lg2
+          md2
           >
           <template>
             <v-combobox
-              v-if="user.role_id !== 4"
               v-model="facility"
               item-text="partner"
               item-value="id"
@@ -64,21 +63,19 @@
               label="Select Partner"
               multiple
               disabled
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          sm6
-          md6
-          lg2
+          md2
           >
           <template>
             <v-combobox
-              v-if="user.role_id !== 4"
               :items="all_facilities_level"
               label="Select Facility Level"
               v-on:change="getFacilitylevelfilter"
@@ -91,14 +88,12 @@
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          sm6
-          md6
-          lg2
+          md3
           >
           <template>
             <v-combobox
-              v-if="user.role_id !== 4"
               v-model="facility"
               :items="fac"
               item-text="name"
@@ -106,14 +101,30 @@
               label="Select Facility"
               v-on:change="getFacilityfilter"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
           </template>
         </v-flex>
         <template>
-          <v-flex xs12 sm6 md2 lg2> 
+           <v-flex
+            v-if="user.role_id === 4"
+            xs12
+            md2
+          >
+            <v-combobox
+              :items="cadres"
+              item-text="name"
+              item-value="id"
+              label="Select Cadre"
+              v-on:change="cadreFilter"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex xs12 md2> 
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -140,7 +151,7 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2 lg2>
+          <v-flex xs12 md2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -172,7 +183,7 @@
       <template>
         <v-btn block color="secondary" dark>Filter</v-btn>
       </template>
-    </template>
+    </container>
     <!-- End filters -->
 
     <v-tabs
@@ -322,6 +333,7 @@ export default {
   },
   data () {
     return {
+      cadres: [],
       facility: '',
       counties: '',
       subcounties: '',
@@ -909,8 +921,22 @@ export default {
        
         this.getAgeData(this.exp_filtf)
       }
-
     },
+
+    cadreFilter (a) {
+      this.fac_filt = [], this.exp_filt = []
+      if(a.length > 0){
+        for(var e in this.s){
+          if(this.s[e].county === a[c].name){
+            this.exp_filt.push(this.s[e])
+          }
+        }
+        this.getAgeData(this.exp_filt)
+      }else{
+        this.getAgeData(this.s)
+      }
+    },
+
     click () {
       let expo = []
       var dates = {
@@ -942,6 +968,8 @@ export default {
       }
       this.getAgeData(expo)
     },
+
+
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
         const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
