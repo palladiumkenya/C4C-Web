@@ -395,7 +395,7 @@ export default {
 
       barOptionsDevice: {
         xAxis: {
-          categories: ['Capillary tube', 'Glass slide', 'IV catheter/canula', 'Lancet', 'Needle on IV-line', 'Phlebotomy needle/vacuum set', 'Pippete tip', 'Sature needle', 'Scalpel', 'Syringe /needle blood drawing', 'syringe/needle IM/SC injection', 'Unused needle', 'Other'],
+          categories: ['Capillary tube', 'Glass slide', 'IV catheter/canula', 'Lancet', 'Needle on IV-line', 'Phlebotomy needle/vacuum set', 'Pippete tip', 'Sature needle', 'Scalpel', 'Syringe /needle blood drawing', 'syringe/needle IM/SC injection', 'Unused needle', 'Other', 'Not Specified'],
           title: {
             text: 'Devices'
           }
