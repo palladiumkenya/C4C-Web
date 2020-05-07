@@ -1,17 +1,20 @@
 <template>
   <v-card>
-    <template>
-      <v-layout>
+    <container
+      fill-height
+      fluid
+      grid-list-xl
+      py-0>
+      <v-layout
+        justify-center
+        wrap>
         <v-flex
+          v-if="user.role_id === 1"
           xs12
-          md6
-          sm6
-          lg2
+          md2
           >
           <template>
-
             <v-combobox
-              v-if="user.role_id === 1"
               v-model="counties"
               :items="all_counties"
               item-text="name"
@@ -19,7 +22,7 @@
               label="Select County"
               v-on:change="getSubCounties"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
@@ -27,9 +30,7 @@
         </v-flex>
         <v-flex
           xs12
-          md6
-          sm6
-          lg2
+          md3
           >
           <template>
             <v-combobox
@@ -42,7 +43,7 @@
               :disabled="active"
               v-on:change="getFacilitysubcountyfilter"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
@@ -50,9 +51,7 @@
         </v-flex>
         <v-flex
           xs12
-          md6
-          sm6
-          lg2
+          md2
           >
           <template>
             <v-combobox
@@ -64,7 +63,7 @@
               label="Select Partner"
               multiple
               disabled
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
@@ -72,9 +71,7 @@
         </v-flex>
         <v-flex
           xs12
-          sm6
-          md6
-          lg2
+          md2
           >
           <template>
             <v-combobox
@@ -92,9 +89,7 @@
         </v-flex>
         <v-flex
           xs12
-          sm6
-          md6
-          lg2
+          md3
           >
           <template>
             <v-combobox
@@ -106,14 +101,14 @@
               label="Select Facility"
               v-on:change="getFacilityfilter"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips>
             </v-combobox>
           </template>
         </v-flex>
         <template>
-          <v-flex xs12 sm6 md2 lg2> 
+          <v-flex xs12 md2> 
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -140,7 +135,7 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2 lg2>
+          <v-flex xs12 md2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -172,7 +167,7 @@
       <template>
         <v-btn block color="secondary" dark>Filter</v-btn>
       </template>
-    </template>
+    </container>
     <!-- End filters -->
 
     <v-tabs

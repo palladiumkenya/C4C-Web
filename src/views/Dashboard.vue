@@ -4,7 +4,9 @@
     fluid
     grid-list-xl
   >
-    <v-layout wrap>
+    <v-layout
+      justify-center
+      wrap>
 
       <!-- Start Cards -->
       <v-flex
@@ -74,117 +76,130 @@
       <template>
         <!-- Start filters -->
 
-        <v-layout >
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id != 4"
-                v-model="counties"
-                :items="all_counties"
-                item-text="name"
-                item-value="id"
-                label="Select County"
-                v-on:change="getSubCounties"
-                multiple
-                clerable
-                persistent-hint
-                chips/>
-            </template>
-          </v-flex>
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id != 4"
-                v-model="subcounties"
-                :items="all_subcounties"
-                item-text="name"
-                item-value="id"
-                label="Select Sub-County"
-                :disabled="active"
-                v-on:change="facilitySubCounty"
-                multiple
-                clerable
-                persistent-hint
-                chips/>
+        <v-container py-0>
+          <v-layout wrap>
+            <v-flex
+              xs10
+              md2
+            >
+              <template>
+                <v-combobox
+                  v-if="user.role_id != 4"
+                  v-model="counties"
+                  :items="all_counties"
+                  item-text="name"
+                  item-value="id"
+                  label="Select County"
+                  v-on:change="getSubCounties"
+                  multiple
+                  clerable
+                  persistent-hint
+                  chips/>
+              </template>
+            </v-flex>
+            <v-flex
+              xs10
+              md2
+            >
+              <template>
+                <v-combobox
+                  v-if="user.role_id != 4"
+                  v-model="subcounties"
+                  :items="all_subcounties"
+                  item-text="name"
+                  item-value="id"
+                  label="Select Sub-County"
+                  :disabled="active"
+                  v-on:change="facilitySubCounty"
+                  multiple
+                  clerable
+                  persistent-hint
+                  chips/>
 
-            </template>
-          </v-flex>
+              </template>
+            </v-flex>
 
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id != 4"
-                v-model="partner"
-                :items="fac"
-                item-text="partner"
-                item-value="id"
-                label="Select Partner"
-                multiple
-                clerable
-                disabled
-                persistent-hint
-                chips/>
+            <v-flex
+              xs10
+              md2
+            >
+              <template>
+                <v-combobox
+                  v-if="user.role_id != 4"
+                  v-model="partner"
+                  :items="fac"
+                  item-text="partner"
+                  item-value="id"
+                  label="Select Partner"
+                  multiple
+                  clerable
+                  disabled
+                  persistent-hint
+                  chips/>
 
-            </template>
-          </v-flex>
+              </template>
+            </v-flex>
 
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id != 4"
-                :items="all_facilities_level"
-                label="Select Facility Level"
-                v-on:change="facilityLevel"
-                :disabled="active_level"
-                multiple
-                clerable
-                persistent-hint
-                chips/>
+            <v-flex
+              xs10
+              md2
+            >
+              <template>
+                <v-combobox
+                  v-if="user.role_id != 4"
+                  :items="all_facilities_level"
+                  label="Select Facility Level"
+                  v-on:change="facilityLevel"
+                  :disabled="active_level"
+                  multiple
+                  clerable
+                  persistent-hint
+                  chips/>
 
-            </template>
-          </v-flex>
+              </template>
+            </v-flex>
 
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id != 4"
-                v-model="facility"
-                :items="fac"
-                item-text="name"
-                item-value="id"
-                label="Select Facility"
-                v-on:change="facilityFilter"
-                :disabled="active_fac"
-                multiple
-                clerable
-                persistent-hint
-                chips/>
+            <v-flex
+              xs10
+              md4
+            >
+              <template>
+                <v-combobox
+                  v-if="user.role_id != 4"
+                  v-model="facility"
+                  :items="fac"
+                  item-text="name"
+                  item-value="id"
+                  label="Select Facility"
+                  v-on:change="facilityFilter"
+                  :disabled="active_fac"
+                  multiple
+                  clerable
+                  persistent-hint
+                  chips/>
 
-            </template>
-          </v-flex>
-        </v-layout>
+              </template>
+            </v-flex>
+          </v-layout>
+        </v-container>
 
         <template>
+          <v-flex
+            v-if="user.role_id === 4"
+            xs10
+            md4
+          >
+            <v-combobox
+              :items="cadres"
+              item-text="name"
+              item-value="id"
+              label="Select Cadre"
+              v-on:change="cadreFilter"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
           <v-flex xs12 sm6 md2 lg2>
             <v-menu
               ref="menu1"
@@ -248,6 +263,7 @@
             @click="click">Filter
           </v-btn>
         </v-flex> -->
+        
         <!-- End filters -->
       </template>
 
@@ -309,6 +325,7 @@ export default {
   },
   data () {
     return {
+      cadres: [],
       partner:[],
       isLoading: true,
       fullPage: false,
@@ -466,7 +483,6 @@ export default {
       next_link: 'auth/next_link'
     })
   },
-
   created () {
     if (this.auth === null) {
       alert('Not Logged in')
@@ -490,6 +506,10 @@ export default {
     // this.getAllUsers()
     this.getFacilities()
     this.getCounties()
+    axios.get('cadres')
+      .then((c)=>{
+        this.cadres = c.data.data
+      })
   },
   methods: {
     click () {
@@ -675,7 +695,6 @@ export default {
 
     facilityFilter (a) {
       let b = [], e = [], us = []
-      console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
@@ -695,6 +714,33 @@ export default {
       } else {
         this.getTest(this.us_filtf)
         this.getMonth(this.exp_filtf)
+      }
+    },
+
+    cadreFilter (a) {
+      this.us_filt =[],this.fac_filt = [], this.exp_filt = []
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var ex in this.s) {
+            console.log(this.s[ex])
+            if (this.s[ex].cadre === a[c].name) {
+              this.exp_filt.push(this.s[ex])
+              // console.log(this.s[ex])
+            }
+          }
+          for (var u in this.userz) {
+            if (this.userz[u].cadre_id === a[c].id) {
+              this.us_filt.push(this.userz[u])
+            }
+          }
+        }
+        this.getTest(this.us_filt)
+        this.getMonth(this.exp_filt)
+        this.fac = this.fac_filt.sort()
+      } else {
+        this.fac = this.all_facilities
+        this.getTest(this.userz)
+        this.getMonth(this.s)
       }
     },
 
