@@ -717,9 +717,7 @@ export default {
         }
         this.getsummarydata(this.reg_filt)
         this.getAgeData(this.reg_filt)
-        this.fac = this.fac_filt.sort()
       } else {
-        this.fac = this.all_facilities
         this.getsummarydata(this.s)
         this.getAgeData(this.s)
         
