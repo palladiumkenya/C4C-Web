@@ -202,7 +202,7 @@ export default [
     }
   },
   {
-    path: '/all_broadcast',
+    path: '/all_broadcasts',
     name: 'Broadcast',
     view: 'AllBroadcasts',
     beforeEnter: (to, from, next) => {
@@ -217,7 +217,7 @@ export default [
   {
     path: '/broadcast',
     name: 'Broadcast Facility',
-    view: 'BroadcastFacility',
+    view: 'AllBroadcast',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({

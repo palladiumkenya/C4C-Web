@@ -212,7 +212,7 @@ export default {
           ]
         },
         {
-          to: '/broadcast',
+          to: '/all_broadcasts',
           icon: 'mdi-account-switch',
           text: 'Broadcasts'
         },

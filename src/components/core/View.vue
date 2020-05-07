@@ -10,6 +10,7 @@
 </template>
 
 <script>
+
 export default {
   metaInfo () {
     return {
@@ -17,6 +18,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style>

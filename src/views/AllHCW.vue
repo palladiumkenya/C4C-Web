@@ -11,25 +11,6 @@
       <v-flex
         md12
       >
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="12000"
-          color="error"
-          top>
-          <v-icon
-            color="white"
-            class="mr-3"
-          >
-            mdi-bell-plus
-          </v-icon>
-          <div> {{ output.errors }} {{ result }}</div>
-          <v-icon
-            size="16"
-            @click="snackbar = false"
-          >
-            mdi-close-circle
-          </v-icon>
-        </v-snackbar>
 
         <v-card>
           <v-card-title>
@@ -58,10 +39,15 @@
             :items="all_hcws"
             :rows-per-page-items="rowsPerPageItems"
             :search="search"
-            loading
-            loading-text="Loading... Please wait"
+            :loading="true"
+            class="elevation-1"
             item-key="id"
           >
+
+          <template slot='no-data'>
+              <v-progress-linear slot='progress' indeterminate></v-progress-linear>
+          </template>
+
             <template
               slot="items"
               slot-scope="props">
@@ -92,16 +78,14 @@
 
 <script>
 import axios from 'axios'
-import { mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   data () {
     return {
       all_hcws: [],
       search: '',
-      snackbar: false,
-      output: '',
-      result: '',
-      rowsPerPageItems: [100, 500, 1000],
+      isLoading: true,
+      rowsPerPageItems: [100, 2000, 10000],
       headers: [
         {
           sortable: false,
@@ -159,6 +143,8 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["showSnackbar", "closeSnackbar"]),
+
     getHCW () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('hcw')
@@ -169,19 +155,19 @@ export default {
           })
           .catch(() => {
             this.error = true
-            this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true
-          })
-      } else if (this.user.role_id === 4) {
-        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-          .then((workers) => {
-            console.log(workers.data)
-            this.all_hcws = workers.data.data
-            this.loopT(workers.data.links.next)
-          })
+            this.$emit('showSnackbar', 'Check your internet connection or retry logging in!', 5000, 'bottom')          
+            })
+          } else if (this.user.role_id === 4) {
+            axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+              .then((workers) => {
+                console.log(workers.data)
+                this.all_hcws = workers.data.data
+                this.loopT(workers.data.links.next)
+                this.isLoading = false
+              })
           .catch(() => {
             this.error = true
-            this.result = 'Check your internet connection or retry logging in.'
+            this.resp = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
       }

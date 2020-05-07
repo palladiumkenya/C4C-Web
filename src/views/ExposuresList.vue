@@ -67,14 +67,19 @@
               </v-flex>
             </v-layout>
           </v-container><br>
+
           <v-data-table
             :headers="headers"
             :items="exposures"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
-            loading
-            loading-text="Loading... Please wait"
+            :loading="true"
           >
+
+          <template slot='no-data'>
+              <v-progress-linear slot='progress' indeterminate></v-progress-linear>
+          </template>
+
             <template
               slot="items"
               slot-scope="props">
@@ -153,6 +158,7 @@ export default {
       search: '',
       link: '',
       output: '',
+      isLoading: true,
       result: '',
       snackbar: false,
       headers: [
@@ -225,6 +231,7 @@ export default {
             this.link = exp.data.links.next
             if (this.link) {
               this.loopT(this.link)
+              this.isLoading = false
             }
           })
           .catch(() => {
@@ -239,6 +246,7 @@ export default {
             this.link = exp.data.links.next
             if (this.link) {
               this.loopT(this.link)
+              this.isLoading = false
             }
           })
           .catch(() => {

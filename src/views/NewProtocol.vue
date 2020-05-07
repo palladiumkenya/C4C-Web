@@ -27,7 +27,7 @@
               ref="form"
               v-model="valid"
               lazy-validation
-              @submit.prevent="postProtocal">
+              @submit="postProtocal">
               <v-container py-0>
                 <v-layout wrap>
 
@@ -80,9 +80,10 @@
                       v-model="editorData"
                       required
                       />
-                      <div v-if="editorData === '' " >
-                        <v-text style=color:red>Text area is required </v-text>
-                      </div>
+                     <ul>
+                      <li v-for="error in errors" :key="error">{{ error }}</li>
+                    </ul>
+
                   </v-flex>
 
                   <v-flex xs12 >
@@ -130,7 +131,7 @@
                       class="mx-0 font-weight-light"
                       color="success"
                       type="submit"
-                      @click="validate(); alert=!alert; dialog1=true"
+                      @click="validate(); dialog1=true"
                     >
                       Submit
                     </v-btn>
@@ -151,12 +152,10 @@
 
                     <v-alert
                       :value="alert"
-                      text
-                      dismissible
-                      transition="scale-transition"
-                      color = "#47a44b"
                       icon = "mdi-alert"
-                      dense
+                      dismissible
+                      outline color="error"
+                      elevation="2"
                     >
                       <h6> {{ output.error }} {{ output.message }} </h6>
                     </v-alert>
@@ -188,7 +187,7 @@ export default {
       editorData: '',
       editorConfig: { },
       items: [],
-      errors: [],
+      errors: '',
       alert: false,
       valid: true,
       dialog1: false,
@@ -269,8 +268,13 @@ export default {
     postProtocal (e) {
       e.preventDefault()
 
+      this.errors = [];
+
+       if (this.editorData == '') {
+        this.errors.push('Description is required.');
+      } else {
+
       let allData = new FormData()
-      console.log(this.user)
 
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
@@ -305,6 +309,7 @@ export default {
           console.log(error)
           this.alert = true
         })
+      }
     }
   }
 }

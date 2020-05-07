@@ -57,9 +57,9 @@
                     placeholder="Write here"
                     required/>
 
-                    <div v-if="editorData === '' " >
-                        <v-text style=color:red>Text area is required </v-text>
-                      </div>
+                    <ul>
+                      <li v-for="error in errors" :key="error">{{ error }}</li>
+                    </ul>
 
                 </v-flex>
 
@@ -107,7 +107,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; dialog1=true"
+                    @click="validateData();  dialog1=true"
                   >
                     Submit
                   </v-btn>
@@ -128,15 +128,10 @@
 
                   <v-alert
                     :value="alert"
-                    head
-                    type="success"
-                    border="right"
                     icon = "mdi-alert"
                     dismissible
-                    text
-                    transition="scale-transition"
-                    color = "#47a44b"
-                    dense
+                    outline color="error"
+                    elevation="2"
                   >
                     <h6> {{ output.error }} {{ output.message }} </h6>
                   </v-alert>
@@ -220,10 +215,17 @@ export default {
 
     removeFile (key) {
       this.files.splice(key, 1)
-    },
+    }, 
 
     postCOVID (e) {
+
       e.preventDefault()
+
+      this.errors = [];
+
+       if (this.editorData == '') {
+        this.errors.push('Description is required.');
+      } else {
 
       let allData = new FormData()
 
@@ -254,8 +256,8 @@ export default {
           console.log(error)
           this.alert = true
         })
+      }
     }
-
   }
 }
 
