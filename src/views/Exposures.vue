@@ -339,7 +339,6 @@ export default {
       maxDate: new Date().toISOString().substr(0, 10),
       minDate: '2016-01-01',
       endDate: new Date().toISOString().substr(0, 10),
-       //end
 
       value: true,
       value1: true,
@@ -443,8 +442,6 @@ export default {
           }
         ]
       },
-
-      // devices ends
 
       barOptionsAge: {
         xAxis: {
@@ -947,7 +944,8 @@ export default {
     },
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        axios.get(`exposures/all/`)
+        const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
+        axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.s = exp.data.data
             if (exp.data.links.next != null) {
@@ -1167,7 +1165,6 @@ export default {
       for (var xt in expo) {
         var m = c.indexOf(expo[xt].exposure_date.slice(0,3))+1
         if (m<10) {m='0'+m}
-        console.log(m)
         var d = [expo[xt].exposure_date.slice(8,13).trim(),m].join('-')
         if (d === name) {
           counter++
@@ -1189,7 +1186,13 @@ export default {
     getNumh (name, t) {
       var counter = 0
       for (var xh in t) {
-        if (moment(t[xh].created_at).format().substr(11, 2) === name) {
+        var hr = t[xh].exposure_date.split(':')[0].slice(-2).trim()
+        
+        if (hr < 10) {
+          hr = '0' + hr
+          console.log(hr)
+        }
+        if (hr === name) {
           counter++
         }
       }

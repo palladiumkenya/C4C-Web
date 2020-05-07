@@ -98,6 +98,16 @@
             </v-alert>
           </v-data-table>
         </material-card>
+        <div class="maps">
+          <l-map
+            :zoom="zoom"
+            :center="LatLng(-1.285790, 36.820030)">
+            <l-tile-layer
+              :url="url"
+              :attribution="attribution"/>
+            <l-marker :lat-lng="LatLng(-1.285790, 36.820030)"/>
+          </l-map>
+        </div>
       </v-flex>
     </v-layout>
     <v-snackbar
@@ -124,7 +134,7 @@ export default {
   },
   data () {
     return {
-      zoom: 18,
+      zoom: 11,
       center: L.latLng(0, 0),
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',

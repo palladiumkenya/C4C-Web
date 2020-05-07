@@ -7,6 +7,8 @@
       <v-flex
         xs12
         text-xs-right>
+
+        <div v-if="user.role_id === 1 || user.role_id === 2">
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
@@ -14,6 +16,11 @@
 
           Add A New Public Resource
         </v-btn>
+        </div>
+
+        <div v-else>
+         </div>
+
       </v-flex>
 
       <v-snackbar
@@ -98,6 +105,7 @@
 <script>
 import axios from 'axios'
 import Loader from '../components/core/Loader'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { Loader },
@@ -108,11 +116,17 @@ export default {
       snackbar: false,
       output: '',
       resp: '',
+      role_id: '',
       loading: true
     }
   },
   created () {
     this.getResources()
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
 
   methods: {

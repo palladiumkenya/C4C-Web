@@ -15,6 +15,9 @@ export default{
     authenticated (state) {
       return state.token && state.user
     },
+    token (state) {
+      return state.token
+    },
     user (state) {
       return state.user
     },

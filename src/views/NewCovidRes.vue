@@ -20,7 +20,7 @@
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Add A New Public Resource
+              Add A New COVID 19 Resource
             </p>
             <div class="text--primary">
               Kindly fill all the required fields
@@ -31,7 +31,7 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit="postCME">
+            @submit.prevent="postCOVID">
             <v-container py-0>
               <v-layout wrap>
 
@@ -41,7 +41,7 @@
                 >
                   <v-text-field
                     id="title"
-                    :rules="titleRules"
+                    :rules="[v => !!v || 'Title is required']"
                     v-model="title"
                     required
                     label="Title"
@@ -54,10 +54,14 @@
                     :editor="editor"
                     v-model="editorData"
                     :config="editorConfig"
+                    placeholder="Write here"
                     required/>
-                </v-flex>
-                <ul> <li v-for="error in errors" :key="error">{{ error }}</li> </ul>
 
+                    <div v-if="editorData === '' " >
+                        <v-text style=color:red>Text area is required </v-text>
+                      </div>
+
+                </v-flex>
 
                 <v-flex xs12 >
                   <label for="document">Upload Image:</label>
@@ -163,14 +167,10 @@ export default {
         // The configuration of the editor.
       },
       valid: true,
-      errors: [],
-      titleRules: [
-        v => !!v || 'Title is required'
-      ],
       dialog1: false,
       result: '',
+      errors: [],
       output: '',
-      resp: '',
       alert: false,
       title: '',
       file: '',
@@ -222,11 +222,7 @@ export default {
       this.files.splice(key, 1)
     },
 
-    postCME (e) {
-      if (!this.editorData) {
-        this.errors.push("Fill in the text area .");
-      }
-
+    postCOVID (e) {
       e.preventDefault()
 
       let allData = new FormData()
@@ -235,7 +231,7 @@ export default {
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('cme_files[' + i + ']', file)
+        allData.append('resource_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
       allData.append('title', this.title)
@@ -243,21 +239,18 @@ export default {
 
       axios({
         method: 'POST',
-        url: 'resources/cmes/create',
+        url: 'resources/special/create',
         data: allData,
-        headers: { 'Content-Type': `multipart/form-data` }
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
         .then((response) => {
           this.output = response.data
           console.log(response)
-
           this.alert = true
-
-          //this.$router.push('/cmes')
+          this.$router.push('/covid19_resources')
         })
         .catch(error => {
           this.output = error
-
           console.log(error)
           this.alert = true
         })
@@ -280,7 +273,6 @@ span.remove-file{
   color:red;
   cursor: pointer;
 }
-
 ul {
   list-style: none;
   color: red;

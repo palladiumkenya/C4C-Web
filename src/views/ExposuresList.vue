@@ -82,19 +82,23 @@
                 <td>{{ exposures.indexOf(props.item)+1 }}</td>
                 <td>{{ props.item.gender }}</td>
                 <td>{{ props.item.cadre }}</td>
+                <td>{{ props.item.facility }}</td>
                 <td v-if="props.item.device_used">{{ props.item.device_used }}</td>
                 <td v-else>Not Specified</td>
                 <td>{{ props.item.exposure_type }}</td>
                 <td>{{ props.item.exposure_location }}</td>
                 <td>{{ Boolean(props.item.pep_initiated) }}</td>
                 <td>{{ props.item.exposure_date }}</td>
-
+                <td>
+                  <v-icon v-if="props.expanded">mdi-arrow-down</v-icon>
+                  <v-icon v-else>mdi-arrow-right</v-icon>
+                </td>
               </tr>
             </template>
             <template
               slot="expand"
               slot-scope="props">
-              <v-card flat>
+              <v-card outlined :dark="true">
                 <v-container py-0>
                   <v-layout wrap>
                     <v-flex
@@ -115,7 +119,7 @@
                       <v-card-text>
                         device purpose: {{ props.item.device_purpose }} <br>
                         previous exposures: {{ props.item.previous_exposures }} <br>
-                        exposure result of: <div v-if="props.item.result_of"> {{ props.item.result_of }}</div> <small v-else>Not specified</small> <br>
+                        exposure result of: <span v-text="props.item.result_of ? props.item.result_of : 'Not specified'"></span> <br>
                         exposure description: {{ props.item.exposure_description }}
                       </v-card-text>
                     </v-flex>
@@ -145,7 +149,7 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [100, 500, 1000],
       search: '',
       link: '',
       output: '',
@@ -164,6 +168,10 @@ export default {
         {
           text: 'Cadre',
           value: 'cadre'
+        },
+        {
+          text: 'Facility',
+          value: 'facility'
         },
         {
           text: 'Device',
@@ -210,7 +218,8 @@ export default {
   methods: {
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id == 5) {
-        axios.get('exposures/all/')
+        const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
+        axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.exposures = exp.data.data
             this.link = exp.data.links.next
@@ -263,8 +272,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Gender','Cadre', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Patient HIV Status', 'Patient HBV Status', 'Pep initiated', 'Pep Date','Exposure Date']
-        const filterVal = ['gender','cadre', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'patient_hiv_status', 'patient_hbv_status', 'pep_initiated', 'pep_date', 'exposure_date']
+        const tHeader = ['Gender','Cadre', 'Facility', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Patient HIV Status', 'Patient HBV Status', 'Pep initiated', 'Pep Date','Exposure Date']
+        const filterVal = ['gender','cadre', 'facility', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'patient_hiv_status', 'patient_hbv_status', 'pep_initiated', 'pep_date', 'exposure_date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -279,10 +288,12 @@ export default {
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        // console.log(v[j])
-        if (v[j] === null) {
+        console.log(v)
+        if (v[j] === '') {
           console.log(v[j])
           return 'Not Specified'
+        } else if (j === 'pep_initiated') {
+          return Boolean(v[j])
         } else {
           return v[j]
         }
