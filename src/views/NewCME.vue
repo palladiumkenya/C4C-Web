@@ -129,10 +129,10 @@
 
                   <v-alert
                     :value="alert"
-                    type="success"
-                    border="right"
                     icon = "mdi-alert"
                     dismissible
+                    outline color="error"
+                    elevation="2"
                   >
                     <h6> {{ output.error }} {{ output.message }} </h6>
                   </v-alert>
