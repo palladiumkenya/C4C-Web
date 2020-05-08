@@ -41,14 +41,14 @@
           </template>
                 
           <template slot="items" slot-scope="props">
-                <td>{{ props.item.id }}</td>
-                <td>{{ props.item.county }}</td>
-                <td>{{ props.item.sub_county }}</td>
-                <td>{{ props.item.role.name }}</td>
-                <td>{{ props.item.cadre }}</td>
-                <td>{{ props.item.gender }}</td>
+            <td>{{ props.item.id }}</td>
+            <td>{{ props.item.county }}</td>
+            <td>{{ props.item.sub_county }}</td>
+            <td>{{ props.item.role.name }}</td>
+            <td>{{ props.item.cadre }}</td>
+            <td>{{ props.item.gender }}</td>
 
-            </template>
+          </template>
             <v-alert
               slot="no-results"
               :value="true"

@@ -51,8 +51,7 @@
               v-text="link.text"
             />
           </v-list-tile>
-          <div v-else-if="(link.text == 'Manage Facility' || link.text == 'Resource Center') && user.role_id == 5">
-          </div>
+          <div v-else-if="(link.text == 'Manage Facility' || link.text == 'Resource Center') && user.role_id == 5"/>
           <v-list-tile
             v-else-if="!link.subLinks"
             :to="link.to"
@@ -132,8 +131,6 @@ import {
   mapActions,
   mapGetters
 } from 'vuex'
-import store from './../../store'
-import auth from '../../store/auth.js'
 
 export default {
   props: {
@@ -256,11 +253,11 @@ export default {
               icon: 'mdi-archive',
               text: 'Facility Resources'
             },
-             {
-               to: '/covid19_resources',
-               icon: 'mdi-alert-decagram',
-               text: 'COVID 19 Resources'
-             }
+            {
+              to: '/covid19_resources',
+              icon: 'mdi-alert-decagram',
+              text: 'COVID 19 Resources'
+            }
           ]
         },
         // {

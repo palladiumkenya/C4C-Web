@@ -1,64 +1,64 @@
 <template>
-    <v-container
-      fill-height
-      fluid
-      grid-list-xl>
-      <v-layout
-        justify-center
-        wrap
+  <v-container
+    fill-height
+    fluid
+    grid-list-xl>
+    <v-layout
+      justify-center
+      wrap
+    >
+      <v-flex
+        xs12
+        md11
       >
-        <v-flex
-          xs12
-          md11
-        >
-          <v-card>
+        <v-card>
 
-            <v-card-text>
-              <p class="display-1 text--primary">
+          <v-card-text>
+            <p class="display-1 text--primary">
 
-                Add A New Facility Resource
-              </p>
-              <div class="text--primary">
-                Kindly fill all the required fields
-              </div>
-            </v-card-text>
+              Add A New Facility Resource
+            </p>
+            <div class="text--primary">
+              Kindly fill all the required fields
+            </div>
+          </v-card-text>
 
-            <v-form
-              ref="form"
-              v-model="valid"
-              lazy-validation
-              @submit="postProtocal">
-              <v-container py-0>
-                <v-layout wrap>
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            @submit="postProtocal">
+            <v-container py-0>
+              <v-layout wrap>
 
-                  <v-flex
-                    xs12
-                    md12
-                  >
-                    <v-text-field
-                      id="title"
-                      :rules="[v => !!v || 'Title is required']"
-                      v-model="title"
-                      required
-                      label="Title"
-                      class="purple-input"/>
-                  </v-flex>
+                <v-flex
+                  xs12
+                  md12
+                >
+                  <v-text-field
+                    id="title"
+                    :rules="[v => !!v || 'Title is required']"
+                    v-model="title"
+                    required
+                    label="Title"
+                    class="purple-input"/>
+                </v-flex>
 
-                   <v-flex
-                    xs12
-                    md8>
-                    <label>Facility:</label>
+                <v-flex
+                  xs12
+                  md8>
+                  <label>Facility:</label>
 
-                    <div v-if="user.role.id === 4">
+                  <div v-if="user.role.id === 4">
                     <v-chip
                       class="ma-2"
                       x-large
                     >
                       {{ user.hcw.facility_name }}
                     </v-chip>
-                    </div>
+                  </div>
 
-                   <div v-else-if="user.role.id === 1 || user.role.id === 2">
+                  <div v-else-if="user.role.id === 1 || user.role.id === 2">
                     <v-combobox
                       v-model="facility"
                       :items="all_facilities"
@@ -70,108 +70,111 @@
                       clearable
                       persistent-hint
                       chips />
-                   </div>  
+                  </div>
 
-                  </v-flex>
-                  <v-flex xs12>
-                    <ckeditor
-                      id="editorData"
-                      :editor="editor"
-                      v-model="editorData"
-                      required
-                      />
-                     <ul>
-                      <li v-for="error in errors" :key="error">{{ error }}</li>
-                    </ul>
+                </v-flex>
+                <v-flex xs12>
+                  <ckeditor
+                    id="editorData"
+                    :editor="editor"
+                    v-model="editorData"
+                    required
+                  />
+                  <ul>
+                    <li
+                      v-for="error in errors"
+                      :key="error">{{ error }}</li>
+                  </ul>
 
-                  </v-flex>
+                </v-flex>
 
-                  <v-flex xs12 >
+                <v-flex xs12 >
 
-                    <label for="document">Upload Image:</label>
-                    <input
-                      id="file"
-                      ref="file"
-                      value="file"
-                      accept="image/*"
-                      type="file"
-                      @change="handleImageChange()">
+                  <label for="document">Upload Image:</label>
+                  <input
+                    id="file"
+                    ref="file"
+                    value="file"
+                    accept="image/*"
+                    type="file"
+                    @change="handleImageChange()">
 
-                    <img
-                      v-show="showPreview"
-                      :src="imagePreview">
-                  </v-flex>
+                  <img
+                    v-show="showPreview"
+                    :src="imagePreview">
+                </v-flex>
 
-                  <v-flex>
-                    <label for="document">Upload Documents:</label>
-                    <input
-                      id="files"
-                      ref="files"
-                      value="files"
-                      type="file"
-                      multiple
-                      @change="handleFiles()">
+                <v-flex>
+                  <label for="document">Upload Documents:</label>
+                  <input
+                    id="files"
+                    ref="files"
+                    value="files"
+                    type="file"
+                    multiple
+                    @change="handleFiles()">
 
-                    <v-card
-                      v-for="(file, key) in files"
-                      :key="file.id"
-                      class="file-listing">{{ file.name }}
-                      <span
-                        class="remove-file"
-                        @click="removeFile(key)"> Remove </span> </v-card>
-                  </v-flex>
+                  <v-card
+                    v-for="(file, key) in files"
+                    :key="file.id"
+                    class="file-listing">{{ file.name }}
+                    <span
+                      class="remove-file"
+                      @click="removeFile(key)"> Remove </span> </v-card>
+                </v-flex>
 
-                  <v-flex
-                    xs12
-                    text-xs-right
+                <v-flex
+                  xs12
+                  text-xs-right
+                >
+                  <v-btn
+                    :disabled="!valid"
+                    :loading="dialog1"
+                    class="mx-0 font-weight-light"
+                    color="success"
+                    type="submit"
+                    @click="validate(); dialog1=true"
                   >
-                    <v-btn
-                      :disabled="!valid"
-                      :loading="dialog1"
-                      class="mx-0 font-weight-light"
-                      color="success"
-                      type="submit"
-                      @click="validate(); dialog1=true"
-                    >
-                      Submit
-                    </v-btn>
+                    Submit
+                  </v-btn>
 
-                    <v-dialog
-                      v-model="dialog1"
-                      max-width="290"
-                      lazy>
-                      <v-card>
-                        <v-card-text class="text-xs-center">
-                          <v-progress-circular
-                            :size="70"
-                            indeterminate
-                            class="primary--text"/>
-                        </v-card-text>
-                      </v-card>
-                    </v-dialog>
+                  <v-dialog
+                    v-model="dialog1"
+                    max-width="290"
+                    lazy>
+                    <v-card>
+                      <v-card-text class="text-xs-center">
+                        <v-progress-circular
+                          :size="70"
+                          indeterminate
+                          class="primary--text"/>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
 
-                    <v-alert
-                      :value="alert"
-                      icon = "mdi-alert"
-                      dismissible
-                      outline color="error"
-                      elevation="2"
-                    >
-                      <h6> {{ output.error }} {{ output.message }} </h6>
-                    </v-alert>
+                  <v-alert
+                    :value="alert"
+                    icon = "mdi-alert"
+                    dismissible
+                    outline
+                    color="error"
+                    elevation="2"
+                  >
+                    <h6> {{ output.error }} {{ output.message }} </h6>
+                  </v-alert>
 
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-form>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-form>
 
-          </v-card>
-        </v-flex>
+        </v-card>
+      </v-flex>
 
-      </v-layout>
+    </v-layout>
 
-    </v-container>
-  
+  </v-container>
+
 </template>
 
 <script>
@@ -201,8 +204,8 @@ export default {
       imagePreview: '',
       files: [],
       output: '',
-      load:true,
-      
+      load: true
+
     }
   },
 
@@ -211,16 +214,16 @@ export default {
       user: 'auth/user'
     })
   },
-  created () {
-    this.getFacilities()
-  },
   watch: {
     dialog1 (val) {
       if (!val) return
       setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
- 
+  created () {
+    this.getFacilities()
+  },
+
   methods: {
     validate () {
       this.$refs.form.validate()
@@ -268,47 +271,46 @@ export default {
     postProtocal (e) {
       e.preventDefault()
 
-      this.errors = [];
+      this.errors = []
 
-       if (this.editorData == '') {
-        this.errors.push('Description is required.');
+      if (this.editorData == '') {
+        this.errors.push('Description is required.')
       } else {
+        let allData = new FormData()
 
-      let allData = new FormData()
+        for (var i = 0; i < this.files.length; i++) {
+          let file = this.files[i]
 
-      for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i]
+          allData.append('protocol_files[' + i + ']', file)
+        }
+        allData.append('image_file', this.file)
+        allData.append('title', this.title)
+        allData.append('body', this.editorData)
+        if (this.user.role.id === 4) {
+          allData.append('facility_id', this.user.hcw.facility_id)
+        } else if (this.user.role.id === 1) {
+          allData.append('facility_id', this.facility.id)
+        }
 
-        allData.append('protocol_files[' + i + ']', file)
-      }
-      allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.editorData)
-      if (this.user.role.id === 4) {
-        allData.append('facility_id', this.user.hcw.facility_id)
-      } else if (this.user.role.id === 1) {
-        allData.append('facility_id', this.facility.id)
-      }
-
-      axios({
-        method: 'POST',
-        url: 'resources/protocols/create',
-        data: allData,
-        headers: {
-          'content-type': `multipart/form-data` }
-      })
-        .then((response) => {
-          console.log(response)
-         
-          this.output = response.data
-          this.alert = true
-          this.$router.push('/protocols')
+        axios({
+          method: 'POST',
+          url: 'resources/protocols/create',
+          data: allData,
+          headers: {
+            'content-type': `multipart/form-data` }
         })
-        .catch(error => {
-          this.output = error
-          console.log(error)
-          this.alert = true
-        })
+          .then((response) => {
+            console.log(response)
+
+            this.output = response.data
+            this.alert = true
+            this.$router.push('/protocols')
+          })
+          .catch(error => {
+            this.output = error
+            console.log(error)
+            this.alert = true
+          })
       }
     }
   }
