@@ -13,26 +13,6 @@
         md12
       >
 
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="12000"
-          color="error"
-          top>
-          <v-icon
-            color="white"
-            class="mr-3"
-          >
-            mdi-bell-plus
-          </v-icon>
-          <div> {{ output.errors }} {{ result }}</div>
-          <v-icon
-            size="16"
-            @click="snackbar = false"
-          >
-            mdi-close-circle
-          </v-icon>
-        </v-snackbar>
-
         <v-card>
           <v-card-title>
             All Users
@@ -49,16 +29,18 @@
           <v-data-table
             :headers="headers"
             :items="all_users"
+            :loading="true"
+            class="elevation-1"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
-            loading
-            loading-text="Loading... Please wait"
             item-key="id"
           >
-            <template
-              slot="items"
-              slot-scope="props">
-              <tr @click="props.expanded = !props.expanded">
+
+          <template slot='no-data'>
+              <v-progress-linear slot='progress' indeterminate></v-progress-linear>
+          </template>
+                
+          <template slot="items" slot-scope="props">
                 <td>{{ props.item.id }}</td>
                 <td>{{ props.item.county }}</td>
                 <td>{{ props.item.sub_county }}</td>
@@ -66,7 +48,6 @@
                 <td>{{ props.item.cadre }}</td>
                 <td>{{ props.item.gender }}</td>
 
-              </tr>
             </template>
             <v-alert
               slot="no-results"
@@ -88,14 +69,14 @@
 
 <script>
 import axios from 'axios'
+import { mapMutations } from 'vuex'
 export default {
+
   data () {
     return {
-      rowsPerPageItems: [100, 500, 1000],
-      output: '',
+      rowsPerPageItems: [100, 2000, 10000],
       search: '',
-      result: '',
-      loading: false,
+      isLoading: true,
       all_users: [],
       headers: [
         {
@@ -136,21 +117,20 @@ export default {
     this.getUsers()
   },
   methods: {
+    ...mapMutations(["showSnackbar", "closeSnackbar"]),
+
     getUsers () {
-      this.loading = true
       axios.get('users')
         .then((users) => {
           console.log(users.data)
           this.all_users = users.data.data
           this.loopT(users.data.links.next)
+          this.isLoading = false
         })
         .catch(() => {
           this.error = true
-          this.result = 'Check your internet connection or retry logging in.'
-          this.snackbar = true
+          this.showSnackbar({ text: "Check your internet connection or retry logging in." }) 
         })
-        .finally(() =>
-          (this.loading = false))
     },
     async loopT (l) {
       var i
