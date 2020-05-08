@@ -65,7 +65,6 @@
                     v-model="partner"
                     :items="all_partner"
                     item-text="partner"
-                    item-value="sub_county"
                     label="Select Partner"
                     multiple
                     disabled

@@ -57,10 +57,9 @@
           <template>
             <v-combobox
               v-if="user.role_id !== 4"
-              v-model="facility"
+              v-model="partner"
               item-text="partner"
               item-value="id"
-              :items="all_facilities"
               label="Select Partner"
               multiple
               disabled
