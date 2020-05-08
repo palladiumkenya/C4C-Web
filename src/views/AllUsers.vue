@@ -13,6 +13,26 @@
         md12
       >
 
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
         <v-card>
           <v-card-title>
             All Users
@@ -69,7 +89,7 @@
 
 <script>
 import axios from 'axios'
-import { mapMutations } from 'vuex'
+
 export default {
 
   data () {
@@ -78,6 +98,8 @@ export default {
       search: '',
       isLoading: true,
       all_users: [],
+      snackbar: false,
+      result: '',
       headers: [
         {
           sortable: true,
@@ -117,7 +139,6 @@ export default {
     this.getUsers()
   },
   methods: {
-    ...mapMutations(["showSnackbar", "closeSnackbar"]),
 
     getUsers () {
       axios.get('users')
@@ -129,7 +150,9 @@ export default {
         })
         .catch(() => {
           this.error = true
-          this.showSnackbar({ text: "Check your internet connection or retry logging in." }) 
+          this.result = 'Check your internet connection or retry logging in.'
+          this.snackbar = true
+
         })
     },
     async loopT (l) {

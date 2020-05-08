@@ -12,6 +12,26 @@
         md12
       >
 
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
         <v-card>
           <v-card-title>
             Health Care Workers
@@ -78,13 +98,15 @@
 
 <script>
 import axios from 'axios'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       all_hcws: [],
       search: '',
       isLoading: true,
+      snackbar: false,
+      result: '',
       rowsPerPageItems: [100, 2000, 10000],
       headers: [
         {
@@ -143,7 +165,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["showSnackbar", "closeSnackbar"]),
 
     getHCW () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
@@ -152,11 +173,11 @@ export default {
             console.log(workers.data)
             this.all_hcws = workers.data.data
             this.loopT(workers.data.links.next)
+            this.isLoading = false
           })
           .catch(() => {
-            this.error = true
-            this.$emit('showSnackbar', 'Check your internet connection or retry logging in!', 5000, 'bottom')          
-            })
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true            })
           } else if (this.user.role_id === 4) {
             axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
               .then((workers) => {
@@ -166,8 +187,7 @@ export default {
                 this.isLoading = false
               })
           .catch(() => {
-            this.error = true
-            this.resp = 'Check your internet connection or retry logging in.'
+            this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
       }

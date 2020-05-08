@@ -20,7 +20,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div> {{ output.errors }} {{result}}</div>
+      <div> {{result}}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
