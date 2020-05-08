@@ -21,7 +21,7 @@
 
       <v-flex
         v-for="result in results"
-        :key="id"
+        :key="result.id"
         xs12
         sm6
         md6
