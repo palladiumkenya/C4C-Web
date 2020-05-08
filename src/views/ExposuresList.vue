@@ -103,7 +103,9 @@
             <template
               slot="expand"
               slot-scope="props">
-              <v-card outlined :dark="true">
+              <v-card 
+                outlined 
+                :dark="true">
                 <v-container py-0>
                   <v-layout wrap>
                     <v-flex
@@ -217,15 +219,15 @@ export default {
   created () {
     if (this.exposures.length === 0) {
       this.getExp()
-    } else{
+    } else {
       this.exposures = this.e
     }
   },
   methods: {
     getExp () {
-      if (this.user.role_id === 1 || this.user.role_id == 5) {
-        const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
-        axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
+        const proxyurl = 'https://evening-brushlands-82997.herokuapp.com/';
+        axios.get(proxyurl + 'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.exposures = exp.data.data
             this.link = exp.data.links.next
@@ -268,9 +270,10 @@ export default {
           i = 11
         }
       }
-      if (this.user.role_id == 5) {
-        for (var i in this.exposures) {
-          if (this.exposures[i].county == this.user.county) {
+      i = 0
+      if (this.user.role_id === 5) {
+        for (i in this.exposures) {
+          if (this.exposures[i].county === this.user.county) {
             u.push(this.exposures[i])
           }
         }
@@ -280,8 +283,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Gender','Cadre', 'Facility', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Patient HIV Status', 'Patient HBV Status', 'Pep initiated', 'Pep Date','Exposure Date']
-        const filterVal = ['gender','cadre', 'facility', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'patient_hiv_status', 'patient_hbv_status', 'pep_initiated', 'pep_date', 'exposure_date']
+        const tHeader = ['Gender', 'Cadre', 'Facility', 'Previous Exposures', 'Type', 'Device', 'Location', 'Result', 'Description', 'Patient HIV Status', 'Patient HBV Status', 'Pep initiated', 'Pep Date', 'Exposure Date']
+        const filterVal = ['gender', 'cadre', 'facility', 'previous_exposures', 'exposure_type', 'device_used', 'exposure_location', 'result_of', 'exposure_description', 'patient_hiv_status', 'patient_hbv_status', 'pep_initiated', 'pep_date', 'exposure_date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

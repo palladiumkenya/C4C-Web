@@ -9,24 +9,24 @@
       wrap
     >
 
-    <v-snackbar
-        color="error"
+      <v-snackbar
         v-model="snackbar"
         :timeout="12000"
+        color="error"
         top>
         <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
+          color="white"
+          class="mr-3"
+        >
+          mdi-bell-plus
+        </v-icon>
+        <div> {{ output.errors }} {{ result }}</div>
+        <v-icon
+          size="16"
+          @click="snackbar = false"
+        >
+          mdi-close-circle
+        </v-icon>
       </v-snackbar>
 
       <v-flex
@@ -34,33 +34,33 @@
         text-xs-right
       >
 
-      <div v-if="user.role_id === 1 || user.role_id === 2">
-        <v-btn
-          class="mx-0 font-weight-light "
-          color="success"
-          @click="$router.push('new_bulk_broadcast')"
-        >
-          Send A Bulk Broadcast
-        </v-btn>
-        
-         <v-btn
-          class="mx-0 font-weight-light "
-          color="success"
-          @click="$router.push('new_broadcast')"
-        >
-          Send A New Broadcast
-        </v-btn>
-      </div>
-        
-      <div v-else>
-        <v-btn
-          class="mx-0 font-weight-light "
-          color="success"
-          @click="$router.push('new_broadcast')"
-        >
-          Send A New Broadcast
-        </v-btn>
-      </div>
+        <div v-if="user.role_id === 1 || user.role_id === 2">
+          <v-btn
+            class="mx-0 font-weight-light "
+            color="success"
+            @click="$router.push('new_bulk_broadcast')"
+          >
+            Send A Bulk Broadcast
+          </v-btn>
+
+          <v-btn
+            class="mx-0 font-weight-light "
+            color="success"
+            @click="$router.push('new_broadcast')"
+          >
+            Send A New Broadcast
+          </v-btn>
+        </div>
+
+        <div v-else>
+          <v-btn
+            class="mx-0 font-weight-light "
+            color="success"
+            @click="$router.push('new_broadcast')"
+          >
+            Send A New Broadcast
+          </v-btn>
+        </div>
 
       </v-flex>
 
@@ -85,15 +85,17 @@
             :rows-per-page-items="rowsPerPageItems"
             :items="all_messages"
             :loading="true"
-            class="elevation-1"
             :search="search"
+            class="elevation-1"
             show-actions
             item-key="id"
           >
 
-          <template slot='no-data'>
-              <v-progress-linear slot='progress' indeterminate></v-progress-linear>
-          </template>
+            <template slot="no-data">
+              <v-progress-linear
+                slot="progress"
+                indeterminate/>
+            </template>
 
             <template
               slot="items"
@@ -175,7 +177,7 @@ export default {
 
   methods: {
     getBroadcast () {
-      if (this.user.role_id === 1|| this.user.role_id == 5) {
+      if (this.user.role_id === 1 || this.user.role_id == 5) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {
             console.log(broadcast.data)
@@ -202,7 +204,7 @@ export default {
       }
     },
     async loopT (l) {
-      var i, u = []
+      var i; var u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -212,10 +214,10 @@ export default {
           i = 11
         }
       }
-      if(this.user.role_id == 5){
-        for (var ex in this.all_messages){
+      if (this.user.role_id == 5) {
+        for (var ex in this.all_messages) {
           if (this.all_messages[ex].facility) {
-            if (this.all_messages[ex].facility.county == this.user.hcw.county) { 
+            if (this.all_messages[ex].facility.county === this.user.hcw.county) {
               u.push(this.all_messages[ex])
             }
           }

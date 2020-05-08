@@ -56,9 +56,11 @@
                     :config="editorConfig"
                     required/>
 
-                     <ul>
-                      <li v-for="error in errors" :key="error">{{ error }}</li>
-                    </ul>
+                  <ul>
+                    <li
+                      v-for="error in errors"
+                      :key="error">{{ error }}</li>
+                  </ul>
 
                 </v-flex>
 
@@ -220,46 +222,45 @@ export default {
     postCME (e) {
       e.preventDefault()
 
-       this.errors = [];
+      this.errors = []
 
-       if (this.editorData == '') {
-        this.errors.push('Description is required.');
+      if (this.editorData == '') {
+        this.errors.push('Description is required.')
       } else {
+        let allData = new FormData()
 
-      let allData = new FormData()
+        // iterating over any file sent over appending the files
+        for (var i = 0; i < this.files.length; i++) {
+          let file = this.files[i]
 
-      // iterating over any file sent over appending the files
-      for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i]
+          allData.append('cme_files[' + i + ']', file)
+        }
+        allData.append('image_file', this.file)
+        allData.append('title', this.title)
+        allData.append('body', this.editorData)
 
-        allData.append('cme_files[' + i + ']', file)
-      }
-      allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.editorData)
-
-      axios({
-        method: 'POST',
-        url: 'resources/cmes/create',
-        data: allData,
-        headers: { 'Content-Type': `multipart/form-data` }
-      })
-        .then((response) => {
-          this.output = response.data
-          console.log(response)
-
-          this.alert = true
-
-          this.$router.push('/cmes')
+        axios({
+          method: 'POST',
+          url: 'resources/cmes/create',
+          data: allData,
+          headers: { 'Content-Type': `multipart/form-data` }
         })
-        .catch(error => {
-          this.output = error
+          .then((response) => {
+            this.output = response.data
+            console.log(response)
 
-          console.log(error)
-          this.alert = true
-        })
+            this.alert = true
+
+            this.$router.push('/cmes')
+          })
+          .catch(error => {
+            this.output = error
+
+            console.log(error)
+            this.alert = true
+          })
       }
-    }  
+    }
   }
 }
 

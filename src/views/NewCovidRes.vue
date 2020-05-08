@@ -57,9 +57,11 @@
                     placeholder="Write here"
                     required/>
 
-                    <ul>
-                      <li v-for="error in errors" :key="error">{{ error }}</li>
-                    </ul>
+                  <ul>
+                    <li
+                      v-for="error in errors"
+                      :key="error">{{ error }}</li>
+                  </ul>
 
                 </v-flex>
 
@@ -107,7 +109,7 @@
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData();  dialog1=true"
+                    @click="validateData(); dialog1=true"
                   >
                     Submit
                   </v-btn>
@@ -130,7 +132,8 @@
                     :value="alert"
                     icon = "mdi-alert"
                     dismissible
-                    outline color="error"
+                    outline
+                    color="error"
                     elevation="2"
                   >
                     <h6> {{ output.error }} {{ output.message }} </h6>
@@ -215,47 +218,45 @@ export default {
 
     removeFile (key) {
       this.files.splice(key, 1)
-    }, 
+    },
 
     postCOVID (e) {
-
       e.preventDefault()
 
-      this.errors = [];
+      this.errors = []
 
-       if (this.editorData == '') {
-        this.errors.push('Description is required.');
+      if (this.editorData == '') {
+        this.errors.push('Description is required.')
       } else {
+        let allData = new FormData()
 
-      let allData = new FormData()
+        // iterating over any file sent over appending the files
+        for (var i = 0; i < this.files.length; i++) {
+          let file = this.files[i]
 
-      // iterating over any file sent over appending the files
-      for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i]
+          allData.append('resource_files[' + i + ']', file)
+        }
+        allData.append('image_file', this.file)
+        allData.append('title', this.title)
+        allData.append('body', this.editorData)
 
-        allData.append('resource_files[' + i + ']', file)
-      }
-      allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.editorData)
-
-      axios({
-        method: 'POST',
-        url: 'resources/special/create',
-        data: allData,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-        .then((response) => {
-          this.output = response.data
-          console.log(response)
-          this.alert = true
-          this.$router.push('/covid19_resources')
+        axios({
+          method: 'POST',
+          url: 'resources/special/create',
+          data: allData,
+          headers: { 'Content-Type': 'multipart/form-data' }
         })
-        .catch(error => {
-          this.output = error
-          console.log(error)
-          this.alert = true
-        })
+          .then((response) => {
+            this.output = response.data
+            console.log(response)
+            this.alert = true
+            this.$router.push('/covid19_resources')
+          })
+          .catch(error => {
+            this.output = error
+            console.log(error)
+            this.alert = true
+          })
       }
     }
   }
