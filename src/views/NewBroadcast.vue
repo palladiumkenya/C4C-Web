@@ -86,7 +86,8 @@
                   xs12
                 >
                   <v-textarea
-                    :rules="[rules.required]"
+                    :rules="textRules"
+                    counter
                     v-model="message"
                     label="Message"
                     placeholder="Write here"
@@ -102,7 +103,7 @@
                   :loading="dialog1"
                   class="mr-4 success"
                   type="submit"
-                  @click="validate(); dialog1=true; alert=!alert; ">
+                  @click="validate(); dialog1=true; ">
                   submit</v-btn>
               </v-flex>   
 
@@ -125,15 +126,10 @@
 
                 <v-alert
                   :value="alert"
-                  head
-                  type="success"
-                  border="right"
-                  icon = "mdi-alert"
-                  dismissible
-                  text
-                  transition="scale-transition"
-                  color = "#47a44b"
-                  dense
+                    icon = "mdi-alert"
+                    dismissible
+                    outline color="error"
+                    elevation="2"
                 >
                   <h6> {{ output.error }} {{ output.message }} </h6>
                 </v-alert>
@@ -170,7 +166,9 @@ export default {
       message: '',
       rules: {
         required: value => !!value || 'This field is required.'
-      }
+      },
+      textRules: [v => v.length <= 160 || 'Max of 160 Characters' || 'This field is required.'],
+
 
     }
   },

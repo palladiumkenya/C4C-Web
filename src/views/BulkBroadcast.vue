@@ -24,11 +24,13 @@
                 Kindly fill all the required fields
               </div>
           </v-card-text>
+
           <div style="height:10%">
             <upload-excel-component
             :on-success="handleSuccess"
             :before-upload="beforeUpload" />
           </div>
+
           <v-form
             ref="form"
             v-model="valid"
@@ -53,9 +55,10 @@
                   xs12
                 >
                   <v-textarea
-                    :rules="[rules.required]"
+                    :rules="textRules"
                     v-model="message"
                     label="Message"
+                    counter
                     placeholder="Write here"
                     required
                   />
@@ -90,15 +93,10 @@
                 </v-dialog>
                 <v-alert
                   :value="alert"
-                  head
-                  type="success"
-                  border="right"
-                  icon = "mdi-alert"
-                  dismissible
-                  text
-                  transition="scale-transition"
-                  color = "#47a44b"
-                  dense
+                    icon = "mdi-alert"
+                    dismissible
+                    outline color="error"
+                    elevation="2"
                 >
                   <h6> {{ output.error }} {{ output.message }} </h6>
                 </v-alert>
@@ -133,7 +131,8 @@ export default {
       message: '',
       rules: {
         required: value => !!value || 'This field is required.'
-      }
+      },
+      textRules: [v => v.length <= 160 || 'Max of 160 Characters' || 'This field is required.'],
     }
   },
 
