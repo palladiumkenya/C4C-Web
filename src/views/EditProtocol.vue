@@ -145,14 +145,12 @@
                     </v-dialog>
 
                     <v-alert
-                      :value="alert"
-                      text
-                      dismissible
-                      transition="scale-transition"
-                      color = "#47a44b"
-                      icon = "mdi-alert"
-                      dense
-                    >
+                    :value="alert"
+                    icon = "mdi-alert"
+                    dismissible
+                    outline color="error"
+                    elevation="2"
+                  >
                       <h6> {{ output.error }} {{ output.message }} </h6>
                     </v-alert>
 

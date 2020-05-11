@@ -12,7 +12,8 @@
     "jest": {
         "moduleFileExtensions": [
             "js",
-            "vue"
+            "vue",
+            "json"
         ],
         "transform": {
             "^.+\\.js$": "babel-jest",

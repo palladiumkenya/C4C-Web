@@ -139,15 +139,10 @@
 
                   <v-alert
                     :value="alert"
-                    head
-                    type="success"
-                    border="right"
                     icon = "mdi-alert"
                     dismissible
-                    text
-                    transition="scale-transition"
-                    color = "#47a44b"
-                    dense
+                    outline color="error"
+                    elevation="2"
                   >
                     <h6> {{ output.error }} {{ output.message }}  </h6>
                   </v-alert>
