@@ -11,16 +11,6 @@ export default [
     name: 'Dashboard',
     // Relative to /src/views
     view: 'Dashboard',
-
-    beforeEnter: (to, from, next) => {
-      if (!store.getters['auth/authenticated']) {
-        return next({
-          name: 'login'
-        })
-      }
-      next()
-    }
-
     // beforeEnter: (to, from, next) => {
     //   if (!store.getters['auth/authenticated']) {
     //     return next({
@@ -29,7 +19,6 @@ export default [
     //   }
     //   next()
     // }
-
   },
   {
     path: '/login',

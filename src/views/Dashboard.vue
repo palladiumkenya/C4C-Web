@@ -241,13 +241,13 @@
           </v-flex>
         </template>
 
-        <v-flex xs12 sm6 md2 lg2>
+        <!-- <v-flex xs12 sm6 md2 lg2>
           <v-btn
             block
             color="secondary"
             @click="click">Filter
           </v-btn>
-        </v-flex>
+        </v-flex> -->
         <!-- End filters -->
       </template>
 
@@ -384,7 +384,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Year - Month'
+            text: 'Months - Year'
           }
         },
         yAxis: {
@@ -459,6 +459,7 @@ export default {
     },
     ...mapGetters({
       user: 'auth/user',
+      auth: 'auth/token',
       e: 'auth/expo',
       all_users: 'auth/us_all',
       us_no: 'auth/us_no',
@@ -467,8 +468,8 @@ export default {
   },
 
   created () {
-    if (this.user === null) {
-      alert('Not admin')
+    if (this.auth === null) {
+      alert('Not Logged in')
       this.$router.replace({
         name: 'login'
       })
@@ -699,14 +700,17 @@ export default {
 
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        axios.get('exposures/all/')
+        const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
+        axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.scount = exp.data.meta.total
             this.s = exp.data.data
             this.link = exp.data.links.next
             this.loopT(this.link)
           })
-          .catch(error => console.log(error.message))
+          .catch(error => {
+            console.log(error.message)
+          })
       } else if (this.user.role_id === 4) {
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {

@@ -133,24 +133,17 @@ export default {
       if (!vm.form.email || !vm.form.password) {
         vm.result = "Email and Password can't be empty."
         vm.showResult = true
-
         return
       }
 
       this.signIn(this.form)
         .then(() => {
-          // if(this.user != null){
           this.$router.replace({
             name: 'Dashboard'
           })
-          // } else {
-          //   vm.error = true
-          //   vm.result = 'Not an admin. Please check your email.'
-          //   vm.showResult = true
-          // }
+          console.log(user)
         })
         .catch(() => {
-          // console.log('failed')
           vm.error = true
           vm.result = 'Email or Password is incorrect.'
           vm.showResult = true

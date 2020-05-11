@@ -9,7 +9,7 @@
       wrap
     >
       <v-flex
-        md11
+        md12
       >
         <v-snackbar
           v-model="snackbar"

@@ -69,36 +69,35 @@
               </v-flex>
 
               <v-flex
-              xs12
+                xs12
               >
-                   <v-dialog
-                    v-model="dialog1"
-                    max-width="290"
-                    lazy>
-                    <v-card>
-                      <v-card-text class="text-xs-center">
-                        <v-progress-circular
-                          :size="70"
-                          indeterminate
-                          class="primary--text"/>
-                      </v-card-text>
-                    </v-card>
-                  </v-dialog>
-
-                  <v-alert
-                    :value="alert"
-                    head
-                    type="success"
-                    border="right"
-                    icon = "mdi-alert"
-                    dismissible
-                    text
-                    transition="scale-transition"
-                    color = "#47a44b"
-                    dense
-                  >
-                    <h6> {{ output.error }} {{ output.message }} </h6>
-                  </v-alert>
+                <v-dialog
+                  v-model="dialog1"
+                  max-width="290"
+                  lazy>
+                  <v-card>
+                    <v-card-text class="text-xs-center">
+                      <v-progress-circular
+                        :size="70"
+                        indeterminate
+                        class="primary--text"/>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+                <v-alert
+                  :value="alert"
+                  head
+                  type="success"
+                  border="right"
+                  icon = "mdi-alert"
+                  dismissible
+                  text
+                  transition="scale-transition"
+                  color = "#47a44b"
+                  dense
+                >
+                  <h6> {{ output.error }} {{ output.message }} </h6>
+                </v-alert>
               </v-flex>
 
               </v-layout>

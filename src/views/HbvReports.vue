@@ -5,11 +5,8 @@
     grid-list-xl
   >
     <v-layout wrap>
-
-      <!-- Start Cards -->
-<template>
+      <template>
         <!-- Start filters -->
-
         <v-layout >
           <v-flex
             xs12
@@ -18,6 +15,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id === 1"
                 v-model="counties"
                 :items="all_counties"
                 item-text="name"
@@ -37,6 +35,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id !== 4"
                 v-model="subcounties"
                 :items="all_subcounties"
                 item-text="name"
@@ -61,6 +60,7 @@
             <template>
 
               <v-combobox
+                v-if="user.role_id !== 4"
                 v-model="facility"
                 :items="fac"
                 item-text="partner"
@@ -84,6 +84,7 @@
             <template>
 
               <v-combobox
+                v-if="user.role_id !== 4"
                 :items="all_facilities_level"
                 label="Select Facility Level"
                 v-on:change="facilityLevel"
@@ -103,6 +104,7 @@
           >
             <template>
               <v-combobox
+                v-if="user.role_id !== 4"
                 v-model="facility"
                 :items="fac"
                 item-text="name"
