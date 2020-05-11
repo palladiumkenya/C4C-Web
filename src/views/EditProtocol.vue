@@ -1,4 +1,5 @@
 <template>
+  <div id="ScrollableDiv">
     <v-container
       fill-height
       fluid
@@ -14,20 +15,19 @@
           <v-card>
 
             <v-card-text>
+              <div/>
               <p class="display-1 text--primary">
 
-                Add A New Facility Resource
+                Edit Facility Resource
               </p>
-              <div class="text--primary">
-                Kindly fill all the required fields
-              </div>
+
             </v-card-text>
 
             <v-form
               ref="form"
               v-model="valid"
               lazy-validation
-              @submit.prevent="postProtocal">
+              @submit="editProtocal">
               <v-container py-0>
                 <v-layout wrap>
 
@@ -37,8 +37,8 @@
                   >
                     <v-text-field
                       id="title"
-                      :rules="[v => !!v || 'Title is required']"
-                      v-model="title"
+                      :rules="titleRules"
+                      v-model="protocol.title"
                       required
                       label="Title"
                       class="purple-input"/>
@@ -48,41 +48,20 @@
                     xs12
                     md8>
                     <label>Facility:</label>
-
-                    <div v-if="user.role.id === 4">
                     <v-chip
                       class="ma-2"
                       x-large
                     >
-                      {{ user.hcw.facility_name }}
+                      {{ protocol.facility_id }} : {{user.hcw.facility_name}}
                     </v-chip>
-                    </div>
+                  </v-flex>  
 
-                   <div v-else-if="user.role.id === 1 || user.role.id === 2">
-                    <v-combobox
-                      v-model="facility"
-                      :items="all_facilities"
-                      :loading="load"
-                      :disabled="load"
-                      :rules="[v => !!v || 'Facility is required']"
-                      item-text="name"
-                      item-value="id"
-                      clearable
-                      persistent-hint
-                      chips />
-                   </div>  
-
-                  </v-flex>
                   <v-flex xs12>
                     <ckeditor
                       id="editorData"
                       :editor="editor"
-                      v-model="editorData"
-                      required
-                      />
-                      <div v-if="editorData === '' " >
-                        <v-text style=color:red>Text area is required </v-text>
-                      </div>
+                      v-model="protocol.body"
+                      rules="bodyRules"/>
                   </v-flex>
 
                   <v-flex xs12 >
@@ -96,6 +75,14 @@
                       type="file"
                       @change="handleImageChange()">
 
+                    <v-img
+                      :src="protocol.file"
+                      class="white--text align-end"
+                      max-height="400px"
+                    />
+
+                  </v-flex>
+                  <v-flex xs12>
                     <img
                       v-show="showPreview"
                       :src="imagePreview">
@@ -110,6 +97,15 @@
                       type="file"
                       multiple
                       @change="handleFiles()">
+
+                    <v-list
+                      v-for="file in protocol.files"
+                      :key="file"
+                      class="file-listing"> {{ file.file_name }}
+                      <span
+                        class="remove-file"
+                        @click="removeFile(key)"> Remove </span>
+                    </v-list>
 
                     <v-card
                       v-for="(file, key) in files"
@@ -126,13 +122,12 @@
                   >
                     <v-btn
                       :disabled="!valid"
-                      :loading="dialog1"
                       class="mx-0 font-weight-light"
                       color="success"
                       type="submit"
-                      @click="validate(); alert=!alert; dialog1=true"
+                      @click="validateData(); alert=!alert; dialog1=true "
                     >
-                      Submit
+                      Save
                     </v-btn>
 
                     <v-dialog
@@ -150,14 +145,12 @@
                     </v-dialog>
 
                     <v-alert
-                      :value="alert"
-                      text
-                      dismissible
-                      transition="scale-transition"
-                      color = "#47a44b"
-                      icon = "mdi-alert"
-                      dense
-                    >
+                    :value="alert"
+                    icon = "mdi-alert"
+                    dismissible
+                    outline color="error"
+                    elevation="2"
+                  >
                       <h6> {{ output.error }} {{ output.message }} </h6>
                     </v-alert>
 
@@ -172,7 +165,7 @@
       </v-layout>
 
     </v-container>
-  
+  </div>
 </template>
 
 <script>
@@ -185,25 +178,32 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
-      editorData: '',
       editorConfig: { },
       items: [],
-      errors: [],
       alert: false,
       valid: true,
+      titleRules: [
+        v => !!v || 'Title is required'
+      ],
+      bodyRules: [
+        v => !!v || 'Fill in the required text'
+      ],
       dialog1: false,
       result: '',
       facility_id: '',
-      title: '',
+      protocol : {
+        body: '',
+        title: '',
+       },
       file: '',
-      all_facilities: [],
-      facility: '',
       showPreview: false,
       imagePreview: '',
       files: [],
       output: '',
-      load:true,
-      
+      resp: '',
+      rules: {
+        required: value => !!value || 'Required.'
+      }
     }
   },
 
@@ -212,29 +212,18 @@ export default {
       user: 'auth/user'
     })
   },
-  created () {
-    this.getFacilities()
-  },
   watch: {
     dialog1 (val) {
       if (!val) return
       setTimeout(() => (this.dialog1 = false), 8000)
     }
   },
- 
+  created () {
+    this.getProtocol()
+  },
   methods: {
-    validate () {
+    validateData () {
       this.$refs.form.validate()
-    },
-
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          console.log(facilities.data)
-          this.all_facilities = facilities.data.data
-          this.load = false
-        })
-        .catch(error => console.log(error.message))
     },
 
     handleFiles () {
@@ -266,11 +255,22 @@ export default {
       this.files.splice(key, 1)
     },
 
-    postProtocal (e) {
+    getProtocol () {
+      var id = this.$route.params.id
+      axios.get('resources/protocols/details/' + id)
+        .then((response) => {
+          this.protocol = response.data.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    editProtocal (e) {
       e.preventDefault()
 
       let allData = new FormData()
-      console.log(this.user)
 
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
@@ -278,32 +278,31 @@ export default {
         allData.append('protocol_files[' + i + ']', file)
       }
       allData.append('image_file', this.file)
-      allData.append('title', this.title)
-      allData.append('body', this.editorData)
-      if (this.user.role.id === 4) {
-        allData.append('facility_id', this.user.hcw.facility_id)
-      } else if (this.user.role.id === 1) {
-        allData.append('facility_id', this.facility.id)
-      }
+      allData.append('title', this.protocol.title)
+      allData.append('body', this.protocol.body)
+      allData.append('facility_id', this.protocol.facility_id )
+      allData.append('protocol_id', this.protocol.id)
+
 
       axios({
         method: 'POST',
-        url: 'resources/protocols/create',
+        url: 'resources/protocols/update',
         data: allData,
         headers: {
-          'content-type': `multipart/form-data` }
+          'content-type': 'multipart/form-data' }
       })
         .then((response) => {
           console.log(response)
-         
           this.output = response.data
           this.alert = true
-          this.$router.push('/protocols')
+
+          this.$router.push('/protocals')
         })
         .catch(error => {
           this.output = error
           console.log(error)
           this.alert = true
+
         })
     }
   }
@@ -314,10 +313,6 @@ export default {
 span.remove-file{
   color:red;
   cursor: pointer;
-}
-ul {
-  list-style: none;
-  color: red;
 }
 
 </style>

@@ -1,119 +1,127 @@
 <template>
   <v-card>
-    <template>
-      <v-layout>
+    <v-container
+      fill-height
+      fluid
+      grid-list-xl
+      py-0>
+      <v-layout
+        justify-center
+        wrap>
         <v-flex
+          v-if="user.role_id === 1"
           xs12
-          md6
-          sm6
-          lg2
-          >
+          md2
+        >
           <template>
-
             <v-combobox
-              v-if="user.role_id === 1"
               v-model="counties"
               :items="all_counties"
               item-text="name"
               item-value="id"
               label="Select County"
-              v-on:change="getSubCounties"
               multiple
-              clerable
+              clearable
               persistent-hint
-              chips>
-            </v-combobox>
+              chips
+              @change="getSubCounties"/>
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          md6
-          sm6
-          lg2
-          >
+          md3
+        >
           <template>
             <v-combobox
-              v-if="user.role_id !== 4"
               v-model="subcounties"
               :items="all_subcounties"
+              :disabled="active"
               item-text="name"
               item-value="id"
               label="Select Sub-County"
-              :disabled="active"
-              v-on:change="getFacilitysubcountyfilter"
               multiple
-              clerable
+              clearable
               persistent-hint
-              chips>
-            </v-combobox>
+              chips
+              @change="getFacilitysubcountyfilter"/>
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          md6
-          sm6
-          lg2
-          >
+          md2
+        >
           <template>
             <v-combobox
               v-if="user.role_id !== 4"
-              v-model="facility"
+              v-model="partner"
               item-text="partner"
               item-value="id"
-              :items="all_facilities"
               label="Select Partner"
               multiple
               disabled
-              clerable
+              clearable
               persistent-hint
-              chips>
-            </v-combobox>
+              chips/>
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          sm6
-          md6
-          lg2
-          >
+          md2
+        >
           <template>
             <v-combobox
-              v-if="user.role_id !== 4"
               :items="all_facilities_level"
-              label="Select Facility Level"
-              v-on:change="getFacilitylevelfilter"
               :disabled="active_level"
+              label="Select Facility Level"
               multiple
               clerable
               persistent-hint
-              chips>
-            </v-combobox>
+              chips
+              @change="getFacilitylevelfilter"/>
           </template>
         </v-flex>
         <v-flex
+          v-if="user.role_id !== 4"
           xs12
-          sm6
-          md6
-          lg2
-          >
+          md3
+        >
           <template>
             <v-combobox
-              v-if="user.role_id !== 4"
               v-model="facility"
               :items="fac"
               item-text="name"
               item-value="id"
               label="Select Facility"
-              v-on:change="getFacilityfilter"
               multiple
-              clerable
+              clearable
               persistent-hint
-              chips>
-            </v-combobox>
+              chips
+              @change="getFacilityfilter"/>
           </template>
         </v-flex>
         <template>
-          <v-flex xs12 sm6 md2 lg2> 
+          <v-flex
+            v-if="user.role_id === 4"
+            xs12
+            md2
+          >
+            <v-combobox
+              :items="cadres"
+              item-text="name"
+              item-value="id"
+              label="Select Cadre"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="cadreFilter"/>
+          </v-flex>
+          <v-flex
+            xs12
+            md2>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -125,22 +133,36 @@
               offset-y
               full-width
               min-width="290px"
-              >
+            >
               <v-text-field
                 slot="activator"
                 v-model="startDate"
                 label="Start Date"
                 prepend-icon="mdi-calendar"
                 readonly
-              ></v-text-field>
-              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="startDate"
+                :max="endDate"
+                :min="minDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu1 = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2 lg2>
+          <v-flex
+            xs12
+            md2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -159,20 +181,35 @@
                 label="End Date"
                 prepend-icon="mdi-calendar"
                 readonly
-              ></v-text-field>
-              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="endDate"
+                :max="maxDate"
+                :min="startDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="click();$refs.menu.save(endDate)">OK</v-btn>
               </v-date-picker>
             </v-menu>
           </v-flex>
         </template>
       </v-layout>
       <template>
-        <v-btn block color="secondary" dark>Filter</v-btn>
+        <v-btn
+          block
+          color="secondary"
+          dark>Filter</v-btn>
       </template>
-    </template>
+    </v-container>
     <!-- End filters -->
 
     <v-tabs
@@ -282,7 +319,6 @@
                 :options="gendOptions"/>
             </template>
 
-
           </v-card-text>
           <v-card-text v-if="n==10">This is the Third tab</v-card-text>
         </v-container>
@@ -299,7 +335,7 @@ import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
-//import json from '../map.json'
+// import json from '../map.json'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -322,6 +358,7 @@ export default {
   },
   data () {
     return {
+      cadres: [],
       facility: '',
       counties: '',
       subcounties: '',
@@ -395,12 +432,12 @@ export default {
 
       barOptionsDevice: {
         xAxis: {
-          categories: ['Capillary tube', 'Glass slide', 'IV catheter/canula', 'Lancet', 'Needle on IV-line', 'Phlebotomy needle/vacuum set', 'Pippete tip', 'Sature needle', 'Scalpel', 'Syringe /needle blood drawing', 'syringe/needle IM/SC injection', 'Unused needle', 'Other'],
+          categories: ['Capillary tube', 'Glass slide', 'IV catheter/canula', 'Lancet', 'Needle on IV-line', 'Phlebotomy needle/vacuum set', 'Pippete tip', 'Sature needle', 'Scalpel', 'Syringe /needle blood drawing', 'syringe/needle IM/SC injection', 'Unused needle', 'Other', 'Not Specified'],
           title: {
             text: 'Devices'
           }
         },
-        
+
         yAxis: {
           min: 0,
           title: {
@@ -747,13 +784,13 @@ export default {
       users: [],
       gender: [],
       hours: [],
-       load: true,
+      load: true,
       fac_filt: [],
       fac_filtl: [],
       fac_filtf: [],
       exp_filt: [],
       exp_filtl: [],
-      exp_filtf: [],
+      exp_filtf: []
 
     }
   },
@@ -788,164 +825,173 @@ export default {
 
     getSubCounties (a) {
       console.log(a)
-      if(a.length > 0){
+      if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
-        for(var x in a){
+        for (var x in a) {
           axios.get(`subcounties/${a[x].id}`)
-          .then((subcounties) => {
-            this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
-          } )
-          .catch(error => console.log(error.message))
+            .then((subcounties) => {
+              this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+            })
+            .catch(error => console.log(error.message))
         }
         this.getFacilitycountyfilter(a)
-      }else{
+      } else {
         this.active = true
         this.getFacilitycountyfilter(a)
       }
     },
 
-    getFacilitycountyfilter (a){
+    getFacilitycountyfilter (a) {
       this.fac_filt = [], this.exp_filt = []
-      if(a.length > 0){
-        for(var c in a){
-          for(var ai in this.all_facilities){
-            if(this.all_facilities[ai].county === a[c].name){
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var ai in this.all_facilities) {
+            if (this.all_facilities[ai].county === a[c].name) {
               this.fac_filt.push(this.all_facilities[ai])
             }
           }
-          for(var e in this.s){
-            if(this.s[e].county == a[c].name){
+          for (var e in this.s) {
+            if (this.s[e].county == a[c].name) {
               this.exp_filt.push(this.s[e])
             }
           }
-        } 
+        }
         this.getAgeData(this.exp_filt)
         this.fac = this.fac_filt.sort()
-      }else{
-      
+      } else {
         this.getAgeData(this.s)
         this.fac = this.all_facilities
       }
     },
-    getFacilitysubcountyfilter (fsb){
-       this.exp_filtl = [], this.fac_filtl = []
-       this.active_level = false
-       if(fsb.length > 0){
-         for(var sb in fsb){
-           
-           for(var a in this.fac_filt){
-             if(this.fac_filt[a].sub_county === fsb[sb].name){
-               console.log(fsb[sb])
-               this.fac_filtl.push(this.fac_filt[a])
-             }
-           }
-            for(var e in this.exp_filt){
-              if(this.exp_filt[e].sub_county === fsb[sb].name){
-                this.exp_filtl.push(this.exp_filt[e])
-              }
+    getFacilitysubcountyfilter (fsb) {
+      this.exp_filtl = [], this.fac_filtl = []
+      this.active_level = false
+      if (fsb.length > 0) {
+        for (var sb in fsb) {
+          for (var a in this.fac_filt) {
+            if (this.fac_filt[a].sub_county === fsb[sb].name) {
+              console.log(fsb[sb])
+              this.fac_filtl.push(this.fac_filt[a])
             }
-         }
-       
-         this.getAgeData(this.exp_filtl)
-         this.fac = this.fac_filtl.sort()
-       }else{
-         
-         this.getAgeData(this.exp_filt)
-         this.fac = this.fac_filt
-         this.active_level = true
-       }
+          }
+          for (var e in this.exp_filt) {
+            if (this.exp_filt[e].sub_county === fsb[sb].name) {
+              this.exp_filtl.push(this.exp_filt[e])
+            }
+          }
+        }
+
+        this.getAgeData(this.exp_filtl)
+        this.fac = this.fac_filtl.sort()
+      } else {
+        this.getAgeData(this.exp_filt)
+        this.fac = this.fac_filt
+        this.active_level = true
+      }
     },
 
-    getFacilitylevelfilter (fl){
+    getFacilitylevelfilter (fl) {
       this.fac_filtf = [], this.exp_filtf = []
       this.active_fac = false
-      if(fl.length > 0){
-        for(var l in fl){
-          for(var a in this.fac_filtl){
-            if(this.fac_filtl[a].level == fl[l]){
+      if (fl.length > 0) {
+        for (var l in fl) {
+          for (var a in this.fac_filtl) {
+            if (this.fac_filtl[a].level == fl[l]) {
               this.fac_filtf.push(this.fac_filtl[a])
-            }else if(fl[l] === 'Level 5 and Above'){
-                if(Number(this.fac_filtl[a].level.slice(6,7)) >= 5){
-                  this.fac_filtf.push(this.fac_filtl[a])
-                }
+            } else if (fl[l] === 'Level 5 and Above') {
+              if (Number(this.fac_filtl[a].level.slice(6, 7)) >= 5) {
+                this.fac_filtf.push(this.fac_filtl[a])
               }
+            }
           }
-          for(var e in this.exp_filtl){
-            if(this.exp_filtl[e].facility_level === fl[l]){
+          for (var e in this.exp_filtl) {
+            if (this.exp_filtl[e].facility_level === fl[l]) {
               this.exp_filtf.push(this.exp_filtl[e])
-            }else if(fl[l] === 'Level 5 and Above'){
-              if(Number(this.exp_filtl[e].facility_level.slice(6,7)) >= 5){
+            } else if (fl[l] === 'Level 5 and Above') {
+              if (Number(this.exp_filtl[e].facility_level.slice(6, 7)) >= 5) {
                 this.exp_filtf.push(this.exp_filtl[e])
               }
             }
           }
         }
-       
+
         this.getAgeData(this.exp_filtf)
         this.fac = this.fac_filtf.sort()
-      }else{
-       
+      } else {
         this.getAgeData(this.exp_filtl)
         this.fac = this.fac_filtl
         this.active_fac = true
       }
     },
 
-    getFacilityfilter (f){
-      let al = [], exp = []
-      if(f.length > 0){
-        for(var s in f){
+    getFacilityfilter (f) {
+      let al = []; let exp = []
+      if (f.length > 0) {
+        for (var s in f) {
           console.log(f[s].name)
-          for(var e in this.exp_filtf){
-            if(this.exp_filtf[e].facility === f[s].name){
+          for (var e in this.exp_filtf) {
+            if (this.exp_filtf[e].facility === f[s].name) {
               exp.push(this.exp_filtf[e])
             }
           }
         }
         this.getAgeData(exp)
-      
-      }else{
-       
+      } else {
         this.getAgeData(this.exp_filtf)
       }
-
     },
+
+    cadreFilter (a) {
+      this.fac_filt = [], this.exp_filt = []
+      if (a.length > 0) {
+        for (var e in this.s) {
+          if (this.s[e].county === a[c].name) {
+            this.exp_filt.push(this.s[e])
+          }
+        }
+        this.getAgeData(this.exp_filt)
+      } else {
+        this.getAgeData(this.s)
+      }
+    },
+
     click () {
       let expo = []
       var dates = {
-        convert:function(d) {
+        convert: function (d) {
           return (
-            d.constructor === Date ? d :
-            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
-            d.constructor === Number ? new Date(d) :
-            d.constructor === String ? new Date(d) :
-            typeof d === "object" ? new Date(d.year,d.month,d.date) :
-            NaN
-          );
+            d.constructor === Date ? d
+              : d.constructor === Array ? new Date(d[0], d[1], d[2])
+                : d.constructor === Number ? new Date(d)
+                  : d.constructor === String ? new Date(d)
+                    : typeof d === 'object' ? new Date(d.year, d.month, d.date)
+                      : NaN
+          )
         },
-        inRange:function(d,start,end) {
+        inRange: function (d, start, end) {
           return (
-            isFinite(d=this.convert(d).valueOf()) &&
-            isFinite(start=this.convert(start).valueOf()) &&
-            isFinite(end=this.convert(end).valueOf()) ?
-            start <= d && d <= end :
-            NaN
-          );
+            isFinite(d = this.convert(d).valueOf()) &&
+            isFinite(start = this.convert(start).valueOf()) &&
+            isFinite(end = this.convert(end).valueOf())
+              ? start <= d && d <= end
+              : NaN
+          )
         }
       }
-       for (var e in this.s) {
+      for (var e in this.s) {
         var i = new Date(this.s[e].created_at).toISOString().substr(0, 10)
-        if (dates.inRange(i,this.startDate,this.endDate)) {
+        if (dates.inRange(i, this.startDate, this.endDate)) {
           expo.push(this.s[e])
         }
       }
       this.getAgeData(expo)
     },
+
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
-        axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
+        const proxyurl = 'https://evening-brushlands-82997.herokuapp.com/'
+        axios.get(proxyurl + 'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.s = exp.data.data
             if (exp.data.links.next != null) {
@@ -970,7 +1016,7 @@ export default {
             }
           })
           .catch(error => console.log(error.message))
-      } 
+      }
     },
 
     getCad () {
@@ -983,7 +1029,7 @@ export default {
     },
 
     async loopT (l) {
-      var i,u = []
+      var i; var u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -1008,7 +1054,7 @@ export default {
       this.load = true
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
-        data.push(this.getAgeNum(i,list))
+        data.push(this.getAgeNum(i, list))
       }
       this.barOptionsAge.series[0].data = data
       this.value = false
@@ -1017,51 +1063,51 @@ export default {
       this.load = true
       var data = []
       for (var i in this.gendOptions.xAxis.categories) {
-        data.push(this.getGend(this.gendOptions.xAxis.categories[i],list))
+        data.push(this.getGend(this.gendOptions.xAxis.categories[i], list))
       }
       this.gendOptions.series[0].data = data
       this.value1 = false
       this.load = false
-      
+
       this.load = true
       var data = []
       for (var i in this.barOptionsDevice.xAxis.categories) {
-        data.push(this.getDevice(this.barOptionsDevice.xAxis.categories[i],list))
+        data.push(this.getDevice(this.barOptionsDevice.xAxis.categories[i], list))
       }
       this.barOptionsDevice.series[0].data = data
       this.value1 = false
       this.load = false
-      
+
       this.load = true
       var datac = []
       for (var i in this.barOptionsCadre.xAxis.categories) {
-        datac.push(this.getNumc(this.barOptionsCadre.xAxis.categories[i],list))
+        datac.push(this.getNumc(this.barOptionsCadre.xAxis.categories[i], list))
       }
       this.barOptionsCadre.series[0].data = datac
       this.valuec = false
       this.load = false
-      
+
       this.load = true
       var data = []
       for (var i in this.barOptionsLocation.xAxis.categories) {
-        data.push(this.getNum(this.barOptionsLocation.xAxis.categories[i],list))
+        data.push(this.getNum(this.barOptionsLocation.xAxis.categories[i], list))
       }
       this.barOptionsLocation.series[0].data = data
       this.load = false
-      
+
       this.load = true
       var data = []
       for (var i in this.barOptions.xAxis.categories) {
-        data.push(this.getNums(this.barOptions.xAxis.categories[i],list))
+        data.push(this.getNums(this.barOptions.xAxis.categories[i], list))
       }
       this.barOptions.series[0].data = data
       this.valuet = false
       this.load = false
-      
+
       this.load = true
       var data = []
       for (var i in this.barOptionsHour.xAxis.categories) {
-        data.push(this.getNumh(this.barOptionsHour.xAxis.categories[i],list))
+        data.push(this.getNumh(this.barOptionsHour.xAxis.categories[i], list))
       }
       this.barOptionsHour.series[0].data = data
       this.load = false
@@ -1070,7 +1116,7 @@ export default {
       var data = []
       this.barOptionsTime.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var i in this.barOptionsTime.xAxis.categories) {
-        data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i],list))
+        data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i], list))
       }
       this.barOptionsTime.series[0].data = data
       this.load = false
@@ -1094,10 +1140,9 @@ export default {
           count++
         } else if (age > 65 && cat == 5) {
           count++
-        } else if (age < 18 && cat == 6){
+        } else if (age < 18 && cat == 6) {
           count++
-        }
-         else {
+        } else {
           count
         }
       }
@@ -1117,10 +1162,9 @@ export default {
       for (var x in g) {
         if (g[x].gender === cat && g[x].gender === num) {
           count++
-           console.log((count / 100 ) * (cat + num))
+          console.log((count / 100) * (cat + num))
         }
       }
-
     },
 
     getDevice (cat, d) {
@@ -1163,9 +1207,9 @@ export default {
       var counter = 0
       var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       for (var xt in expo) {
-        var m = c.indexOf(expo[xt].exposure_date.slice(0,3))+1
-        if (m<10) {m='0'+m}
-        var d = [expo[xt].exposure_date.slice(8,13).trim(),m].join('-')
+        var m = c.indexOf(expo[xt].exposure_date.slice(0, 3)) + 1
+        if (m < 10) { m = '0' + m }
+        var d = [expo[xt].exposure_date.slice(8, 13).trim(), m].join('-')
         if (d === name) {
           counter++
         }
@@ -1187,7 +1231,7 @@ export default {
       var counter = 0
       for (var xh in t) {
         var hr = t[xh].exposure_date.split(':')[0].slice(-2).trim()
-        
+
         if (hr < 10) {
           hr = '0' + hr
           console.log(hr)
@@ -1198,20 +1242,20 @@ export default {
       }
       return counter
     },
-    dateRange(startDate, endDate) {
-      var start      = startDate.split('-');
-      var end        = endDate.split('-');
-      var startYear  = parseInt(start[0]);
-      var endYear    = parseInt(end[0]);
-      var dates      = [];
+    dateRange (startDate, endDate) {
+      var start = startDate.split('-')
+      var end = endDate.split('-')
+      var startYear = parseInt(start[0])
+      var endYear = parseInt(end[0])
+      var dates = []
 
-      for(var i = startYear; i <= endYear; i++) {
-        var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
-        var startMon = i === startYear ? parseInt(start[1])-1 : 0;
-        for(var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j+1) {
-          var month = j+1;
-          var displayMonth = month < 10 ? '0'+month : month;
-          dates.push([i, displayMonth].join('-'));
+      for (var i = startYear; i <= endYear; i++) {
+        var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1
+        var startMon = i === startYear ? parseInt(start[1]) - 1 : 0
+        for (var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+          var month = j + 1
+          var displayMonth = month < 10 ? '0' + month : month
+          dates.push([i, displayMonth].join('-'))
         }
       }
       return dates

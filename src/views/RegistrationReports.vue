@@ -1,153 +1,168 @@
 <template>
 
   <v-card>
-
-      <!-- Start filters -->
-          <template>
-            <v-container
-              fill-height
-              fluid
-              grid-list-xl
-            >
-            <v-layout wrap>
-              <v-flex
-                xs12
-                md6
-                lg2
-              >
-                <template>
-                  <v-combobox
-                    v-if="user.role_id === 1"
-                    v-model="counties"
-                    :items="all_counties"
-                    item-text="name"
-                    item-value="id"
-                    label="Select County"
-                    v-on:change="getSubCounties"
-                    multiple
-                    clerable
-                    persistent-hint
-                    chips/>
-
-                </template>
-              </v-flex>
-              <v-flex
-               xs12
-               md6
-               lg3
-              >
-                <template>
-                  <v-combobox
-                    v-if="user.role_id !== 4"
-                    v-model="subcounties"
-                    :items="all_subcounties"
-                    item-text="name"
-                    item-value="id"
-                    label="Select Sub-County"
-                    v-on:change="getFacilitysubcountyfilter"
-                    :disabled="active"
-                    multiple
-                    clerable
-                    persistent-hint
-                    chips/>
-                </template>
-              </v-flex>
-
-              <v-flex
-                xs12
-                md6
-                lg2
-              >
-
-                <template>
-                  <v-combobox
-                    v-if="user.role_id !== 4"
-                    v-model="partner"
-                    :items="all_partner"
-                    item-text="partner"
-                    item-value="sub_county"
-                    label="Select Partner"
-                    multiple
-                    disabled
-                    clerable
-                    persistent-hint
-                    chips/>
-
-                </template>
-              </v-flex>
-
-              <v-flex
-                xs12
-                md6
-                lg2
-              >
-
-                <template>
-
-                  <v-combobox
-                    v-if="user.role_id !== 4"
-                    :items="all_facilities_level"
-                    label="Select Facility Level"
-                    v-on:change="getFacilitylevelfilter"
-                    :disabled="active_level"
-                    multiple
-                    clerable
-                    persistent-hint
-                    chips/>
-
-                </template>
-              </v-flex>
-
-              <v-flex
-                xs12
-                md6
-                lg2
-              >
-                <template>
-                  <v-combobox
-                    v-if="user.role_id !== 4"
-                    v-model="facility"
-                    :items="fac"
-                    item-text="name"
-                    item-value="id"
-                    label="Select Facility"
-                    v-on:change="getFacilityfilter"
-                   :disabled="active_fac"
-                    multiple
-                    clerable
-                    persistent-hint
-                    chips/>
-                </template>
-              </v-flex>
+    <!-- Start filters -->
+    <template>
+      <v-container
+        fill-height
+        fluid
+        grid-list-xl
+      >
+        <v-layout
+        justify-center
+        wrap>
+          <v-flex
+            xs12
+            md6
+            lg2
+          >
             <template>
-              <v-flex xs12 sm6 md2 lg2>
-              <v-menu
-                ref="menu1"
-                :close-on-content-click="false"
-                v-model="menu1"
-                :nudge-right="40"
-                :return-value.sync="startDate"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="startDate"
-                  label="Start Date"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                ></v-text-field>
-                <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
-                </v-date-picker>
-              </v-menu>
-           </v-flex>
-          <v-flex xs12 sm6 md2 lg2>
+              <v-combobox
+                v-if="user.role_id === 1"
+                v-model="counties"
+                :items="all_counties"
+                item-text="name"
+                item-value="id"
+                label="Select County"
+                v-on:change="getSubCounties"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg3
+          >
+            <template>
+              <v-combobox
+                v-if="user.role_id !== 4"
+                v-model="subcounties"
+                :items="all_subcounties"
+                item-text="name"
+                item-value="id"
+                label="Select Sub-County"
+                v-on:change="getFacilitysubcountyfilter"
+                :disabled="active"
+                multiple
+                clearable
+                persistent-hint
+                chips/>
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg2
+          >
+
+            <template>
+              <v-combobox
+                v-if="user.role_id !== 4"
+                v-model="partner"
+                :items="all_partner"
+                item-text="partner"
+                item-value="sub_county"
+                label="Select Partner"
+                multiple
+                disabled
+                clearable
+                persistent-hint
+                chips/>
+
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg2
+          >
+            <template>
+              <v-combobox
+                v-if="user.role_id !== 4"
+                :items="all_facilities_level"
+                label="Select Facility Level"
+                v-on:change="getFacilitylevelfilter"
+                :disabled="active_level"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+            </template>
+          </v-flex>
+
+          <v-flex
+            xs12
+            md6
+            lg2
+          >
+            <template>
+              <v-combobox
+                v-if="user.role_id !== 4"
+                v-model="facility"
+                :items="fac"
+                item-text="name"
+                item-value="id"
+                label="Select Facility"
+                v-on:change="getFacilityfilter"
+                :disabled="active_fac"
+                multiple
+                clerable
+                persistent-hint
+                chips/>
+            </template>
+          </v-flex>
+        
+        <template>
+          <v-flex
+            v-if="user.role_id === 4"
+            xs12
+            md2
+          >
+            <v-combobox
+              :items="cadres"
+              item-text="name"
+              item-value="id"
+              label="Select Cadre"
+              v-on:change="cadreFilter"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex xs12 md2>
+            <v-menu
+              ref="menu1"
+              :close-on-content-click="false"
+              v-model="menu1"
+              :nudge-right="40"
+              :return-value.sync="startDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="startDate"
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
+              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex xs12 md2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -175,19 +190,9 @@
             </v-menu>
           </v-flex>
         </template>
-
-            <template>
-              <v-flex xs12 sm6 md2 lg2>
-              <v-btn
-                block
-                color="secondary"
-                dark>Filter</v-btn>
-              </v-flex>
-            </template>
         </v-layout>
-            </v-container>
-
-      </template>
+      </v-container>
+    </template>
       
             <!-- End filters -->
     <v-tabs
@@ -231,15 +236,15 @@
               lg12
             >
             <template>
-               <div class="card vld-parent">
-          <loading :active.sync="isLoading" 
-          :can-cancel="false"
-          loader='bars'
-          :is-full-page="fullPage"></loading>
-              <highcharts
-                ref="barChart"
-                :options="cadrOptions"/>
-               </div>
+              <div class="card vld-parent">
+                <loading :active.sync="isLoading" 
+                :can-cancel="false"
+                loader='bars'
+                :is-full-page="fullPage"></loading>
+                <highcharts
+                  ref="barChart"
+                  :options="cadrOptions"/>
+              </div>
             </template>
             </v-flex>
           </v-card-text>
@@ -255,9 +260,9 @@
               :can-cancel="false"
               loader='bars'
               :is-full-page="fullPage"></loading>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptions"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptions"/>
             </div>
             </v-flex>
           </v-card-text>
@@ -310,6 +315,7 @@ export default {
   },
   data () {
     return {
+      cadres: [],
       isLoading: true,
       fullPage: false,
       all_partner: [],
@@ -550,6 +556,10 @@ export default {
     }
     this.getFacilities()
     this.getCounties()
+    axios.get('cadres')
+      .then((c)=>{
+        this.cadres = c.data.data
+      })
   },
   methods: {
     getCounties () {
@@ -589,7 +599,7 @@ export default {
     },
 
      getfacilityCountyfilter (fc) {
-       this.fac_filt = [], this.reg_filt = []
+      this.fac_filt = [], this.reg_filt = []
       if (fc.length > 0) {
         for (var c in fc) {
           for (var f in this.all_facilities) {
@@ -693,6 +703,25 @@ export default {
           this.getsummarydata(this.reg_filtf)
           this.getAgeData(this.reg_filtf)
         }
+    },
+
+    cadreFilter (fc) {
+      this.fac_filt = [], this.reg_filt = []
+      if (fc.length > 0) {
+        for (var c in fc) {
+          for(var u in this.s){
+            if(this.s[u].cadre_id === fc[c].id){
+              this.reg_filt.push(this.s[u])
+            }
+          }
+        }
+        this.getsummarydata(this.reg_filt)
+        this.getAgeData(this.reg_filt)
+      } else {
+        this.getsummarydata(this.s)
+        this.getAgeData(this.s)
+        
+      }
     },
 
     click (){

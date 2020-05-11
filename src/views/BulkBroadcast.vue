@@ -6,25 +6,30 @@
     <v-layout
       justify-center
       wrap
-    >
+      >
       <v-flex
         xs12
         md11
-      >
+        >
         <material-card
           color="green"
           title="New Broadcast"
           text="Kindly fill all the required fields"
-        >
+          >
           <v-card-text>
-            <div/>
-            <p class="display-1 text--primary">
-              New Bulk Broadcast
-            </p>
-            <div class="text--primary">
-              Kindly fill all the required fields
-            </div>
+              <p class="display-1 text--primary">
+                New Bulk Broadcast
+              </p>
+              <div class="text--primary">
+                Kindly fill all the required fields
+              </div>
           </v-card-text>
+
+          <div style="height:10%">
+            <upload-excel-component
+            :on-success="handleSuccess"
+            :before-upload="beforeUpload" />
+          </div>
 
           <v-form
             ref="form"
@@ -32,26 +37,28 @@
             @submit.prevent="post_BulkBroadcast">
             <v-container py-0>
               <v-layout wrap>
-
                 <v-flex
                   xs12
                 >
                   <v-text-field
                     :rules="[rules.required]"
-                    v-model="phoneNumbers"
+                    v-model="phoneNo"
                     label="Add Phone Numbers Seperated By A Comma"
                     required
                     single-line
-                  />
+                  >
+                  {{phoneNo}}
+                  </v-text-field>
                 </v-flex>
 
                 <v-flex
                   xs12
                 >
                   <v-textarea
-                    :rules="[rules.required]"
+                    :rules="textRules"
                     v-model="message"
                     label="Message"
+                    counter
                     placeholder="Write here"
                     required
                   />
@@ -86,15 +93,10 @@
                 </v-dialog>
                 <v-alert
                   :value="alert"
-                  head
-                  type="success"
-                  border="right"
-                  icon = "mdi-alert"
-                  dismissible
-                  text
-                  transition="scale-transition"
-                  color = "#47a44b"
-                  dense
+                    icon = "mdi-alert"
+                    dismissible
+                    outline color="error"
+                    elevation="2"
                 >
                   <h6> {{ output.error }} {{ output.message }} </h6>
                 </v-alert>
@@ -113,10 +115,14 @@
 
 <script>
 import axios from 'axios'
+import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 
 export default {
+  components: { UploadExcelComponent },
   data () {
     return {
+      phoneNo: [],
+      tableHeader: [],
       valid: true,
       dialog1: false,
       alert: false,
@@ -125,7 +131,8 @@ export default {
       message: '',
       rules: {
         required: value => !!value || 'This field is required.'
-      }
+      },
+      textRules: [v => v.length <= 160 || 'Max of 160 Characters' || 'This field is required.'],
     }
   },
 
@@ -137,16 +144,15 @@ export default {
   },
 
   methods: {
-
     validate () {
       this.$refs.form.validate()
     },
 
     post_BulkBroadcast (e) {
       e.preventDefault()
-
+      console.log(String(this.phoneNo))
       axios.post('broadcasts/web/direct', {
-        phone_numbers: this.phoneNumbers,
+        phone_numbers: String(this.phoneNo),
         message: this.message
       })
         .then((response) => {
@@ -159,7 +165,33 @@ export default {
           this.output = error
           this.alert = true
         })
-    }
+    },
+    beforeUpload (file) {
+      const isLt1M = file.size / 1024 / 1024 < 1
+
+      if (isLt1M) {
+        return true
+      }
+
+      this.$message({
+        message: 'Please do not upload files larger than 1m in size.',
+        type: 'warning'
+      })
+      return false
+    },
+    handleSuccess ({ results, header }) {
+      this.tableHeader = header
+      this.is_data = false
+      for (var r in results) {
+        if (String(results[r].mobile).slice(0,3) != '254' && String(results[r].mobile).slice(0,1) === '7') {
+          results[r].mobile = '254'+ String(results[r].mobile)
+        } else if (String(results[r].mobile).length < 5) {
+          console.log(results.splice(r,1))
+          break;
+        }
+        this.phoneNo.push(results[r].mobile)
+      }
+    },
   }
 }
 </script>

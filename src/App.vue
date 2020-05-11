@@ -7,6 +7,7 @@
       <core-drawer />
     </div>
     <core-view />
+
   </v-app>
 </template>
 

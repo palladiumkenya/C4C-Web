@@ -14,21 +14,24 @@
       >
         <material-card
           color="green"
-          title="Edit COVID 19 Resource "
+          title="Create A Public Resource "
           text="Kindly fill all the required fields carefully"
         >
           <v-card-text>
             <div/>
             <p class="display-1 text--primary">
-              Edit COVID 19 Resource
+              Add A New Public Resource
             </p>
+            <div class="text--primary">
+              Kindly fill all the required fields
+            </div>
           </v-card-text>
 
           <v-form
-           ref="form"
+            ref="form"
             v-model="valid"
             lazy-validation
-            @submit="editCovid19">
+            @submit="postCME">
             <v-container py-0>
               <v-layout wrap>
 
@@ -38,24 +41,27 @@
                 >
                   <v-text-field
                     id="title"
-                    :rules="titleRules"
-                    v-model="covid19.title"
+                    :rules="[v => !!v || 'Title is required']"
+                    v-model="title"
                     required
                     label="Title"
-                    class="purple-input">
-                  </v-text-field>
+                    class="purple-input"/>
                 </v-flex>
 
                 <v-flex xs12>
                   <ckeditor
                     id="editorData"
                     :editor="editor"
-                    v-model="covid19.body"
-                    :rules="bodyRules"
+                    v-model="editorData"
                     :config="editorConfig"
-                    placeholder="Write here"
-                    required>
-                  </ckeditor>  
+                    required/>
+
+                  <ul>
+                    <li
+                      v-for="error in errors"
+                      :key="error">{{ error }}</li>
+                  </ul>
+
                 </v-flex>
 
                 <v-flex xs12 >
@@ -68,15 +74,6 @@
                     type="file"
                     @change="handleImageChange()">
 
-                  <v-img
-                    :src="covid19.file"
-                    class="white--text align-end"
-                    height="400px"
-                  />                                      
-
-                </v-flex>
-
-                <v-flex xs12>
                   <img
                     v-show="showPreview"
                     :src="imagePreview">
@@ -85,29 +82,20 @@
                 <v-flex xs12>
                   <label for="document">Upload Documents:</label>
                   <input
-                    value="files"
                     id="files"
                     ref="files"
                     type="file"
                     multiple
                     @change="handleFiles()">
 
-                  <v-list
-                      v-for="file in covid19.files"
-                      :key="file"
-                      class="file-listing"> {{file.file_name}}
-                      <span
-                        class="remove-file"
-                        @click="removeFile(key)"> Remove </span>
-                  </v-list>   
-
                   <v-card
                     v-for="(file, key) in files"
                     :key="file.id"
-                    class="file-listing">{{ file.name }} 
+                    class="file-listing">{{ file.name }}
                     <span
                       class="remove-file"
                       @click="removeFile(key)"> Remove </span> </v-card>
+
                 </v-flex>
 
                 <v-flex
@@ -116,12 +104,13 @@
                 >
                   <v-btn
                     :disabled="!valid"
+                    :loading="dialog1"
                     class="mx-0 font-weight-light"
                     color="success"
                     type="submit"
-                    @click="validateData(); alert=!alert; dialog1=true "
+                    @click="validate(); dialog1=true"
                   >
-                    Save
+                    Submit
                   </v-btn>
 
                   <v-dialog
@@ -140,15 +129,10 @@
 
                   <v-alert
                     :value="alert"
-                    head
-                    type="success"
-                    border="right"
                     icon = "mdi-alert"
                     dismissible
-                    text
-                    transition="scale-transition"
-                    color = "#47a44b"
-                    dense
+                    outline color="error"
+                    elevation="2"
                   >
                     <h6> {{ output.error }} {{ output.message }} </h6>
                   </v-alert>
@@ -174,30 +158,22 @@ export default {
   data () {
     return {
       editor: ClassicEditor,
+      editorData: '',
       editorConfig: {
         // The configuration of the editor.
       },
-      titleRules: [
-        v => !!v || 'Title is required'
-      ],
-      bodyRules: [
-        v => !!v || 'Fill in the required text'
-      ],
+      valid: true,
+      errors: [],
       dialog1: false,
       result: '',
-      valid: true,
       output: '',
+      resp: '',
       alert: false,
-      covid19: {
-              body: '',
-              title: '',
-      },
+      title: '',
       file: '',
-      files: [],
       showPreview: false,
       imagePreview: '',
-      covid19: '',
-      resp: ''
+      files: []
     }
   },
   watch: {
@@ -207,19 +183,14 @@ export default {
     }
   },
 
-  created() {
-       this.getCovid()
-    },
-
   methods: {
-    validateData () {
+
+    validate () {
       this.$refs.form.validate()
     },
 
     handleImageChange (e) {
       this.file = this.$refs.file.files[0]
-
-    console.log(event.target.files[0].name) //here is the original name
 
       let reader = new FileReader()
 
@@ -248,55 +219,48 @@ export default {
       this.files.splice(key, 1)
     },
 
-    getCovid () {
-      var id = this.$route.params.id
-       axios.get('resources/special/' + id)
-        .then((resource) => {
-        this.covid19 = resource.data.data 
-        console.log(resource.data)
-
-        }).catch((error) => {
-        console.log(error.message)
-        })
-    },
-
-    editCovid19 (e) {
+    postCME (e) {
       e.preventDefault()
 
-      let allData = new FormData()
+      this.errors = []
 
-      // iterating over any file sent over appending the files
-      for (var i = 0; i < this.files.length; i++) {
-        let file = this.files[i]
+      if (this.editorData == '') {
+        this.errors.push('Description is required.')
+      } else {
+        let allData = new FormData()
 
-        allData.append('resource_files[' + i + ']', file)
+        // iterating over any file sent over appending the files
+        for (var i = 0; i < this.files.length; i++) {
+          let file = this.files[i]
+
+          allData.append('cme_files[' + i + ']', file)
+        }
+        allData.append('image_file', this.file)
+        allData.append('title', this.title)
+        allData.append('body', this.editorData)
+
+        axios({
+          method: 'POST',
+          url: 'resources/cmes/create',
+          data: allData,
+          headers: { 'Content-Type': `multipart/form-data` }
+        })
+          .then((response) => {
+            this.output = response.data
+            console.log(response)
+
+            this.alert = true
+
+            this.$router.push('/cmes')
+          })
+          .catch(error => {
+            this.output = error
+
+            console.log(error)
+            this.alert = true
+          })
       }
-      allData.append('image_file', this.file)
-      allData.append('title', this.covid19.title)
-      allData.append('body', this.covid19.body)
-      allData.append('special_resource_id', this.covid19.id)
-
-      axios({
-        method: 'POST',
-        url: 'resources/special/update',
-        data: allData,
-        headers: { 'Content-Type': `multipart/form-data` }
-      })
-        .then((response) => {
-          this.output = response.data
-          console.log(response)
-          this.alert = true
-
-          this.$router.push('/covid19_resources')
-        })
-        .catch(error => {
-          this.output = error
-          console.log(error)
-          this.alert = true
-
-        })
     }
-
   }
 }
 
@@ -313,6 +277,11 @@ export default {
 span.remove-file{
   color:red;
   cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  color: red;
 }
 
 </style>

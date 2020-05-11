@@ -10,7 +10,7 @@ export default [
     path: '',
     name: 'Dashboard',
     // Relative to /src/views
-    view: 'Dashboard',
+    view: 'Dashboard'
     // beforeEnter: (to, from, next) => {
     //   if (!store.getters['auth/authenticated']) {
     //     return next({
@@ -80,7 +80,7 @@ export default [
   {
     path: '/exposure-list',
     name: 'Exposures List',
-    view: 'Exposures_List',
+    view: 'ExposuresList',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -160,7 +160,7 @@ export default [
   {
     path: '/users_list',
     name: 'Users List',
-    view: 'All_Users',
+    view: 'AllUsers',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -173,7 +173,7 @@ export default [
   {
     path: '/hcw_list',
     name: 'HCW List',
-    view: 'All_HCW',
+    view: 'AllHCW',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -202,9 +202,9 @@ export default [
     }
   },
   {
-    path: '/all_broadcast',
+    path: '/all_broadcasts',
     name: 'Broadcast',
-    view: 'All_Broadcasts',
+    view: 'AllBroadcasts',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -217,7 +217,7 @@ export default [
   {
     path: '/broadcast',
     name: 'Broadcast Facility',
-    view: 'Broadcast_Facility',
+    view: 'AllBroadcast',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -230,7 +230,7 @@ export default [
   {
     path: '/new_bulk_broadcast',
     name: 'New Broadcast Facility',
-    view: 'Bulk_Broadcast',
+    view: 'BulkBroadcast',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -243,7 +243,7 @@ export default [
   {
     path: '/new_broadcast',
     name: 'New Broadcast',
-    view: 'New_Broadcast',
+    view: 'NewBroadcast',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -256,7 +256,7 @@ export default [
   {
     path: '/cmes',
     name: 'Public Resources',
-    view: 'All_Cmes',
+    view: 'AllCmes',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -269,7 +269,7 @@ export default [
   {
     path: '/add_CME',
     name: 'Add Public Resource',
-    view: 'New_CME',
+    view: 'NewCME',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -282,7 +282,7 @@ export default [
   {
     path: '/view_CME/:id',
     name: 'View Public Resource',
-    view: 'View_CME',
+    view: 'ViewCME',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -295,12 +295,12 @@ export default [
   {
     path: '/edit_public_resource/:id',
     name: 'Edit Public Resource',
-    view: 'Edit_CME'
+    view: 'EditCME'
   },
   {
     path: '/view_Protocol/:id',
     name: 'View Facility Resource',
-    view: 'View_Protocol',
+    view: 'ViewProtocol',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -313,7 +313,7 @@ export default [
   {
     path: '/protocols',
     name: 'Facility Resources',
-    view: 'All_Protocols',
+    view: 'AllProtocols',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -326,7 +326,7 @@ export default [
   {
     path: '/add_protocol',
     name: 'Add Facility Resource',
-    view: 'New_Protocol',
+    view: 'NewProtocol',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -339,7 +339,7 @@ export default [
   {
     path: '/edit_protocol/:id',
     name: 'Edit Facility Resource',
-    view: 'Edit_Protocol'
+    view: 'EditProtocol'
   },
   {
     path: '/departments',
@@ -358,20 +358,20 @@ export default [
   {
     path: '/covid19_resources',
     name: 'COVID19 Resources',
-    view: 'All_Covid',
-     beforeEnter: (to, from, next) => {
-       if (!store.getters['auth/authenticated']) {
-         return next({
-           name: 'login'
-         })
-       }
-       next()
-     }
+    view: 'AllCovid',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   },
   {
     path: '/new_covid19_resources',
     name: 'New COVID19 Resource',
-    view: 'New_COVID',
+    view: 'NewCovidRes',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -384,7 +384,7 @@ export default [
   {
     path: '/view_covid19_resource/:id',
     name: 'View COVID19 Resource',
-    view: 'View_COVID',
+    view: 'ViewCovidRes',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
@@ -397,7 +397,7 @@ export default [
   {
     path: '/edit_covid19_resource/:id',
     name: 'Edit COVID19 Resource',
-    view: 'Edit_COVID',
+    view: 'EditCovidRes',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
         return next({
