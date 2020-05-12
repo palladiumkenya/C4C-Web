@@ -1,6 +1,9 @@
 module.exports = {
-  devServer: {
+
+    devServer: {
+        disableHostCheck: true,
     proxy: 'http://c4ctest.mhealthkenya.org/',
 
   }
+
 }

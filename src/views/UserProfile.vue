@@ -11,12 +11,14 @@
         xs12
         md8
       >
+       <v-form @submit="postUser">
         <material-card
           color="green"
           title="Edit Profile"
           text="Complete your profile"
         >
-        
+
+      
           <v-card-text>
             <p class="display-1 text--primary">
               User Profile
@@ -29,10 +31,10 @@
                 xs12
                 md4
               >
-                
-                <v-text-field
+                  <v-text-field
                   label="First Name"
-                  v-model="user.first_name"
+                  v-model="userdata.first_name"
+                  :rules="[v => !!v || 'First Name is required']"
                 >
                 </v-text-field>
               </v-flex>
@@ -42,8 +44,9 @@
                 md4
               >
                 <v-text-field
-                  label="First Name"
-                  v-model="user.surname"
+                  label="Surname"
+                  v-model="userdata.surname"
+                  :rules="[v => !!v || 'Surname is required']"
                 >
                 </v-text-field>
               </v-flex>
@@ -53,9 +56,11 @@
                 md4
               >
               <v-select
-                v-model="user.gender"
+                v-model="userdata.gender"
                 :items="gender"
+                item-value="id"
                 label="Gender"
+                :rules="[v => !!v || 'Gender is required']"
                 required
               > 
               </v-select>
@@ -66,9 +71,10 @@
                 md6
               >
                <v-text-field
-                v-model="user.email"
+                v-model="userdata.email"
                 label="E-mail"
                 required
+                :rules="[v => !!v || 'Email is required']"
               >
               </v-text-field>
               </v-flex>
@@ -78,9 +84,11 @@
                 md6
               >
                 <v-select
-                v-model="user.role.name"
+                v-model="userdata.role.name"
                 :items="roles"
+                item-value="id"
                 label="Role"
+                :rules="[v => !!v || 'Role is required']"
                 required
               >
               </v-select>
@@ -90,28 +98,29 @@
                 xs12
                 md6>
                 <v-select
-                  v-model="user.hcw.facility_name"
-                  :items="all_facilities"
+                  v-model="userdata.hcw.facility_name"
+                  :items="facilities"
                   item-value="id"
                   item-text="name"
                   label="Facility"
+                  :rules="[v => !!v || 'Facility is required']"
                   required
-                > </v-select> {{user.hcw.facility_name}}
+                > </v-select> 
               </v-flex>
 
               <v-flex
                 xs12
                 md6>
                 <v-select
-                
-                  v-model="user.cadre"
-                  :items="all_cadres"
+                  v-model="userdata.cadre"
+                  :items="cadres"
                   item-text="name"
                   label="Cadre"
                   item-value="id"
+                  :rules="[v => !!v || 'Cadre is required']"
                   required
-                > {{user.cadre}}
-                </v-select>  {{user.cadre}}   
+                > 
+                </v-select>    
               </v-flex> 
 
               <v-flex
@@ -121,14 +130,28 @@
                 <v-btn
                   class="mx-0 font-weight-light"
                   color="success"
+                  type="submit"
                 >
                   Update Profile
                 </v-btn>
+
+                <v-alert
+                    :value="alert"
+                    icon = "mdi-alert"
+                    dismissible
+                    outline color="error"
+                    elevation="2"
+                  >
+                    <h6> {{ output.error }} {{ output.message }} </h6>
+                  </v-alert>
+
               </v-flex>
 
             </v-layout>
           </v-container>
+       
         </material-card>
+         </v-form>
       </v-flex>
       <v-flex
         xs12
@@ -179,8 +202,20 @@ export default {
         'Health care worker',
         'Facility Admin'
       ],
-      all_facilities : [],
-      all_cadres: []
+      facilities : [],
+      cadres: [],
+      userdata : {
+        first_name: '',
+        surname: '',
+        gender: '',
+        email: '',
+        role: '',
+        facility_name: '',
+        cadre: ''
+      },
+      userdata: '',
+      output: '',
+      alert: false
     }
   },
   computed: {
@@ -191,6 +226,7 @@ export default {
   created () {
     this.getFacilities()
     this.getCadres()
+    this.getUser()
 
   },
 
@@ -199,7 +235,6 @@ export default {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
-          this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
     },
@@ -208,10 +243,51 @@ export default {
       axios.get('cadres')
         .then((cadres) => {
           console.log(cadres.data)
-          this.all_cadres = cadres.data.data
         })
         .catch(error => console.log(error.message))
+    },
+
+    getUser () {
+      var id = this.$route.params.id
+       axios.get('auth/user')
+        .then((user) => {
+        this.userdata = user.data.data 
+        console.log(user.data)
+
+        }).catch((error) => {
+        console.log(error.message)
+        })
+    },
+
+    postUser (e) {
+      e.preventDefault();
+      
+      let allData = new FormData();
+
+      allData.append('first_name', this.userdata.first_name)
+      allData.append('surname', this.userdata.surname)
+      allData.append('gender', this.userdata.gender)
+      allData.append('email', this.userdata.email)
+      allData.append('role', this.user.role)
+      allData.append('facility_name', this.user.first_name)
+      allData.append('cadre', this.user.cadre)
+
+      axios({
+        method: 'POST',
+        url: 'auth/complete_profile',
+        data: allData,
+      })
+      .then((response) => {
+        this.output = response.data
+        this.alert = true
+      })
+      .catch(error => {
+        this.output = error
+        console.log(error)
+      })
     }
+
+
   }  
 }
 </script>
