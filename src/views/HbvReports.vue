@@ -557,7 +557,6 @@ export default {
           b[b.length - 1]++
         }
         prev = arr[i]
-        
       }console.log(b.length)
       for (var u in b) {
         if (name == 0 && b[u]) {

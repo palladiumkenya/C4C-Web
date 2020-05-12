@@ -187,7 +187,7 @@ export default {
           results[r].mobile = '254'+ String(results[r].mobile)
         } else if (String(results[r].mobile).length < 5) {
           console.log(results.splice(r,1))
-          break;
+          break
         }
         this.phoneNo.push(results[r].mobile)
       }

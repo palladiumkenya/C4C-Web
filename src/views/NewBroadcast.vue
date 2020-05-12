@@ -59,7 +59,7 @@
                     class="ma-2"
                     x-large
                   >
-                    {{ user.hcw.facility_name }} 
+                    {{ user.hcw.facility_name }}
                   </v-chip>
                 </v-flex>
 
@@ -86,57 +86,56 @@
                   xs12
                 >
                   <v-textarea
+                    v-model="message"
                     :rules="textRules"
                     counter
-                    v-model="message"
                     label="Message"
                     placeholder="Write here"
                     required
                   />
                 </v-flex>
 
-              <v-flex
-              xs12
-              >
-                <v-btn
-                  :disabled="!valid"
-                  :loading="dialog1"
-                  class="mr-4 success"
-                  type="submit"
-                  @click="validate(); dialog1=true; ">
-                  submit</v-btn>
-              </v-flex>   
+                <v-flex
+                  xs12
+                >
+                  <v-btn
+                    :disabled="!valid"
+                    :loading="dialog1"
+                    class="mr-4 success"
+                    type="submit"
+                    @click="validate(); dialog1=true; ">
+                    submit</v-btn>
+                </v-flex>
 
-              <v-flex
-                xs12
-              >
-                <v-dialog
-                  v-model="dialog1"
-                  max-width="290"
-                  lazy>
-                  <v-card>
-                    <v-card-text class="text-xs-center">
-                      <v-progress-circular
-                        :size="70"
-                        indeterminate
-                        class="primary--text"/>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
+                <v-flex
+                  xs12
+                >
+                  <v-dialog
+                    v-model="dialog1"
+                    max-width="290"
+                    lazy>
+                    <v-card>
+                      <v-card-text class="text-xs-center">
+                        <v-progress-circular
+                          :size="70"
+                          indeterminate
+                          class="primary--text"/>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
 
-                <v-alert
-                  :value="alert"
+                  <v-alert
+                    :value="alert"
                     icon = "mdi-alert"
                     dismissible
-                    outline color="error"
+                    outline
+                    color="error"
                     elevation="2"
-                >
-                  <h6> {{ output.error }} {{ output.message }} </h6>
-                </v-alert>
-              </v-flex>    
-
+                  >
+                    <h6> {{ output.error }} {{ output.message }} </h6>
+                  </v-alert>
+                </v-flex>
               </v-layout>
-              
 
             </v-container>
           </v-form>
@@ -167,8 +166,7 @@ export default {
       rules: {
         required: value => !!value || 'This field is required.'
       },
-      textRules: [v => v.length <= 160 || 'Max of 160 Characters' || 'This field is required.'],
-
+      textRules: [v => v.length <= 160 || 'Max of 160 Characters' || 'This field is required.']
 
     }
   },
@@ -208,12 +206,12 @@ export default {
       axios.get('facilities')
         .then((facilities) => {
           let all_facilities = facilities.data.data
-          if (this.user.role_id == 5){
+          if (this.user.role_id === 5) {
             for (var fac in all_facilities) {
-              if (all_facilities[fac].county == this.user.county) {
+              if (all_facilities[fac].county === this.user.county) {
                 this.all_facilities.push(all_facilities[fac])
               }
-            } 
+            }
           } else {
             this.all_facilities = all_facilities
           }
@@ -223,7 +221,7 @@ export default {
 
     postBroadcast (e) {
       e.preventDefault()
-      if (this.user.role_id === 1||this.user.role_id == 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.post('broadcasts/web/create', {
           facility_id: this.facility.id,
           cadres: this.cadres.map(item => item.id),
