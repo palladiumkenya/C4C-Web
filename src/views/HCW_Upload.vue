@@ -52,21 +52,10 @@
                   xs12
                   md4
                 >
-                  <v-combobox
-                    v-if="user.role_id == 1"
-                    v-model="role"
-                    :rules="[rules.required]"
-                    :items="items"
-                    label="Role"
-                    class="purple-input"
-                  />
-                  <v-chip
-                    v-else
-                    class="ma-2"
-                    x-large
-                  >
-                    Role: Health Care Worker
-                  </v-chip>
+                  <v-text-field
+                    v-model="cadre"
+                    label="Cadre"
+                    class="purple-input"/>
                 </v-flex>
 
                 <v-flex
@@ -78,7 +67,7 @@
                     :rules="[rules.emailRules]"
                     label="Email Address"
                     class="purple-input"/>
-                </v-flex>
+                  </v-flex>
                 <v-flex
                   xs12
                   md4
@@ -105,40 +94,76 @@
                   xs12
                   md6
                 >
-                  <v-text-field
-                    v-model="password"
-                    :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="[rules.required, rules.min]"
-                    :type="show3 ? 'text' : 'password'"
-                    name="input-10-2"
-                    label="Password"
-                    hint="At least 8 characters"
-                    class="input-group--focused"
-                    @click:append="show3 = !show3"/>
+                  <v-menu
+                    ref="menu"
+                    :close-on-content-click="false"
+                    v-model="menu"
+                    :nudge-right="40"
+                    :return-value.sync="dob"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <v-text-field
+                      slot="activator"
+                      v-model="dob"
+                      label="DoB"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                    />
+                    <v-date-picker
+                      :dark="true"
+                      v-model="dob"
+                      :max="maxDate"
+                      no-title
+                      scrollable>
+                      <v-spacer/>
+                      <v-btn
+                        flat
+                        color="primary"
+                        @click="menu = false">Cancel</v-btn>
+                      <v-btn
+                        flat
+                        color="primary"
+                        @click="$refs.menu.save(dob)">OK</v-btn>
+                    </v-date-picker>
+                  </v-menu>
                 </v-flex>
                 <v-flex
                   xs12
                   md6
                 >
                   <v-text-field
-                    v-model="cnf_pass"
-                    :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="[rules.required, rules.min]"
-                    :type="show3 ? 'text' : 'password'"
+                    v-model="id_no"
+                    :rules="[rules.required]"
                     name="input-10-2"
-                    label="Repeat Password"
-                    hint="At least 8 characters"
-                    class="input-group--focused"
-                    @click:append="show3 = !show3"/>
+                    label="ID No."/>
                 </v-flex>
                 <v-flex
                   xs12
-                  md12
+                  md6
                 >
                   <v-text-field
-                    v-model="affl"
-                    label="Enter affliation"
+                    v-model="dept"
+                    label="Department"
                     class="green-input"/>
+                </v-flex>
+                <v-flex
+                  v-if="user.role_id === 1"
+                  xs12
+                  md6
+                >
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    item-text="name"
+                    item-value="id"
+                    label="Select Facility"
+                    clearable
+                    persistent-hint
+                    chips/>
                 </v-flex>
                 <v-flex
                   xs12
@@ -148,7 +173,7 @@
                   <router-link to="/bulk-signup">
                     <v-btn
                       class="mx-0 font-weight-light"
-                      color="info"
+                      color="infos"
                     >
                       File signup
                     </v-btn>
@@ -209,18 +234,17 @@ export default {
   //
   data () {
     return {
-      absolute: true,
-      overlay: false,
-      show3: false,
+      menu: false,
+      maxDate: '2004-01-01',
+      dob: '2004-01-01',
       fname: '',
       surname: '',
       gendInp: '',
-      role: '',
-      password: '',
-      cnf_pass: '',
+      cadre: '',
+      id_no: '',
       msisdn: '',
       email: '',
-      affl: '',
+      dept: '',
       output: '',
       pre_out: '',
       rules: {
@@ -232,10 +256,6 @@ export default {
         'Male',
         'Female'
       ],
-      items: [
-        '3 | Health care worker',
-        '4 | Facility Admin'
-      ],
       resp: false,
       color: null,
       colors: [
@@ -246,7 +266,9 @@ export default {
       bottom: false,
       left: false,
       right: false,
-      snackbar: false
+      snackbar: false,
+      all_facilities: [],
+      facility: null
     }
   },
   computed: {
@@ -254,43 +276,50 @@ export default {
       user: 'auth/user'
     })
   },
-  mounted () {
-    if (this.user.role_id != 1){
-      this.role = 3
+  created () {
+    if (this.user.role_id !== 1){
+      this.facility = this.user.hcw.facility_id
+      console.log(this.facility)
+    } else {
+      this.getFacilities()
     }
   },
   methods: {
+    getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
     testFill () {
-      if (this.fname == '') {
+      if (this.fname === '') {
         this.pre_out = 'First Name must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.surname == '') {
+      } else if (this.surname === '') {
         this.pre_out = 'surname must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.msisdn == '') {
+      } else if (this.msisdn === '') {
         this.pre_out = 'Mobile must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.role == '') {
+      } else if (this.cadre === '') {
         this.pre_out = 'Role must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.gender == '') {
+      } else if (this.gender === '') {
         this.pre_out = 'gender must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.password == '') {
-        this.pre_out = 'password must be filled out'
+      } else if (this.dept === '') {
+        this.pre_out = 'Department must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.cnf_pass == '') {
-        this.pre_out = 'Repeate password must be filled out'
-        this.snack('top', 'center')
-        return false
-      } else if (this.password != this.cnf_pass) {
-        this.pre_out = 'Passwords dont match'
+      } else if (this.dob === '') {
+        this.pre_out = 'DOB must be filled out'
         this.snack('top', 'center')
         return false
       } else {
@@ -303,17 +332,18 @@ export default {
     postUser (e) {
       e.preventDefault()
       if (this.testFill()) {
-        axios.post('auth/signup', {
-          first_name: this.fname,
+        axios.post('auth/signup',{
+          facility_id: facility.id,
+          facility_department: this.dept,
+          cadre: this.cadre,
+          first_name:  this.fname,
           surname: this.surname,
-          msisdn: this.msisdn,
-          role_id: this.role.charAt(0),
-          gender: this.gendInp,
           email: this.email,
-          password: this.password,
-          password_confirmation: this.cnf_pass,
-          message: `Welcome ${this.fname} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
-        )
+          msisdn: this.msisdn,
+          gender: this.gendInp,
+          dob: this.dob,
+          id_no: this.id_no
+        })
           .then((response) => {
             this.output = response.data
             this.resp = Boolean(response.data.success)
