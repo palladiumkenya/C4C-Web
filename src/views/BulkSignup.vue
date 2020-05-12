@@ -38,15 +38,22 @@
                     </v-btn>
                   </v-flex>
                   <v-flex
+                    v-if="user.role_id === 1"
                     xs12
                     md4
                   >
-                    <v-text-field
-                      :disabled="is_data"
-                      v-model="affl"
-                      label="Enter affliation"
-                      class="green-input"/>
+                  <v-combobox
+                    v-model="facility"
+                    :items="all_facilities"
+                    item-text="name"
+                    item-value="id"
+                    label="Select Facility"
+                    clearable
+                    persistent-hint
+                    chips
+                    :disabled="is_data"/>
                   </v-flex>
+                  {{facility}}
                 </v-layout>
               </v-container>
             </v-form>
@@ -85,8 +92,6 @@
                 slot="items"
                 slot-scope="{ item }"
               >
-                <!-- <td>
-              {{typeof(item)}}</td> -->
                 <td
                   v-for="(msg, index) in item"
                   :key="index">{{ msg }}</td>
@@ -132,6 +137,7 @@
 <script>
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 export default {
@@ -186,22 +192,60 @@ export default {
         },
         {
           sortable: false,
-          text: 'Password',
-          value: 'password'
+          text: 'Email',
+          value: 'email'
         },
         {
           sortable: false,
-          text: 'Email',
-          value: 'email'
+          text: 'Facility_Department',
+          value: 'facility_department'
+        },
+        {
+          sortable: false,
+          text: 'Cadre',
+          value: 'cadre'
+        },
+        {
+          sortable: false,
+          text: 'DOB',
+          value: 'dob'
+        },
+        {
+          sortable: false,
+          text: 'ID Number',
+          value: 'id_no'
         }
-      ]
+      ],
+      all_facilities: [],
+      facility: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
+  created () {
+    if (this.user.role_id !== 1){
+      this.facility = this.user.hcw.facility_id
+      console.log(this.facility)
+    } else {
+      this.getFacilities()
     }
   },
   methods: {
+    getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          console.log(facilities.data)
+          this.all_facilities = facilities.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
     postUsers (e) {
       e.preventDefault()
       for (var u in this.tableData) {
-        if (this.tableData[u].first_name === undefined) {
+        if (this.tableData[u].FirstName === undefined) {
           this.output_pre = `ERROR: Fill first name for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
@@ -239,16 +283,17 @@ export default {
         console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
         axios.post('auth/signup', {
-          first_name: this.tableData[v].first_name,
+          facility_id: 17,
+          facility_department: this.tableData[v].Facility_Department,
+          cadre: this.tableData[v].cadre,
+          first_name:  this.tableData[v].FirstName,
           surname: this.tableData[v].surname,
-          msisdn: this.tableData[v].mobile.toString(),
-          role_id: '3',
+          email: this.tableData[v].Email,
+          msisdn: this.tableData[v].Mobile.toString(),
           gender: this.tableData[v].gender,
-          email: this.tableData[v].email,
-          password: this.tableData[v].password.toString(),
-          password_confirmation: this.tableData[v].password.toString(),
-          message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` }
-        )
+          dob: this.tableData[v].dob,
+          id_no: this.tableData[v].id_no
+        })
           .then((response) => {
             this.output = response.data
             console.log(this.output)
@@ -283,6 +328,14 @@ export default {
       this.tableData = results
       this.tableHeader = header
       this.is_data = false
+      for (var r in results) {
+        if (String(results[r].Mobile).slice(0,3) != '254' && String(results[r].Mobile).slice(0,1) === '7') {
+          results[r].Mobile = '254'+ String(results[r].Mobile)
+        } else if (String(results[r].mobile).length < 5) {
+          console.log(results.splice(r,1))
+          break
+        }
+      }
     },
     snack (...args) {
       this.top = false
