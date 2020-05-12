@@ -16,7 +16,7 @@
         :loading="loading"
         style="margin-left:16px;"
         size="mini"
-        color="info"
+        color="infos"
         type="submit"
         @click="handleUpload">
         Browse

@@ -88,19 +88,17 @@
           xs12
           md3
         >
-          <template>
-            <v-combobox
-              v-model="facility"
-              :items="fac"
-              item-text="name"
-              item-value="id"
-              label="Select Facility"
-              multiple
-              clearable
-              persistent-hint
-              chips
-              @change="getFacilityfilter"/>
-          </template>
+          <v-combobox
+            v-model="facility"
+            :items="fac"
+            item-text="name"
+            item-value="id"
+            label="Select Facility"
+            multiple
+            clearable
+            persistent-hint
+            chips
+            @change="getFacilityfilter"/>
         </v-flex>
         <template>
           <v-flex
@@ -203,12 +201,6 @@
           </v-flex>
         </template>
       </v-layout>
-      <template>
-        <v-btn
-          block
-          color="secondary"
-          dark>Filter</v-btn>
-      </template>
     </v-container>
     <!-- End filters -->
 
@@ -235,8 +227,7 @@
               <v-layout wrap>
                 <v-flex
                   xs12
-                  md6
-                  text-xs-left
+                  md12
                 >
                   <highcharts
                     ref="barChart"
@@ -244,8 +235,7 @@
                 </v-flex>
                 <v-flex
                   xs12
-                  md6
-                  text-xs-left
+                  md12
                 >
                   <div class="map">
                     <l-map
@@ -256,10 +246,9 @@
                       <l-choropleth-layer
                         :data="datas"
                         :value="values"
-                        :extra-values="extraValues"
                         :geojson="paraguayGeojson"
                         :color-scale="colorScale"
-                        :strokeColor="currentStrokeColor"
+                        :stroke-color="currentStrokeColor"
                         title-key="department_name"
                         id-key="department_id"
                         geojson-id-key="dpto">
@@ -431,10 +420,8 @@ export default {
       maxDate: new Date().toISOString().substr(0, 10),
       minDate: '2016-01-01',
       endDate: new Date().toISOString().substr(0, 10),
-
       value: true,
       value1: true,
-      valuec: true,
       gendOptions: {
         xAxis: {
           categories: ['MALE', 'FEMALE', 'UNDEFINED'],
@@ -830,8 +817,6 @@ export default {
         ]
       },
       s: [],
-      locations: [],
-      hcw: [],
       type: [],
       cadre: [],
       dob: [],
@@ -861,7 +846,7 @@ export default {
         attributionControl: false
       },
       currentStrokeColor: '200004',
-      datas:[]
+      datas: []
 
     }
   },
@@ -923,7 +908,7 @@ export default {
             }
           }
           for (var e in this.s) {
-            if (this.s[e].county == a[c].name) {
+            if (this.s[e].county === a[c].name) {
               this.exp_filt.push(this.s[e])
             }
           }
@@ -944,7 +929,6 @@ export default {
         for (var sb in fsb) {
           for (var a in this.fac_filt) {
             if (this.fac_filt[a].sub_county === fsb[sb].name) {
-              console.log(fsb[sb])
               this.fac_filtl.push(this.fac_filt[a])
             }
           }
@@ -1004,9 +988,9 @@ export default {
 
     getFacilityfilter (f) {
       let al = []; let exp = []
+      this.exp_filtf = this.s
       if (f.length > 0) {
         for (var s in f) {
-          console.log(f[s].name)
           for (var e in this.exp_filtf) {
             if (this.exp_filtf[e].facility === f[s].name) {
               exp.push(this.exp_filtf[e])
@@ -1081,6 +1065,7 @@ export default {
               this.loopT(this.link)
             } else {
               this.getAgeData(this.s)
+              this.getCountyData(this.s)
             }
           })
           .catch(error => console.log(error.message))
@@ -1093,6 +1078,7 @@ export default {
               // this.c = exp.data.cadre.meta.total // total cadre
               this.loopT(this.link)
             } else {
+              this.getCountyData(this.s)
               this.getAgeData(this.s)
             }
           })
@@ -1104,7 +1090,6 @@ export default {
       axios.get('cadres')
         .then((cad) => {
           this.cadres = cad.data.data
-          console.log(cad.data.data)
         })
         .catch(error => console.log(error.message))
     },
@@ -1120,7 +1105,7 @@ export default {
           i = 11
         }
       }
-      if (this.user.role_id == 5) {
+      if (this.user.role_id === 5) {
         for (var i in this.s) {
           if (this.s[i].county == this.user.county) {
             u.push(this.s[i])
@@ -1166,7 +1151,6 @@ export default {
         datac.push(this.getNumc(this.barOptionsCadre.xAxis.categories[i], list))
       }
       this.barOptionsCadre.series[0].data = datac
-      this.valuec = false
       this.load = false
 
       this.load = true
@@ -1244,7 +1228,6 @@ export default {
       for (var x in g) {
         if (g[x].gender === cat && g[x].gender === num) {
           count++
-          console.log((count / 100) * (cat + num))
         }
       }
     },
@@ -1316,7 +1299,6 @@ export default {
 
         if (hr < 10) {
           hr = '0' + hr
-          console.log(hr)
         }
         if (hr === name) {
           counter++
@@ -1344,7 +1326,8 @@ export default {
     },
 
     getCountyData (n) {
-      var a = [], b = [], prev, count = 0, arr = []
+      var a = []; var b = []; var prev; var count = 0; var arr = []
+      this.datas = []
       for (var f in n) {
         arr.push(n[f].county)
       }
@@ -1359,6 +1342,9 @@ export default {
         prev = arr[i]
       }
       console.log(a, b)
+      for (var e in pyDepartmentsData) {
+        pyDepartmentsData[e].exposures = 0
+      }
       for (var i in a) {
         for (var e in pyDepartmentsData) {
           if (a[i] === pyDepartmentsData[e].department_name) {
@@ -1367,8 +1353,7 @@ export default {
           this.datas = pyDepartmentsData
         }
       }
-      
-      return pyDepartmentsData
+      console.log(this.datas)
     }
   }
 }

@@ -67,7 +67,7 @@
                     :rules="[rules.emailRules]"
                     label="Email Address"
                     class="purple-input"/>
-                  </v-flex>
+                </v-flex>
                 <v-flex
                   xs12
                   md4
@@ -277,9 +277,8 @@ export default {
     })
   },
   created () {
-    if (this.user.role_id !== 1){
+    if (this.user.role_id !== 1) {
       this.facility = this.user.hcw.facility_id
-      console.log(this.facility)
     } else {
       this.getFacilities()
     }
@@ -332,11 +331,11 @@ export default {
     postUser (e) {
       e.preventDefault()
       if (this.testFill()) {
-        axios.post('auth/signup',{
-          facility_id: facility.id,
+        axios.post('auth/bulk/register', {
+          facility_id: this.facility.id,
           facility_department: this.dept,
           cadre: this.cadre,
-          first_name:  this.fname,
+          first_name: this.fname,
           surname: this.surname,
           email: this.email,
           msisdn: this.msisdn,
