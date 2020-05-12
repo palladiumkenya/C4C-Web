@@ -12,7 +12,6 @@
         Add A New Facility Protocol
       </v-btn>
 
-      
     </v-flex>
 
     <v-snackbar
@@ -39,52 +38,51 @@
       <Loader />
     </div>
 
-  
     <v-flex
+      v-for="(result, index) in results"
       v-else
+      :key="result.id"
       cols="12"
       dense
-      v-for="(result, index) in results"
-      :key="result.id"
       dark>
 
-        <v-card
-          class="mx-auto">
+      <v-card
+        class="mx-auto">
 
-          <v-card-title class="headline">{{ result.title }}</v-card-title>
+        <v-card-title class="headline">{{ result.title }}</v-card-title>
 
-          <v-divider/>
+        <v-divider/>
 
-          <v-card-actions>
-            <v-card-text class="text--primary">
-              <div><span> Created On: </span> {{ result.created_at }}</div>
-            </v-card-text>
+        <v-card-actions>
+          <v-card-text class="text--primary">
+            <div><span> Created On: </span> {{ result.created_at }}</div>
+          </v-card-text>
 
-            <v-btn
-              icon
-              color="orange"
-              @click="$router.push({ name: 'View Facility Resource', params: {id: result.id} })">
-              <v-icon> mdi-plus  </v-icon>
-            </v-btn>
+          <v-btn
+            icon
+            color="orange"
+            @click="$router.push({ name: 'View Facility Resource', params: {id: result.id} })">
+            <v-icon> mdi-plus  </v-icon>
+          </v-btn>
 
-            <v-btn
-              icon
-              color="green"
-              @click="$router.push({ name : 'Edit Facility Resource', params: {id: result.id } })">
-              <v-icon> mdi-pencil </v-icon>
-            </v-btn>
+          <v-btn
+            icon
+            color="green"
+            @click="$router.push({ name : 'Edit Facility Resource', params: {id: result.id } })">
+            <v-icon> mdi-pencil </v-icon>
+          </v-btn>
 
-            <v-btn
-              icon
-              color="red"
-              @click=" deleteResource(result.id, index); loading=true ">
+          <v-btn
+            icon
+            color="red"
+            @click=" deleteResource(result.id, index); loading=true ">
 
-              <v-icon> mdi-delete </v-icon>
-            </v-btn>
+            <v-icon> mdi-delete </v-icon>
+          </v-btn>
 
-          </v-card-actions>
+        </v-card-actions>
 
-        </v-card>
+      </v-card>
 
     </v-flex>
   </v-container>
@@ -128,7 +126,7 @@ export default {
         })
     },
 
-    deleteResource(id, index) {
+    deleteResource (id, index) {
       axios.delete('resources/protocols/delete/' + id)
         .then((response) => {
           console.log(response.data)

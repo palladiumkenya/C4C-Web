@@ -22,7 +22,7 @@
             <upload-excel-component
               :on-success="handleSuccess"
               :before-upload="beforeUpload" />
-            
+
             <v-form @submit="postUsers">
               <v-container py-0>
                 <v-layout wrap>
@@ -42,24 +42,31 @@
                     xs12
                     md4
                   >
-                  <v-combobox
-                    v-model="facility"
-                    :items="all_facilities"
-                    item-text="name"
-                    item-value="id"
-                    label="Select Facility"
-                    clearable
-                    persistent-hint
-                    chips
-                    :disabled="is_data"/>
+                    <v-combobox
+                      v-model="facility"
+                      :items="all_facilities"
+                      :disabled="is_data"
+                      item-text="name"
+                      item-value="id"
+                      label="Select Facility"
+                      clearable
+                      persistent-hint
+                      chips/>
                   </v-flex>
-                  {{facility}}
                 </v-layout>
               </v-container>
             </v-form>
-            <v-dialog v-model="loading" fullscreen full-width>
-              <v-container fluid fill-height style="background-color: rgba(255, 255, 255, 0.5);">
-                <v-layout justify-center align-center>
+            <v-dialog
+              v-model="loading"
+              fullscreen
+              full-width>
+              <v-container
+                fluid
+                fill-height
+                style="background-color: rgba(255, 255, 255, 0.5);">
+                <v-layout
+                  justify-center
+                  align-center>
                   <v-progress-circular
                     :rotate="360"
                     :size="100"
@@ -226,7 +233,7 @@ export default {
     })
   },
   created () {
-    if (this.user.role_id !== 1){
+    if (this.user.role_id !== 1) {
       this.facility = this.user.hcw.facility_id
       console.log(this.facility)
     } else {
@@ -265,12 +272,8 @@ export default {
           this.output_pre = `ERROR: Fill gender for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].password === undefined) {
-          this.output_pre = `ERROR: Fill password for record: ${u + 1}`
-          this.snack('bottom', 'center')
-          return
-        } else if (this.tableData[u].password.toString().length < 6) {
-          this.output_pre = `ERROR: Password for record: ${u + 1} should be more the 5 characters`
+        } else if (this.facility === null) {
+          this.output_pre = `ERROR: Select facility`
           this.snack('bottom', 'center')
           return
         }
@@ -283,10 +286,10 @@ export default {
         console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
         axios.post('auth/signup', {
-          facility_id: 17,
+          facility_id: this.facility.id,
           facility_department: this.tableData[v].Facility_Department,
           cadre: this.tableData[v].cadre,
-          first_name:  this.tableData[v].FirstName,
+          first_name: this.tableData[v].FirstName,
           surname: this.tableData[v].surname,
           email: this.tableData[v].Email,
           msisdn: this.tableData[v].Mobile.toString(),
@@ -329,10 +332,10 @@ export default {
       this.tableHeader = header
       this.is_data = false
       for (var r in results) {
-        if (String(results[r].Mobile).slice(0,3) != '254' && String(results[r].Mobile).slice(0,1) === '7') {
-          results[r].Mobile = '254'+ String(results[r].Mobile)
+        if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
+          results[r].Mobile = '254' + String(results[r].Mobile)
         } else if (String(results[r].mobile).length < 5) {
-          console.log(results.splice(r,1))
+          console.log(results.splice(r, 1))
           break
         }
       }

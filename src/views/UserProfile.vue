@@ -11,159 +11,152 @@
         xs12
         md8
       >
-       <v-form @submit="postUser">
-        <material-card
-          color="green"
-          title="Edit Profile"
-          text="Complete your profile"
-        >
+        <v-form @submit="postUser">
+          <material-card
+            color="green"
+            title="Edit Profile"
+            text="Complete your profile"
+          >
 
-      
-          <v-card-text>
-            <p class="display-1 text--primary">
-              User Profile
-            </p>
-            <div class="text--primary"/>
-          </v-card-text>
-          <v-container py-0>
-            <v-layout wrap>
-              <v-flex
-                xs12
-                md4
-              >
+            <v-card-text>
+              <p class="display-1 text--primary">
+                User Profile
+              </p>
+              <div class="text--primary"/>
+            </v-card-text>
+            <v-container py-0>
+              <v-layout wrap>
+                <v-flex
+                  xs12
+                  md4
+                >
                   <v-text-field
-                  label="First Name"
-                  v-model="userData.first_name"
-                  :rules="[v => !!v || 'First Name is required']"
+                    v-model="userData.first_name"
+                    :rules="[v => !!v || 'First Name is required']"
+                    label="First Name"
+                  />
+                </v-flex>
+
+                <v-flex
+                  xs12
+                  md4
                 >
-                </v-text-field>
-              </v-flex>
+                  <v-text-field
+                    v-model="userData.surname"
+                    :rules="[v => !!v || 'Surname is required']"
+                    label="Surname"
+                  />
+                </v-flex>
 
-              <v-flex
-                xs12
-                md4
-              >
-                <v-text-field
-                  label="Surname"
-                  v-model="userData.surname"
-                  :rules="[v => !!v || 'Surname is required']"
+                <v-flex
+                  xs12
+                  md4
                 >
-                </v-text-field>
-              </v-flex>
+                  <v-select
+                    v-model="userData.gender"
+                    :items="gender"
+                    :rules="[v => !!v || 'Gender is required']"
+                    label="Gender"
+                    required
+                    autocomplete
+                  />
+                </v-flex>
 
-              <v-flex
-                xs12
-                md4
-              >
-              <v-select
-                v-model="userData.gender"
-                :items="gender"
-                label="Gender"
-                :rules="[v => !!v || 'Gender is required']"
-                required
-                autocomplete
-              > 
-              </v-select>
-              </v-flex>
-
-              <v-flex
-                xs12
-                md6
-              >
-               <v-text-field
-                v-model="userData.email"
-                label="E-mail"
-                required
-                :rules="[v => !!v || 'Email is required']"
-              >
-              </v-text-field>
-              </v-flex>
-
-              <v-flex
-                xs12
-                md6
-              >
-                <v-select
-                v-model="userData.role"
-                :items="roles"
-                item-value="id"
-                item-text="name"
-                label="Role"
-                :rules="[v => !!v || 'Role is required']"
-                required
-                return-object
-                :hint="`${user.role.name}`"
-                persistent-hint
-                autocomplete
-              >
-              </v-select>
-              </v-flex>
-
-              <v-flex
-                xs12
-                md6>
-                <v-select
-                  :items="all_facilities"
-                  item-value="id"
-                  item-text="name"
-                  label="Facility"
-                  v-model="userData.facility_name"
-                  :hint="`${user.hcw.facility_name}`"
-                  persistent-hint
-                  :rules="[v => !!v || 'Facility is required']"
-                  required
-                  autocomplete
-                > </v-select> 
-              </v-flex>
-              
-
-              <v-flex
-                xs12
-                md6>
-                <v-select
-                  v-model="userData.cadre"
-                  :items="all_cadres"
-                  item-value="id"
-                  item-text="name"
-                  :rules="[v => !!v || 'Cadre is required']"
-                  required
-                  label="Cadre"
-                  :hint="`${user.cadre}`"
-                  persistent-hint
-                  autocomplete
-                > 
-                </v-select>    
-              </v-flex> 
-
-              <v-flex
-                xs12
-                text-xs-right
-              >
-                <v-btn
-                  class="mx-0 font-weight-light"
-                  color="success"
-                  type="submit"
+                <v-flex
+                  xs12
+                  md6
                 >
-                  Update Profile
-                </v-btn>
+                  <v-text-field
+                    v-model="userData.email"
+                    :rules="[v => !!v || 'Email is required']"
+                    label="E-mail"
+                    required
+                  />
+                </v-flex>
 
-                <v-alert
+                <v-flex
+                  xs12
+                  md6
+                >
+                  <v-select
+                    v-model="userData.role"
+                    :items="roles"
+                    :rules="[v => !!v || 'Role is required']"
+                    :hint="`${user.role.name}`"
+                    item-value="id"
+                    item-text="name"
+                    label="Role"
+                    required
+                    return-object
+                    persistent-hint
+                    autocomplete
+                  />
+                </v-flex>
+
+                <v-flex
+                  xs12
+                  md6>
+                  <v-select
+                    :items="all_facilities"
+                    v-model="userData.facility_name"
+                    :hint="`${user.hcw.facility_name}`"
+                    :rules="[v => !!v || 'Facility is required']"
+                    item-value="id"
+                    item-text="name"
+                    label="Facility"
+                    persistent-hint
+                    required
+                    autocomplete
+                  />
+                </v-flex>
+
+                <v-flex
+                  xs12
+                  md6>
+                  <v-select
+                    v-model="userData.cadre"
+                    :items="all_cadres"
+                    :rules="[v => !!v || 'Cadre is required']"
+                    :hint="`${user.cadre}`"
+                    item-value="id"
+                    item-text="name"
+                    required
+                    label="Cadre"
+                    persistent-hint
+                    autocomplete
+                  />
+                </v-flex>
+
+                <v-flex
+                  xs12
+                  text-xs-right
+                >
+                  <v-btn
+                    class="mx-0 font-weight-light"
+                    color="success"
+                    type="submit"
+                  >
+                    Update Profile
+                  </v-btn>
+
+                  <v-alert
                     :value="alert"
                     icon = "mdi-alert"
                     dismissible
-                    outline color="error"
+                    outline
+                    color="error"
                     elevation="2"
                   >
-                    <h6> {{ output.error }} {{ output.message }} {{output}} </h6>
+                    <h6> {{ output.error }} {{ output.message }} {{ output }} </h6>
                   </v-alert>
 
-              </v-flex>
+                </v-flex>
 
-            </v-layout>
-          </v-container>
-       
-        </material-card>
-         </v-form>
+              </v-layout>
+            </v-container>
+
+          </material-card>
+        </v-form>
       </v-flex>
       <v-flex
         xs12
@@ -209,16 +202,16 @@ export default {
         'UNDEFINED'
       ],
       roles: [
-        {id: '1', name: 'Super Admin'},
-        {id: '2', name: 'Partner Admin'},
-        {id: '3', name: 'Health care worker'},
-        {id: '4', name: 'Facility Admin'},
-        {id: '5', name: 'County Admin'},
+        { id: '1', name: 'Super Admin' },
+        { id: '2', name: 'Partner Admin' },
+        { id: '3', name: 'Health care worker' },
+        { id: '4', name: 'Facility Admin' },
+        { id: '5', name: 'County Admin' }
       ],
-      select: {state: 'Flodrida'},
-      all_facilities : [],
+      select: { state: 'Flodrida' },
+      all_facilities: [],
       all_cadres: [],
-      userData : {},
+      userData: {},
       output: '',
       alert: false
     }
@@ -228,19 +221,18 @@ export default {
       user: 'auth/user'
     })
   },
+  watch: {
+    user (newData) {
+      this.userData = newData
+    }
+  },
   created () {
     this.getFacilities()
     this.getCadres()
     this.userData = Object.assign({}, this.$store.getters.user)
-
-  },
-  watch: {
-    user(newData) {
-      this.userData = newData
-    }
   },
 
-  methods : {
+  methods: {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
@@ -260,8 +252,8 @@ export default {
     },
 
     postUser (e) {
-      e.preventDefault();
-      
+      e.preventDefault()
+
       // let allData = new FormData();
 
       // allData.append('first_name', this.user.first_name)
@@ -275,19 +267,18 @@ export default {
       axios({
         method: 'POST',
         url: 'auth/complete_profile',
-        data: this.userData,
+        data: this.userData
       })
-      .then((response) => {
-        this.output = response.data
-        this.alert = true
-      })
-      .catch(error => {
-        this.output = error
-        console.log(error)
-      })
+        .then((response) => {
+          this.output = response.data
+          this.alert = true
+        })
+        .catch(error => {
+          this.output = error
+          console.log(error)
+        })
     }
 
-
-  }  
+  }
 }
 </script>
