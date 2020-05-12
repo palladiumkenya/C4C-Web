@@ -124,7 +124,6 @@ export default {
   },
   data () {
     return {
-      areaOptions: data.AreaData,
       map: null,
       zoom: 11,
       center: L.latLng(0, 0),
@@ -193,10 +192,10 @@ export default {
       }
       console.log(this.users)
     },
-    approvCh (check_id) {
-      console.log(check_id)
+    approvCh (checkId) {
+      console.log(checkId)
       axios.post('check_in/approve', {
-        check_in_id: check_id
+        check_in_id: checkId
       })
         .then((r) => {
           this.result = r.data
@@ -216,7 +215,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['Cadre', 'Previous Exposures', 'Type', 'Location', 'Date']
-        const filterVal = [ 'cadre', 'previous_exposures', 'type', 'location', 'date']
+        const filterVal = ['cadre', 'previous_exposures', 'type', 'location', 'date']
         const list = this.users
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

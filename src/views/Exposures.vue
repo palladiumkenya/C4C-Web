@@ -201,12 +201,6 @@
           </v-flex>
         </template>
       </v-layout>
-      <template>
-        <v-btn
-          block
-          color="secondary"
-          dark>Filter</v-btn>
-      </template>
     </v-container>
     <!-- End filters -->
 
@@ -252,10 +246,9 @@
                       <l-choropleth-layer
                         :data="datas"
                         :value="values"
-                        :extra-values="extraValues"
                         :geojson="paraguayGeojson"
                         :color-scale="colorScale"
-                        :strokeColor="currentStrokeColor"
+                        :stroke-color="currentStrokeColor"
                         title-key="department_name"
                         id-key="department_id"
                         geojson-id-key="dpto">
@@ -853,7 +846,7 @@ export default {
         attributionControl: false
       },
       currentStrokeColor: '200004',
-      datas:[]
+      datas: []
 
     }
   },
@@ -1333,7 +1326,7 @@ export default {
     },
 
     getCountyData (n) {
-      var a = [], b = [], prev, count = 0, arr = []
+      var a = []; var b = []; var prev; var count = 0; var arr = []
       this.datas = []
       for (var f in n) {
         arr.push(n[f].county)
@@ -1350,10 +1343,9 @@ export default {
       }
       console.log(a, b)
       for (var e in pyDepartmentsData) {
-          pyDepartmentsData[e].exposures = 0
-        }
+        pyDepartmentsData[e].exposures = 0
+      }
       for (var i in a) {
-        
         for (var e in pyDepartmentsData) {
           if (a[i] === pyDepartmentsData[e].department_name) {
             pyDepartmentsData[e].exposures = b[i]

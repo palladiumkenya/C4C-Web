@@ -109,7 +109,7 @@
             :disabled="!is_data"
             href="reg.xlsx"
             download
-            color="info"
+            color="infos"
           >Get Excel template
           </v-btn>
         </material-card>
@@ -256,19 +256,19 @@ export default {
           this.output_pre = `ERROR: Fill first name for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].surname === undefined) {
+        } else if (this.tableData[u].Surname === undefined) {
           this.output_pre = `ERROR: Fill surname for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].mobile === undefined) {
+        } else if (this.tableData[u].Mobile === undefined) {
           this.output_pre = `ERROR: Fill mobile for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].mobile.toString().length < 9) {
+        } else if (this.tableData[u].Mobile.length < 7) {
           this.output_pre = `ERROR: Fill valid mobile for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].gender === undefined) {
+        } else if (this.tableData[u].Gender === undefined) {
           this.output_pre = `ERROR: Fill gender for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
@@ -285,15 +285,15 @@ export default {
       for (var v in this.tableData) {
         console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
-        axios.post('auth/signup', {
+        axios.post('auth/bulk/register', {
           facility_id: this.facility.id,
           facility_department: this.tableData[v].Facility_Department,
-          cadre: this.tableData[v].cadre,
+          cadre: this.tableData[v].Cadre,
           first_name: this.tableData[v].FirstName,
-          surname: this.tableData[v].surname,
+          surname: this.tableData[v].Surname,
           email: this.tableData[v].Email,
           msisdn: this.tableData[v].Mobile.toString(),
-          gender: this.tableData[v].gender,
+          gender: this.tableData[v].Gender,
           dob: this.tableData[v].dob,
           id_no: this.tableData[v].id_no
         })
@@ -332,6 +332,17 @@ export default {
       this.tableHeader = header
       this.is_data = false
       for (var r in results) {
+        var xlSerialOffset = -2209075200000
+        var elapsedDays
+        if (results[r].dob < 61) {
+          elapsedDays = results[r].dob
+        }
+        else {
+          elapsedDays = results[r].dob - 1
+        }
+        var millisPerDay = 86400000
+        var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
+        results[r].dob = new Date(jsTimestamp).toISOString().substr(0, 10)
         if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
           results[r].Mobile = '254' + String(results[r].Mobile)
         } else if (String(results[r].mobile).length < 5) {
