@@ -33,7 +33,7 @@
               >
                   <v-text-field
                   label="First Name"
-                  v-model="userdata.first_name"
+                  v-model="userData.first_name"
                   :rules="[v => !!v || 'First Name is required']"
                 >
                 </v-text-field>
@@ -45,7 +45,7 @@
               >
                 <v-text-field
                   label="Surname"
-                  v-model="userdata.surname"
+                  v-model="userData.surname"
                   :rules="[v => !!v || 'Surname is required']"
                 >
                 </v-text-field>
@@ -56,12 +56,12 @@
                 md4
               >
               <v-select
-                v-model="userdata.gender"
+                v-model="userData.gender"
                 :items="gender"
-                item-value="id"
                 label="Gender"
                 :rules="[v => !!v || 'Gender is required']"
                 required
+                autocomplete
               > 
               </v-select>
               </v-flex>
@@ -71,7 +71,7 @@
                 md6
               >
                <v-text-field
-                v-model="userdata.email"
+                v-model="userData.email"
                 label="E-mail"
                 required
                 :rules="[v => !!v || 'Email is required']"
@@ -84,12 +84,17 @@
                 md6
               >
                 <v-select
-                v-model="userdata.role.name"
+                v-model="userData.role"
                 :items="roles"
                 item-value="id"
+                item-text="name"
                 label="Role"
                 :rules="[v => !!v || 'Role is required']"
                 required
+                return-object
+                :hint="`${user.role.name}`"
+                persistent-hint
+                autocomplete
               >
               </v-select>
               </v-flex>
@@ -98,27 +103,34 @@
                 xs12
                 md6>
                 <v-select
-                  v-model="userdata.hcw.facility_name"
-                  :items="facilities"
+                  :items="all_facilities"
                   item-value="id"
                   item-text="name"
                   label="Facility"
+                  v-model="userData.facility_name"
+                  :hint="`${user.hcw.facility_name}`"
+                  persistent-hint
                   :rules="[v => !!v || 'Facility is required']"
                   required
+                  autocomplete
                 > </v-select> 
               </v-flex>
+              
 
               <v-flex
                 xs12
                 md6>
                 <v-select
-                  v-model="userdata.cadre"
-                  :items="cadres"
-                  item-text="name"
-                  label="Cadre"
+                  v-model="userData.cadre"
+                  :items="all_cadres"
                   item-value="id"
+                  item-text="name"
                   :rules="[v => !!v || 'Cadre is required']"
                   required
+                  label="Cadre"
+                  :hint="`${user.cadre}`"
+                  persistent-hint
+                  autocomplete
                 > 
                 </v-select>    
               </v-flex> 
@@ -142,7 +154,7 @@
                     outline color="error"
                     elevation="2"
                   >
-                    <h6> {{ output.error }} {{ output.message }} </h6>
+                    <h6> {{ output.error }} {{ output.message }} {{output}} </h6>
                   </v-alert>
 
               </v-flex>
@@ -197,23 +209,16 @@ export default {
         'UNDEFINED'
       ],
       roles: [
-        'Super Admin',
-        'Partner Admin',
-        'Health care worker',
-        'Facility Admin'
+        {id: '1', name: 'Super Admin'},
+        {id: '2', name: 'Partner Admin'},
+        {id: '3', name: 'Health care worker'},
+        {id: '4', name: 'Facility Admin'},
+        {id: '5', name: 'County Admin'},
       ],
-      facilities : [],
-      cadres: [],
-      userdata : {
-        first_name: '',
-        surname: '',
-        gender: '',
-        email: '',
-        role: '',
-        facility_name: '',
-        cadre: ''
-      },
-      userdata: '',
+      select: {state: 'Flodrida'},
+      all_facilities : [],
+      all_cadres: [],
+      userData : {},
       output: '',
       alert: false
     }
@@ -226,8 +231,13 @@ export default {
   created () {
     this.getFacilities()
     this.getCadres()
-    this.getUser()
+    this.userData = Object.assign({}, this.$store.getters.user)
 
+  },
+  watch: {
+    user(newData) {
+      this.userData = newData
+    }
   },
 
   methods : {
@@ -235,6 +245,7 @@ export default {
       axios.get('facilities')
         .then((facilities) => {
           console.log(facilities.data)
+          this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
     },
@@ -243,39 +254,28 @@ export default {
       axios.get('cadres')
         .then((cadres) => {
           console.log(cadres.data)
+          this.all_cadres = cadres.data.data
         })
         .catch(error => console.log(error.message))
-    },
-
-    getUser () {
-      var id = this.$route.params.id
-       axios.get('auth/user')
-        .then((user) => {
-        this.userdata = user.data.data 
-        console.log(user.data)
-
-        }).catch((error) => {
-        console.log(error.message)
-        })
     },
 
     postUser (e) {
       e.preventDefault();
       
-      let allData = new FormData();
+      // let allData = new FormData();
 
-      allData.append('first_name', this.userdata.first_name)
-      allData.append('surname', this.userdata.surname)
-      allData.append('gender', this.userdata.gender)
-      allData.append('email', this.userdata.email)
-      allData.append('role', this.user.role)
-      allData.append('facility_name', this.user.first_name)
-      allData.append('cadre', this.user.cadre)
+      // allData.append('first_name', this.user.first_name)
+      // allData.append('surname', this.user.surname)
+      // allData.append('gender', this.user.gender)
+      // allData.append('email', this.user.email)
+      // allData.append('role', this.user.role)
+      // allData.append('facility_name', this.user.hcw.fa)
+      // allData.append('cadre', this.user.cadre)
 
       axios({
         method: 'POST',
         url: 'auth/complete_profile',
-        data: allData,
+        data: this.userData,
       })
       .then((response) => {
         this.output = response.data
