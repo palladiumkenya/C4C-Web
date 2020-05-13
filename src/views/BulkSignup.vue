@@ -87,6 +87,22 @@
               loading-text="Loading... Please wait"
             >
               <template
+                slot="items"
+                slot-scope="props">
+                <tr>
+                  <td>{{ tableData.indexOf(props.item)+1 }}</td>
+                  <td>{{ props.item.FirstName }}</td>
+                  <td>{{ props.item.Surname }}</td>
+                  <td>{{ props.item.Mobile }}</td>
+                  <td>{{ props.item.Gender }}</td>
+                  <td>{{ props.item.Email }}</td>
+                  <td>{{ props.item.Facility_Department }}</td>
+                  <td>{{ props.item.Cadre }}</td>
+                  <td>{{ props.item.dob }}</td>
+                  <td>{{ props.item.id_no }}</td>
+                </tr>
+              </template>
+              <!-- <template
                 slot="headerCell"
                 slot-scope="{ header }"
               >
@@ -102,7 +118,7 @@
                 <td
                   v-for="(msg, index) in item"
                   :key="index">{{ msg }}</td>
-              </template>
+              </template> -->
             </v-data-table>
           </div>
           <v-btn
@@ -173,10 +189,10 @@ export default {
       tableData: [],
       tableHeader: [],
       tableHead: [
-        // {
-        //   text: 'Number',
-        //   value: 'number'
-        // },
+        {
+          text: 'Number',
+          value: 'number'
+        },
         {
           sortable: false,
           text: 'First Name',
