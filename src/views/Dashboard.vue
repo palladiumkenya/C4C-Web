@@ -90,11 +90,11 @@
                   item-text="name"
                   item-value="id"
                   label="Select County"
-                  v-on:change="getSubCounties"
                   multiple
-                  clerable
+                  clearable
                   persistent-hint
-                  chips/>
+                  chips
+                  @change="getSubCounties"/>
               </template>
             </v-flex>
             <v-flex
@@ -106,15 +106,15 @@
                   v-if="user.role_id != 4"
                   v-model="subcounties"
                   :items="all_subcounties"
+                  :disabled="active"
                   item-text="name"
                   item-value="id"
                   label="Select Sub-County"
-                  :disabled="active"
-                  v-on:change="facilitySubCounty"
                   multiple
-                  clerable
+                  clearable
                   persistent-hint
-                  chips/>
+                  chips
+                  @change="facilitySubCounty"/>
 
               </template>
             </v-flex>
@@ -132,7 +132,7 @@
                   item-value="id"
                   label="Select Partner"
                   multiple
-                  clerable
+                  clearable
                   disabled
                   persistent-hint
                   chips/>
@@ -148,13 +148,13 @@
                 <v-combobox
                   v-if="user.role_id != 4"
                   :items="all_facilities_level"
-                  label="Select Facility Level"
-                  v-on:change="facilityLevel"
                   :disabled="active_level"
+                  label="Select Facility Level"
                   multiple
-                  clerable
+                  clearable
                   persistent-hint
-                  chips/>
+                  chips
+                  @change="facilityLevel"/>
 
               </template>
             </v-flex>
@@ -168,15 +168,15 @@
                   v-if="user.role_id != 4"
                   v-model="facility"
                   :items="fac"
+                  :disabled="active_fac"
                   item-text="name"
                   item-value="id"
                   label="Select Facility"
-                  v-on:change="facilityFilter"
-                  :disabled="active_fac"
                   multiple
-                  clerable
+                  clearable
                   persistent-hint
-                  chips/>
+                  chips
+                  @change="facilityFilter"/>
 
               </template>
             </v-flex>
@@ -194,13 +194,17 @@
               item-text="name"
               item-value="id"
               label="Select Cadre"
-              v-on:change="cadreFilter"
               multiple
               clearable
               persistent-hint
-              chips/>
+              chips
+              @change="cadreFilter"/>
           </v-flex>
-          <v-flex xs12 sm6 md2 lg2>
+          <v-flex
+            xs12
+            sm6
+            md2
+            lg2>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -219,15 +223,31 @@
                 label="Start Date"
                 prepend-icon="mdi-calendar"
                 readonly
-              ></v-text-field>
-              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="startDate"
+                :max="endDate"
+                :min="minDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu1 = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2 lg2>
+          <v-flex
+            xs12
+            sm6
+            md2
+            lg2>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
@@ -246,11 +266,23 @@
                 label="End Date"
                 prepend-icon="mdi-calendar"
                 readonly
-              ></v-text-field>
-              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="endDate"
+                :max="maxDate"
+                :min="startDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="click();$refs.menu.save(endDate)">OK</v-btn>
               </v-date-picker>
             </v-menu>
           </v-flex>
@@ -263,7 +295,7 @@
             @click="click">Filter
           </v-btn>
         </v-flex> -->
-        
+
         <!-- End filters -->
       </template>
 
@@ -273,13 +305,14 @@
         xs12
         md12
         lg12
-        >
+      >
         <div class="card vld-parent">
-          <loading :active.sync="isLoading"
-          :can-cancel="false"
-          loader='bars'
-          color="#007bff"
-          :is-full-page="fullPage"></loading>
+          <loading
+            :active.sync="isLoading"
+            :can-cancel="false"
+            :is-full-page="fullPage"
+            loader="bars"
+            color="#007bff"/>
           <highcharts
             ref="barChart"
             :options="barOptionsTest"/>
@@ -311,10 +344,8 @@ import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
-import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 
-import { EventBus } from './../event-bus.js'
 
 exportingInit(Highcharts)
 
@@ -326,7 +357,7 @@ export default {
   data () {
     return {
       cadres: [],
-      partner:[],
+      partner: [],
       isLoading: true,
       fullPage: false,
       menu: false,
@@ -461,7 +492,7 @@ export default {
       us_filtl: [],
       fac_filtf: [],
       exp_filtf: [],
-      us_filtf: [],
+      us_filtf: []
     }
   },
   computed: {
@@ -490,8 +521,8 @@ export default {
         name: 'login'
       })
     }
-    if (this.e.length === 0) { this.getExp() } else {this.getMonth(this.e); this.scount = this.e.length; this.s = this.e}
-    if (this.us_no === 0 ) {
+    if (this.e.length === 0) { this.getExp() } else { this.getMonth(this.e); this.scount = this.e.length; this.s = this.e }
+    if (this.us_no === 0) {
       this.getAllUsers()
     } else if (this.all_users.length !== this.us_no) {
       this.u = this.us_no
@@ -507,43 +538,43 @@ export default {
     this.getFacilities()
     this.getCounties()
     axios.get('cadres')
-      .then((c)=>{
+      .then((c) => {
         this.cadres = c.data.data
       })
   },
   methods: {
     click () {
-      let exp = [], us =[]
+      let exp = []; let us = []
       var dates = {
-        convert:function(d) {
+        convert: function (d) {
           return (
-            d.constructor === Date ? d :
-            d.constructor === Array ? new Date(d[0],d[1],d[2]) :
-            d.constructor === Number ? new Date(d) :
-            d.constructor === String ? new Date(d) :
-            typeof d === "object" ? new Date(d.year,d.month,d.date) :
-            NaN
-          );
+            d.constructor === Date ? d
+              : d.constructor === Array ? new Date(d[0], d[1], d[2])
+                : d.constructor === Number ? new Date(d)
+                  : d.constructor === String ? new Date(d)
+                    : typeof d === 'object' ? new Date(d.year, d.month, d.date)
+                      : NaN
+          )
         },
-        inRange:function(d,start,end) {
+        inRange: function (d, start, end) {
           return (
-            isFinite(d=this.convert(d).valueOf()) &&
-            isFinite(start=this.convert(start).valueOf()) &&
-            isFinite(end=this.convert(end).valueOf()) ?
-            start <= d && d <= end :
-            NaN
-          );
+            isFinite(d = this.convert(d).valueOf()) &&
+            isFinite(start = this.convert(start).valueOf()) &&
+            isFinite(end = this.convert(end).valueOf())
+              ? start <= d && d <= end
+              : NaN
+          )
         }
       }
       for (var e in this.s) {
         var i = new Date(this.s[e].created_at).toISOString().substr(0, 10)
-        if (dates.inRange(i,this.startDate,this.endDate)){
+        if (dates.inRange(i, this.startDate, this.endDate)) {
           exp.push(this.s[e])
         }
       }
       for (var u in this.userz) {
         var i = new Date(this.userz[u].created_at).toISOString().substr(0, 10)
-        if (dates.inRange(i,this.startDate,this.endDate)) {
+        if (dates.inRange(i, this.startDate, this.endDate)) {
           us.push(this.userz[u])
         }
       }
@@ -585,22 +616,24 @@ export default {
       }
     },
     facilityCounty (a) {
-      this.us_filt =[],this.fac_filt = [], this.exp_filt = []
+      this.us_filt = []
+      this.fac_filt = []
+      this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
           for (var f in this.all_facilities) {
-            if (this.all_facilities[f].county == a[c].name) {
+            if (this.all_facilities[f].county === a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
             }
           }
           for (var ex in this.s) {
-            if (this.s[ex].county == a[c].name) {
+            if (this.s[ex].county === a[c].name) {
               this.exp_filt.push(this.s[ex])
               // console.log(this.s[ex])
             }
           }
           for (var u in this.userz) {
-            if (this.userz[u].county == a[c].name) {
+            if (this.userz[u].county === a[c].name) {
               this.us_filt.push(this.userz[u])
             }
           }
@@ -615,23 +648,25 @@ export default {
       }
     },
     facilitySubCounty (a) {
-      this.exp_filtl = [], this.fac_filtl = [], this.us_filtl = []
+      this.exp_filtl = []
+      this.fac_filtl = []
+      this.us_filtl = []
       this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
           // console.log(a[c].name)
           for (var f in this.fac_filt) {
-            if (this.fac_filt[f].sub_county == a[c].name) {
+            if (this.fac_filt[f].sub_county === a[c].name) {
               this.fac_filtl.push(this.fac_filt[f])
             }
           }
           for (var ex in this.exp_filt) {
-            if (this.exp_filt[ex].sub_county == a[c].name) {
+            if (this.exp_filt[ex].sub_county === a[c].name) {
               this.exp_filtl.push(this.exp_filt[ex])
             }
           }
           for (var u in this.us_filt) {
-            if (this.us_filt[u].sub_county == a[c].name) {
+            if (this.us_filt[u].sub_county === a[c].name) {
               this.us_filtl.push(this.us_filt[u])
             }
           }
@@ -648,25 +683,27 @@ export default {
     },
 
     facilityLevel (a) {
-      this.fac_filtf = [], this.exp_filtf = [], this.us_filtf = []
+      this.fac_filtf = []
+      this.exp_filtf = []
+      this.us_filtf = []
       this.active_fac = false
       console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var f in this.fac_filtl) {
-            if (this.fac_filtl[f].level == a[c]) {
+            if (this.fac_filtl[f].level === a[c]) {
               this.fac_filtf.push(this.fac_filtl[f])
-            } else if (a[c]== 'Level 5 and Above') {
-              if (Number(this.fac_filtl[f].level.slice(6,7)) >= 5) {
+            } else if (a[c] === 'Level 5 and Above') {
+              if (Number(this.fac_filtl[f].level.slice(6, 7)) >= 5) {
                 this.fac_filtf.push(this.fac_filtl[f])
               }
             }
           }
           for (var ex in this.exp_filtl) {
-            if (this.exp_filtl[ex].facility_level == a[c]) {
+            if (this.exp_filtl[ex].facility_level === a[c]) {
               this.exp_filtf.push(this.exp_filtl[ex])
-            } else if (a[c]== 'Level 5 and Above') {
-              if (Number(this.exp_filtl[ex].facility_level.slice(6,7)) >= 5) {
+            } else if (a[c] === 'Level 5 and Above') {
+              if (Number(this.exp_filtl[ex].facility_level.slice(6, 7)) >= 5) {
                 this.exp_filtf.push(this.exp_filtl[ex])
               }
             }
@@ -674,13 +711,12 @@ export default {
           for (var u in this.us_filtl) {
             if (this.us_filtl[u].facility_level === a[c]) {
               this.us_filtf.push(this.us_filtl[u])
-            } else if (a[c]== 'Level 5 and Above') {
-              if (Number(this.us_filtl[u].facility_level.slice(6,7)) >= 5) {
+            } else if (a[c] === 'Level 5 and Above') {
+              if (Number(this.us_filtl[u].facility_level.slice(6, 7)) >= 5) {
                 this.us_filtf.push(this.us_filtl[u])
               }
             }
           }
-          
         }
         this.getTest(this.us_filtf)
         this.getMonth(this.exp_filtf)
@@ -694,7 +730,7 @@ export default {
     },
 
     facilityFilter (a) {
-      let b = [], e = [], us = []
+      let b = []; let e = []; let us = []
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
@@ -707,7 +743,6 @@ export default {
               us.push(this.us_filtf[u])
             }
           }
-          
         }
         this.getTest(us)
         this.getMonth(e)
@@ -718,7 +753,9 @@ export default {
     },
 
     cadreFilter (a) {
-      this.us_filt =[],this.fac_filt = [], this.exp_filt = []
+      this.us_filt = []
+      this.fac_filt = []
+      this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.s) {
@@ -746,8 +783,8 @@ export default {
 
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        const proxyurl = "https://evening-brushlands-82997.herokuapp.com/";
-        axios.get(proxyurl+'http://c4ctest.mhealthkenya.org/api/exposures/all/')
+        const proxyurl = 'https://evening-brushlands-82997.herokuapp.com/'
+        axios.get(proxyurl + 'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
             this.scount = exp.data.meta.total
             this.s = exp.data.data
@@ -769,7 +806,7 @@ export default {
       }
     },
     async loopT (l) {
-      var i , e =[]
+      var i; var e = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
@@ -782,23 +819,23 @@ export default {
         }
       }
       if (this.user.role_id === 5) {
-        for (var ex in this.s){
-          if (this.s[ex].county ==this.user.hcw.county) {
+        for (var ex in this.s) {
+          if (this.s[ex].county === this.user.hcw.county) {
             e.push(this.s[ex])
           }
         }
         this.scount = e.length
         this.s = e
-      } 
-      
+      }
+
       this.getMonth(this.s)
     },
-    
+
     getMonth (list) {
       // console.log(list)
       var wdata = []
       for (var i in this.barOptionsTime.xAxis.categories) {
-        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i],list))
+        wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i], list))
       }
       this.barOptionsTime.series[0].data = wdata
     },
@@ -823,9 +860,9 @@ export default {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('hcw')
           .then((exp) => {
-            if (this.user.role_id === 5){
+            if (this.user.role_id === 5) {
               this.u = 'loading...'
-            }else{
+            } else {
               this.u = exp.data.meta.total
               this.storeUsNo(exp.data)
             }
@@ -849,7 +886,7 @@ export default {
     },
 
     async loopG (l) {
-      var i, u =[]
+      var i; var u = []
       this.userz = this.all_users
       console.log(this.userz)
       for (i = 0; i < 1;) {
@@ -864,13 +901,13 @@ export default {
           i = 11
         }
       }
-      if (this.user.role_id == 5) {
-        for (var ex in this.userz){
-          if (this.userz[ex].county ==this.user.hcw.county) {
+      if (this.user.role_id === 5) {
+        for (var ex in this.userz) {
+          if (this.userz[ex].county === this.user.hcw.county) {
             u.push(this.userz[ex])
           }
         }
-        this.userz = u 
+        this.userz = u
         this.u = u.length
       }
       this.getTest(this.userz)
@@ -885,7 +922,7 @@ export default {
       }
       this.barOptionsTest.series[0].data = reg
     },
-    
+
     getNumr (name, li) {
       var counter = 0
       for (var r in li) {
@@ -899,10 +936,10 @@ export default {
     },
 
     getBroadcasts () {
-      if (this.user.role_id === 1 || this.user.role_id == 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('broadcasts/web/all')
           .then((users) => {
-            if (this.user.role_id == 5) {
+            if (this.user.role_id === 5) {
               this.broad = users.data.data
               this.loopBroad(users.data.links.next)
             } else {
@@ -918,7 +955,7 @@ export default {
           .catch(error => console.log(error.message))
       }
     },
-    async loopBroad (l){
+    async loopBroad (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
@@ -929,15 +966,15 @@ export default {
           i = 11
         }
       }
-      for (var ex in this.broad){
+      for (var ex in this.broad) {
         if (this.broad[ex].facility) {
-          if (this.broad[ex].facility.county == this.user.hcw.county) { 
+          if (this.broad[ex].facility.county === this.user.hcw.county) {
             this.b += 1
           }
         }
       }
     }
   }
-  
+
 }
 </script>
