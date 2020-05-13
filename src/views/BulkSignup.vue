@@ -282,11 +282,14 @@ export default {
       this.pushData()
     },
     pushData () {
+      if (this.user.role_id === 1) {
+        this.facility = this.facility.id
+      }
       for (var v in this.tableData) {
         console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
         axios.post('auth/bulk/register', {
-          facility_id: this.facility.id,
+          facility_id: this.facility,
           facility_department: this.tableData[v].Facility_Department,
           cadre: this.tableData[v].Cadre,
           first_name: this.tableData[v].FirstName,
