@@ -9,7 +9,9 @@ export default{
     exp: [],
     us_all: null,
     us_no: 0,
-    link_next: null
+    link_next: null,
+    curr_page: 0,
+    last_page: 0
   },
   getters: {
     authenticated (state) {
@@ -32,6 +34,12 @@ export default{
     },
     next_link (state) {
       return state.link_next
+    },
+    curr_page (state) {
+      return state.curr_page
+    },
+    last_page (state) {
+      return state.last_page
     }
   },
   mutations: {
@@ -52,6 +60,12 @@ export default{
     },
     SET_LINK (state, data) {
       state.link_next = data
+    },
+    SET_CURR_PG (state, data) {
+      state.curr_page = data
+    },
+    SET_LAST_PG (state, data) {
+      state.last_page = data
     }
   },
   actions: {
@@ -101,6 +115,8 @@ export default{
         commit('SET_EXP', [])
         commit('SET_LINK', null)
         commit('SET_US_NO', 0)
+        commit('SET_CURR_PG', 0)
+        commit('SET_LAST_PG', 0)
       })
     },
     storeExp ({ commit }, exposures) {
@@ -112,6 +128,10 @@ export default{
     storeUsNo ({ commit }, us_no) {
       commit('SET_US_NO', us_no.meta.total)
       commit('SET_LINK', us_no.links.next)
+    },
+    storePages ({ commit }, pg) {
+      commit('SET_CURR_PG', pg.meta.current_page)
+      commit('SET_LAST_PG', pg.meta.last_page)
     }
   }
 }

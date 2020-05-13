@@ -84,7 +84,7 @@
             >
               <template>
                 <v-combobox
-                  v-if="user.role_id != 4"
+                  v-if="user.role_id === 1"
                   v-model="counties"
                   :items="all_counties"
                   item-text="name"
@@ -511,7 +511,9 @@ export default {
       e: 'auth/expo',
       all_users: 'auth/us_all',
       us_no: 'auth/us_no',
-      next_link: 'auth/next_link'
+      next_link: 'auth/next_link',
+      curr: 'auth/curr_page',
+      last: 'auth/last_page'
     })
   },
   created () {
@@ -521,17 +523,37 @@ export default {
         name: 'login'
       })
     }
+    if (this.user.role_id === 5) {
+      this.subCounties()
+      this.active = false
+      if (this.curr === 0) {
+        console.log(this.curr)
+        this.getAllUsers()
+      } else if(this.curr !== this.last) {
+        console.log('nn',this.curr)
+        this.loopG(this.next_link)
+      } else {
+        console.log('c',this.curr)
+        this.userz = this.all_users
+        this.u = this.all_users.length
+        this.getTest(this.all_users)
+        this.isLoading = false
+      }
+    }
+    // console.log(this.curr)
     if (this.e.length === 0) { this.getExp() } else { this.getMonth(this.e); this.scount = this.e.length; this.s = this.e }
-    if (this.us_no === 0) {
-      this.getAllUsers()
-    } else if (this.all_users.length !== this.us_no) {
-      this.u = this.us_no
-      this.loopG(this.next_link)
-    } else {
-      this.userz = this.all_users
-      this.u = this.us_no
-      this.getTest(this.all_users)
-      this.isLoading = false
+    if (this.user.role_id !== 5) {
+      if (this.us_no === 0) {
+        this.getAllUsers()
+      } else if (this.all_users.length !== this.us_no) {
+        this.u = this.us_no
+        this.loopG(this.next_link)
+      } else {
+        this.userz = this.all_users
+        this.u = this.us_no
+        this.getTest(this.all_users)
+        this.isLoading = false
+      }
     }
     this.getBroadcasts()
     // this.getAllUsers()
@@ -597,7 +619,18 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-
+    subCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          for (var x in counties.data.data) {
+            if (this.user.hcw.county === counties.data.data[x].name) {
+              this.getSubCounties([counties.data.data[x]])
+              console.log(counties.data.data[x])
+            }
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
     getSubCounties (a) {
       if (a.length > 0) {
         this.active = false
@@ -648,18 +681,20 @@ export default {
       }
     },
     facilitySubCounty (a) {
+      console.log(a)
       this.exp_filtl = []
       this.fac_filtl = []
       this.us_filtl = []
+      this.fac_filt = this.all_facilities
       this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.fac_filt) {
             if (this.fac_filt[f].sub_county === a[c].name) {
               this.fac_filtl.push(this.fac_filt[f])
             }
           }
+          console.log(this.fac_filtl)
           for (var ex in this.exp_filt) {
             if (this.exp_filt[ex].sub_county === a[c].name) {
               this.exp_filtl.push(this.exp_filt[ex])
@@ -687,8 +722,9 @@ export default {
       this.exp_filtf = []
       this.us_filtf = []
       this.active_fac = false
-      console.log(a)
+      //console.log(a)
       if (a.length > 0) {
+        console.log(this.fac_filtl)
         for (var c in a) {
           for (var f in this.fac_filtl) {
             if (this.fac_filtl[f].level === a[c]) {
@@ -731,6 +767,7 @@ export default {
 
     facilityFilter (a) {
       let b = []; let e = []; let us = []
+      console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
@@ -786,7 +823,11 @@ export default {
         const proxyurl = 'https://evening-brushlands-82997.herokuapp.com/'
         axios.get(proxyurl + 'http://c4ctest.mhealthkenya.org/api/exposures/all/')
           .then((exp) => {
-            this.scount = exp.data.meta.total
+            if (this.user.role_id === 5) {
+              this.scount = 'loading...'
+            } else {
+              this.scount = exp.data.meta.total
+            }
             this.s = exp.data.data
             this.link = exp.data.links.next
             this.loopT(this.link)
@@ -806,26 +847,41 @@ export default {
       }
     },
     async loopT (l) {
-      var i; var e = []
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.s = this.s.concat(response.data.data)
-          this.storeExp(this.s)
-          this.getMonth(this.e)
-        } else {
-          i = 11
+      var i
+      var e = []
+      if (this.user.role_id !== 5) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.s = this.s.concat(response.data.data)
+            this.storeExp(this.s)
+            this.getMonth(this.e)
+          } else {
+            i = 11
+          }
         }
-      }
-      if (this.user.role_id === 5) {
+      } else if (this.user.role_id === 5) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.s = this.s.concat(response.data.data)
+            this.storeExp(this.s)
+          } else {
+            i = 11
+          }
+        }
         for (var ex in this.s) {
           if (this.s[ex].county === this.user.hcw.county) {
             e.push(this.s[ex])
           }
+          this.getMonth(e)
+          this.storeExp(e)
         }
         this.scount = e.length
         this.s = e
+        this.storeExp(this.s)
       }
 
       this.getMonth(this.s)
@@ -853,7 +909,8 @@ export default {
     ...mapActions({
       storeExp: 'auth/storeExp',
       storeAllUsers: 'auth/storeUser',
-      storeUsNo: 'auth/storeUsNo'
+      storeUsNo: 'auth/storeUsNo',
+      storePages: 'auth/storePages'
     }),
 
     getAllUsers () {
@@ -862,6 +919,7 @@ export default {
           .then((exp) => {
             if (this.user.role_id === 5) {
               this.u = 'loading...'
+              this.storePages(exp.data)
             } else {
               this.u = exp.data.meta.total
               this.storeUsNo(exp.data)
@@ -888,33 +946,47 @@ export default {
     async loopG (l) {
       var i; var u = []
       this.userz = this.all_users
-      console.log(this.userz)
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.userz = this.userz.concat(response.data.data)
-          this.storeAllUsers(this.userz)
-          this.storeUsNo(response.data)
-          this.getTest(this.userz)
-        } else {
-          i = 11
+      if (this.user.role_id !== 5) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.userz = this.userz.concat(response.data.data)
+            this.storeAllUsers(this.userz)
+            this.storeUsNo(response.data)
+            this.getTest(this.userz)
+          } else {
+            i = 11
+          }
         }
-      }
-      if (this.user.role_id === 5) {
+      } else if (this.user.role_id === 5) {
+        this.isLoading = true
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.userz = this.userz.concat(response.data.data)
+            this.storePages(response.data)
+          } else {
+            i = 11
+          }
+        }
         for (var ex in this.userz) {
           if (this.userz[ex].county === this.user.hcw.county) {
             u.push(this.userz[ex])
+            this.getTest(u)
           }
         }
         this.userz = u
         this.u = u.length
+        this.storeAllUsers(this.userz)
       }
       this.getTest(this.userz)
       this.isLoading = false
     },
 
     getTest (list) {
+      console.log('a')
       this.load = true
       var reg = []
       for (var r in this.barOptionsTest.xAxis.categories) {
