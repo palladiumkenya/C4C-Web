@@ -347,7 +347,7 @@ export default {
         results[r].dob = new Date(jsTimestamp).toISOString().substr(0, 10)
         if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
           results[r].Mobile = '254' + String(results[r].Mobile)
-        } else if (String(results[r].mobile).length < 5) {
+        } else if (String(results[r].Mobile).length < 5) {
           console.log(results.splice(r, 1))
           break
         }

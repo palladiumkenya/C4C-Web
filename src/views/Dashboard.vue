@@ -330,43 +330,7 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-        <v-flex
-          xs12
-          md12
-        >
-          <div class="map">
-            <l-map
-              :center="[0.559, 38.2]"
-              :zoom="6"
-              :options="mapOptions"
-              style="height: 500px;">
-              <l-choropleth-layer
-                :data="mapdata"
-                :value="values"
-                :geojson="paraguayGeojson"
-                :color-scale="colorScale"
-                :stroke-color="currentStrokeColor"
-                title-key="department_name"
-                id-key="department_id"
-                geojson-id-key="dpto">
-                <template slot-scope="props">
-                  <l-info-control
-                    :item="props.currentItem"
-                    :unit="props.unit"
-                    class="bcols"
-                    title="County"
-                    placeholder="Hover over a County"/>
-                  <l-reference-chart
-                    :color-scale="colorScale"
-                    :min="props.min"
-                    :max="props.max"
-                    title="Users enrolment"
-                    position="topright"/>
-                </template>
-              </l-choropleth-layer>
-            </l-map>
-          </div>
-        </v-flex>
+        <Map :exposures="s" :users="userz" />
       <!-- End Maps -->
     </v-layout>
   </v-container>
@@ -380,11 +344,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import { mapGetters, mapActions } from 'vuex'
-import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth'
-import * as geojson from '../vendor/data'
-import paraguayGeojson from '../vendor/counties.json'
-import { pyDepartmentsData } from '../vendor/para_dep'
-import { LMap } from 'vue2-leaflet'
+import Map from '@/views/Map.vue'
 
 
 exportingInit(Highcharts)
@@ -393,10 +353,7 @@ export default {
   components: {
     Loading,
     highcharts: Chart,
-    LMap,
-    'l-info-control': InfoControl,
-    'l-reference-chart': ReferenceChart,
-    'l-choropleth-layer': ChoroplethLayer
+    Map
   },
   data () {
     return {
@@ -536,29 +493,7 @@ export default {
       us_filtl: [],
       fac_filtf: [],
       exp_filtf: [],
-      us_filtf: [],
-
-      pyDepartmentsData,
-      paraguayGeojson,
-      colorScale: geojson.colorArray,
-      values: {
-        key: 'exposures',
-        metric: 'exposures'
-        
-      },
-      values: {
-        key: 'exposures',
-        metric: 'exposures'
-        
-      },
-      extraValues: [{
-      
-      }],
-      mapOptions: {
-        attributionControl: false
-      },
-      currentStrokeColor: '200004',
-      mapdata: []
+      us_filtf: []
     }
   },
   computed: {
@@ -667,8 +602,6 @@ export default {
       }
       this.getTest(us)
       this.getMonth(exp)
-      this.getMapData(us)
-      this.getMapData(exp)
     },
     getFacilities () {
       axios.get('facilities')
@@ -742,15 +675,11 @@ export default {
         }
         this.getTest(this.us_filt)
         this.getMonth(this.exp_filt)
-        this.getMapData(this.us_filt)
-        this.getMapData(this.exp_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
         this.getTest(this.userz)
         this.getMonth(this.s)
-        this.getMapData(this.userz)
-        this.getMapData(this.s)
       }
     },
     facilitySubCounty (a) {
@@ -780,15 +709,11 @@ export default {
         }
         this.getTest(this.us_filtl)
         this.getMonth(this.exp_filtl)
-        this.getMapData(this.us_filtl)
-        this.getMapData(this.exp_filtl)
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
         this.getTest(this.us_filt)
         this.getMonth(this.exp_filt)
-        this.getMapData(this.us_filt)
-        this.getMapData(this.exp_filt)
         this.active_level = true
       }
     },
@@ -832,16 +757,12 @@ export default {
         console.log(this.fac_filtf)
         this.getTest(this.us_filtf)
         this.getMonth(this.exp_filtf)
-        this.getMapData(this.us_filtf)
-        this.getMapData(this.exp_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.fac = this.fac_filtl
         this.getTest(this.us_filtl)
         this.active_fac = true
         this.getMonth(this.exp_filtl)
-        this.getMapData(this.us_filtl)
-        this.getMapData(this.exp_filtl)
       }
     },
 
@@ -863,13 +784,9 @@ export default {
         }
         this.getTest(us)
         this.getMonth(e)
-        this.getMapData(e)
-        this.getMapData(us)
       } else {
         this.getTest(this.us_filtf)
         this.getMonth(this.exp_filtf)
-        this.getMapData(this.us_filtf)
-        this.getMapData(this.exp_filtf)
       }
     },
 
@@ -894,59 +811,12 @@ export default {
         }
         this.getTest(this.us_filt)
         this.getMonth(this.exp_filt)
-       // this.getMapData(this.exp_filt)
-        //this.getMapData(this.us_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
         this.getTest(this.userz)
-       // this.getMapData(this.userz)
         this.getMonth(this.s)
-        //this.getMapData(this.s)
-
       }
-    },
-
-    getMapData(c){
-      var a = []; var b = []; var prev; var count = 0; var arr = []
-      this.mapdata = []
-      for(var k in c){
-        arr.push(c[k].county)
-      }
-      arr.sort()
-      for(var i = 0; i < arr.length; i++ ){
-        if(arr[i] !== prev){
-          a.push(arr[i])
-          b.push(1)
-        }else {
-         b[b.length - 1]++
-      }
-      prev = arr[i]
-      }
-      for(var d in pyDepartmentsData){
-        pyDepartmentsData[d].exposures = b[i]
-      }
-       for (var i in a) {
-        for (var e in pyDepartmentsData) {
-          if (a[i] === pyDepartmentsData[e].department_name) {
-            pyDepartmentsData[e].exposures = b[i]
-          }
-          this.mapdata = pyDepartmentsData
-        }
-      }
-      console.log(this.mapdata)
-       for(var u in pyDepartmentsData){
-        pyDepartmentsData[d].hcw = b[i]
-      }
-       for (var i in a) {
-        for (var e in pyDepartmentsData) {
-          if (a[i] === pyDepartmentsData[e].department_name) {
-            pyDepartmentsData[e].hcw = b[i]
-          }
-          this.mapdata = pyDepartmentsData
-        }
-      }
-
     },
 
     getExp () {
@@ -1016,7 +886,6 @@ export default {
       }
 
       this.getMonth(this.s)
-      this.getMapData(this.s)
     },
 
     getMonth (list) {
@@ -1140,7 +1009,6 @@ export default {
         this.storeAllUsers(this.userz)
       }
       this.getTest(this.userz)
-      this.getMapData(this.userz)
       this.isLoading = false
     },
 
