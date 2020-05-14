@@ -59,11 +59,13 @@
     },
     "devDependencies": {
         "@mdi/font": "2.5.94",
+        "@testing-library/dom": "^7.5.2",
         "@vue/cli-plugin-babel": "^4.2.3",
         "@vue/cli-plugin-eslint": "3.0.1",
         "@vue/cli-service": "^4.2.3",
         "@vue/eslint-config-standard": "3.0.1",
         "axios": "^0.19.2",
+        "axios-mock-adapter": "^1.18.1",
         "material-design-icons-iconfont": "3.0.3",
         "node-sass": "^4.9.3",
         "script-loader": "^0.7.2",

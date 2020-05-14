@@ -98,7 +98,7 @@
                   md6>
                   <v-select
                     :items="all_facilities"
-                    v-model="userData.facility_name"
+                    v-model="userData.hcw.facility_name"
                     :hint="`${user.hcw.facility_name}`"
                     :rules="[v => !!v || 'Facility is required']"
                     item-value="id"
@@ -211,7 +211,15 @@ export default {
       select: { state: 'Flodrida' },
       all_facilities: [],
       all_cadres: [],
-      userData: {},
+      userData: {
+        first_name: '',
+        surname: '',
+        gender: '',
+        email: '',
+        role: '',
+        facility_name: '',
+        cadre: ''
+      },
       output: '',
       alert: false
     }
@@ -221,15 +229,11 @@ export default {
       user: 'auth/user'
     })
   },
-  watch: {
-    user (newData) {
-      this.userData = newData
-    }
-  },
+  
   created () {
     this.getFacilities()
     this.getCadres()
-    this.userData = Object.assign({}, this.$store.getters.user)
+    this.getUser()
   },
 
   methods: {
@@ -251,23 +255,32 @@ export default {
         .catch(error => console.log(error.message))
     },
 
+    getUser () {
+      axios.get('auth/user')
+        .then((user) => {
+          console.log(user.data)
+          this.userData = user.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+
     postUser (e) {
       e.preventDefault()
 
-      // let allData = new FormData();
+      let allData = new FormData();
 
-      // allData.append('first_name', this.user.first_name)
-      // allData.append('surname', this.user.surname)
-      // allData.append('gender', this.user.gender)
-      // allData.append('email', this.user.email)
-      // allData.append('role', this.user.role)
-      // allData.append('facility_name', this.user.hcw.fa)
-      // allData.append('cadre', this.user.cadre)
+       allData.append('first_name', this.user.first_name)
+       allData.append('surname', this.user.surname)
+       allData.append('gender', this.user.gender)
+       allData.append('email', this.user.email)
+       allData.append('role', this.user.role)
+       allData.append('facility_name', this.user.hcw.fa)
+       allData.append('cadre', this.user.cadre)
 
       axios({
         method: 'POST',
         url: 'auth/complete_profile',
-        data: this.userData
+        data: allData
       })
         .then((response) => {
           this.output = response.data
