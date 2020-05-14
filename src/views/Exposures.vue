@@ -840,7 +840,7 @@ export default {
       },
       extraValues: [{
         key: 'users',
-        metric: 'exposures'
+        metric: 'users'
       }],
       mapOptions: {
         attributionControl: false
@@ -864,8 +864,10 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
+          if (this.user.role_id === 5) {
+            this.subCounties()
+          }
         })
         .catch(error => console.log(error.message))
     },
@@ -878,9 +880,21 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+    subCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          for (var x in counties.data.data) {
+            if (this.user.hcw.county === counties.data.data[x].name) {
+              this.getSubCounties([counties.data.data[x]])
+              console.log(counties.data.data[x])
+            }
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
 
     getSubCounties (a) {
-      console.log(a)
+      //console.log(a)
       if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
@@ -899,7 +913,8 @@ export default {
     },
 
     getFacilitycountyfilter (a) {
-      this.fac_filt = [], this.exp_filt = []
+      this.fac_filt = []
+      this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
           for (var ai in this.all_facilities) {
@@ -923,7 +938,8 @@ export default {
       }
     },
     getFacilitysubcountyfilter (fsb) {
-      this.exp_filtl = [], this.fac_filtl = []
+      this.exp_filtl = []
+      this.fac_filtl = []
       this.active_level = false
       if (fsb.length > 0) {
         for (var sb in fsb) {
@@ -987,8 +1003,7 @@ export default {
     },
 
     getFacilityfilter (f) {
-      let al = []; let exp = []
-      this.exp_filtf = this.s
+      let exp = []
       if (f.length > 0) {
         for (var s in f) {
           for (var e in this.exp_filtf) {
@@ -1106,6 +1121,7 @@ export default {
         }
       }
       if (this.user.role_id === 5) {
+        this.active = false
         for (var i in this.s) {
           if (this.s[i].county == this.user.county) {
             u.push(this.s[i])

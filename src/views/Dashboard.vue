@@ -330,45 +330,44 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-          <v-flex
-                  xs12
-                  md12
-                >
-                  <div class="map">
-                    <l-map
-                      :center="[0.559, 38.2]"
-                      :zoom="6"
-                      :options="mapOptions"
-                      style="height: 500px;">
-                      <l-choropleth-layer
-                        :data="mapdata"
-                        :value="values"
-                        :geojson="paraguayGeojson"
-                        :color-scale="colorScale"
-                        :stroke-color="currentStrokeColor"
-                        title-key="department_name"
-                        id-key="department_id"
-                        geojson-id-key="dpto">
-                        <template slot-scope="props">
-                          <l-info-control
-                            :item="props.currentItem"
-                            :unit="props.unit"
-                            class="bcols"
-                            title="County"
-                            placeholder="Hover over a County"/>
-                          <l-reference-chart
-                            :color-scale="colorScale"
-                            :min="props.min"
-                            :max="props.max"
-                            title="Users enrolment"
-                            position="topright"/>
-                        </template>
-                      </l-choropleth-layer>
-                    </l-map>
-                  </div>
-                </v-flex>
+        <v-flex
+          xs12
+          md12
+        >
+          <div class="map">
+            <l-map
+              :center="[0.559, 38.2]"
+              :zoom="6"
+              :options="mapOptions"
+              style="height: 500px;">
+              <l-choropleth-layer
+                :data="mapdata"
+                :value="values"
+                :geojson="paraguayGeojson"
+                :color-scale="colorScale"
+                :stroke-color="currentStrokeColor"
+                title-key="department_name"
+                id-key="department_id"
+                geojson-id-key="dpto">
+                <template slot-scope="props">
+                  <l-info-control
+                    :item="props.currentItem"
+                    :unit="props.unit"
+                    class="bcols"
+                    title="County"
+                    placeholder="Hover over a County"/>
+                  <l-reference-chart
+                    :color-scale="colorScale"
+                    :min="props.min"
+                    :max="props.max"
+                    title="Users enrolment"
+                    position="topright"/>
+                </template>
+              </l-choropleth-layer>
+            </l-map>
+          </div>
+        </v-flex>
       <!-- End Maps -->
-
     </v-layout>
   </v-container>
 </template>
@@ -607,7 +606,6 @@ export default {
         this.isLoading = false
       }
     }
-    // console.log(this.curr)
     if (this.e.length === 0) { this.getExp() } else { this.getMonth(this.e); this.scount = this.e.length; this.s = this.e }
     if (this.user.role_id !== 5) {
       if (this.us_no === 0) {
@@ -677,13 +675,15 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
+          if (this.user.role_id === 5) {
+            this.subCounties()
+          }
         })
         .catch(error => console.log(error.message))
     },
     getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data.data)
           this.all_counties = counties.data.data
         })
         .catch(error => console.log(error.message))
@@ -754,7 +754,6 @@ export default {
       }
     },
     facilitySubCounty (a) {
-      console.log(a)
       this.exp_filtl = []
       this.fac_filtl = []
       this.us_filtl = []
@@ -801,7 +800,6 @@ export default {
       this.active_fac = false
       //console.log(a)
       if (a.length > 0) {
-        console.log(this.fac_filtl)
         for (var c in a) {
           for (var f in this.fac_filtl) {
             if (this.fac_filtl[f].level === a[c]) {
@@ -831,6 +829,7 @@ export default {
             }
           }
         }
+        console.log(this.fac_filtf)
         this.getTest(this.us_filtf)
         this.getMonth(this.exp_filtf)
         this.getMapData(this.us_filtf)
