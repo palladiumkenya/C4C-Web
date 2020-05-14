@@ -52,8 +52,9 @@
                   xs12
                   md4
                 >
-                  <v-text-field
+                  <v-combobox
                     v-model="cadre"
+                    :items="cadres"
                     label="Cadre"
                     class="purple-input"/>
                 </v-flex>
@@ -87,6 +88,7 @@
                     v-model="msisdn"
                     :rules="[rules.required]"
                     label="Mobile"
+                    :hint="`${mobileHint}`"
                     single-line
                     class="purple-input"/>
                 </v-flex>
@@ -145,8 +147,9 @@
                   xs12
                   md6
                 >
-                  <v-text-field
+                  <v-combobox
                     v-model="dept"
+                    :items="departments"
                     label="Department"
                     class="green-input"/>
                 </v-flex>
@@ -253,9 +256,41 @@ export default {
         emailRules: v => /.+@.+/.test(v) || 'E-mail must be valid'
       },
       gender: [
-        'Male',
-        'Female'
+        'MALE',
+        'FEMALE',
+        'TRANSGENDER',
+        'UNDEFINED'
       ],
+      cadres: [
+        'Doctor',
+        'Clinical officer',
+        'Nurse',
+        'Student',
+        'Laboratory Technologist',
+        'Cleaner',
+        'Waste Handler',
+        'VCT Counsellor',
+        'Other-Specify'
+
+      ],
+      departments: [
+        'Outpatient department (OPD)',
+        'Inpatient Service (IP)',
+        'Medical Department',
+        'New Born Unit (NBU)',
+        'Renal Unit',
+        'Mother and Child (MCH)',
+        'Paramedical Department',
+        'Physical Medicine and Rehabilitation Department',
+        'Operational Theatre Complex (OP)',
+        'Pharmacy Department',
+        'Radiology Department (X-ray)',
+        'Dietary Department',
+        'Medical Record Department (MRD)',
+        'Not Specified'
+
+      ],
+      mobileHint: ["Mobile Format is 254700000000"],
       resp: false,
       color: null,
       colors: [
@@ -268,7 +303,7 @@ export default {
       right: false,
       snackbar: false,
       all_facilities: [],
-      facility: null
+      facility: ''
     }
   },
   computed: {
@@ -331,17 +366,28 @@ export default {
     postUser (e) {
       e.preventDefault()
       if (this.testFill()) {
-        axios.post('auth/bulk/register', {
-          facility_id: this.facility.id,
-          facility_department: this.dept,
-          cadre: this.cadre,
-          first_name: this.fname,
-          surname: this.surname,
-          email: this.email,
-          msisdn: this.msisdn,
-          gender: this.gendInp,
-          dob: this.dob,
-          id_no: this.id_no
+
+        let formData = new FormData()
+
+        if (this.user.role.id === 4) {
+          formData.append('facility_id', this.user.hcw.facility_id)
+        } else if (this.user.role.id === 1) {
+          formData.append('facility_id', this.facility.id)
+        }
+          formData.append('facility_department', this.dept),
+          formData.append('cadre', this.cadre),
+          formData.append('first_name', this.fname),
+          formData.append('surname', this.surname),
+          formData.append('email', this.email),
+          formData.append('msisdn', this.msisdn),
+          formData.append('gender', this.gendInp),
+          formData.append('dob', this.dob),
+          formData.append('id_no', this.id_no)
+
+        axios({
+          method: 'POST',
+          url: 'auth/bulk/register',
+          data: formData
         })
           .then((response) => {
             this.output = response.data
