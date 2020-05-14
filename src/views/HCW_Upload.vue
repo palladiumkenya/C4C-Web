@@ -366,7 +366,6 @@ export default {
     postUser (e) {
       e.preventDefault()
       if (this.testFill()) {
-
         let formData = new FormData()
 
         if (this.user.role.id === 4) {

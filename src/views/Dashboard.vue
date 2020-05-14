@@ -1124,6 +1124,7 @@ export default {
             l = response.data.links.next
             this.userz = this.userz.concat(response.data.data)
             this.storePages(response.data)
+            this.storeAllUsers(this.userz)
           } else {
             i = 11
           }
@@ -1132,6 +1133,7 @@ export default {
           if (this.userz[ex].county === this.user.hcw.county) {
             u.push(this.userz[ex])
             this.getTest(u)
+            this.storeAllUsers(u)
           }
         }
         this.userz = u
@@ -1144,7 +1146,6 @@ export default {
     },
 
     getTest (list) {
-      console.log('a')
       this.load = true
       var reg = []
       for (var r in this.barOptionsTest.xAxis.categories) {
