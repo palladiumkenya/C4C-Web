@@ -331,8 +331,11 @@ export default {
     postUser (e) {
       e.preventDefault()
       if (this.testFill()) {
+        if (this.user.role_id === 1) {
+          this.facility = this.facility.id
+        }
         axios.post('auth/bulk/register', {
-          facility_id: this.facility.id,
+          facility_id: this.facility,
           facility_department: this.dept,
           cadre: this.cadre,
           first_name: this.fname,

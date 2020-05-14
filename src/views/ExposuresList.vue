@@ -260,18 +260,29 @@ export default {
     },
 
     async loopT (l) {
-      var i, u = []
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.exposures = this.exposures.concat(response.data.data)
-        } else {
-          i = 11
+      var i
+      var u = []
+      if (this.user.role_id ===1) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.exposures = this.exposures.concat(response.data.data)
+          } else {
+            i = 11
+          }
         }
-      }
-      i = 0
-      if (this.user.role_id === 5) {
+      } else if (this.user.role_id === 5) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.exposures = this.exposures.concat(response.data.data)
+          } else {
+            i = 11
+          }
+        }
+        i = 0
         for (i in this.exposures) {
           if (this.exposures[i].county === this.user.county) {
             u.push(this.exposures[i])
