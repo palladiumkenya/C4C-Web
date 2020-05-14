@@ -102,23 +102,6 @@
                   <td>{{ props.item.id_no }}</td>
                 </tr>
               </template>
-              <!-- <template
-                slot="headerCell"
-                slot-scope="{ header }"
-              >
-                <span
-                  class="subheading font-weight-light text--darken-3"
-                  v-text="header.text"
-                />
-              </template>
-              <template
-                slot="items"
-                slot-scope="{ item }"
-              >
-                <td
-                  v-for="(msg, index) in item"
-                  :key="index">{{ msg }}</td>
-              </template> -->
             </v-data-table>
           </div>
           <v-btn
