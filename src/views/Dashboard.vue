@@ -1023,6 +1023,7 @@ export default {
     getMonth (list) {
       // console.log(list)
       var wdata = []
+      this.barOptionsTime.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var i in this.barOptionsTime.xAxis.categories) {
         wdata.push(this.getNumt(this.barOptionsTime.xAxis.categories[i], list))
       }
@@ -1031,12 +1032,35 @@ export default {
 
     getNumt (name, sa) {
       var counter = 0
+     var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       for (var xt in sa) {
-        if (sa[xt].exposure_date.slice(0, 3) === name) {
+        var m = c.indexOf(sa[xt].exposure_date.slice(0, 3)) + 1
+        if (m < 10) { m = '0' + m }
+        var d = [sa[xt].exposure_date.slice(8, 13).trim(), m].join('-')
+        if (d === name) {
           counter++
         }
       }
       return counter
+    },
+
+    dateRange (startDate, endDate) {
+      var start = startDate.split('-')
+      var end = endDate.split('-')
+      var startYear = parseInt(start[0])
+      var endYear = parseInt(end[0])
+      var dates = []
+
+      for (var i = startYear; i <= endYear; i++) {
+        var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1
+        var startMon = i === startYear ? parseInt(start[1]) - 1 : 0
+        for (var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+          var month = j + 1
+          var displayMonth = month < 10 ? '0' + month : month
+          dates.push([i, displayMonth].join('-'))
+        }
+      }
+      return dates
     },
 
     ...mapActions({
