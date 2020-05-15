@@ -106,6 +106,7 @@
                 <td>{{ props.item.approved_by }}</td>
                 <td>{{ props.item.facility.name }}</td>
                 <td>{{ props.item.message }}</td>
+                <td>{{ props.item.created_at }}</td>
               </tr>
             </template>
             <v-alert
@@ -162,7 +163,12 @@ export default {
           sortable: false,
           text: 'Message',
           value: 'message'
-        }
+        },
+        {
+          sortable: false,
+          text: 'Time',
+          value: 'created_at'
+        },
       ]
     }
   },
