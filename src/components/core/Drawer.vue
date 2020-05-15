@@ -227,11 +227,11 @@ export default {
             //   icon: 'mdi-file-tree',
             //   text: 'Departments'
             // },
-            {
-              to: '/checkin',
-              icon: 'mdi-crosshairs-gps',
-              text: 'Checkin'
-            },
+            // {
+            //   to: '/checkin',
+            //   icon: 'mdi-crosshairs-gps',
+            //   text: 'Checkin'
+            // },
             {
               to: '/facility-admin',
               icon: 'mdi-lock-pattern',

@@ -330,7 +330,7 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-        <Map :exposures="s" :users="userz" />
+        <Map v-if="user.role_id === 1" :exposures="s" :users="userz" />
       <!-- End Maps -->
     </v-layout>
   </v-container>
