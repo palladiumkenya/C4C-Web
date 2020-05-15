@@ -30,7 +30,7 @@
                     :color-scale="colorScale"
                     :min="props.min"
                     :max="props.max"
-                    title="Users enrolment"
+                    title="Users Enrolment"
                     position="topright"/>
                 </template>
                 </l-choropleth-layer>
@@ -58,11 +58,11 @@ export default {
             colorScale: geojson.colorArray,
             values: {
                 key: 'exposures',
-                metric: 'exposures'
+                metric: 'Exposures'
             },
             extraValues: [{
                 key: 'users',
-                metric: 'users'
+                metric: 'Users'
             }],
             mapOptions: {
                 attributionControl: false
