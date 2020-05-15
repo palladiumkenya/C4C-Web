@@ -421,7 +421,8 @@ export default {
           {
             colorByPoint: true,
             name: 'Numbers',
-            data: []
+            data: [],
+           
           }
         ]
       },
@@ -1212,7 +1213,7 @@ export default {
       var counter = 0
       var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       for (var xt in expo) {
-        var m = c.indexOf(expo[xt].exposure_date.slice(0, 3)) + 1
+        var m = c.indexOf(expo[xt].exposure_date.slice(0, 3)) + 1 
         if (m < 10) { m = '0' + m }
         var d = [expo[xt].exposure_date.slice(8, 13).trim(), m].join('-')
         if (d === name) {

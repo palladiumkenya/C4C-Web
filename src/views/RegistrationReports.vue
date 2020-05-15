@@ -845,12 +845,32 @@ export default {
     getsummarydata (list){
       this.load = true
         var reg = []
+         this.monthOptions.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var r in this.monthOptions.xAxis.categories) {
         reg.push(this.getNumr(this.monthOptions.xAxis.categories[r],list))
         
       }
       this.monthOptions.series[0].data = reg
       this.load = false
+    },
+
+    dateRange (startDate, endDate) {
+      var start = startDate.split('-')
+      var end = endDate.split('-')
+      var startYear = parseInt(start[0])
+      var endYear = parseInt(end[0])
+      var dates = []
+
+      for (var i = startYear; i <= endYear; i++) {
+        var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1
+        var startMon = i === startYear ? parseInt(start[1]) - 1 : 0
+        for (var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+          var month = j + 1
+          var displayMonth = month < 10 ? '0' + month : month
+          dates.push([i, displayMonth].join('-'))
+        }
+      }
+      return dates
     },
 
     getAgeNum (cat, a) {
@@ -898,12 +918,13 @@ export default {
     },
 
     getNumr (name, reg) {
-      var counter = 0
-      for (var r in reg) {
-        var dat = new Date(reg[r].created_at)
-        var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        if (list[dat.getMonth()] === name) {
-          console.log(name)
+       var counter = 0
+      var c = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+      for (var xt in reg) {
+        var m = c.indexOf(reg[xt].created_at.slice(5, 7)) + 1 
+        if (m < 10) { m = '0' + m }
+        var d = [reg[xt].created_at.slice(0, 4).trim(), m].join('-')
+        if (d === name) {
           counter++
         }
       }
