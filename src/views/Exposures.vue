@@ -233,43 +233,8 @@
                     ref="barChart"
                     :options="barOptionsTime"/>
                 </v-flex>
-                <v-flex
-                  xs12
-                  md12
-                >
-                  <div class="map">
-                    <l-map
-                      :center="[0.559, 38.2]"
-                      :zoom="6"
-                      :options="mapOptions"
-                      style="height: 500px;">
-                      <l-choropleth-layer
-                        :data="datas"
-                        :value="values"
-                        :geojson="paraguayGeojson"
-                        :color-scale="colorScale"
-                        :stroke-color="currentStrokeColor"
-                        title-key="department_name"
-                        id-key="department_id"
-                        geojson-id-key="dpto">
-                        <template slot-scope="props">
-                          <l-info-control
-                            :item="props.currentItem"
-                            :unit="props.unit"
-                            class="bcols"
-                            title="County"
-                            placeholder="Hover over a County"/>
-                          <l-reference-chart
-                            :color-scale="colorScale"
-                            :min="props.min"
-                            :max="props.max"
-                            title="Users enrolment"
-                            position="topright"/>
-                        </template>
-                      </l-choropleth-layer>
-                    </l-map>
-                  </div>
-                </v-flex>
+                <Map
+                  :data="s" />
               </v-layout>
             </v-container>
           </v-card-text>
@@ -357,7 +322,6 @@
             </template>
 
           </v-card-text>
-          <v-card-text v-if="n==10">This is the Third tab</v-card-text>
         </v-container>
       </v-tab-item>
     </v-tabs>
@@ -372,11 +336,7 @@ import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
-import { InfoControl, ReferenceChart, ChoroplethLayer } from 'vue-choropleth'
-import * as geojson from '../vendor/data'
-import paraguayGeojson from '../vendor/counties.json'
-import { pyDepartmentsData } from '../vendor/para_dep'
-import { LMap } from 'vue2-leaflet'
+import Map from '@/views/Map.vue'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -393,12 +353,7 @@ export default {
     })
   },
   components: {
-    highcharts: Chart,
-    LMap,
-    'l-info-control': InfoControl,
-    'l-reference-chart': ReferenceChart,
-    'l-choropleth-layer': ChoroplethLayer
-  },
+    highcharts: Chart, Map },
   data () {
     return {
       partner: [],
@@ -830,24 +785,7 @@ export default {
       fac_filtf: [],
       exp_filt: [],
       exp_filtl: [],
-      exp_filtf: [],
-      pyDepartmentsData,
-      paraguayGeojson,
-      colorScale: geojson.colorArray,
-      values: {
-        key: 'exposures',
-        metric: 'exposures'
-      },
-      extraValues: [{
-        key: 'users',
-        metric: 'exposures'
-      }],
-      mapOptions: {
-        attributionControl: false
-      },
-      currentStrokeColor: '200004',
-      datas: []
-
+      exp_filtf: []
     }
   },
 
@@ -860,12 +798,13 @@ export default {
     // this.getExpo()
   },
   methods: {
-
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
+          if (this.user.role_id === 5) {
+            this.subCounties()
+          }
         })
         .catch(error => console.log(error.message))
     },
@@ -878,9 +817,21 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+    subCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          for (var x in counties.data.data) {
+            if (this.user.hcw.county === counties.data.data[x].name) {
+              this.getSubCounties([counties.data.data[x]])
+              console.log(counties.data.data[x])
+            }
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
 
     getSubCounties (a) {
-      console.log(a)
+      //console.log(a)
       if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
@@ -899,7 +850,8 @@ export default {
     },
 
     getFacilitycountyfilter (a) {
-      this.fac_filt = [], this.exp_filt = []
+      this.fac_filt = []
+      this.exp_filt = []
       if (a.length > 0) {
         for (var c in a) {
           for (var ai in this.all_facilities) {
@@ -913,17 +865,16 @@ export default {
             }
           }
         }
-        this.getCountyData(this.exp_filt)
         this.getAgeData(this.exp_filt)
         this.fac = this.fac_filt.sort()
       } else {
-        this.getCountyData(this.s)
         this.getAgeData(this.s)
         this.fac = this.all_facilities
       }
     },
     getFacilitysubcountyfilter (fsb) {
-      this.exp_filtl = [], this.fac_filtl = []
+      this.exp_filtl = []
+      this.fac_filtl = []
       this.active_level = false
       if (fsb.length > 0) {
         for (var sb in fsb) {
@@ -939,11 +890,9 @@ export default {
           }
         }
 
-        this.getCountyData(this.exp_filtl)
         this.getAgeData(this.exp_filtl)
         this.fac = this.fac_filtl.sort()
       } else {
-        this.getCountyData(this.exp_filt)
         this.getAgeData(this.exp_filt)
         this.fac = this.fac_filt
         this.active_level = true
@@ -975,20 +924,17 @@ export default {
           }
         }
 
-        this.getCountyData(this.exp_filtf)
         this.getAgeData(this.exp_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.getAgeData(this.exp_filtl)
-        this.getCountyData(this.exp_filtl)
         this.fac = this.fac_filtl
         this.active_fac = true
       }
     },
 
     getFacilityfilter (f) {
-      let al = []; let exp = []
-      this.exp_filtf = this.s
+      let exp = []
       if (f.length > 0) {
         for (var s in f) {
           for (var e in this.exp_filtf) {
@@ -998,10 +944,8 @@ export default {
           }
         }
         this.getAgeData(exp)
-        this.getCountyData(exp)
       } else {
         this.getAgeData(this.exp_filtf)
-        this.getCountyData(this.exp_filtf)
       }
     },
 
@@ -1016,7 +960,6 @@ export default {
         this.getAgeData(this.exp_filt)
       } else {
         this.getAgeData(this.s)
-        this.getCountyData(this.s)
       }
     },
 
@@ -1050,7 +993,6 @@ export default {
         }
       }
       this.getAgeData(expo)
-      this.getCountyData(expo)
     },
 
     getExp () {
@@ -1065,7 +1007,6 @@ export default {
               this.loopT(this.link)
             } else {
               this.getAgeData(this.s)
-              this.getCountyData(this.s)
             }
           })
           .catch(error => console.log(error.message))
@@ -1078,7 +1019,6 @@ export default {
               // this.c = exp.data.cadre.meta.total // total cadre
               this.loopT(this.link)
             } else {
-              this.getCountyData(this.s)
               this.getAgeData(this.s)
             }
           })
@@ -1106,6 +1046,7 @@ export default {
         }
       }
       if (this.user.role_id === 5) {
+        this.active = false
         for (var i in this.s) {
           if (this.s[i].county == this.user.county) {
             u.push(this.s[i])
@@ -1114,7 +1055,6 @@ export default {
         this.s = u
       }
       this.getAgeData(this.s)
-      this.getCountyData(this.s)
     },
 
     getAgeData (list) {
@@ -1323,49 +1263,8 @@ export default {
         }
       }
       return dates
-    },
-
-    getCountyData (n) {
-      var a = []; var b = []; var prev; var count = 0; var arr = []
-      this.datas = []
-      for (var f in n) {
-        arr.push(n[f].county)
-      }
-      arr.sort()
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i] !== prev) {
-          a.push(arr[i])
-          b.push(1)
-        } else {
-          b[b.length - 1]++
-        }
-        prev = arr[i]
-      }
-      console.log(a, b)
-      for (var e in pyDepartmentsData) {
-        pyDepartmentsData[e].exposures = 0
-      }
-      for (var i in a) {
-        for (var e in pyDepartmentsData) {
-          if (a[i] === pyDepartmentsData[e].department_name) {
-            pyDepartmentsData[e].exposures = b[i]
-          }
-          this.datas = pyDepartmentsData
-        }
-      }
-      console.log(this.datas)
     }
   }
 }
 </script>
-<style scoped>
-@import "../../node_modules/leaflet/dist/leaflet.css";
-body {
-  background-color: #e7d090;
-  margin-left: 100px;
-  margin-right: 100px;
-}
-#map {
-  background-color: #eee;
-}
-</style>
+
