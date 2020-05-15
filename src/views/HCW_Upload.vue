@@ -153,7 +153,7 @@
                     class="green-input"/>
                 </v-flex>
                 <v-flex
-                  v-if="user.role_id === 1"
+                  v-if="user.role_id !== 4"
                   xs12
                   md6
                 >
@@ -310,7 +310,7 @@ export default {
     })
   },
   created () {
-    if (this.user.role_id !== 1) {
+    if (this.user.role_id === 4) {
       this.facility = this.user.hcw.facility_id
     } else {
       this.getFacilities()
@@ -320,8 +320,15 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
-          this.all_facilities = facilities.data.data
+          if (this.user.role_id === 1) {
+            this.all_facilities = facilities.data.data
+          } else {
+            for (var a in facilities.data.data) {
+              if (this.user.hcw.county === facilities.data.data[a].county) {
+                this.all_facilities.push(facilities.data.data[a])
+              }
+            }
+          }
         })
         .catch(error => console.log(error.message))
     },
