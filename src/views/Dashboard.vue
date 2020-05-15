@@ -301,10 +301,8 @@
 
       <!-- Start Graphs -->
       <v-flex
-        sm3
         xs12
         md12
-        lg12
       >
         <div class="card vld-parent">
           <loading
@@ -330,7 +328,7 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-        <Map v-if="user.role_id === 1" :exposures="s" :users="userz" />
+        <Map v-if="user.role_id === 1 && !isLoading" :exposures="s" :users="userz" />
       <!-- End Maps -->
     </v-layout>
   </v-container>
@@ -884,7 +882,6 @@ export default {
         this.s = e
         this.storeExp(this.s)
       }
-
       this.getMonth(this.s)
     },
 

@@ -168,7 +168,7 @@ export default {
           sortable: false,
           text: 'Time',
           value: 'created_at'
-        },
+        }
       ]
     }
   },
@@ -183,7 +183,7 @@ export default {
 
   methods: {
     getBroadcast () {
-      if (this.user.role_id === 1 || this.user.role_id == 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get('broadcasts/web/all')
           .then((broadcast) => {
             console.log(broadcast.data)
@@ -220,7 +220,7 @@ export default {
           i = 11
         }
       }
-      if (this.user.role_id == 5) {
+      if (this.user.role_id === 5) {
         for (var ex in this.all_messages) {
           if (this.all_messages[ex].facility) {
             if (this.all_messages[ex].facility.county === this.user.hcw.county) {

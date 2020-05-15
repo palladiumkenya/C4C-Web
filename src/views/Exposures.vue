@@ -221,104 +221,152 @@
         v-for="n in 9"
         :key="n">
         <v-container fluid>
-          <v-card-text v-if="n==1">
+          <v-card-text v-if="n===1">
             <!-- Start Graphs -->
             <v-container py-0>
               <v-layout wrap>
                 <v-flex
                   xs12
                   md12
-                >
-                  <highcharts
-                    ref="barChart"
-                    :options="barOptionsTime"/>
+                  >
+                  <div class="card vld-parent">
+                    <loading
+                      :active.sync="isLoading"
+                      :can-cancel="false"
+                      :is-full-page="false"
+                      loader="bars"
+                      color="#007bff"/>
+                    <highcharts
+                      ref="barChart"
+                      :options="barOptionsTime"/>
+                  </div>
                 </v-flex>
               </v-layout>
             </v-container>
           </v-card-text>
 
           <!-- Start Exposure Type -->
-          <v-card-text v-if="n==2">
-
-            <highcharts
-              ref="barChart"
-              :options="barOptions"/>
-
+          <v-card-text v-if="n===2">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptions"/>
+            </div>
           </v-card-text>
 
           <!-- Start Exposure Location -->
 
-          <v-card-text v-if="n==3">
-            <highcharts
-              ref="barChart"
-              :options="barOptionsLocation"/>
+          <v-card-text v-if="n===3">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsLocation"/>
+            </div>
           </v-card-text>
 
           <!-- Start Exposure Devices -->
 
-          <v-card-text v-if="n==4">
-            <highcharts
-              ref="barChart"
-              :options="barOptionsDevice"/>
+          <v-card-text v-if="n===4">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsDevice"/>
+            </div>
           </v-card-text>
 
           <!-- Start Exposure Cadre -->
 
-          <v-card-text v-if="n==5">
-            <highcharts
-              ref="barChart"
-              :options="barOptionsCadre"/>
-
+          <v-card-text v-if="n===5">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsCadre"/>
+            </div>
           </v-card-text>
 
           <!-- Start Exposure Time -->
-          <v-card-text v-if="n==6">
-            <highcharts
-              ref="barChart"
-              :options="barOptionsTime"/>
+          <v-card-text v-if="n===6">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsTime"/>
+            </div>
           </v-card-text>
 
           <!--Start Exposure Age -->
-          <v-card-text v-if="n==7">
-            <template>
-              <div
-                v-if="value" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
-              </div>
+          <v-card-text v-if="n===7">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
               <highcharts
                 ref="barChart"
                 :options="barOptionsAge"/>
-            </template>
+            </div>
           </v-card-text>
 
           <!-- Start Exposure Hour -->
 
-          <v-card-text v-if="n==8">
-            <highcharts
-              ref="barChart"
-              :options="barOptionsHour"/>
+          <v-card-text v-if="n===8">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsHour"/>
+            </div>
           </v-card-text>
 
           <!-- Start Gender -->
           <v-card-text v-if="n==9">
-            <template>
-              <div
-                v-if="value1" >
-                <v-progress-circular
-                  :size="50"
-                  color="primary"
-                  indeterminate
-                />
-              </div>
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
               <highcharts
                 ref="barChart"
                 :options="gendOptions"/>
-            </template>
-
+            </div>
           </v-card-text>
         </v-container>
       </v-tab-item>
@@ -334,6 +382,8 @@ import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -349,10 +399,10 @@ export default {
       user: 'auth/user'
     })
   },
-  components: {
-    highcharts: Chart },
+  components: { highcharts: Chart, Loading },
   data () {
     return {
+      isLoading: true,
       partner: [],
       cadres: [],
       facility: '',
@@ -1052,6 +1102,7 @@ export default {
         this.s = u
       }
       this.getAgeData(this.s)
+      this.isLoading = false
     },
 
     getAgeData (list) {
