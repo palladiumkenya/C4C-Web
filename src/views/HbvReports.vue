@@ -1,4 +1,4 @@
-<template>
+  <template>
   <v-container
     fill-height
     fluid
@@ -178,13 +178,23 @@
           </v-flex>
         </template>
 
-        <template>
+        <div class="text-center"> 
+          
           <v-btn
-            block
+            x-large
             color="secondary"
             dark
             @click="click">Filter</v-btn>
-        </template>
+
+        <v-btn
+            :loading="downloadLoading"
+            color="primary"
+            x-large
+            @click="handleDownload">
+            <v-icon left>mdi-download</v-icon>Export Excel
+        </v-btn>
+
+      </div>
 
         <!-- End filters -->
       </template>
@@ -248,6 +258,11 @@ export default {
       active: true,
       active_fac: true,
       active_level: true,
+
+      downloadLoading: false,
+      filename: `HBV Report ${new Date().toISOString()}`,
+      autoWidth: true,
+      bookType: 'xlsx',
 
       barOptionsHBV: {
         chart: {
@@ -501,6 +516,7 @@ export default {
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
+              console.log(exp.data)
             } else {
               this.getHBV(this.s)
               this.isLoading = false
@@ -568,8 +584,41 @@ export default {
         }
       }
       return count
+    },
+
+    handleDownload () {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['First Name', 'Surname', 'Gender','Phone Number','Disease Name', 'Date', 'County', 'Sub County', 'Facility Name','Facility Level']
+        const filterVal = ['first_name', 'surname','gender', 'msisdn', 'disease', 'date', 'county', 'sub_county', 'facility_name', 'facility_level']
+        const list = this.s
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson (filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'msisdn') {
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
     }
 
   }
 }
 </script>
+
+<style>
+.v-btn {
+  margin-right: 130px;
+}
+</style>

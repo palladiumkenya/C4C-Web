@@ -1,14 +1,20 @@
 <template>
-  <v-card>
+  <v-container
+   fluid
+   grid-list-xl>
+
     <v-layout wrap>
+
       <template>
         <!-- Start filters -->
         <v-layout >
+
           <v-flex
             xs12
             md6
             lg3
           >
+          <template>
             <v-combobox
               v-if="user.role_id === 1"
               v-model="counties"
@@ -21,7 +27,9 @@
               persistent-hint
               chips
               @change="getSubCounties"/>
+            </template>  
           </v-flex>
+
           <v-flex
             xs12
             md6
@@ -50,9 +58,7 @@
             md6
             lg3
           >
-
             <template>
-
               <v-combobox
                 v-if="user.role_id !== 4"
                 v-model="facility"
@@ -74,6 +80,7 @@
             md6
             lg3
           >
+            <template>
               <v-combobox
                 v-if="user.role_id !== 4"
                 :items="all_facilities_level"
@@ -84,6 +91,7 @@
                 persistent-hint
                 chips
                 @change="facilityLevel"/>
+            </template>    
           </v-flex>
 
           <v-flex
@@ -111,10 +119,7 @@
         </v-layout>
 
         <template>
-          <v-flex
-            xs12
-            sm6
-            md2>
+          <v-flex xs12 sm6 md2>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -196,19 +201,32 @@
             </v-menu>
           </v-flex>
         </template>
-        &nbsp;
-        <template>
+
+       
+        <div class="text-center"> 
+          
           <v-btn
-            block
+            x-large
             color="secondary"
             dark
             @click="click">Filter</v-btn>
-        </template>
 
-        <!-- End filters -->
+        <v-btn
+            :loading="downloadLoading"
+            color="primary"
+            x-large
+            @click="handleDownload">
+            <v-icon left>mdi-download</v-icon>Export Excel
+        </v-btn>
+
+      </div>  
+
       </template>
-    </v-layout>
+      </v-layout>
 
+       <!-- End filters -->
+
+    <v-card>  
     <v-tabs
       color="white"
       centered
@@ -336,8 +354,10 @@
         </v-container>
       </v-tab-item>
     </v-tabs>
-  </v-card>
-
+    </v-card>
+    
+    
+  </v-container>
 </template>
 
 <script>
@@ -378,6 +398,11 @@ export default {
       active: true,
       active_fac: true,
       active_level: true,
+
+      downloadLoading: false,
+      filename: `Other Diseases Report ${new Date().toISOString()}`,
+      autoWidth: true,
+      bookType: 'xlsx',
 
       AllDiseaseschartOptions: {
         xAxis: {
@@ -1314,6 +1339,33 @@ export default {
       return count
     },
 
+    handleDownload () {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['First Name', 'Surname', 'Gender','Phone Number','Disease Name', 'Date', 'County', 'Sub County', 'Facility Name','Facility Level']
+        const filterVal = ['first_name', 'surname','gender', 'msisdn', 'disease', 'date', 'county', 'sub_county', 'facility_name', 'facility_level']
+        const list = this.a
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson (filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'msisdn') {
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
+    },
+
     async loopA (l) {
       var i
       for (i = 0; i < 1;) {
@@ -1409,3 +1461,11 @@ export default {
 }
 // end
 </script>
+
+<style>
+.v-btn {
+  margin-right: 130px;
+}
+
+
+</style>
