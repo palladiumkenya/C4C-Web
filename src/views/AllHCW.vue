@@ -10,28 +10,26 @@
     >
       <v-flex
         md12
-      >
-
-      <v-snackbar
-        color="error"
-        v-model="snackbar"
-        :timeout="12000"
-        top>
-        <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-      </v-snackbar>
-
+        >
+        <v-snackbar
+          color="error"
+          v-model="snackbar"
+          :timeout="12000"
+          top>
+          <v-icon
+            color="white"
+            class="mr-3"
+            >
+            mdi-bell-plus
+          </v-icon>
+          <div> {{result}}</div>
+          <v-icon
+            size="16"
+            @click="snackbar = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-snackbar>
         <v-card>
           <v-card-title>
             Health Care Workers
@@ -162,6 +160,9 @@ export default {
       this.loopT(this.next_link)
     } else {
       this.all_hcws = this.all_users
+    }
+    if (this.user.role_id === 4) {
+      this.getHCW()
     }
   },
   methods: {

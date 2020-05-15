@@ -365,7 +365,7 @@ export default {
       e.preventDefault()
       if (this.testFill()) {
         let formData = new FormData()
-
+ 
         if (this.user.role.id === 4) {
           formData.append('facility_id', this.user.hcw.facility_id)
         } else if (this.user.role.id === 1) {
@@ -391,6 +391,7 @@ export default {
             this.resp = Boolean(response.data.success)
             this.clearData()
             this.snack('top', 'center')
+            this.$router.push('/hcw_list')
           })
           .catch((error) => {
             this.output = error
