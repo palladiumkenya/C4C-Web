@@ -233,8 +233,6 @@
                     ref="barChart"
                     :options="barOptionsTime"/>
                 </v-flex>
-                <Map
-                  :data="s" />
               </v-layout>
             </v-container>
           </v-card-text>
@@ -336,7 +334,6 @@ import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
-import Map from '@/views/Map.vue'
 
 // SeriesLabel(Highcharts);
 exportingInit(Highcharts)
@@ -353,7 +350,7 @@ export default {
     })
   },
   components: {
-    highcharts: Chart, Map },
+    highcharts: Chart },
   data () {
     return {
       partner: [],
