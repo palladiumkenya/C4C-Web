@@ -361,9 +361,9 @@ export default {
       fullPage: false,
       menu: false,
       menu1: false,
-      startDate: '2016-01-01',
+      startDate: '2017-01-01',
       maxDate: new Date().toISOString().substr(0, 10),
-      minDate: '2016-01-01',
+      minDate: '2017-01-01',
       endDate: new Date().toISOString().substr(0, 10),
       facility: '',
       counties: '',
@@ -431,7 +431,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months - Year'
+            text: 'Year - Month'
           }
         },
         yAxis: {
@@ -1012,9 +1012,9 @@ export default {
     getTest (list) {
       this.load = true
       var reg = []
-     // this.barOptionsTest.xAxis.categories = this.dateRange(this.startDate, this.endDate)
+      this.barOptionsTest.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var r in this.barOptionsTest.xAxis.categories) {
-        reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r], list))
+        reg.push(this.getNumTest(this.barOptionsTest.xAxis.categories[r], list))
       }
       this.barOptionsTest.series[0].data = reg
     },
@@ -1030,14 +1030,13 @@ export default {
       }
       return counter
     },
-    getNumM (name, li) {
+    getNumTest (name, li) {
       var counter = 0
-     var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      var c = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
       for (var xt in li) {
-         var dat = new Date(li[r].created_at)
-        var m = c.indexOf(li[xt].created_at.slice(0, 3)) + 1
+        var m = c.indexOf(li[xt].created_at.slice(5, 7)) + 1 
         if (m < 10) { m = '0' + m }
-        var d = [li[xt].created_at.slice(8, 13).trim(), m].join('-')
+        var d = [li[xt].created_at.slice(0, 4).trim(), m].join('-')
         if (d === name) {
           counter++
         }
