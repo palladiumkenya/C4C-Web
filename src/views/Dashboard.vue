@@ -1015,6 +1015,7 @@ export default {
     getTest (list) {
       this.load = true
       var reg = []
+     // this.barOptionsTest.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var r in this.barOptionsTest.xAxis.categories) {
         reg.push(this.getNumr(this.barOptionsTest.xAxis.categories[r], list))
       }
@@ -1024,9 +1025,23 @@ export default {
     getNumr (name, li) {
       var counter = 0
       for (var r in li) {
-        var dat = new Date(li[r].created_at)
+        var dat = new Date(li[r].created_at) 
         var list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if (list[dat.getMonth()] === name) {
+          counter++
+        }
+      }
+      return counter
+    },
+    getNumM (name, li) {
+      var counter = 0
+     var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      for (var xt in li) {
+         var dat = new Date(li[r].created_at)
+        var m = c.indexOf(li[xt].created_at.slice(0, 3)) + 1
+        if (m < 10) { m = '0' + m }
+        var d = [li[xt].created_at.slice(8, 13).trim(), m].join('-')
+        if (d === name) {
           counter++
         }
       }
