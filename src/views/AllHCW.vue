@@ -216,8 +216,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['First Name', 'Surname', 'Cadre', 'Department', 'Facility', 'DOB']
-        const filterVal = ['first_name', 'surname', 'cadre', 'facility_name', 'department', 'dob']
+        const tHeader = ['First Name', 'Surname', 'Facility', 'Department', 'Cadre','DOB']
+        const filterVal = ['first_name', 'surname', 'facility_name', 'department', 'cadre', 'dob']
         const list = this.all_hcws
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

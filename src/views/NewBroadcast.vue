@@ -286,7 +286,7 @@ export default {
             this.output = response.data
             console.log(response.data)
             this.alert = true
-            this.$router.push('/all_broadcast')
+            this.$router.push('/all_broadcasts')
           })
           .catch(error => {
             this.output = error
