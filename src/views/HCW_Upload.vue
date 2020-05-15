@@ -139,7 +139,6 @@
                 >
                   <v-text-field
                     v-model="id_no"
-                    :rules="[rules.required]"
                     name="input-10-2"
                     label="ID No."/>
                 </v-flex>
@@ -173,29 +172,28 @@
                   md6
                   text-xs-left
                 >
-                  <router-link to="/bulk-signup">
-                    <v-btn
-                      class="mx-0 font-weight-light"
-                      color="infos"
-                    >
-                      File signup
-                    </v-btn>
-                  </router-link>
+                  <v-btn
+                    type="submit"
+                    class="mx-0 font-weight-light"
+                    color="infos"
+                  >
+                    Submit
+                  </v-btn>
                 </v-flex>
 
                 <v-flex
                   xs12
                   md6
                   text-xs-right
-                >
-                  <v-btn
-                    type="submit"
-                    class="mx-0 font-weight-light"
-                    large
-                    color="success"
                   >
-                    Submit
-                  </v-btn>
+                  <router-link to="/bulk-signup">
+                    <v-btn
+                      class="mx-0 font-weight-light"
+                      color="primary"
+                    >
+                      File signup
+                    </v-btn>
+                  </router-link>
                 </v-flex>
               </v-layout>
             </v-container>
