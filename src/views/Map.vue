@@ -79,7 +79,6 @@ export default {
     },
     created() {
         this.getExpData(this.exposures)
-        this.getUsData(this.users)
     },
     methods: {
         getUsData (n) {
@@ -135,7 +134,6 @@ export default {
                 }
                 prev = arr[i]
             }
-            console.log(a, b)
             for (var e in pyDepartmentsData) {
                 pyDepartmentsData[e].exposures = 0
             }
@@ -147,6 +145,7 @@ export default {
                 this.datas = pyDepartmentsData
                 }
             }
+            this.getUsData(this.users)
         }
     }
 }

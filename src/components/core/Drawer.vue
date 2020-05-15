@@ -87,7 +87,7 @@
               v-for="sublink in link.subLinks"
               :key="sublink.text">
               <template
-                v-if="(user.role_id === 4 || user.role_id === 5) && (sublink.text != 'Facility Admins' && sublink.text != 'Public Resources' && sublink.text != 'View Users')">
+                v-if="(user.role_id === 4 || user.role_id === 5) && (sublink.text != 'Facility Admins' && sublink.text != 'Public Resources' && sublink.text != 'View Users' && sublink.text != 'Checkin' && sublink.text != 'Facility Admins' )">
                 <!-- {{drawerList(sublink.text)}} -->
                 <v-list-tile
                   :to="sublink.to"
@@ -227,11 +227,11 @@ export default {
             //   icon: 'mdi-file-tree',
             //   text: 'Departments'
             // },
-            {
-              to: '/checkin',
-              icon: 'mdi-crosshairs-gps',
-              text: 'Checkin'
-            },
+            // {
+            //   to: '/checkin',
+            //   icon: 'mdi-crosshairs-gps',
+            //   text: 'Checkin'
+            // },
             {
               to: '/facility-admin',
               icon: 'mdi-lock-pattern',

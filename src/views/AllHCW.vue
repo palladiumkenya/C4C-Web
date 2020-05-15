@@ -10,28 +10,26 @@
     >
       <v-flex
         md12
-      >
-
-      <v-snackbar
-        color="error"
-        v-model="snackbar"
-        :timeout="12000"
-        top>
-        <v-icon
-        color="white"
-        class="mr-3"
-      >
-        mdi-bell-plus
-      </v-icon>
-      <div> {{result}}</div>
-      <v-icon
-        size="16"
-        @click="snackbar = false"
-      >
-        mdi-close-circle
-      </v-icon>
-      </v-snackbar>
-
+        >
+        <v-snackbar
+          color="error"
+          v-model="snackbar"
+          :timeout="12000"
+          top>
+          <v-icon
+            color="white"
+            class="mr-3"
+            >
+            mdi-bell-plus
+          </v-icon>
+          <div> {{result}}</div>
+          <v-icon
+            size="16"
+            @click="snackbar = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-snackbar>
         <v-card>
           <v-card-title>
             Health Care Workers
@@ -163,6 +161,9 @@ export default {
     } else {
       this.all_hcws = this.all_users
     }
+    if (this.user.role_id === 4) {
+      this.getHCW()
+    }
   },
   methods: {
 
@@ -216,8 +217,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['First Name', 'Surname', 'Cadre', 'Department', 'Facility', 'DOB']
-        const filterVal = ['first_name', 'surname', 'cadre', 'facility_name', 'department', 'dob']
+        const tHeader = ['First Name', 'Surname', 'Facility', 'Department', 'Cadre','DOB']
+        const filterVal = ['first_name', 'surname', 'facility_name', 'department', 'cadre', 'dob']
         const list = this.all_hcws
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

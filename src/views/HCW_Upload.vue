@@ -139,7 +139,6 @@
                 >
                   <v-text-field
                     v-model="id_no"
-                    :rules="[rules.required]"
                     name="input-10-2"
                     label="ID No."/>
                 </v-flex>
@@ -154,7 +153,7 @@
                     class="green-input"/>
                 </v-flex>
                 <v-flex
-                  v-if="user.role_id === 1"
+                  v-if="user.role_id !== 4"
                   xs12
                   md6
                 >
@@ -173,29 +172,28 @@
                   md6
                   text-xs-left
                 >
-                  <router-link to="/bulk-signup">
-                    <v-btn
-                      class="mx-0 font-weight-light"
-                      color="infos"
-                    >
-                      File signup
-                    </v-btn>
-                  </router-link>
+                  <v-btn
+                    type="submit"
+                    class="mx-0 font-weight-light"
+                    color="infos"
+                  >
+                    Submit
+                  </v-btn>
                 </v-flex>
 
                 <v-flex
                   xs12
                   md6
                   text-xs-right
-                >
-                  <v-btn
-                    type="submit"
-                    class="mx-0 font-weight-light"
-                    large
-                    color="success"
                   >
-                    Submit
-                  </v-btn>
+                  <router-link to="/bulk-signup">
+                    <v-btn
+                      class="mx-0 font-weight-light"
+                      color="primary"
+                    >
+                      File signup
+                    </v-btn>
+                  </router-link>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -312,7 +310,7 @@ export default {
     })
   },
   created () {
-    if (this.user.role_id !== 1) {
+    if (this.user.role_id === 4) {
       this.facility = this.user.hcw.facility_id
     } else {
       this.getFacilities()
@@ -322,8 +320,15 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
-          this.all_facilities = facilities.data.data
+          if (this.user.role_id === 1) {
+            this.all_facilities = facilities.data.data
+          } else {
+            for (var a in facilities.data.data) {
+              if (this.user.hcw.county === facilities.data.data[a].county) {
+                this.all_facilities.push(facilities.data.data[a])
+              }
+            }
+          }
         })
         .catch(error => console.log(error.message))
     },
@@ -367,7 +372,7 @@ export default {
       e.preventDefault()
       if (this.testFill()) {
         let formData = new FormData()
-
+ 
         if (this.user.role.id === 4) {
           formData.append('facility_id', this.user.hcw.facility_id)
         } else if (this.user.role.id === 1) {
@@ -393,6 +398,7 @@ export default {
             this.resp = Boolean(response.data.success)
             this.clearData()
             this.snack('top', 'center')
+            this.$router.push('/hcw_list')
           })
           .catch((error) => {
             this.output = error

@@ -330,7 +330,7 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-        <Map :exposures="s" :users="userz" />
+        <Map v-if="user.role_id === 1" :exposures="s" :users="userz" />
       <!-- End Maps -->
     </v-layout>
   </v-container>
@@ -382,7 +382,7 @@ export default {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
-            text: 'Months - Year'
+            text: 'Year - Month'
           }
         },
         yAxis: {

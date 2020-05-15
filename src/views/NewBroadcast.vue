@@ -66,7 +66,7 @@
                 <v-flex
                   xs12
                 >
-                  <v-combobox
+                  <v-select
                     ref="cadres"
                     v-model="cadres"
                     :items="all_cadres"
@@ -76,9 +76,25 @@
                     multiple
                     chips
                     label="Select Cadre"
-                    required
+                    required>
 
-                  />
+                     <!-- Add a tile with Select All as Lalbel and binded on a method that add or remove all items -->
+                      <v-list-tile
+                        slot="prepend-item"
+                        ripple
+                        @click="toggle"
+                      >
+                        <v-list-tile-action>
+                          <v-icon :color="cadres.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-title>Select All</v-list-tile-title>
+                      </v-list-tile>
+                      <v-divider
+                        slot="prepend-item"
+                        class="mt-2"
+                      />
+                  </v-select>
+
                   <strong>{{ all_cadres.item }}</strong>&nbsp;
                 </v-flex>
 
@@ -173,7 +189,19 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user'
-    })
+    }),
+
+    selectedAllCadres () {
+        return this.cadres.length === this.all_cadres.length
+      },
+      selectedOneCadre () {
+        return this.cadres.length > 0 && !this.selectedAllCadres
+      },
+      icon () {
+        if (this.selectedAllCadres) return 'mdi-close-box'
+        if (this.selectedOneCadre) return 'mdi-minus-box'
+        return 'mdi-checkbox-blank-outline'
+      },
   },
 
   watch: {
@@ -189,6 +217,17 @@ export default {
   },
 
   methods: {
+
+    toggle () {
+        this.$nextTick(() => {
+          if (this.selectedAllCadres) {
+            this.cadres = []
+          } else {
+            this.cadres = this.all_cadres.slice()
+          }
+        })
+      },
+
     validate () {
       this.$refs.form.validate()
     },
@@ -247,7 +286,7 @@ export default {
             this.output = response.data
             console.log(response.data)
             this.alert = true
-            this.$router.push('/broadcast')
+            this.$router.push('/all_broadcasts')
           })
           .catch(error => {
             this.output = error
