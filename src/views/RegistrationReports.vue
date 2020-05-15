@@ -334,9 +334,9 @@ export default {
       active_level: true,
       menu: false,
       menu1: false,
-      startDate: '2016-01-01',
+      startDate: '2017-01-01',
       maxDate: new Date().toISOString().substr(0, 10),
-      minDate: '2016-01-01',
+      minDate: '2017-01-01',
       endDate: new Date().toISOString().substr(0, 10),
       monthOptions: {
         xAxis: {
