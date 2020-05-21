@@ -1,11 +1,14 @@
 <template>
   <v-container grid-list-lg>
+    <v-layout
+      row
+      wrap
+      v-if="user.role_id === 1 || user.role_id === 2">
 
       <v-flex
         xs12
         text-xs-right>
 
-        <div v-if="user.role_id == 1 || user.role_id == 2">
         <v-btn
           class="mx-0 font-weight-light "
           color="success"
@@ -13,10 +16,7 @@
 
           Add A New COVID 19 Resource
         </v-btn>
-        </div>
 
-        <div v-else>
-        </div>
       </v-flex>
 
       <v-snackbar
@@ -97,6 +97,88 @@
           </v-card>
       
       </v-flex>
+    </v-layout>
+
+    <v-layout
+      row
+      wrap
+      v-else>
+
+      <v-flex
+        xs12
+        text-xs-right>
+
+      </v-flex>
+
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{output.message}} {{ output.errors }} {{resp}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
+      <v-flex v-if="loading">
+        <Loader />
+      </v-flex>
+
+      <v-flex 
+      cols="12" 
+      dense 
+      v-else
+      v-for="(result) in results"
+      :key="result.id"
+      dark>
+
+        <v-card 
+        class="mx-auto"
+        outlined>
+
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <v-img
+              height="150px"
+              max-width="200px"
+              :src="result.file || 'sunshine.jpg' "
+              class="white--text align-end"
+              
+            />
+             
+              <v-list >
+              <v-card-title class="headline"> {{ result.title }} </v-card-title>
+
+              <v-card-actions>
+                <v-card-text class="text--primary">
+                <div><span> Created On: </span> {{ result.created_at }}</div>
+              </v-card-text>
+
+              <v-btn
+                color="orange"
+                @click="$router.push({ name: 'View COVID19 Resource', params: {id: result.id} })">
+                Read More
+              </v-btn>
+
+            </v-card-actions>              
+          </v-list>
+
+          </div>
+          </v-card>
+      
+      </v-flex>
+    </v-layout>
+
+    
 
   </v-container>
 </template>
