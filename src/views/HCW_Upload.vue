@@ -29,8 +29,8 @@
             <v-container py-0>
               <v-layout wrap>
                 <v-flex
-                  xs12
-                  md6
+                  xs11
+                  
                 >
                   <v-text-field
                     v-model="fname"
@@ -38,9 +38,10 @@
                     label="First Name"
                     class="green-input"/>
                 </v-flex>
+
                 <v-flex
-                  xs12
-                  md6
+                  xs11
+                  
                 >
                   <v-text-field
                     v-model="surname"
@@ -48,7 +49,8 @@
                     label="Last Name"
                     class="green-input"/>
                 </v-flex>
-                <v-flex
+
+                <!-- <v-flex
                   xs12
                   md4
                 >
@@ -57,11 +59,11 @@
                     :items="cadres"
                     label="Cadre"
                     class="purple-input"/>
-                </v-flex>
+                </v-flex> -->
 
                 <v-flex
-                  xs12
-                  md8
+                  xs11
+                  
                 >
                   <v-text-field
                     v-model="email"
@@ -69,20 +71,22 @@
                     label="Email Address"
                     class="purple-input"/>
                 </v-flex>
+
                 <v-flex
-                  xs12
-                  md4
+                  xs11
+                
                 >
-                  <v-combobox
+                   <v-combobox
                     v-model="gendInp"
                     :items="gender"
                     :rules="[rules.required]"
                     label="Gender"
                     class="purple-input"/>
-                </v-flex>
+                </v-flex> 
+
                 <v-flex
-                  xs12
-                  md8
+                  xs11
+                  
                 >
                   <v-text-field
                     v-model="msisdn"
@@ -92,7 +96,8 @@
                     single-line
                     class="purple-input"/>
                 </v-flex>
-                <v-flex
+
+                <!-- <v-flex
                   xs12
                   md6
                 >
@@ -132,8 +137,9 @@
                         @click="$refs.menu.save(dob)">OK</v-btn>
                     </v-date-picker>
                   </v-menu>
-                </v-flex>
-                <v-flex
+                </v-flex> -->
+
+                <!-- <v-flex
                   xs12
                   md6
                 >
@@ -141,8 +147,9 @@
                     v-model="id_no"
                     name="input-10-2"
                     label="ID No."/>
-                </v-flex>
-                <v-flex
+                </v-flex> -->
+
+                <!-- <v-flex
                   xs12
                   md6
                 >
@@ -151,8 +158,9 @@
                     :items="departments"
                     label="Department"
                     class="green-input"/>
-                </v-flex>
-                <v-flex
+                </v-flex> -->
+
+                <!-- <v-flex
                   v-if="user.role_id !== 4"
                   xs12
                   md6
@@ -166,7 +174,8 @@
                     clearable
                     persistent-hint
                     chips/>
-                </v-flex>
+                </v-flex> -->
+
                 <v-flex
                   xs12
                   md6
@@ -217,7 +226,7 @@
       >
         mdi-bell-plus
       </v-icon>
-      <div>{{ pre_out }}{{ output.message }}<br> {{ output.errors }}</div>
+      <div>{{ pre_out }} || {{ output.message }} || {{ output.errors }}</div>
       <v-icon
         size="16"
         @click="snackbar = false"
@@ -236,16 +245,11 @@ export default {
   data () {
     return {
       menu: false,
-      maxDate: '2004-01-01',
-      dob: '2004-01-01',
       fname: '',
       surname: '',
       gendInp: '',
-      cadre: '',
-      id_no: '',
       msisdn: '',
       email: '',
-      dept: '',
       output: '',
       pre_out: '',
       rules: {
@@ -259,35 +263,35 @@ export default {
         'TRANSGENDER',
         'UNDEFINED'
       ],
-      cadres: [
-        'Doctor',
-        'Clinical officer',
-        'Nurse',
-        'Student',
-        'Laboratory Technologist',
-        'Cleaner',
-        'Waste Handler',
-        'VCT Counsellor',
-        'Other-Specify'
+      // cadres: [
+      //   'Doctor',
+      //   'Clinical officer',
+      //   'Nurse',
+      //   'Student',
+      //   'Laboratory Technologist',
+      //   'Cleaner',
+      //   'Waste Handler',
+      //   'VCT Counsellor',
+      //   'Other-Specify'
 
-      ],
-      departments: [
-        'Outpatient department (OPD)',
-        'Inpatient Service (IP)',
-        'Medical Department',
-        'New Born Unit (NBU)',
-        'Renal Unit',
-        'Mother and Child (MCH)',
-        'Paramedical Department',
-        'Physical Medicine and Rehabilitation Department',
-        'Operational Theatre Complex (OP)',
-        'Pharmacy Department',
-        'Radiology Department (X-ray)',
-        'Dietary Department',
-        'Medical Record Department (MRD)',
-        'Not Specified'
+      // ],
+      // departments: [
+      //   'Outpatient department (OPD)',
+      //   'Inpatient Service (IP)',
+      //   'Medical Department',
+      //   'New Born Unit (NBU)',
+      //   'Renal Unit',
+      //   'Mother and Child (MCH)',
+      //   'Paramedical Department',
+      //   'Physical Medicine and Rehabilitation Department',
+      //   'Operational Theatre Complex (OP)',
+      //   'Pharmacy Department',
+      //   'Radiology Department (X-ray)',
+      //   'Dietary Department',
+      //   'Medical Record Department (MRD)',
+      //   'Not Specified'
 
-      ],
+      // ],
       mobileHint: ["Mobile Format is 254700000000"],
       resp: false,
       color: null,
@@ -299,9 +303,9 @@ export default {
       bottom: false,
       left: false,
       right: false,
-      snackbar: false,
-      all_facilities: [],
-      facility: ''
+      snackbar: true,
+      // all_facilities: [],
+      // facility: ''
     }
   },
   computed: {
@@ -309,29 +313,29 @@ export default {
       user: 'auth/user'
     })
   },
-  created () {
-    if (this.user.role_id === 4) {
-      this.facility = this.user.hcw.facility_id
-    } else {
-      this.getFacilities()
-    }
-  },
+  // created () {
+  //   if (this.user.role_id === 4) {
+  //     this.facility = this.user.hcw.facility_id
+  //   } else {
+  //     this.getFacilities()
+  //   }
+  // },
   methods: {
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          if (this.user.role_id === 1) {
-            this.all_facilities = facilities.data.data
-          } else {
-            for (var a in facilities.data.data) {
-              if (this.user.hcw.county === facilities.data.data[a].county) {
-                this.all_facilities.push(facilities.data.data[a])
-              }
-            }
-          }
-        })
-        .catch(error => console.log(error.message))
-    },
+    // getFacilities () {
+    //   axios.get('facilities')
+    //     .then((facilities) => {
+    //       if (this.user.role_id === 1) {
+    //         this.all_facilities = facilities.data.data
+    //       } else {
+    //         for (var a in facilities.data.data) {
+    //           if (this.user.hcw.county === facilities.data.data[a].county) {
+    //             this.all_facilities.push(facilities.data.data[a])
+    //           }
+    //         }
+    //       }
+    //     })
+    //     .catch(error => console.log(error.message))
+    // },
     testFill () {
       if (this.fname === '') {
         this.pre_out = 'First Name must be filled out'
@@ -345,23 +349,17 @@ export default {
         this.pre_out = 'Mobile must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.cadre === '') {
-        this.pre_out = 'Role must be filled out'
+      } else if (this.email === '') {
+        this.pre_out = 'Email must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.gender === '') {
+      } 
+      else if (this.gender === '') {
         this.pre_out = 'gender must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.dept === '') {
-        this.pre_out = 'Department must be filled out'
-        this.snack('top', 'center')
-        return false
-      } else if (this.dob === '') {
-        this.pre_out = 'DOB must be filled out'
-        this.snack('top', 'center')
-        return false
-      } else {
+      }  
+      else {
         return true
       }
     },
@@ -373,34 +371,37 @@ export default {
       if (this.testFill()) {
         let formData = new FormData()
  
-        if (this.user.role.id === 4) {
-          formData.append('facility_id', this.user.hcw.facility_id)
-        } else if (this.user.role.id === 1) {
-          formData.append('facility_id', this.facility.id)
-        }
-          formData.append('facility_department', this.dept),
-          formData.append('cadre', this.cadre),
+        // if (this.user.role.id === 4) {
+        //   formData.append('facility_id', this.user.hcw.facility_id)
+        // } else if (this.user.role.id === 1) {
+        //   formData.append('facility_id', this.facility.id)
+        // }
+          // formData.append('facility_department', this.dept),
+          // formData.append('cadre', this.cadre),
           formData.append('first_name', this.fname),
           formData.append('surname', this.surname),
           formData.append('email', this.email),
           formData.append('msisdn', this.msisdn),
           formData.append('gender', this.gendInp),
-          formData.append('dob', this.dob),
-          formData.append('id_no', this.id_no)
+          formData.append('role_id', '3'),
+          formData.append('password', this.msisdn),
+          formData.append('password_confirmation', this.msisdn)
 
         axios({
           method: 'POST',
-          url: 'auth/bulk/register',
+          url: 'auth/signup',
           data: formData
         })
           .then((response) => {
+            this.pre_out = 'You have been registered successfully, login to update your profile'
             this.output = response.data
-            this.resp = Boolean(response.data.success)
+            console.log(response.data)
             this.clearData()
             this.snack('top', 'center')
             this.$router.push('/hcw_list')
           })
           .catch((error) => {
+            this.pre_out = 'Error, please try again'
             this.output = error
             this.snack('top', 'center')
           })

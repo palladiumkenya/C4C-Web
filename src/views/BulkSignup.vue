@@ -94,11 +94,11 @@
                   <td>{{ props.item.FirstName }}</td>
                   <td>{{ props.item.Surname }}</td>
                   <td>{{ props.item.Mobile }}</td>
-                  <td>{{ props.item.Gender }}</td>
+                  <!-- <td>{{ props.item.Gender }}</td> -->
                   <td>{{ props.item.Email }}</td>
-                  <td>{{ props.item.Facility_Department }}</td>
-                  <td>{{ props.item.Cadre }}</td>
-                  <td>{{ props.item.dob }}</td>
+                  <!-- <td>{{ props.item.Facility_Department }}</td> -->
+                  <!-- <td>{{ props.item.Cadre }}</td> -->
+                  <!-- <td>{{ props.item.dob }}</td> -->
                   <td>{{ props.item.id_no }}</td>
                 </tr>
               </template>
@@ -168,7 +168,7 @@ export default {
       left: false,
       right: false,
       snackbar: false,
-      rowsPerPageItems: [50, 250, 500],
+      rowsPerPageItems: [50, 1000, 3000],
       tableData: [],
       tableHeader: [],
       tableHead: [
@@ -200,30 +200,30 @@ export default {
           sortable: false,
           text: 'Email',
           value: 'email'
-        },
-        {
-          sortable: false,
-          text: 'Facility_Department',
-          value: 'facility_department'
-        },
-        {
-          sortable: false,
-          text: 'Cadre',
-          value: 'cadre'
-        },
-        {
-          sortable: false,
-          text: 'DOB',
-          value: 'dob'
-        },
-        {
-          sortable: false,
-          text: 'ID Number',
-          value: 'id_no'
         }
+        // {
+        //   sortable: false,
+        //   text: 'Facility_Department',
+        //   value: 'facility_department'
+        // },
+        // {
+        //   sortable: false,
+        //   text: 'Cadre',
+        //   value: 'cadre'
+        // },
+        // {
+        //   sortable: false,
+        //   text: 'DOB',
+        //   value: 'dob'
+        // },
+        // {
+        //   sortable: false,
+        //   text: 'ID Number',
+        //   value: 'id_no'
+        // }
       ],
-      all_facilities: [],
-      facility: null
+      // all_facilities: [],
+      // facility: null
     }
   },
   computed: {
@@ -231,30 +231,31 @@ export default {
       user: 'auth/user'
     })
   },
-  created () {
-    if (this.user.role_id === 4) {
-      this.facility = this.user.hcw.facility_id
-      console.log(this.facility)
-    } else {
-      this.getFacilities()
-    }
-  },
+  // created () {
+  //   if (this.user.role_id === 4) {
+  //     this.facility = this.user.hcw.facility_id
+  //     console.log(this.facility)
+  //   } else {
+  //     this.getFacilities()
+  //   }
+  // },
   methods: {
-    getFacilities () {
-      axios.get('facilities')
-        .then((facilities) => {
-          if (this.user.role_id === 1) {
-            this.all_facilities = facilities.data.data
-          } else {
-            for (var a in facilities.data.data) {
-              if (this.user.hcw.county === facilities.data.data[a].county) {
-                this.all_facilities.push(facilities.data.data[a])
-              }
-            }
-          }
-        })
-        .catch(error => console.log(error.message))
-    },
+    // getFacilities () {
+    //   axios.get('facilities')
+    //     .then((facilities) => {
+    //       if (this.user.role_id === 1) {
+    //         this.all_facilities = facilities.data.data
+    //       } else {
+    //         for (var a in facilities.data.data) {
+    //           if (this.user.hcw.county === facilities.data.data[a].county) {
+    //             this.all_facilities.push(facilities.data.data[a])
+    //           }
+    //         }
+    //       }
+    //     })
+    //     .catch(error => console.log(error.message))
+    // },
+
     postUsers (e) {
       e.preventDefault()
       for (var u in this.tableData) {
@@ -274,15 +275,16 @@ export default {
           this.output_pre = `ERROR: Fill valid mobile for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].Gender === undefined) {
-          this.output_pre = `ERROR: Fill gender for record: ${u + 1}`
-          this.snack('bottom', 'center')
-          return
-        } else if (this.facility === null) {
-          this.output_pre = `ERROR: Select facility`
-          this.snack('bottom', 'center')
-          return
-        }
+        } 
+        // else if (this.tableData[u].Gender === undefined) {
+        //   this.output_pre = `ERROR: Fill gender for record: ${u + 1}`
+        //   this.snack('bottom', 'center')
+        //   return
+        // } else if (this.facility === null) {
+        //   this.output_pre = `ERROR: Select facility`
+        //   this.snack('bottom', 'center')
+        //   return
+        // }
       }
       this.loading = true
       this.pushData()
@@ -295,16 +297,16 @@ export default {
         console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
         axios.post('auth/bulk/register', {
-          facility_id: this.facility,
-          facility_department: this.tableData[v].Facility_Department,
-          cadre: this.tableData[v].Cadre,
+          // facility_id: this.facility,
+          // facility_department: this.tableData[v].Facility_Department,
+          // cadre: this.tableData[v].Cadre,
           first_name: this.tableData[v].FirstName,
           surname: this.tableData[v].Surname,
           email: this.tableData[v].Email,
           msisdn: this.tableData[v].Mobile.toString(),
-          gender: this.tableData[v].Gender,
+          //gender: this.tableData[v].Gender,
           dob: this.tableData[v].dob,
-          id_no: this.tableData[v].id_no
+          //id_no: this.tableData[v].id_no
         })
           .then((response) => {
             this.output = response.data

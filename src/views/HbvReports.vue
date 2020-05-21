@@ -183,7 +183,7 @@
           <v-btn
             x-large
             color="secondary"
-            dark
+            darknt
             @click="click">Filter</v-btn>
 
         <v-btn
