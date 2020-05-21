@@ -303,7 +303,7 @@ export default {
       bottom: false,
       left: false,
       right: false,
-      snackbar: true,
+      snackbar: false,
       // all_facilities: [],
       // facility: ''
     }

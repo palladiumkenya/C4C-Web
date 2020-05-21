@@ -87,7 +87,7 @@
                 slot-scope="props">
                 <tr>
                   <td>{{ tableData.indexOf(props.item)+1 }}</td>
-                  <td>{{ props.item.firstName }}</td>
+                  <td>{{ props.item.first_name }}</td>
                   <td>{{ props.item.surname }}</td>
                   <td>{{ props.item.mobile }}</td>
                   <td>{{ props.item.gender }}</td>
@@ -161,7 +161,7 @@ export default {
       left: false,
       right: false,
       snackbar: false,
-      rowsPerPageItems: [50, 1000, 3000],
+      rowsPerPageItems: [200, 1000, 3000],
       tableData: [],
       tableHeader: [],
       tableHead: [
@@ -172,7 +172,7 @@ export default {
         {
           sortable: false,
           text: 'First Name',
-          value: 'firstname'
+          value: 'first_name'
         },
         {
           sortable: false,
@@ -268,6 +268,7 @@ export default {
               return
             }
             this.snack('top', 'center')
+            this.$router.push('/hcw_list')
           })
           .catch((error) => {
             this.output = error
@@ -293,18 +294,9 @@ export default {
       this.tableData = results
       this.tableHeader = header
       this.is_data = false
+
       for (var r in results) {
-        var xlSerialOffset = -2209075200000
-        var elapsedDays
-        if (results[r].dob < 61) {
-          elapsedDays = results[r].dob
-        }
-        else {
-          elapsedDays = results[r].dob - 1
-        }
-        var millisPerDay = 86400000
-        var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
-        results[r].dob = new Date(jsTimestamp).toISOString().substr(0, 10)
+        
         if (String(results[r].mobile).slice(0, 3) !== '254' && String(results[r].mobile).slice(0, 1) === '7') {
           results[r].mobile = '254' + String(results[r].mobile)
         } else if (String(results[r].mobile).length < 5) {
