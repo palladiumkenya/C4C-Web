@@ -42,16 +42,12 @@
                     xs12
                     md4
                   >
-                    <v-combobox
-                      v-model="facility"
-                      :items="all_facilities"
+                    <v-text-field
                       :disabled="is_data"
-                      item-text="name"
-                      item-value="id"
-                      label="Select Facility"
-                      clearable
-                      persistent-hint
-                      chips/>
+                      v-model="affl"
+                      label="Enter affliation"
+                      class="green-input"/>
+
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -91,15 +87,12 @@
                 slot-scope="props">
                 <tr>
                   <td>{{ tableData.indexOf(props.item)+1 }}</td>
-                  <td>{{ props.item.FirstName }}</td>
-                  <td>{{ props.item.Surname }}</td>
-                  <td>{{ props.item.Mobile }}</td>
-                  <!-- <td>{{ props.item.Gender }}</td> -->
-                  <td>{{ props.item.Email }}</td>
-                  <!-- <td>{{ props.item.Facility_Department }}</td> -->
-                  <!-- <td>{{ props.item.Cadre }}</td> -->
-                  <!-- <td>{{ props.item.dob }}</td> -->
-                  <td>{{ props.item.id_no }}</td>
+                  <td>{{ props.item.firstName }}</td>
+                  <td>{{ props.item.surname }}</td>
+                  <td>{{ props.item.mobile }}</td>
+                  <td>{{ props.item.gender }}</td>
+                  <td>{{ props.item.password }}</td>
+                  <td>{{ props.item.email }}</td>
                 </tr>
               </template>
             </v-data-table>
@@ -198,32 +191,15 @@ export default {
         },
         {
           sortable: false,
+          text: 'Password',
+          value: 'password'
+        },
+        {
+          sortable: false,
           text: 'Email',
           value: 'email'
         }
-        // {
-        //   sortable: false,
-        //   text: 'Facility_Department',
-        //   value: 'facility_department'
-        // },
-        // {
-        //   sortable: false,
-        //   text: 'Cadre',
-        //   value: 'cadre'
-        // },
-        // {
-        //   sortable: false,
-        //   text: 'DOB',
-        //   value: 'dob'
-        // },
-        // {
-        //   sortable: false,
-        //   text: 'ID Number',
-        //   value: 'id_no'
-        // }
-      ],
-      // all_facilities: [],
-      // facility: null
+      ]
     }
   },
   computed: {
@@ -231,82 +207,57 @@ export default {
       user: 'auth/user'
     })
   },
-  // created () {
-  //   if (this.user.role_id === 4) {
-  //     this.facility = this.user.hcw.facility_id
-  //     console.log(this.facility)
-  //   } else {
-  //     this.getFacilities()
-  //   }
-  // },
   methods: {
-    // getFacilities () {
-    //   axios.get('facilities')
-    //     .then((facilities) => {
-    //       if (this.user.role_id === 1) {
-    //         this.all_facilities = facilities.data.data
-    //       } else {
-    //         for (var a in facilities.data.data) {
-    //           if (this.user.hcw.county === facilities.data.data[a].county) {
-    //             this.all_facilities.push(facilities.data.data[a])
-    //           }
-    //         }
-    //       }
-    //     })
-    //     .catch(error => console.log(error.message))
-    // },
-
     postUsers (e) {
       e.preventDefault()
       for (var u in this.tableData) {
-        if (this.tableData[u].FirstName === undefined) {
+        if (this.tableData[u].first_name === undefined) {
           this.output_pre = `ERROR: Fill first name for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].Surname === undefined) {
+        } else if (this.tableData[u].surname === undefined) {
           this.output_pre = `ERROR: Fill surname for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].Mobile === undefined) {
+        } else if (this.tableData[u].mobile === undefined) {
           this.output_pre = `ERROR: Fill mobile for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].Mobile.length < 7) {
+        } else if (this.tableData[u].mobile.toString().length < 9) {
           this.output_pre = `ERROR: Fill valid mobile for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } 
-        // else if (this.tableData[u].Gender === undefined) {
-        //   this.output_pre = `ERROR: Fill gender for record: ${u + 1}`
-        //   this.snack('bottom', 'center')
-        //   return
-        // } else if (this.facility === null) {
-        //   this.output_pre = `ERROR: Select facility`
-        //   this.snack('bottom', 'center')
-        //   return
-        // }
+        } else if (this.tableData[u].gender === undefined) {
+          this.output_pre = `ERROR: Fill gender for record: ${u + 1}`
+          this.snack('bottom', 'center')
+          return
+        } else if (this.tableData[u].password === undefined) {
+          this.output_pre = `ERROR: Fill password for record: ${u + 1}`
+          this.snack('bottom', 'center')
+          return
+        } else if (this.tableData[u].password.toString().length < 6) {
+          this.output_pre = `ERROR: Password for record: ${u + 1} should be more the 5 characters`
+          this.snack('bottom', 'center')
+          return
+        }
       }
       this.loading = true
       this.pushData()
     },
     pushData () {
-      if (this.user.role_id === 1) {
-        this.facility = this.facility.id
-      }
       for (var v in this.tableData) {
         console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
-        axios.post('auth/bulk/register', {
-          // facility_id: this.facility,
-          // facility_department: this.tableData[v].Facility_Department,
-          // cadre: this.tableData[v].Cadre,
-          first_name: this.tableData[v].FirstName,
-          surname: this.tableData[v].Surname,
-          email: this.tableData[v].Email,
-          msisdn: this.tableData[v].Mobile.toString(),
-          //gender: this.tableData[v].Gender,
-          dob: this.tableData[v].dob,
-          //id_no: this.tableData[v].id_no
+        axios.post('auth/signup', {
+          first_name: this.tableData[v].first_name,
+          surname: this.tableData[v].surname,
+          msisdn: this.tableData[v].mobile.toString(),
+          role_id: '3',
+          gender: this.tableData[v].gender,
+          email: this.tableData[v].email,
+          password: this.tableData[v].password.toString(),
+          password_confirmation: this.tableData[v].password.toString(),
+          message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` 
         })
           .then((response) => {
             this.output = response.data
@@ -354,9 +305,9 @@ export default {
         var millisPerDay = 86400000
         var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
         results[r].dob = new Date(jsTimestamp).toISOString().substr(0, 10)
-        if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
-          results[r].Mobile = '254' + String(results[r].Mobile)
-        } else if (String(results[r].Mobile).length < 5) {
+        if (String(results[r].mobile).slice(0, 3) !== '254' && String(results[r].mobile).slice(0, 1) === '7') {
+          results[r].mobile = '254' + String(results[r].mobile)
+        } else if (String(results[r].mobile).length < 5) {
           console.log(results.splice(r, 1))
           break
         }
