@@ -92,7 +92,7 @@ export default [
   },
   {
     path: '/facility-admin',
-    name: 'Facilit Admin',
+    name: 'Facility Admin',
     view: 'FacilityAdmin',
     beforeEnter: (to, from, next) => {
       if (!store.getters['auth/authenticated']) {
