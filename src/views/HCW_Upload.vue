@@ -36,7 +36,8 @@
                     v-model="fname"
                     :rules="[rules.required]"
                     label="First Name"
-                    class="green-input"/>
+                    class="green-input">
+                  </v-text-field>  
                 </v-flex>
 
                 <v-flex
@@ -47,19 +48,9 @@
                     v-model="surname"
                     :rules="[rules.required]"
                     label="Last Name"
-                    class="green-input"/>
+                    class="green-input">
+                  </v-text-field>  
                 </v-flex>
-
-                <!-- <v-flex
-                  xs12
-                  md4
-                >
-                  <v-combobox
-                    v-model="cadre"
-                    :items="cadres"
-                    label="Cadre"
-                    class="purple-input"/>
-                </v-flex> -->
 
                 <v-flex
                   xs11
@@ -69,7 +60,8 @@
                     v-model="email"
                     :rules="[rules.emailRules]"
                     label="Email Address"
-                    class="purple-input"/>
+                    class="purple-input">
+                  </v-text-field>  
                 </v-flex>
 
                 <v-flex
@@ -81,8 +73,10 @@
                     :items="gender"
                     :rules="[rules.required]"
                     label="Gender"
-                    class="purple-input"/>
+                    class="purple-input">
+                   </v-combobox>  
                 </v-flex> 
+                
 
                 <v-flex
                   xs11
@@ -94,87 +88,9 @@
                     label="Mobile"
                     :hint="`${mobileHint}`"
                     single-line
-                    class="purple-input"/>
+                    class="purple-input">
+                  </v-text-field>  
                 </v-flex>
-
-                <!-- <v-flex
-                  xs12
-                  md6
-                >
-                  <v-menu
-                    ref="menu"
-                    :close-on-content-click="false"
-                    v-model="menu"
-                    :nudge-right="40"
-                    :return-value.sync="dob"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      slot="activator"
-                      v-model="dob"
-                      label="DoB"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                    />
-                    <v-date-picker
-                      :dark="true"
-                      v-model="dob"
-                      :max="maxDate"
-                      no-title
-                      scrollable>
-                      <v-spacer/>
-                      <v-btn
-                        flat
-                        color="primary"
-                        @click="menu = false">Cancel</v-btn>
-                      <v-btn
-                        flat
-                        color="primary"
-                        @click="$refs.menu.save(dob)">OK</v-btn>
-                    </v-date-picker>
-                  </v-menu>
-                </v-flex> -->
-
-                <!-- <v-flex
-                  xs12
-                  md6
-                >
-                  <v-text-field
-                    v-model="id_no"
-                    name="input-10-2"
-                    label="ID No."/>
-                </v-flex> -->
-
-                <!-- <v-flex
-                  xs12
-                  md6
-                >
-                  <v-combobox
-                    v-model="dept"
-                    :items="departments"
-                    label="Department"
-                    class="green-input"/>
-                </v-flex> -->
-
-                <!-- <v-flex
-                  v-if="user.role_id !== 4"
-                  xs12
-                  md6
-                >
-                  <v-combobox
-                    v-model="facility"
-                    :items="all_facilities"
-                    item-text="name"
-                    item-value="id"
-                    label="Select Facility"
-                    clearable
-                    persistent-hint
-                    chips/>
-                </v-flex> -->
 
                 <v-flex
                   xs12
@@ -263,35 +179,6 @@ export default {
         'TRANSGENDER',
         'UNDEFINED'
       ],
-      // cadres: [
-      //   'Doctor',
-      //   'Clinical officer',
-      //   'Nurse',
-      //   'Student',
-      //   'Laboratory Technologist',
-      //   'Cleaner',
-      //   'Waste Handler',
-      //   'VCT Counsellor',
-      //   'Other-Specify'
-
-      // ],
-      // departments: [
-      //   'Outpatient department (OPD)',
-      //   'Inpatient Service (IP)',
-      //   'Medical Department',
-      //   'New Born Unit (NBU)',
-      //   'Renal Unit',
-      //   'Mother and Child (MCH)',
-      //   'Paramedical Department',
-      //   'Physical Medicine and Rehabilitation Department',
-      //   'Operational Theatre Complex (OP)',
-      //   'Pharmacy Department',
-      //   'Radiology Department (X-ray)',
-      //   'Dietary Department',
-      //   'Medical Record Department (MRD)',
-      //   'Not Specified'
-
-      // ],
       mobileHint: ["Mobile Format is 254700000000"],
       resp: false,
       color: null,
@@ -304,8 +191,6 @@ export default {
       left: false,
       right: false,
       snackbar: false,
-      // all_facilities: [],
-      // facility: ''
     }
   },
   computed: {
@@ -313,29 +198,9 @@ export default {
       user: 'auth/user'
     })
   },
-  // created () {
-  //   if (this.user.role_id === 4) {
-  //     this.facility = this.user.hcw.facility_id
-  //   } else {
-  //     this.getFacilities()
-  //   }
-  // },
+ 
   methods: {
-    // getFacilities () {
-    //   axios.get('facilities')
-    //     .then((facilities) => {
-    //       if (this.user.role_id === 1) {
-    //         this.all_facilities = facilities.data.data
-    //       } else {
-    //         for (var a in facilities.data.data) {
-    //           if (this.user.hcw.county === facilities.data.data[a].county) {
-    //             this.all_facilities.push(facilities.data.data[a])
-    //           }
-    //         }
-    //       }
-    //     })
-    //     .catch(error => console.log(error.message))
-    // },
+   
     testFill () {
       if (this.fname === '') {
         this.pre_out = 'First Name must be filled out'
@@ -371,13 +236,6 @@ export default {
       if (this.testFill()) {
         let formData = new FormData()
  
-        // if (this.user.role.id === 4) {
-        //   formData.append('facility_id', this.user.hcw.facility_id)
-        // } else if (this.user.role.id === 1) {
-        //   formData.append('facility_id', this.facility.id)
-        // }
-          // formData.append('facility_department', this.dept),
-          // formData.append('cadre', this.cadre),
           formData.append("first_name", this.fname),
           formData.append("surname", this.surname),
           formData.append("email", this.email),
@@ -386,7 +244,9 @@ export default {
           formData.append("role_id", "3"),
           formData.append("password", this.msisdn),
           formData.append("password_confirmation", this.msisdn),
-          formData.append("message", ""),
+
+          formData.append("message", "`Welcome ${this.first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` "),
+
           formData.append("consent", "1")
 
         axios({
