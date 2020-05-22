@@ -128,6 +128,7 @@
 
     </v-layout>
     <v-snackbar
+      :timeout="timeout"
       :color="color"
       :bottom="bottom"
       :top="top"
@@ -161,6 +162,7 @@ export default {
   data () {
     return {
       menu: false,
+      timeout: 3000,
       fname: '',
       surname: '',
       gendInp: '',
@@ -234,29 +236,20 @@ export default {
     postUser (e) {
       e.preventDefault()
       if (this.testFill()) {
-        let formData = new FormData()
- 
-          formData.append("first_name", this.fname),
-          formData.append("surname", this.surname),
-          formData.append("email", this.email),
-          formData.append("msisdn", this.msisdn),
-          formData.append("gender", this.gendInp),
-          formData.append("role_id", "3"),
-          formData.append("password", this.msisdn),
-          formData.append("password_confirmation", this.msisdn),
+        axios.post('auth/signup', {
 
-          formData.append("message", "`Welcome ${this.first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` "),
+          first_name: this.fname,
+          surname: this.surname,
+          email: this.email,
+          msisdn: this.msisdn,
+          gender: this.gendInp,
+          role_id: "3",
+          password: this.msisdn,
+          password_confirmation: this.msisdn,
 
-          formData.append("consent", "1")
+          message: "`Welcome to Care For the Carer (C4C) SMS Platform. You have been successfully registered. Messages sent and received are not charged.` ",
 
-        axios({
-          method: 'POST',
-          url: 'auth/signup',
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-          },
-          data: formData
+          consent: "1"
         })
           .then((response) => {
             this.pre_out = 'You have been registered successfully, login to update your profile'
@@ -264,6 +257,7 @@ export default {
             console.log(response)
             this.clearData()
             this.snack('top', 'center')
+
             this.$router.push('/hcw_list')
           })
           .catch((error) => {
