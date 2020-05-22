@@ -378,24 +378,30 @@ export default {
         // }
           // formData.append('facility_department', this.dept),
           // formData.append('cadre', this.cadre),
-          formData.append('first_name', this.fname),
-          formData.append('surname', this.surname),
-          formData.append('email', this.email),
-          formData.append('msisdn', this.msisdn),
-          formData.append('gender', this.gendInp),
-          formData.append('role_id', '3'),
-          formData.append('password', this.msisdn),
-          formData.append('password_confirmation', this.msisdn)
+          formData.append("first_name", this.fname),
+          formData.append("surname", this.surname),
+          formData.append("email", this.email),
+          formData.append("msisdn", this.msisdn),
+          formData.append("gender", this.gendInp),
+          formData.append("role_id", "3"),
+          formData.append("password", this.msisdn),
+          formData.append("password_confirmation", this.msisdn),
+          formData.append("message", ""),
+          formData.append("consent", "1")
 
         axios({
           method: 'POST',
           url: 'auth/signup',
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+          },
           data: formData
         })
           .then((response) => {
             this.pre_out = 'You have been registered successfully, login to update your profile'
             this.output = response.data
-            console.log(response.data)
+            console.log(response)
             this.clearData()
             this.snack('top', 'center')
             this.$router.push('/hcw_list')

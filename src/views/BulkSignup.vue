@@ -257,11 +257,14 @@ export default {
           email: this.tableData[v].email,
           password: this.tableData[v].password.toString(),
           password_confirmation: this.tableData[v].password.toString(),
+          message: '',
+          consent: '1',
+          
           message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` 
         })
           .then((response) => {
             this.output = response.data
-            console.log(this.output)
+            console.log(response)
             this.resp = Boolean(response.data.success)
             if (!this.resp) {
               this.snack('bottom', 'center')
