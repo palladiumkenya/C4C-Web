@@ -254,23 +254,20 @@ export default {
     editCME (e) {
       e.preventDefault()
 
-      let allData = new FormData()
+      let formData = new FormData()
 
       // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('cme_files[' + i + ']', file)
+        formData.append('cme_files[' + i + ']', file)
       }
-      allData.append('image_file', this.file)
-      allData.append('title', this.cme.title)
-      allData.append('body', this.cme.body)
-      allData.append('cme_id', this.cme.id)
+      formData.append('image_file', this.file)
+      formData.append('title', this.cme.title)
+      formData.append('body', this.cme.body)
+      formData.append('cme_id', this.cme.id)
 
-      axios({
-        method: 'POST',
-        url: 'resources/cmes/update',
-        data: allData,
+      axios.post('resources/cmes/update', formData, {
         headers: { 'Content-Type': `multipart/form-data` }
       })
         .then((response) => {

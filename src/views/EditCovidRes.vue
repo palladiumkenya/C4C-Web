@@ -258,23 +258,20 @@ export default {
     editCovid19 (e) {
       e.preventDefault()
 
-      let allData = new FormData()
+      let formData = new FormData()
 
       // iterating over any file sent over appending the files
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('resource_files[' + i + ']', file)
+        formData.append('resource_files[' + i + ']', file)
       }
-      allData.append('image_file', this.file)
-      allData.append('title', this.covid19.title)
-      allData.append('body', this.covid19.body)
-      allData.append('special_resource_id', this.covid19.id)
+      formData.append('image_file', this.file)
+      formData.append('title', this.covid19.title)
+      formData.append('body', this.covid19.body)
+      formData.append('special_resource_id', this.covid19.id)
 
-      axios({
-        method: 'POST',
-        url: 'resources/special/update',
-        data: allData,
+      axios.post('resources/special/update',formData, {
         headers: { 'Content-Type': `multipart/form-data` }
       })
         .then((response) => {
