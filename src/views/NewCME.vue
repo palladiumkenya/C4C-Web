@@ -227,22 +227,19 @@ export default {
       if (this.editorData == '') {
         this.errors.push('Description is required.')
       } else {
-        let allData = new FormData()
+        let formData = new FormData()
 
         // iterating over any file sent over appending the files
         for (var i = 0; i < this.files.length; i++) {
           let file = this.files[i]
 
-          allData.append('cme_files[' + i + ']', file)
+          formData.append('cme_files[' + i + ']', file)
         }
-        allData.append('image_file', this.file)
-        allData.append('title', this.title)
-        allData.append('body', this.editorData)
+        formData.append('image_file', this.file)
+        formData.append('title', this.title)
+        formData.append('body', this.editorData)
 
-        axios({
-          method: 'POST',
-          url: 'resources/cmes/create',
-          data: allData,
+        axios.post('resources/special/create', formData, {
           headers: { 'Content-Type': `multipart/form-data` }
         })
           .then((response) => {
