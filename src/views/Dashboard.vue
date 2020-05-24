@@ -820,7 +820,7 @@ export default {
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
         const proxyurl = 'https://evening-brushlands-82997.herokuapp.com/'
-        axios.get(proxyurl + 'http://c4ctest.mhealthkenya.org/api/exposures/all/')
+        axios.get(proxyurl + 'https://c4-api.mhealthkenya.co.ke/api/exposures/all/')
           .then((exp) => {
             if (this.user.role_id === 5) {
               this.scount = 'loading...'

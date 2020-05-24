@@ -226,8 +226,8 @@ export default {
   methods: {
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        const proxyurl = 'https://evening-brushlands-82997.herokuapp.com/';
-        axios.get(proxyurl + 'http://c4c_api.mhealthkenya.co.ke/api/exposures/all/')
+        const proxyurl = 'https://evening-brushlands-82997.herokuapp.com';
+        axios.get(proxyurl + 'https://c4c-api.mhealthkenya.co.ke/api/exposures/all/')
           .then((exp) => {
             this.exposures = exp.data.data
             this.link = exp.data.links.next
