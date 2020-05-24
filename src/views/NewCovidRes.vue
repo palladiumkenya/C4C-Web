@@ -28,6 +28,7 @@
           </v-card-text>
 
           <v-form
+            method="POST"
             ref="form"
             v-model="valid"
             lazy-validation
@@ -228,22 +229,19 @@ export default {
       if (this.editorData == '') {
         this.errors.push('Description is required.')
       } else {
-        let allData = new FormData()
+        let formData = new FormData()
 
         // iterating over any file sent over appending the files
         for (var i = 0; i < this.files.length; i++) {
           let file = this.files[i]
 
-          allData.append('resource_files[' + i + ']', file)
+          formData.append('resource_files[' + i + ']', file)
         }
-        allData.append('image_file', this.file)
-        allData.append('title', this.title)
-        allData.append('body', this.editorData)
+        formData.append('image_file', this.file)
+        formData.append('title', this.title)
+        formData.append('body', this.editorData)
 
-        axios({
-          method: 'POST',
-          url: 'resources/special/create',
-          data: allData,
+        axios.post('resources/special/create', formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
           .then((response) => {

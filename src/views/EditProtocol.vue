@@ -270,24 +270,21 @@ export default {
     editProtocal (e) {
       e.preventDefault()
 
-      let allData = new FormData()
+      let formData = new FormData()
 
       for (var i = 0; i < this.files.length; i++) {
         let file = this.files[i]
 
-        allData.append('protocol_files[' + i + ']', file)
+        formData.append('protocol_files[' + i + ']', file)
       }
-      allData.append('image_file', this.file)
-      allData.append('title', this.protocol.title)
-      allData.append('body', this.protocol.body)
-      allData.append('facility_id', this.protocol.facility_id )
-      allData.append('protocol_id', this.protocol.id)
+      formData.append('image_file', this.file)
+      formData.append('title', this.protocol.title)
+      formData.append('body', this.protocol.body)
+      formData.append('facility_id', this.protocol.facility_id )
+      formData.append('protocol_id', this.protocol.id)
 
 
-      axios({
-        method: 'POST',
-        url: 'resources/protocols/update',
-        data: allData,
+      axios.post( 'resources/protocols/update', formData, {
         headers: {
           'content-type': 'multipart/form-data' }
       })

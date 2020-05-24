@@ -276,26 +276,23 @@ export default {
       if (this.editorData == '') {
         this.errors.push('Description is required.')
       } else {
-        let allData = new FormData()
+        let formData = new FormData()
 
         for (var i = 0; i < this.files.length; i++) {
           let file = this.files[i]
 
-          allData.append('protocol_files[' + i + ']', file)
+          formData.append('protocol_files[' + i + ']', file)
         }
-        allData.append('image_file', this.file)
-        allData.append('title', this.title)
-        allData.append('body', this.editorData)
+        formData.append('image_file', this.file)
+        formData.append('title', this.title)
+        formData.append('body', this.editorData)
         if (this.user.role.id === 4) {
-          allData.append('facility_id', this.user.hcw.facility_id)
+          formData.append('facility_id', this.user.hcw.facility_id)
         } else if (this.user.role.id === 1) {
-          allData.append('facility_id', this.facility.id)
+          formData.append('facility_id', this.facility.id)
         }
 
-        axios({
-          method: 'POST',
-          url: 'resources/protocols/create',
-          data: allData,
+        axios.post('resources/protocols/create', formData, {
           headers: {
             'content-type': `multipart/form-data` }
         })
