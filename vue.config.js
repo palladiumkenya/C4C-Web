@@ -5,6 +5,6 @@ module.exports = {
     proxy: 'https://c4c-api.mhealthkenya.co.ke/',
 
 
-  }
+  },
 
 }

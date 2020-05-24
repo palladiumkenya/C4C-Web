@@ -213,6 +213,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      token: 'auth/token',
       e: 'auth/expo'
     })
   },
@@ -226,11 +227,10 @@ export default {
   methods: {
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        const proxyurl = 'https://evening-brushlands-82997.herokuapp.com';
-        axios.get(proxyurl + 'https://c4c-api.mhealthkenya.co.ke/api/exposures/all/')
-          .then((exp) => {
-            this.exposures = exp.data.data
-            this.link = exp.data.links.next
+        axios.get(`exposures/all`)
+          .then((response) => {
+            this.exposures = response.data.data
+            this.link = response.data.links.next
             if (this.link) {
               this.loopT(this.link)
               this.isLoading = false

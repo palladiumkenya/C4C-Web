@@ -1045,12 +1045,11 @@ export default {
 
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        const proxyurl = 'https://c4c-api.mhealthkenya.co.ke/'
-        axios.get(proxyurl + 'https://c4c-api.mhealthkenya.co.ke/api/exposures/all/')
-          .then((exp) => {
-            this.s = exp.data.data
-            if (exp.data.links.next != null) {
-              this.link = exp.data.links.next
+        axios.get(`exposures/all`)
+          .then((response) => {
+            this.s = response.data.data
+            if (response.data.links.next != null) {
+              this.link = response.data.links.next
               // this.c = exp.data.cadre.meta.total // total cadre
               this.loopT(this.link)
             } else {
