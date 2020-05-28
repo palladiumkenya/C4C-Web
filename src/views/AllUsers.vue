@@ -44,6 +44,19 @@
               single-line
               hide-details
             />
+
+            <v-flex
+              xs12
+              md2>
+              <v-btn
+                :loading="downloadLoading"
+                color="primary"
+                @click="handleDownload">
+                <v-icon left>mdi-download</v-icon>Export Excel
+              </v-btn>
+            </v-flex>
+
+
           </v-card-title>
 
           <v-data-table
@@ -100,6 +113,12 @@ export default {
       all_users: [],
       snackbar: false,
       result: '',
+
+      downloadLoading: false,
+      filename: `Users ${new Date().toISOString()}`,
+      autoWidth: true,
+      bookType: 'xlsx',
+
       headers: [
         {
           sortable: true,
@@ -165,8 +184,39 @@ export default {
         } else {
           i = 11
         }
-      }
+      } 
+    },
+
+    handleDownload () {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['ID', 'County', 'Sub County', 'Role', 'Cadre','Gender']
+        const filterVal = ['id', 'county', 'sub_county', 'role', 'cadre', 'gender']
+        const list = this.all_hcws
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson (filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'cadre') {
+          return v[j]
+        } else {
+          return v[j]
+        }
+      }))
+    }  
+
+    
+    
     }
   }
-}
+
 </script>

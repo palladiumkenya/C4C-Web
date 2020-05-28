@@ -12,8 +12,8 @@
       <v-flex
         sm3
         xs8
-        md4
-        lg4
+        md2
+        lg2
       >
         <template>
           <v-card
@@ -29,11 +29,12 @@
           </v-card>
         </template>
       </v-flex>
+
       <v-flex
         sm3
         xs8
-        md4
-        lg4
+        md2
+        lg2
       >
         <template>
           <v-card
@@ -49,11 +50,12 @@
           </v-card>
         </template>
       </v-flex>
+
       <v-flex
         sm3
         xs8
-        md4
-        lg4
+        md2
+        lg2
       >
 
         <template>
@@ -70,6 +72,69 @@
           </v-card>
         </template>
 
+      </v-flex>
+
+      <v-flex v-if="user.role_id === 1"
+        sm3
+        xs8
+        md2
+        lg2
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-home-outline</v-icon>
+              <h2 align="center">{{ all_facilities.length }}</h2>
+              <h5 align="center"> Number of Facilities</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex v-if="user.role_id === 1"
+        sm3
+        xs8
+        md2
+        lg2
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-map-marker</v-icon>
+              <h2 align="center">{{ all_counties.length }}</h2>
+              <h5 align="center">Number of Counties</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex v-if="user.role_id === 1"
+        sm3
+        xs8
+        md2
+        lg2
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-account-check</v-icon>
+              <h2 align="center">{{ partnerCount }}</h2>
+              <h5 align="center">Number Of Partners</h5>
+            </v-card-text>
+          </v-card>
+        </template>
       </v-flex>
       <!-- End Cards -->
 
@@ -504,6 +569,18 @@ export default {
     exposuresCount () {
       return this.scount
     },
+
+    countyCount () {
+      return this.county_count.length
+    },
+
+    facilityCount () {
+      return this.all_facilities.length
+    },
+
+    partnerCount () {
+      return this.partner_count
+    },
     ...mapGetters({
       user: 'auth/user',
       auth: 'auth/token',
@@ -606,6 +683,7 @@ export default {
         .then((facilities) => {
           console.log(facilities.data)
           this.all_facilities = facilities.data.data
+
           if (this.user.role_id === 5) {
             this.subCounties()
           }
@@ -616,6 +694,7 @@ export default {
       axios.get('counties')
         .then((counties) => {
           this.all_counties = counties.data.data
+
         })
         .catch(error => console.log(error.message))
     },

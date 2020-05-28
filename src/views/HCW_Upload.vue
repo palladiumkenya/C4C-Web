@@ -251,7 +251,6 @@ export default {
           consent: "1"
         })
           .then((response) => {
-            this.pre_out = 'You have been registered successfully, login to update your profile'
             this.output = response.data
             console.log(response)
             this.clearData()
@@ -260,7 +259,6 @@ export default {
             this.$router.push('/hcw_list')
           })
           .catch((error) => {
-            this.pre_out = 'Error, please try again'
             this.output = error
             this.snack('top', 'center')
           })
