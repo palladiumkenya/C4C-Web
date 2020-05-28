@@ -96,6 +96,7 @@
                 slot="progress"
                 indeterminate/>
             </template>
+             {{all_messages}}
 
             <template
               slot="items"
@@ -104,7 +105,7 @@
                 <td>{{ props.item.cadre.name }}</td>
                 <td>{{ props.item.created_by }}</td>
                 <td>{{ props.item.approved_by }}</td>
-                <td>{{ props.item.facility.name }}</td>
+                <td>{{ props.item.facility.name }}</td> 
                 <td>{{ props.item.created_at }}</td>
                 <td>{{ props.item.message }}</td>
                 
@@ -158,7 +159,7 @@ export default {
         {
           sortable: false,
           text: 'Facility',
-          value: 'facility_id'
+          value: 'facility'
         },
         {
           sortable: false,
@@ -185,7 +186,7 @@ export default {
   methods: {
     getBroadcast () {
       if (this.user.role_id === 1 || this.user.role_id === 5) {
-        axios.get('broadcasts/web/all')
+        axios.get(`broadcasts/web/all`)
           .then((broadcast) => {
             console.log(broadcast.data)
             this.all_messages = broadcast.data.data

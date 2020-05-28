@@ -58,7 +58,6 @@
                 >
                   <v-text-field
                     v-model="email"
-                    :rules="[rules.emailRules]"
                     label="Email Address"
                     class="purple-input">
                   </v-text-field>  
