@@ -4,12 +4,18 @@
     fluid
     grid-list-xl
   >
-    <v-layout
-      justify-center
+  <v-layout  
+    justify-center
       wrap>
 
+  <v-layout  
+    justify-center
+    v-if="user.role_id === 1 || user.role_id === 2"
+    wrap>    
+
+
       <!-- Start Cards -->
-      <v-flex
+      <v-flex 
         sm3
         xs8
         md2
@@ -23,8 +29,8 @@
           >
             <v-card-text>
               <v-icon class="mr-1" >mdi-account-group</v-icon>
-              <h2 align="center">{{ usersCount }}</h2>
-              <h5 align="center">Registered Health Care Workers</h5>
+              <h2 align="center">{{ aUsersCount }}</h2>
+              <h5 align="center">Users</h5>
             </v-card-text>
           </v-card>
         </template>
@@ -67,14 +73,14 @@
             <v-card-text>
               <v-icon class="mr-1">mdi-message</v-icon>
               <h2 align="center">{{ broadcastsCount }}</h2>
-              <h5 align="center">Broadcast Messages Sent</h5>
+              <h5 align="center">Broadcasts Sent </h5>
             </v-card-text>
           </v-card>
         </template>
 
       </v-flex>
 
-      <v-flex v-if="user.role_id === 1"
+      <v-flex 
         sm3
         xs8
         md2
@@ -89,13 +95,13 @@
             <v-card-text>
               <v-icon class="mr-1">mdi-home-outline</v-icon>
               <h2 align="center">{{ all_facilities.length }}</h2>
-              <h5 align="center"> Number of Facilities</h5>
+              <h5 align="center"> Facilities</h5>
             </v-card-text>
           </v-card>
         </template>
       </v-flex>
 
-      <v-flex v-if="user.role_id === 1"
+      <v-flex 
         sm3
         xs8
         md2
@@ -110,13 +116,13 @@
             <v-card-text>
               <v-icon class="mr-1">mdi-map-marker</v-icon>
               <h2 align="center">{{ all_counties.length }}</h2>
-              <h5 align="center">Number of Counties</h5>
+              <h5 align="center">Counties</h5>
             </v-card-text>
           </v-card>
         </template>
       </v-flex>
 
-      <v-flex v-if="user.role_id === 1"
+      <v-flex 
         sm3
         xs8
         md2
@@ -131,12 +137,88 @@
             <v-card-text>
               <v-icon class="mr-1">mdi-account-check</v-icon>
               <h2 align="center">{{ partnerCount }}</h2>
-              <h5 align="center">Number Of Partners</h5>
+              <h5 align="center">Partners</h5>
             </v-card-text>
           </v-card>
         </template>
       </v-flex>
       <!-- End Cards -->
+  </v-layout>
+
+    <v-layout  
+    justify-center
+    v-else
+    wrap> 
+
+      <!-- Start Cards -->
+
+      <v-flex 
+        sm3
+        xs8
+        md4
+        lg4
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1" >mdi-account-group</v-icon>
+              <h2 align="center">{{ usersCount }}</h2>
+              <h5 align="center">Total Number Of Users</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex
+        sm3
+        xs8
+        md4
+        lg4
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-file-chart</v-icon>
+              <h2 align="center">{{ exposuresCount }}</h2>
+              <h5 align="center">Reported Exposures</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex
+        sm3
+        xs8
+        md4
+        lg4
+      >
+
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-message</v-icon>
+              <h2 align="center">{{ broadcastsCount }}</h2>
+              <h5 align="center">Broadcast Messages Sent</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+
+      </v-flex>
+
+      <!-- End Cards -->
+    </v-layout>
 
       <template>
         <!-- Start filters -->
@@ -149,7 +231,7 @@
             >
               <template>
                 <v-combobox
-                  v-if="user.role_id === 1"
+                  v-if="user.role_id === 1 || user.role_id === 2"
                   v-model="counties"
                   :items="all_counties"
                   item-text="name"
@@ -395,6 +477,7 @@
       <!-- Start Maps -->
         <Map v-if="user.role_id === 1 && !isLoading" :exposures="s" :users="userz" />
       <!-- End Maps -->
+
     </v-layout>
   </v-container>
 </template>
@@ -404,7 +487,7 @@ import { Chart } from 'highcharts-vue'
 import axios from 'axios'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import Highcharts from 'highcharts'
+import Highcharts, { error } from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import { mapGetters, mapActions } from 'vuex'
 import Map from '@/views/Map.vue'
@@ -546,7 +629,10 @@ export default {
       load: true,
       u: 0,
       b: 0,
+      p: 0,
       scount: 0,
+      partners: 0,
+      musers: 0,
       broad: [],
       fac_filt: [],
       exp_filt: [],
@@ -563,6 +649,15 @@ export default {
     broadcastsCount () {
       return this.b
     },
+
+    aUsersCount () {
+      return this.musers
+    },
+
+    partnerCount () {
+      return this.p
+    },
+
     usersCount () {
       return this.u
     },
@@ -570,17 +665,6 @@ export default {
       return this.scount
     },
 
-    countyCount () {
-      return this.county_count.length
-    },
-
-    facilityCount () {
-      return this.all_facilities.length
-    },
-
-    partnerCount () {
-      return this.partner_count
-    },
     ...mapGetters({
       user: 'auth/user',
       auth: 'auth/token',
@@ -630,10 +714,12 @@ export default {
         this.isLoading = false
       }
     }
-    this.getBroadcasts()
+    this.getUsers()
+    this.getPartners()
     // this.getAllUsers()
     this.getFacilities()
     this.getCounties()
+    this.getBroadcasts()
     axios.get('cadres')
       .then((c) => {
         this.cadres = c.data.data
@@ -1122,11 +1208,47 @@ export default {
       return counter
     },
 
+    getPartners () {
+      axios.get('partners') 
+        .then((all_partners) => {
+          this.partners = all_partners.data.data
+
+          this.p = all_partners.data.meta.total
+
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getUsers () {
+        axios.get('users') 
+          .then((users) => {
+            this.all_users = users.data.data
+
+            this.musers= users.data.meta.total
+
+            this.loopT(users.data.links.next) 
+          })
+          .catch(error => console.log(error.message))
+    },
+
+      async loopT (l) {
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.musers = this.musers.concat(response.data.data)
+        } else {
+          i = 11
+        }
+      } 
+    },
+
     getBroadcasts () {
-      if (this.user.role_id === 1 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 2) {
         axios.get('broadcasts/web/all')
           .then((users) => {
-            if (this.user.role_id === 5) {
+            if (this.user.role_id === 1 || this.user.role_id === 2) {
               this.broad = users.data.data
               this.loopBroad(users.data.links.next)
             } else {
@@ -1164,6 +1286,9 @@ export default {
   }
 
 }
+
+
+
 </script>
 
 <style scoped>

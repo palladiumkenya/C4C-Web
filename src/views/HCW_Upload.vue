@@ -215,11 +215,7 @@ export default {
         this.pre_out = 'Mobile must be filled out'
         this.snack('top', 'center')
         return false
-      } else if (this.email === '') {
-        this.pre_out = 'Email must be filled out'
-        this.snack('top', 'center')
-        return false
-      } 
+      }  
       else if (this.gender === '') {
         this.pre_out = 'gender must be filled out'
         this.snack('top', 'center')

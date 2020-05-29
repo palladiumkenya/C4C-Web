@@ -69,34 +69,35 @@
         </material-card> <br>
 
         <material-card>
-            <v-card-text>
-              <div/>
-              <p class="display-1 text--primary">
+
+            <v-layout wrap>
+            <v-flex
+              xs10
+              md6
+            >  
+
+            <p class="display-1 text--primary">
                 Admins List
-              </p>
+            </p>
+            </v-flex>  
+
+            <v-flex
+              xs10
+              md6
+            >
               <v-btn
                 :loading="downloadLoading"
-                style="margin:0 0 20px 20px;"
                 color="primary"
                 @click="handleDownload">
                 <v-icon left>mdi-download</v-icon>Export Excel
               </v-btn>
-              <v-combobox
-                v-model="facility_id"
-                :rules="[rules.required]"
-                :items="facilities"
-                label="Facility"
-                class="purple-input"
-              />
-              <v-btn
-                color="secondary"
-                @click="DeviceList">View List
-              </v-btn>
-            </v-card-text>
+            </v-flex>  
+              
+            </v-layout>
 
               <v-data-table 
                 :headers="headers"
-                :items="items"
+                :items="admins"
                 :loading="true"
                 :rows-per-page-items="rowsPerPageItems"
                 class="elevation-1"
@@ -110,7 +111,6 @@
                   v-text="header.text"
                 />
               </template>
-
 
               <template
                   slot="items"
@@ -165,7 +165,6 @@ export default {
       switch1: true,
       name: '',
       load:true,
-      all_users: [],
       facility_id: '',
       facilities: [],
       headers: [
@@ -219,6 +218,7 @@ export default {
     this.Facilities()
     this.Admins()
   },
+
   methods: {
     checkData () {
       if (this.facility_id == '') {
@@ -232,15 +232,11 @@ export default {
       } else { return true }
     },
     Admins () {
-      axios.get('users')
+      axios.get('facility/admins/all')
         .then((users) => {
           console.log(users.data)
-          this.all_users = users.data.data
-          if (users.data.links.next) {
-            this.loopT(users.data.links.next)
-          } else {
-            this.FilterAdmns()
-          }
+
+          this.admins = users.data.data
         })
         .catch(error => console.log(error.message))
     },
@@ -257,16 +253,7 @@ export default {
       }
       this.FilterAdmns()
     },
-    FilterAdmns () {
-      for (var a in this.all_users) {
-        if (this.all_users[a].role_id == 4) {
-          var p = new Object()
-          p.text = this.all_users[a].first_name + ' ' + this.all_users[a].surname + ' ' + this.all_users[a].email
-          p.value = this.all_users[a]
-          this.admins.push(p)
-        }
-      }
-    },
+    
     Facilities () {
       axios.get('facilities')
         .then((resp) => {
@@ -284,10 +271,13 @@ export default {
 
     DeviceList () {
       // setTimeout(function () {
-      axios.get(`facility_admin/${this.facility_id.value.id}`)
-        .then((exp) => {
-          this.items = exp.data.data
-          console.log(exp.data)
+      axios.get(`users`)
+        .then((all_admins) => {
+          this.admins = all_admins.data.data
+
+          this.items = admins.filter(admin => { return admin.role_id.includes('4') })
+
+          console.log(all_admins.data)
           console.log(this.facility_id.value.id)
         })
         .catch(error => console.log(error.message))
