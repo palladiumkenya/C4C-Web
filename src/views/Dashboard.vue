@@ -1225,8 +1225,9 @@ export default {
           .then((users) => {
             if (this.user.role_id === 1 || this.user.role_id === 2) {
               this.total_users = users.data.data
+              
               this.loopBroad(users.data.links.next)
-            } else {
+
               this.musers = users.data.meta.total
             }
           })
