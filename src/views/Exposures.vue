@@ -9,14 +9,14 @@
         justify-center
         wrap>
         <v-flex
-          v-if="user.role_id === 1"
+          v-if="user.role_id === 1 || user.role_id === 2"
           xs12
           md2
         >
           <template>
             <v-combobox
-              v-model="counties"
-              :items="all_counties"
+oom
+zoo              :items="all_counties"
               item-text="name"
               item-value="id"
               label="Select County"

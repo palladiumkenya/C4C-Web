@@ -634,6 +634,7 @@ export default {
       partners: 0,
       musers: 0,
       broad: [],
+      total_users: [],
       fac_filt: [],
       exp_filt: [],
       us_filt: [],
@@ -1222,11 +1223,12 @@ export default {
     getUsers () {
         axios.get('users') 
           .then((users) => {
-            this.all_users = users.data.data
-
-            this.musers= users.data.meta.total
-
-            this.loopT(users.data.links.next) 
+            if (this.user.role_id === 1 || this.user.role_id === 2) {
+              this.total_users = users.data.data
+              this.loopBroad(users.data.links.next)
+            } else {
+              this.musers = users.data.meta.total
+            }
           })
           .catch(error => console.log(error.message))
     },
@@ -1247,19 +1249,17 @@ export default {
     getBroadcasts () {
       if (this.user.role_id === 1 || this.user.role_id === 2) {
         axios.get('broadcasts/web/all')
-          .then((users) => {
-            if (this.user.role_id === 1 || this.user.role_id === 2) {
-              this.broad = users.data.data
-              this.loopBroad(users.data.links.next)
-            } else {
-              this.b = users.data.meta.total
-            }
+          .then((broadcasts) => {
+              this.broad = broadcasts.data.data
+
+              this.b = broadcasts.data.meta.total
+            
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
-          .then((users) => {
-            this.b = users.data.meta.total
+          .then((broadcasts) => {
+            this.b = broadcasts.data.meta.total
           })
           .catch(error => console.log(error.message))
       }

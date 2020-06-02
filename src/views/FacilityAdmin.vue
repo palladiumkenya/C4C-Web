@@ -21,12 +21,12 @@
               Kindly fill all the required fields
             </div>
           </v-card-text>
-          <v-form @submit="AddDevice">
+          <v-form @submit="AddAdmin">
             <v-container py-0>
               <v-layout wrap>
                 <v-flex
                   xs12
-                  md4
+                  md6
                 >
                   <v-combobox
                     v-model="facility_id"
@@ -40,13 +40,14 @@
                 </v-flex>
                 <v-flex
                   xs12
-                  md8
+                  md6
                 >
                   <v-combobox
-                    v-model="name"
+                    v-model="user_id"
                     :rules="[rules.required]"
-                    :items="admins"
-                    item-value=""
+                    :items="all_users"
+                    item-text="surname"
+                    item-value="id"
                     label="Name"
                     class="green-input"/>
                 </v-flex>
@@ -85,12 +86,12 @@
               xs10
               md6
             >
-              <v-btn
+              <!-- <v-btn
                 :loading="downloadLoading"
                 color="primary"
                 @click="handleDownload">
                 <v-icon left>mdi-download</v-icon>Export Excel
-              </v-btn>
+              </v-btn> -->
             </v-flex>  
               
             </v-layout>
@@ -120,7 +121,6 @@
                   <td>{{ item.first_name }}</td>
                   <td>{{ item.surname }}</td>
                   <td>{{ item.email }}</td>
-                  <td>{{ item.created_at }}</td>
                 </tr>  
                 </template>
               </v-data-table>
@@ -166,6 +166,7 @@ export default {
       name: '',
       load:true,
       facility_id: '',
+      user_id: '',
       facilities: [],
       headers: [
         {
@@ -182,15 +183,11 @@ export default {
           sortable: false,
           text: 'Email',
           value: 'email'
-        },
-        {
-          sortable: false,
-          text: 'Created On',
-          value: 'created_at'
         }
       ],
       items: [],
       facilities_all: [],
+      all_users: [],
       admins: [],
       rules: {
         required: value => !!value || 'Required.'
@@ -217,6 +214,7 @@ export default {
   created () {
     this.Facilities()
     this.Admins()
+    this.UsersList()
   },
 
   methods: {
@@ -246,7 +244,7 @@ export default {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
-          this.all_users = this.all_users.concat(response.data.data)
+          this.all_users = this.admins.concat(response.data.data)
         } else {
           i = 11
         }
@@ -269,22 +267,19 @@ export default {
       
     },
 
-    DeviceList () {
+    UsersList () {
       // setTimeout(function () {
       axios.get(`users`)
-        .then((all_admins) => {
-          this.admins = all_admins.data.data
+        .then((users) => {
+          this.all_users = users.data.data
 
-          this.items = admins.filter(admin => { return admin.role_id.includes('4') })
-
-          console.log(all_admins.data)
-          console.log(this.facility_id.value.id)
+          console.log(users.data)
         })
         .catch(error => console.log(error.message))
       // }, 1000);
     },
 
-    AddDevice (e) {
+    AddAdmin(e) {
       e.preventDefault()
       if (this.checkData()) {
         // console.log(this.facility_id.value.id)
@@ -297,7 +292,7 @@ export default {
             this.resp = Boolean(response.data.success)
             this.snack('top', 'center')
             this.items = []
-            this.DeviceList()
+            this.Admins()
           })
           .catch((error) => {
             this.output = error

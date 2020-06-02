@@ -110,7 +110,6 @@
                   <td>{{ props.item.Cadre }}</td>
                   <td>{{ props.item.Date_Of_Birth }}</td>
                   <td>{{ props.item.National_ID }}</td>
-                  <td>{{ props.item.Password }}</td>
 
                 </tr>
               </template>
@@ -233,11 +232,6 @@ export default {
           text: 'ID Number',
           value: 'National_ID'
         },
-        {
-          sortable: false,
-          text: 'Password',
-          value: 'Password'
-        }
       ],
       all_facilities: [],
       facility: null
@@ -250,19 +244,33 @@ export default {
   },
 
   created () {
+    if (this.user.role_id === 4) {
+      this.facility = this.user.hcw.facility_id
+      console.log(this.facility)
+    } else {
       this.getFacilities()
+    }
   },
+
 
   methods: {
 
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          this.all_facilities = facilities.data.data
-          
+          if (this.user.role_id === 1 || this.user.role_id === 2 ) {
+            this.all_facilities = facilities.data.data
+          } else {
+            for (var a in facilities.data.data) {
+              if (this.user.hcw.county === facilities.data.data[a].county) {
+                this.all_facilities.push(facilities.data.data[a])
+              }
+            }
+          }
         })
         .catch(error => console.log(error.message))
     },
+
 
     postUsers (e) {
       e.preventDefault()
@@ -287,18 +295,6 @@ export default {
           this.output_pre = `ERROR: Fill gender for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].Password === undefined) {
-          this.output_pre = `ERROR: Fill password for record: ${u + 1}`
-          this.snack('bottom', 'center')
-          return
-        } else if (this.tableData[u].Password.toString().length < 6) {
-          this.output_pre = `ERROR: Password for record: ${u + 1} should be more the 5 characters`
-          this.snack('bottom', 'center')
-          return
-        } else if (this.tableData[u].Facility_Department === undefined) {
-          this.output_pre = `ERROR: Fill Department for record: ${u + 1}`
-          this.snack('bottom', 'center')
-          return
         } else if (this.tableData[u].Cadre === undefined) {
           this.output_pre = `ERROR: Fill cadre for record: ${u + 1}`
           this.snack('bottom', 'center')
@@ -307,46 +303,43 @@ export default {
           this.output_pre = `ERROR: Fill date of birth for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].Password === undefined) {
-          this.output_pre = `ERROR: Fill password for record: ${u + 1}`
-          this.snack('bottom', 'center')
-          return
-        }
+        } 
       }
       this.loading = true
       this.pushData()
     },
 
     pushData () {
-        if (this.user.role_id === 1 || this.user.role_id) {
-        this.facility = this.facility.id
-      } else if (this.user.role_id === 4) {
-          this.facility = this.user.hcw.facility_id
-      }
-  
+      if (this.user.role_id === 1 || this.user.role_id === 2) {
+            this.facility = this.facility.id
+          } else {
+            this.facility = this.user.hcw.facility_id
+          }
+        
       for (var v in this.tableData) {
         console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
-        axios.post('auth/signup', {
-          first_name: this.tableData[v].FirstName,
-          surname: this.tableData[v].Surname,
-          msisdn: this.tableData[v].Mobile.toString(),
-          role_id: '3',
-          gender: this.tableData[v].Gender,
-          email: this.tableData[v].Email,
+
+        axios.post('auth/bulk/register', {
+          facility_id: this.facility,
           facility_department: this.tableData[v].Facility_Department,
           cadre: this.tableData[v].Cadre,
+          first_name: this.tableData[v].FirstName,
+          surname: this.tableData[v].Surname,
+          email: this.tableData[v].Email,
+          msisdn: this.tableData[v].Mobile.toString(),
+          gender: this.tableData[v].Gender,
+          dob: this.tableData[v].Date_Of_Birth,          
           id_no: this.tableData[v].National_ID,
-          dob: this.tableData[v].Date_Of_Birth,
-          password: this.tableData[v].Password.toString(),
-
-          password_confirmation: this.tableData[v].Password.toString(),
           consent: '1',
+          password: this.tableData[v].Mobile.toString(),
           
           message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` 
         })
           .then((response) => {
             this.output = response.data
+
+
             console.log(response)
             this.resp = Boolean(response.data.success)
             if (!this.resp) {
@@ -382,10 +375,14 @@ export default {
       this.is_data = false
 
       for (var r in results) {
+
+        var millisPerDay = 86400000
+        var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
+        results[r].Date_Of_Birth = new Date(jsTimestamp).toISOString().substr(0, 10)
         
-        if (String(results[r].mobile).slice(0, 3) !== '254' && String(results[r].mobile).slice(0, 1) === '7') {
-          results[r].mobile = '254' + String(results[r].mobile)
-        } else if (String(results[r].mobile).length < 5) {
+        if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
+          results[r].Mobile = '254' + String(results[r].Mobile)
+        } else if (String(results[r].Mobile).length < 5) {
           console.log(results.splice(r, 1))
           break
         }

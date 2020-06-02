@@ -16,7 +16,7 @@
           >
           <template>
             <v-combobox
-              v-if="user.role_id === 1"
+              v-if="user.role_id === 1 || user.role_id === 2 "
               v-model="counties"
               :items="all_counties"
               item-text="name"
