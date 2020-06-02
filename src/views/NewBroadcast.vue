@@ -269,7 +269,7 @@ export default {
           .then((response) => {
             this.output = response.data
             this.alert = true
-            this.$router.push('/broadcast')
+            this.$router.push('/all_broadcasts')
           })
           .catch(error => {
             this.output = error

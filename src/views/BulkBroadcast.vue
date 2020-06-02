@@ -159,7 +159,7 @@ export default {
           this.output = response.data
           this.resp = Boolean(response.data.success)
           this.alert = true
-          this.$router.push('/broadcast')
+          this.$router.push('/all_broadcasts')
         })
         .catch(error => {
           this.output = error
