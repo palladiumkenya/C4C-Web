@@ -185,7 +185,7 @@ export default {
 
   methods: {
     getBroadcast () {
-      if (this.user.role_id === 1 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get(`broadcasts/web/all`)
           .then((broadcast) => {
             console.log(broadcast.data)

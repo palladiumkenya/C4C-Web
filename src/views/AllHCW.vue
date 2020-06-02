@@ -168,7 +168,7 @@ export default {
   methods: {
 
     getHCW () {
-      if (this.user.role_id === 1 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 5 || this.user.role_id === 2) {
         axios.get('hcw')
           .then((workers) => {
             console.log(workers.data)

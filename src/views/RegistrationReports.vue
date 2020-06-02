@@ -18,7 +18,7 @@
           >
             <template>
               <v-combobox
-                v-if="user.role_id === 1"
+                v-if="user.role_id === 1 || user.role_id === 2 "
                 v-model="counties"
                 :items="all_counties"
                 item-text="name"
@@ -758,7 +758,7 @@ export default {
     },
 
     getUsers () {
-      if (this.user.role_id === 1 || this.user.role_id == 5) {
+      if (this.user.role_id === 1 || this.user.role_id == 5 || this.user.role_id == 2) {
         axios.get('hcw')
           .then((exp) => {
             this.s = exp.data.data
