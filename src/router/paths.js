@@ -131,6 +131,20 @@ export default [
     }
   },
   {
+    path: '/bulk-signup-facility',
+    name: 'Bulk Signup Facility',
+    view: 'BulkSignupFacility',
+    meta: { title: 'Upload Excel Sheet' },
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
     path: '/feed-back',
     name: 'Feedback',
     view: 'Feedback',
