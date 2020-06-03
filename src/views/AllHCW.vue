@@ -1,5 +1,5 @@
 <template>
-   <div>
+   <div v-if="user.role_id ===1 || user.role_id ===2">
     <v-toolbar-title
      tabs>
      
@@ -230,9 +230,115 @@
         </v-container>
 
       </v-tab-item>
-  </v-tabs-items>
+   </v-tabs-items>
   </div>
+
+  
+  <v-container v-else
+    fill-height
+    fluid
+    grid-list-xl
+  >
+    <v-layout
+      justify-center
+      wrap
+    >
+
+      <v-flex
+        md12
+      >
+
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
+        <v-card>
+          <v-card-title>
+            All Users
+            <v-spacer/>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            />
+
+            <v-flex
+              xs12
+              md2>
+              <v-btn
+                :loading="downloadLoading"
+                color="primary"
+                @click="handleDownload">
+                <v-icon left>mdi-download</v-icon>Export Excel
+              </v-btn>
+            </v-flex>
+
+
+          </v-card-title>
+
+          <v-data-table
+                  :headers="headers"
+                  :items="all_hcws"
+                  :rows-per-page-items="rowsPerPageItems"
+                  :search="search"
+                  :loading="true"
+                  class="elevation-1"
+                  item-key="id"
+                >
+
+                <template slot='no-data'>
+                    <v-progress-linear slot='progress' indeterminate></v-progress-linear>
+                </template>
+
+                  <template
+                    slot="items"
+                    slot-scope="props">
+                    <tr @click="props.expanded = !props.expanded">
+                      <td>{{ props.item.first_name }}</td>
+                      <td>{{ props.item.surname }}</td>
+                      <td>{{ props.item.facility_name }}</td>
+                      <td>{{ props.item.department }}</td>
+                      <td>{{ props.item.cadre }}</td>
+                      <td>{{ props.item.dob }}</td>
+                    </tr>
+
+          </template>
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+
+          </v-data-table>
+
+        </v-card>
+
+      </v-flex>
+
+    </v-layout>
+  </v-container>
 </template>
+
 
 <script>
 import axios from 'axios'
