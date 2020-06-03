@@ -30,7 +30,7 @@
             <v-card-text>
               <v-icon class="mr-1" >mdi-account-group</v-icon>
               <h2 align="center">{{ aUsersCount }}</h2>
-              <h5 align="center">Users</h5>
+              <h5 align="center">Healthcare Workers</h5>
             </v-card-text>
           </v-card>
         </template>

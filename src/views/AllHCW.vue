@@ -105,7 +105,7 @@ export default {
       isLoading: true,
       snackbar: false,
       result: '',
-      rowsPerPageItems: [100, 2000, 10000],
+      rowsPerPageItems: [1000, 5000, 10000],
       headers: [
         {
           sortable: false,

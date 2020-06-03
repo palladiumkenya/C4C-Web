@@ -38,7 +38,7 @@
                     </v-btn>
                   </v-flex>
                   <v-flex
-                    v-if="user.role_id !== 4"
+                    v-if="user.role_id === 1 || user.role_id === 2"
                     xs12
                     md4
                   >
@@ -376,23 +376,19 @@ export default {
 
       for (var r in results) {
 
-        function xlSerialToJsDate(xlSerial){
-        // milliseconds since 1899-31-12T00:00:00Z, corresponds to xl serial 0.
         var xlSerialOffset = -2209075200000; 
 
         var elapsedDays;
 
-        if (xlSerial < 61) {
-          elapsedDays = xlSerial;
+        if (results[r].Date_Of_Birth  < 61) {
+          elapsedDays = results[r].Date_Of_Birth ;
         }
         else {
-          elapsedDays = xlSerial - 1;
-        
+          elapsedDays = results[r].Date_Of_Birth  - 1;
+        }
         var millisPerDay = 86400000
         var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
         results[r].Date_Of_Birth = new Date(jsTimestamp).toISOString().substr(0, 10)
-      }
-        }  
 
         if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
           results[r].Mobile = '254' + String(results[r].Mobile)
