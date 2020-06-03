@@ -150,6 +150,11 @@ export default {
           text: 'Dashboard'
         },
         {
+          to: '/all_broadcasts',
+          icon: 'mdi-account-switch',
+          text: 'Broadcasts'
+        },
+        {
           icon: 'mdi-account',
           text: 'Users',
           subLinks: [
@@ -158,12 +163,12 @@ export default {
               to: '/add-user',
               icon: 'mdi-account-plus'
             },
-            {
-              to: '/users_list',
-              icon: 'mdi-account-multiple-plus',
-              text: 'View Users'
-            },
-            {
+            // {
+            //   to: '/users_list',
+            //   icon: 'mdi-account-multiple-plus',
+            //   text: 'View Users'
+            // },
+             {
               to: '/hcw_list',
               icon: 'mdi-account-group',
               text: 'Health Care Workers'
@@ -207,11 +212,6 @@ export default {
               text: 'Other Diseases'
             }
           ]
-        },
-        {
-          to: '/all_broadcasts',
-          icon: 'mdi-account-switch',
-          text: 'Broadcasts'
         },
         {
           text: 'Manage Facility',

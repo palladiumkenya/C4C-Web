@@ -107,7 +107,7 @@ export default {
 
   data () {
     return {
-      rowsPerPageItems: [1000, 5000, 10000],
+      rowsPerPageItems: [500, 5000, 10000],
       search: '',
       isLoading: true,
       all_users: [],

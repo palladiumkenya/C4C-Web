@@ -475,7 +475,7 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-        <Map v-if="user.role_id === 1 && !isLoading" :exposures="s" :users="userz" />
+        <Map v-if="user.role_id === 1 || user.role_id === 2 && !isLoading" :exposures="s" :users="userz" />
       <!-- End Maps -->
 
     </v-layout>
@@ -987,14 +987,19 @@ export default {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get(`exposures/all`)
           .then((response) => {
+
+            this.s = response.data.data
+            this.link = response.data.links.next
+            this.loopT(this.link)
+
+            console.log(response.data)
+
             if (this.user.role_id === 5) {
               this.scount = 'loading...'
             } else {
               this.scount = response.data.meta.total
             }
-            this.s = response.data.data
-            this.link = response.data.links.next
-            this.loopT(this.link)
+            
           })
           .catch(error => {
             console.log(error.message)
