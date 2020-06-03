@@ -465,10 +465,8 @@
       </v-flex>
       <!-- End Graphs -->
       <v-flex
-        sm3
-        xs8
-        md8
-        lg12
+        xs12
+        md12
       >
         <highcharts
           ref="barChart"
@@ -688,19 +686,17 @@ export default {
       this.subCounties()
       this.active = false
       if (this.curr === 0) {
-        console.log(this.curr)
         this.getAllUsers()
       } else if(this.curr !== this.last) {
-        console.log('nn',this.curr)
         this.loopG(this.next_link)
       } else {
-        console.log('c',this.curr)
         this.userz = this.all_users
         this.u = this.all_users.length
         this.getTest(this.all_users)
         this.isLoading = false
       }
     }
+    // this.getExp()
     if (this.e.length === 0) { this.getExp() } else { this.getMonth(this.e); this.scount = this.e.length; this.s = this.e }
     if (this.user.role_id !== 5) {
       if (this.us_no === 0) {
@@ -768,7 +764,6 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
 
           if (this.user.role_id === 5) {
@@ -994,7 +989,12 @@ export default {
             }
             this.s = response.data.data
             this.link = response.data.links.next
-            this.loopT(this.link)
+            if (this.link) {
+              this.loopT(this.link)
+            } else {
+              this.getMonth(this.s)
+              this.storeExp(this.s)
+            }
           })
           .catch(error => {
             console.log(error.message)
@@ -1005,7 +1005,13 @@ export default {
             this.scount = exp.data.meta.total
             this.s = exp.data.data
             this.link = exp.data.links.next
-            this.loopT(this.link)
+            if (this.link) {
+              this.loopT(this.link)
+            }
+            else {
+              this.getMonth(this.s)
+              this.storeExp(this.s)
+            }
           })
           .catch(error => console.log(error.message))
       }
@@ -1020,7 +1026,7 @@ export default {
             l = response.data.links.next
             this.s = this.s.concat(response.data.data)
             this.storeExp(this.s)
-            this.getMonth(this.e)
+            this.getMonth(this.s)
           } else {
             i = 11
           }
@@ -1051,7 +1057,6 @@ export default {
     },
 
     getMonth (list) {
-      // console.log(list)
       var wdata = []
       this.barOptionsTime.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var i in this.barOptionsTime.xAxis.categories) {
@@ -1062,7 +1067,7 @@ export default {
 
     getNumt (name, sa) {
       var counter = 0
-     var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       for (var xt in sa) {
         var m = c.indexOf(sa[xt].exposure_date.slice(0, 3)) + 1
         if (m < 10) { m = '0' + m }
@@ -1234,7 +1239,7 @@ export default {
           .catch(error => console.log(error.message))
     },
 
-      async loopT (l) {
+    async loopT (l) {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
