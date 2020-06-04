@@ -288,7 +288,7 @@ export default {
         formData.append('body', this.editorData)
         if (this.user.role.id === 4) {
           formData.append('facility_id', this.user.hcw.facility_id)
-        } else if (this.user.role.id === 1) {
+        } else if (this.user.role.id === 1 || user.role.id ===2) {
           formData.append('facility_id', this.facility.id)
         }
 
