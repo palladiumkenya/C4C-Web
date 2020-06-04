@@ -20,8 +20,9 @@
               <p class="display-1 text--primary">
                 New Bulk Broadcast
               </p>
+
               <div class="text--primary">
-                Kindly fill all the required fields
+                If you are uploading an exel, the column name of the phone numbers should be 'mobile'
               </div>
           </v-card-text>
 

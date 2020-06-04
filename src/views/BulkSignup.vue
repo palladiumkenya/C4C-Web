@@ -18,6 +18,17 @@
           full-width
           title="All Users"
         >
+
+        <v-card-text>
+              <p class="display-1 text--primary">
+                Bulk Signup For Users
+              </p>
+
+              <div class="text--primary">
+                If you are uploading an exel, the column names should be 'first_name, surname, mobile, gender, password, email', all in small letters.
+              </div>
+          </v-card-text>
+
           <div class="app-container">
             <upload-excel-component
               :on-success="handleSuccess"
