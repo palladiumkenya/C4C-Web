@@ -49,7 +49,7 @@
                   md8>
                   <label>Facility:</label>
 
-                  <div v-if="user.role.id === 4">
+                  <div v-if="user.role_id === 4">
                     <v-chip
                       class="ma-2"
                       x-large
@@ -58,7 +58,7 @@
                     </v-chip>
                   </div>
 
-                  <div v-else-if="user.role.id === 1 || user.role.id === 2">
+                  <div v-else-if="user.role_id === 1 || user.role_id === 2">
                     <v-combobox
                       v-model="facility"
                       :items="all_facilities"
@@ -286,9 +286,11 @@ export default {
         formData.append('image_file', this.file)
         formData.append('title', this.title)
         formData.append('body', this.editorData)
-        if (this.user.role.id === 4) {
+        if (this.user.role_id === 4) {
           formData.append('facility_id', this.user.hcw.facility_id)
-        } else if (this.user.role.id === 1 || user.role.id ===2) {
+        } else if (this.user.role_id === 1) {
+          formData.append('facility_id', this.facility.id)
+        } else if (this.user.role_id === 2) {
           formData.append('facility_id', this.facility.id)
         }
 

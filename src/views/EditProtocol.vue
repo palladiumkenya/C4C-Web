@@ -293,7 +293,7 @@ export default {
           this.output = response.data
           this.alert = true
 
-          this.$router.push('/protocals')
+          this.$router.push('/protocols')
         })
         .catch(error => {
           this.output = error
