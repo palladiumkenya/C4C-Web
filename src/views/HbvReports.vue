@@ -50,7 +50,6 @@
 
             </template>
           </v-flex>
-
           <v-flex
             xs12
             md6
@@ -61,9 +60,9 @@
 
               <v-combobox
                 v-if="user.role_id !== 4"
-                v-model="facility"
-                :items="fac"
-                item-text="partner"
+                v-model="partner"
+                :items="all_partners"
+                item-text="name"
                 item-value="id"
                 label="Select Partner"
                 multiple
@@ -248,6 +247,7 @@ export default {
       minDate: '2017-01-01',
       endDate: new Date().toISOString().substr(0, 10),
       facility: '',
+      partner: '',
       counties: '',
       subcounties: '',
       fac: [],
@@ -255,6 +255,7 @@ export default {
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
       all_subcounties: [],
+      all_partners: [],
       active: true,
       active_fac: true,
       active_level: true,
@@ -337,6 +338,7 @@ export default {
     this.getImmunizations()
     this.getFacilities()
     this.getCounties()
+    this.getPartners()
   },
   methods: {
     onCancel() {
@@ -537,6 +539,14 @@ export default {
           })
           .catch(error => console.log(error.message))
       }
+    },
+
+    getPartners () {
+      axios.get('partners') 
+        .then((partners) => {
+          this.all_partners = partners.data.data
+        })
+        .catch(error => console.log(error.message))
     },
     async loopT (l) {
       var i

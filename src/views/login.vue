@@ -19,8 +19,8 @@
                 <div class="layout column align-center">
                   <v-img
                     :src="logo"
-                    width="180"
-                    height="180"/>
+                    width="150"
+                    height="150"/>
                   <h3 class="flex my-4 clo">Care for the Carer Login</h3>
                 </div>
                 <form>
@@ -61,7 +61,7 @@
        <v-footer
           id="core-footer"
           absolute
-          height="82"
+          height="60"
         >
           <div class="footer-items">
             <span

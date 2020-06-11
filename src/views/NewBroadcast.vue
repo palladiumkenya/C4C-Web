@@ -34,7 +34,7 @@
               <v-layout wrap>
 
                 <v-flex
-                  v-if="user.role_id === 1 || user.role_id == 5"
+                  v-if="user.role_id === 1 || user.role_id === 2 || user.role_id == 5"
                   xs12
                 >
                   <v-combobox
@@ -260,7 +260,7 @@ export default {
 
     postBroadcast (e) {
       e.preventDefault()
-      if (this.user.role_id === 1 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 2 ||this.user.role_id === 5) {
         axios.post('broadcasts/web/create', {
           facility_id: this.facility.id,
           cadres: this.cadres.map(item => item.id),

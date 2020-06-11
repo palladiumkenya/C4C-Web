@@ -274,8 +274,8 @@
                 <v-combobox
                   v-if="user.role_id != 4"
                   v-model="partner"
-                  :items="fac"
-                  item-text="partner"
+                  :items="partners"
+                  item-text="name"
                   item-value="id"
                   label="Select Partner"
                   multiple
@@ -473,7 +473,7 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-        <Map v-if="user.role_id === 1 || user.role_id === 2 && !isLoading" :exposures="s" :users="userz" />
+        <Map v-if="(user.role_id === 1 || user.role_id === 2) && !isLoading" :exposures="s" :users="userz" />
       <!-- End Maps -->
 
     </v-layout>

@@ -61,9 +61,9 @@
             <template>
               <v-combobox
                 v-if="user.role_id !== 4"
-                v-model="facility"
-                :items="fac"
-                item-text="partner"
+                v-model="partner"
+                :items="all_partners"
+                item-text="name"
                 item-value="id"
                 label="Select Partner"
                 multiple
@@ -389,12 +389,14 @@ export default {
       endDate: new Date().toISOString().substr(0, 10),
       facility: '',
       counties: '',
+      partner: '',
       subcounties: '',
       fac: [],
       all_facilities: [],
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
       all_subcounties: [],
+      all_partners: [],
       active: true,
       active_fac: true,
       active_level: true,
@@ -745,6 +747,7 @@ export default {
     this.getAllImmunizations()
     this.getFacilities()
     this.getCounties()
+    this.getPartners()
   },
   methods: {
     click () {
@@ -1274,6 +1277,14 @@ export default {
         }
       }
       return counter
+    },
+
+    getPartners () {
+      axios.get('partners') 
+        .then((partners) => {
+          this.all_partners = partners.data.data
+        })
+        .catch(error => console.log(error.message))
     },
 
     getNumi (name, l) {

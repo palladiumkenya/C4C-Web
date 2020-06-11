@@ -15,8 +15,7 @@
         >
           <template>
             <v-combobox
-oom
-zoo              :items="all_counties"
+              :items="all_counties"
               item-text="name"
               item-value="id"
               label="Select County"
@@ -47,6 +46,7 @@ zoo              :items="all_counties"
               @change="getFacilitysubcountyfilter"/>
           </template>
         </v-flex>
+        {{partners}}
         <v-flex
           v-if="user.role_id !== 4"
           xs12
@@ -56,7 +56,8 @@ zoo              :items="all_counties"
             <v-combobox
               v-if="user.role_id !== 4"
               v-model="partner"
-              item-text="partner"
+              :items="all_partners"
+              item-text="name"
               item-value="id"
               label="Select Partner"
               multiple
@@ -403,7 +404,7 @@ export default {
   data () {
     return {
       isLoading: true,
-      partner: [],
+      partner: '',
       cadres: [],
       facility: '',
       counties: '',
@@ -412,6 +413,7 @@ export default {
       all_facilities: [],
       all_subcounties: [],
       all_counties: [],
+      all_partners: [],
       fac: [],
       active: true,
       active_fac: true,
@@ -839,6 +841,7 @@ export default {
 
   created () {
     this.getFacilities()
+    this.getPartners()
     this.getExp()
     this.getCad()
     this.getCounties()
@@ -1042,6 +1045,15 @@ export default {
       }
       this.getAgeData(expo)
     },
+
+    getPartners () {
+      axios.get('partners') 
+        .then((partners) => {
+          this.all_partners = partners.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+
 
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
