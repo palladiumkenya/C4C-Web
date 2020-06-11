@@ -141,7 +141,6 @@ export default {
           this.$router.replace({
             name: 'Dashboard'
           })
-          console.log(user)
         })
         .catch(() => {
           vm.error = true

@@ -112,7 +112,6 @@ export default {
     getProtocols () {
       axios.get('resources/hcw/protocols')
         .then((protocols) => {
-          console.log(protocols.data)
           this.results = protocols.data.data
 
           this.loading = false
@@ -129,7 +128,6 @@ export default {
     deleteResource (id, index) {
       axios.delete('resources/protocols/delete/' + id)
         .then((response) => {
-          console.log(response.data)
 
           this.results.splice(index, 1)
 

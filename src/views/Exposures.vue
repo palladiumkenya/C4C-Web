@@ -46,7 +46,6 @@
               @change="getFacilitysubcountyfilter"/>
           </template>
         </v-flex>
-        {{partners}}
         <v-flex
           v-if="user.role_id !== 4"
           xs12
@@ -863,7 +862,6 @@ export default {
     getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data.data)
           this.all_counties = counties.data.data
         })
         .catch(error => console.log(error.message))
@@ -874,7 +872,6 @@ export default {
           for (var x in counties.data.data) {
             if (this.user.hcw.county === counties.data.data[x].name) {
               this.getSubCounties([counties.data.data[x]])
-              console.log(counties.data.data[x])
             }
           }
         })

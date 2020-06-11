@@ -95,7 +95,6 @@ export default {
     getResources () {
       axios.get('resources/cmes')
         .then((resources) => {
-          console.log(resources.data)
           this.results = resources.data.data
         })
         .catch(error => console.log(error.message))

@@ -151,7 +151,6 @@ export default {
 
     post_BulkBroadcast (e) {
       e.preventDefault()
-      console.log(String(this.phoneNo))
       axios.post('broadcasts/web/direct', {
         phone_numbers: String(this.phoneNo),
         message: this.message

@@ -103,7 +103,6 @@ export default {
         .then((exp) => {
           this.feedback = exp.data.data
           this.link = exp.data.links.next
-          console.log(this.link)
           this.loopT(this.link)
         })
         .catch(error => console.log(error.message))
@@ -120,7 +119,6 @@ export default {
         }
       }
 
-      console.log(this.feedback)
     }
   }
 }

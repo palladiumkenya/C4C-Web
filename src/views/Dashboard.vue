@@ -713,7 +713,6 @@ export default {
     }
     this.getUsers()
     this.getPartners()
-    // this.getAllUsers()
     this.getFacilities()
     this.getCounties()
     this.getBroadcasts()
@@ -786,7 +785,6 @@ export default {
           for (var x in counties.data.data) {
             if (this.user.hcw.county === counties.data.data[x].name) {
               this.getSubCounties([counties.data.data[x]])
-              console.log(counties.data.data[x])
             }
           }
         })
@@ -823,7 +821,6 @@ export default {
           for (var ex in this.s) {
             if (this.s[ex].county === a[c].name) {
               this.exp_filt.push(this.s[ex])
-              // console.log(this.s[ex])
             }
           }
           for (var u in this.userz) {
@@ -854,7 +851,6 @@ export default {
               this.fac_filtl.push(this.fac_filt[f])
             }
           }
-          console.log(this.fac_filtl)
           for (var ex in this.exp_filt) {
             if (this.exp_filt[ex].sub_county === a[c].name) {
               this.exp_filtl.push(this.exp_filt[ex])
@@ -882,7 +878,6 @@ export default {
       this.exp_filtf = []
       this.us_filtf = []
       this.active_fac = false
-      //console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var f in this.fac_filtl) {
@@ -913,7 +908,6 @@ export default {
             }
           }
         }
-        console.log(this.fac_filtf)
         this.getTest(this.us_filtf)
         this.getMonth(this.exp_filtf)
         this.fac = this.fac_filtf.sort()
@@ -927,7 +921,6 @@ export default {
 
     facilityFilter (a) {
       let b = []; let e = []; let us = []
-      console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.exp_filtf) {
@@ -956,10 +949,8 @@ export default {
       if (a.length > 0) {
         for (var c in a) {
           for (var ex in this.s) {
-            console.log(this.s[ex])
             if (this.s[ex].cadre === a[c].name) {
               this.exp_filt.push(this.s[ex])
-              // console.log(this.s[ex])
             }
           }
           for (var u in this.userz) {
@@ -987,8 +978,6 @@ export default {
             this.link = response.data.links.next
             this.loopT(this.link)
 
-            console.log(response.data)
-
             if (this.user.role_id === 5) {
               this.scount = 'loading...'
             } else {
@@ -1004,7 +993,6 @@ export default {
             }
           })
           .catch(error => {
-            console.log(error.message)
           })
       } else if (this.user.role_id === 4) {
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)

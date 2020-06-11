@@ -240,7 +240,6 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
@@ -249,7 +248,6 @@ export default {
     getCadres () {
       axios.get('cadres')
         .then((cadres) => {
-          console.log(cadres.data)
           this.all_cadres = cadres.data.data
         })
         .catch(error => console.log(error.message))
@@ -258,7 +256,6 @@ export default {
     getUser () {
       axios.get('auth/user')
         .then((user) => {
-          console.log(user.data)
           this.userData = user.data.data
         })
         .catch(error => console.log(error.message))
@@ -288,7 +285,6 @@ export default {
         })
         .catch(error => {
           this.output = error
-          console.log(error)
         })
     }
 

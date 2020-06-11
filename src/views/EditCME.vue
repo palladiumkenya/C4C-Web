@@ -245,7 +245,6 @@ export default {
       axios.get('resources/cmes/' + id)
         .then((resource) => {
           this.cme = resource.data.data
-          console.log(resource.data)
         }).catch((error) => {
           console.log(error.message)
         })
@@ -272,7 +271,6 @@ export default {
       })
         .then((response) => {
           this.output = response.data
-          console.log(response)
 
           this.alert = true
 
@@ -280,7 +278,6 @@ export default {
         })
         .catch(error => {
           this.output = error
-          console.log(error)
           this.alert = true
 
         })

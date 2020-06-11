@@ -342,7 +342,6 @@ export default {
   },
   methods: {
     onCancel() {
-      console.log('User cancelled the loader.')
     },
     click () {
       let exp = []
@@ -374,13 +373,11 @@ export default {
         }
       }
       this.getHBV(exp)
-      console.log('l')
-      console.log(this.getHBV(exp))
+     
     },
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
@@ -388,14 +385,12 @@ export default {
     getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data.data)
           this.all_counties = counties.data.data
         })
         .catch(error => console.log(error.message))
     },
 
     getSubCounties (a) {
-      console.log(a)
       if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
@@ -462,7 +457,6 @@ export default {
     facilityLevel (a) {
       this.fac_filtf = [], this.exp_filtf = []
       this.active_fac = false
-      console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var f in this.fac_filtl) {
@@ -518,7 +512,6 @@ export default {
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
-              console.log(exp.data)
             } else {
               this.getHBV(this.s)
               this.isLoading = false
@@ -583,7 +576,7 @@ export default {
           b[b.length - 1]++
         }
         prev = arr[i]
-      }console.log(b.length)
+      }
       for (var u in b) {
         if (name == 0 && b[u]) {
           count++

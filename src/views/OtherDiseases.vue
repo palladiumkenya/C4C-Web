@@ -824,7 +824,6 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
@@ -832,21 +831,18 @@ export default {
     getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data.data)
           this.all_counties = counties.data.data
         })
         .catch(error => console.log(error.message))
     },
 
     getSubCounties (a) {
-      console.log(a)
       if (a.length > 0) {
         this.active = false
         this.all_subcounties = []
         for (var i in a) {
           axios.get(`subcounties/${a[i].id}`)
             .then((subcounties) => {
-              // console.log(subcounties.data)
               this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
             })
             .catch(error => console.log(error.message))
@@ -862,7 +858,6 @@ export default {
       this.tdap_filt = [], this.vericella_filt = [], this.all_filt = []
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county == a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
@@ -924,7 +919,6 @@ export default {
       this.active_level = false
       if (a.length > 0) {
         for (var c in a) {
-          // console.log(a[c].name)
           for (var f in this.fac_filt) {
             if (this.fac_filt[f].sub_county == a[c].name) {
               this.fac_filtl.push(this.fac_filt[f])
@@ -988,7 +982,6 @@ export default {
       this.fac_filtf = [], this.exp_filtf = [], this.measles_filtf = [], this.us_filtf = [],
       this.tdap_filtf = [], this.vericella_filtf = [], this.all_filtf = []
       this.active_fac = false
-      console.log(a)
       if (a.length > 0) {
         for (var c in a) {
           for (var f in this.fac_filtl) {
@@ -1260,7 +1253,6 @@ export default {
     getNumAll (gender, disease, list) {
       var count = 0
       for (var x in list) {
-        // console.log(this.s[x].type)
         if (list[x].gender === gender && list[x].disease === disease) {
           count++
         }
@@ -1273,7 +1265,6 @@ export default {
       for (var xo in this.s) {
         if (this.s[xo].date.slice(0, 3) === name) {
           counter++
-          console.log(this.s[xo].date.slice(0, 3))
         }
       }
       return counter
@@ -1345,7 +1336,7 @@ export default {
           count++
         } else if (name == 1 && b[u] === 2) {
           count++
-        }console.log(a)
+        }
       }
       return count
     },

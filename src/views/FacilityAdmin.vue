@@ -232,7 +232,6 @@ export default {
     Admins () {
       axios.get('facility/admins/all')
         .then((users) => {
-          console.log(users.data)
 
           this.admins = users.data.data
         })
@@ -273,7 +272,6 @@ export default {
         .then((users) => {
           this.all_users = users.data.data
 
-          console.log(users.data)
         })
         .catch(error => console.log(error.message))
       // }, 1000);
@@ -319,12 +317,10 @@ export default {
       })
     },
     formatJson (filterVal, jsonData) {
-      console.log(jsonData)
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
         } else {
-          console.log(jsonData)
           return v[j]
         }
       }))

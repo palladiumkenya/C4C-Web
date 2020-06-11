@@ -197,7 +197,6 @@ export default {
     getResources () {
       axios.get('resources/cmes')
         .then((resources) => {
-          console.log(resources.data)
           this.results = resources.data.data
           this.loading = false
         })
@@ -212,7 +211,6 @@ export default {
     deleteResource (id, index) { 
       axios.delete('resources/cmes/delete/' +id)
         .then((response) => {
-          console.log(response.data)
 
          this.results.splice(index, 1) 
 
@@ -224,7 +222,6 @@ export default {
         })
         .catch((error) => {
           this.error = true
-          console.log(error)
           this.resp = 'Failed, please try again'
           this.snackbar = false
         })

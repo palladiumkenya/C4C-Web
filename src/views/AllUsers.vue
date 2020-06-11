@@ -162,7 +162,6 @@ export default {
     getUsers () {
       axios.get('users')
         .then((users) => {
-          console.log(users.data)
           this.all_users = users.data.data
           this.loopT(users.data.links.next)
           this.isLoading = false

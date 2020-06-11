@@ -246,13 +246,11 @@ export default {
         })
           .then((response) => {
             this.output = response.data
-            console.log(response)
             this.alert = true
             this.$router.push('/covid19_resources')
           })
           .catch(error => {
             this.output = error
-            console.log(error)
             this.alert = true
           })
       }

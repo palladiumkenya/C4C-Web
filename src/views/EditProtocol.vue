@@ -260,7 +260,6 @@ export default {
       axios.get('resources/protocols/details/' + id)
         .then((response) => {
           this.protocol = response.data.data
-          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)
@@ -289,7 +288,6 @@ export default {
           'content-type': 'multipart/form-data' }
       })
         .then((response) => {
-          console.log(response)
           this.output = response.data
           this.alert = true
 
@@ -297,7 +295,6 @@ export default {
         })
         .catch(error => {
           this.output = error
-          console.log(error)
           this.alert = true
 
         })

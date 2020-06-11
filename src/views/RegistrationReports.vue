@@ -565,7 +565,6 @@ export default {
     getCounties () {
       axios.get('counties')
         .then((counties) => {
-          console.log(counties.data.data)
           this.all_counties = counties.data.data
         })
         .catch(error => console.log(error.message))
@@ -577,7 +576,6 @@ export default {
         for (var i in sb) {
           axios.get(`subcounties/${sb[i].id}`)
             .then((subcounties) => {
-              // console.log(subcounties.data)
               this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
             })
             .catch(error => console.log(error.message))
@@ -592,7 +590,6 @@ export default {
      getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
         })
         .catch(error => console.log(error.message))
@@ -766,7 +763,6 @@ export default {
               this.link = exp.data.links.next
               this.loopT(this.link)
             } else {
-              console.log('mm')
               this.getAgeData()
               
             }
@@ -776,12 +772,10 @@ export default {
         axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {
             this.s = exp.data.data
-            // console.log(exp.data)
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
             } else {
-              console.log(this.s)
               this.getAgeData()
              
             }

@@ -246,7 +246,6 @@ export default {
   created () {
     if (this.user.role_id === 4) {
       this.facility = this.user.hcw.facility_id
-      console.log(this.facility)
     } else {
       this.getFacilities()
     }
@@ -317,7 +316,6 @@ export default {
           }
         
       for (var v in this.tableData) {
-        console.log(v)
         this.value = Math.round((v / this.tableData.length) * 100)
 
         axios.post('auth/bulk/register', {
@@ -340,7 +338,6 @@ export default {
             this.output = response.data
 
 
-            console.log(response)
             this.resp = Boolean(response.data.success)
             if (!this.resp) {
               this.snack('bottom', 'center')
@@ -393,7 +390,6 @@ export default {
         if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
           results[r].Mobile = '254' + String(results[r].Mobile)
         } else if (String(results[r].Mobile).length < 5) {
-          console.log(results.splice(r, 1))
           break
         }
       }

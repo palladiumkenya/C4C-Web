@@ -235,7 +235,6 @@ export default {
     getCadres () {
       axios.get('cadres')
         .then((cadres) => {
-          console.log(cadres.data)
           this.all_cadres = cadres.data.data
         })
         .catch(error => console.log(error.message))
@@ -284,7 +283,6 @@ export default {
         })
           .then((response) => {
             this.output = response.data
-            console.log(response.data)
             this.alert = true
             this.$router.push('/all_broadcasts')
           })

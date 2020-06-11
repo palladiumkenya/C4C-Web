@@ -214,8 +214,6 @@ export default {
     handleImageChange (e) {
       this.file = this.$refs.file.files[0]
 
-    console.log(event.target.files[0].name) //here is the original name
-
       let reader = new FileReader()
 
       reader.addEventListener('load', function () {
@@ -248,7 +246,6 @@ export default {
        axios.get('resources/special/' + id)
         .then((resource) => {
         this.covid19 = resource.data.data 
-        console.log(resource.data)
 
         }).catch((error) => {
         console.log(error.message)
@@ -276,14 +273,12 @@ export default {
       })
         .then((response) => {
           this.output = response.data
-          console.log(response)
           this.alert = true
 
           this.$router.push('/covid19_resources')
         })
         .catch(error => {
           this.output = error
-          console.log(error)
           this.alert = true
 
         })

@@ -47,7 +47,6 @@ export default {
       var id = this.$route.params.id
       axios.get('resources/cmes/' + id)
         .then((resource) => {
-          console.log(resource.data)
           this.result = resource.data.data
         })
         .catch(error => console.log(error.message))

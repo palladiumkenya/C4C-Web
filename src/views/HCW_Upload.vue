@@ -248,7 +248,6 @@ export default {
         })
           .then((response) => {
             this.output = response.data
-            console.log(response)
             this.clearData()
             this.snack('top', 'center')
 

@@ -453,7 +453,6 @@ export default {
       if (this.user.role_id === 1 || this.user.role_id === 5 || this.user.role_id === 2) {
         axios.get('hcw')
           .then((workers) => {
-            console.log(workers.data)
             this.all_hcws = workers.data.data
             this.loopT(workers.data.links.next)
             this.isLoading = false
@@ -464,7 +463,6 @@ export default {
           } else if (this.user.role_id === 4) {
             axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
               .then((workers) => {
-                console.log(workers.data)
                 this.all_hcws = workers.data.data
                 this.loopT(workers.data.links.next)
                 this.isLoading = false
@@ -534,7 +532,6 @@ export default {
         })
         .catch((error) => {
           this.error = true
-          console.log(error)
           this.result = 'Check your internet connection or retry logging in.'
           this.snackbar = true
 

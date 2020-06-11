@@ -216,7 +216,6 @@ export default {
 
       axios.get('resources/special')
         .then((resources) => {
-          console.log(resources.data)
           this.results = resources.data.data
           this.loading = false
 
@@ -234,7 +233,6 @@ export default {
     axios.delete('resources/special/delete/' +id)
       .then((response) => {
       // this.result.splice(index, 1)
-        console.log(response.data) 
 
         this.loading = false
 
@@ -246,7 +244,6 @@ export default {
       })
       .catch((error) => {
         this.error = true
-        console.log(error)
         this.result = 'Failed, please try again'
         this.snackbar = true
       })

@@ -310,9 +310,7 @@ export default {
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        console.log(v)
         if (v[j] === '') {
-          console.log(v[j])
           return 'Not Specified'
         } else if (j === 'pep_initiated') {
           return Boolean(v[j])

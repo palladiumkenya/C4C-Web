@@ -232,7 +232,6 @@ export default {
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
-          console.log(facilities.data)
           this.all_facilities = facilities.data.data
           this.load = false
         })
@@ -299,7 +298,6 @@ export default {
             'content-type': `multipart/form-data` }
         })
           .then((response) => {
-            console.log(response)
 
             this.output = response.data
             this.alert = true

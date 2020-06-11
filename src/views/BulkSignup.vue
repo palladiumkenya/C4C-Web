@@ -274,7 +274,6 @@ export default {
         })
           .then((response) => {
             this.output = response.data
-            console.log(response)
             this.resp = Boolean(response.data.success)
             if (!this.resp) {
               this.snack('bottom', 'center')
@@ -284,7 +283,6 @@ export default {
             this.$router.push('/hcw_list')
           })
           .catch((error) => {
-            this.output = error
             this.snack('top', 'center')
           })
       }

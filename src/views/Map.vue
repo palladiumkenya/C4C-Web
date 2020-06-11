@@ -101,7 +101,6 @@ export default {
                 }
                 prev = arr[i]
             }
-            console.log(a, b)
             for (var e in pyDepartmentsData) {
                 pyDepartmentsData[e].users = 0
             }

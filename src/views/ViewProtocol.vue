@@ -47,7 +47,6 @@ export default {
       var id = this.$route.params.id
       axios.get('resources/protocols/details/' + id)
         .then((protocol) => {
-          console.log(protocol.data)
           this.result = protocol.data.data
         })
         .catch(error => console.log(error.message))
