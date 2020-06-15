@@ -440,5 +440,18 @@ export default [
       }
       next()
     }
+  },
+  {
+    path: '/covid_exposure',
+    name: 'COVID 19 Exposures',
+    view: 'COVID19Exposures',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   }
 ]

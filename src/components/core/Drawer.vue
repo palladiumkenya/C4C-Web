@@ -190,6 +190,11 @@ export default {
               icon: 'mdi-chart-bar'
             },
             {
+              text: 'Covid 19 Exposure',
+              to: '/covid_exposure',
+              icon: 'mdi-poll-box'
+            },
+            {
               to: '/exposure-list',
               icon: 'mdi-playlist-check',
               text: 'Exposures List'
