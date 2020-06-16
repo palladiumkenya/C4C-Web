@@ -29,8 +29,8 @@
           >
             <v-card-text>
               <v-icon class="mr-1" >mdi-account-group</v-icon>
-              <h2 align="center">{{ aUsersCount }}</h2>
-              <h5 align="center">Healthcare Workers</h5>
+              <h3 align="center">{{ aUsersCount }}</h3>
+              <h6 align="center">Healthcare Workers</h6>
             </v-card-text>
           </v-card>
         </template>
@@ -50,8 +50,29 @@
           >
             <v-card-text>
               <v-icon class="mr-1">mdi-file-chart</v-icon>
-              <h2 align="center">{{ exposuresCount }}</h2>
-              <h5 align="center">Reported Exposures</h5>
+              <h3 align="center">{{ exposuresCount }}</h3>
+              <h6 align="center">Reported Exposures</h6>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex
+        sm3
+        xs8
+        md2
+        lg2
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-movie-roll</v-icon>
+              <h3 align="center">{{ covidCount }}</h3>
+              <h6 align="center">Covid 19 Exposures</h6>
             </v-card-text>
           </v-card>
         </template>
@@ -72,8 +93,8 @@
           >
             <v-card-text>
               <v-icon class="mr-1">mdi-message</v-icon>
-              <h2 align="center">{{ broadcastsCount }}</h2>
-              <h5 align="center">Broadcasts Sent </h5>
+              <h3 align="center">{{ broadcastsCount }}</h3>
+              <h6 align="center">Broadcasts Sent </h6>
             </v-card-text>
           </v-card>
         </template>
@@ -94,8 +115,8 @@
           >
             <v-card-text>
               <v-icon class="mr-1">mdi-home-outline</v-icon>
-              <h2 align="center">{{ all_facilities.length }}</h2>
-              <h5 align="center"> Facilities</h5>
+              <h3 align="center">{{ all_facilities.length }}</h3>
+              <h6 align="center"> Facilities</h6>
             </v-card-text>
           </v-card>
         </template>
@@ -115,8 +136,8 @@
           >
             <v-card-text>
               <v-icon class="mr-1">mdi-map-marker</v-icon>
-              <h2 align="center">{{ all_counties.length }}</h2>
-              <h5 align="center">Counties</h5>
+              <h3 align="center">{{ all_counties.length }}</h3>
+              <h6 align="center">Counties</h6>
             </v-card-text>
           </v-card>
         </template>
@@ -136,8 +157,8 @@
           >
             <v-card-text>
               <v-icon class="mr-1">mdi-account-check</v-icon>
-              <h2 align="center">{{ partnerCount }}</h2>
-              <h5 align="center">Partners</h5>
+              <h3 align="center">{{ partnerCount }}</h3>
+              <h6 align="center">Partners</h6>
             </v-card-text>
           </v-card>
         </template>
@@ -156,7 +177,7 @@
         sm3
         xs8
         md4
-        lg4
+        lg3
       >
         <template>
           <v-card
@@ -177,7 +198,7 @@
         sm3
         xs8
         md4
-        lg4
+        lg3
       >
         <template>
           <v-card
@@ -198,7 +219,28 @@
         sm3
         xs8
         md4
-        lg4
+        lg3
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-movie-roll</v-icon>
+              <h2 align="center">{{ covidCount }}</h2>
+              <h5 align="center">Covid 19 Exposures</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex
+        sm3
+        xs8
+        md4
+        lg3
       >
 
         <template>
@@ -641,7 +683,8 @@ export default {
       us_filtl: [],
       fac_filtf: [],
       exp_filtf: [],
-      us_filtf: []
+      us_filtf: [],
+      c19count: 0
     }
   },
   computed: {
@@ -664,6 +707,10 @@ export default {
       return this.scount
     },
 
+    covidCount () {
+      return this.c19count
+    },
+
     ...mapGetters({
       user: 'auth/user',
       auth: 'auth/token',
@@ -676,6 +723,7 @@ export default {
     })
   },
   created () {
+    this.getCovidExp()
     if (this.auth === null) {
       alert('Not Logged in')
       this.$router.replace({
@@ -969,6 +1017,55 @@ export default {
       }
     },
 
+    getCovidExp () {
+      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+        axios.get(`exposures/covid/all`)
+          .then((response) => {
+            if (this.user.role_id === 5) {
+              this.c19count = 'loading...'
+            } else {
+              this.c19count = response.data.meta.total
+              console.log(response.data.meta.total)
+            }
+            this.s = response.data.data
+            this.link = response.data.links.next
+            this.loopCovid(this.link)
+
+            if (this.user.role_id === 5) {
+              this.c19count = 'loading...'
+            } else {
+              this.c19count = response.data.meta.total
+              console.log(response.data.meta.total)
+            }
+            this.s = response.data.data
+            this.link = response.data.links.next
+            if (this.link) {
+              this.loopCovid(this.link)
+            } else {
+              this.getMonth(this.s)
+              this.storeExp(this.s)
+            }
+          })
+          .catch(error => {
+          })
+      } else if (this.user.role_id === 4) {
+        axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.c19count = exp.data.meta.total
+            this.s = exp.data.data
+            this.link = exp.data.links.next
+            if (this.link) {
+              this.loopCovid(this.link)
+            }
+            else {
+              this.getMonth(this.s)
+              this.storeExp(this.s)
+            }
+          })
+          .catch(error => console.log(error.message))
+      }
+    },
+
     getExp () {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get(`exposures/all`)
@@ -1045,6 +1142,42 @@ export default {
           this.storeExp(e)
         }
         this.scount = e.length
+        this.s = e
+        this.storeExp(this.s)
+      }
+      this.getMonth(this.s)
+    },
+
+    async loopCovid (l) {
+      var i
+      var e = []
+      if (this.user.role_id !== 5) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.s = this.s.concat(response.data.data)
+          } else {
+            i = 11
+          }
+        }
+      } else if (this.user.role_id === 5) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.s = this.s.concat(response.data.data)
+          } else {
+            i = 11
+          }
+        }
+        for (var ex in this.s) {
+          if (this.s[ex].county === this.user.hcw.county) {
+            e.push(this.s[ex])
+          }
+          this.getMonth(e)
+          this.storeExp(e)
+        }
         this.s = e
         this.storeExp(this.s)
       }

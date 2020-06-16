@@ -352,7 +352,30 @@ export default {
   },
   components: { highcharts: Chart, Loading },
     data () {
-        return {
+      return {
+        isLoading: true,
+      partner: '',
+      cadres: [],
+      facility: '',
+      counties: '',
+      subcounties: '',
+      all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
+      all_facilities: [],
+      all_subcounties: [],
+      all_counties: [],
+      all_partners: [],
+      fac: [],
+      active: true,
+      active_fac: true,
+      active_level: true,
+      menu: false,
+      menu1: false,
+      startDate: '2017-01-01',
+      maxDate: new Date().toISOString().substr(0, 10),
+      minDate: '2017-01-01',
+      endDate: new Date().toISOString().substr(0, 10),
+      value: true,
+      value1: true,
 
             // by month
             barOptionsMonth: {
@@ -656,20 +679,273 @@ export default {
         ]
       },
 
-        }
-    },
+      load: true,
+      fac_filt: [],
+      fac_filtl: [],
+      fac_filtf: [],
+      exp_filt: [],
+      exp_filtl: [],
+      exp_filtf: [],
+      s: [],
+      cadre: [],
+      dob: [],
+      date: [],
+      users: [],
+      gender: [],
+      hours: [],
+
+    }
+  },
 
     created () {
+        this.getcovidExpo()
+        this.getCounties()
+        this.getFacilities()
+        this.getCad()
+        this.getPartners()
+        this.dateRange('2020-01-20', this.endDate)
     },
 
     methods: {
 
+        click () {
+      let expo = []
+      var dates = {
+        convert: function (d) {
+          return (
+            d.constructor === Date ? d
+              : d.constructor === Array ? new Date(d[0], d[1], d[2])
+                : d.constructor === Number ? new Date(d)
+                  : d.constructor === String ? new Date(d)
+                    : typeof d === 'object' ? new Date(d.year, d.month, d.date)
+                      : NaN
+          )
+        },
+        inRange: function (d, start, end) {
+          return (
+            isFinite(d = this.convert(d).valueOf()) &&
+            isFinite(start = this.convert(start).valueOf()) &&
+            isFinite(end = this.convert(end).valueOf())
+              ? start <= d && d <= end
+              : NaN
+          )
+        }
+      }
+      for (var e in this.s) {
+        var i = new Date(this.s[e].created_at).toISOString().substr(0, 10)
+        if (dates.inRange(i, this.startDate, this.endDate)) {
+          expo.push(this.s[e])
+        }
+      }
+      this.getcovidData(expo)
+    },
+
+        getFacilities () {
+      axios.get('facilities')
+        .then((facilities) => {
+          this.all_facilities = facilities.data.data
+          if (this.user.role_id === 5) {
+            this.subCounties()
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          this.all_counties = counties.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+    subCounties () {
+      axios.get('counties')
+        .then((counties) => {
+          for (var x in counties.data.data) {
+            if (this.user.hcw.county === counties.data.data[x].name) {
+              this.getSubCounties([counties.data.data[x]])
+            }
+          }
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    getSubCounties (a) {
+      if (a.length > 0) {
+        this.active = false
+        this.all_subcounties = []
+        for (var x in a) {
+          axios.get(`subcounties/${a[x].id}`)
+            .then((subcounties) => {
+              this.all_subcounties = this.all_subcounties.concat(subcounties.data.data)
+            })
+            .catch(error => console.log(error.message))
+        }
+        this.getFacilitycountyfilter(a)
+      } else {
+        this.active = true
+        this.getFacilitycountyfilter(a)
+      }
+    },
+     getPartners () {
+      axios.get('partners') 
+        .then((partners) => {
+          this.all_partners = partners.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+     getCad () {
+      axios.get('cadres')
+        .then((cad) => {
+          this.cadres = cad.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
+
+    // filters
+    getFacilitycountyfilter (a) {
+      this.fac_filt = []
+      this.exp_filt = []
+      if (a.length > 0) {
+        for (var c in a) {
+          for (var ai in this.all_facilities) {
+            if (this.all_facilities[ai].county === a[c].name) {
+              this.fac_filt.push(this.all_facilities[ai])
+            }
+          }
+          for (var e in this.s) {
+            if (this.s[e].county === a[c].name) {
+              this.exp_filt.push(this.s[e])
+            }
+          }
+        }
+        this.getcovidData(this.exp_filt)
+        this.fac = this.fac_filt.sort()
+      } else {
+        this.getcovidData(this.s)
+        this.fac = this.all_facilities
+      }
+    },
+    getFacilitysubcountyfilter (fsb) {
+      this.exp_filtl = []
+      this.fac_filtl = []
+      this.active_level = false
+      if (fsb.length > 0) {
+        for (var sb in fsb) {
+          for (var a in this.fac_filt) {
+            if (this.fac_filt[a].sub_county === fsb[sb].name) {
+              this.fac_filtl.push(this.fac_filt[a])
+            }
+          }
+          for (var e in this.exp_filt) {
+            if (this.exp_filt[e].sub_county === fsb[sb].name) {
+              this.exp_filtl.push(this.exp_filt[e])
+            }
+          }
+        }
+
+        this.getcovidData(this.exp_filtl)
+        this.fac = this.fac_filtl.sort()
+      } else {
+        this.getcovidData(this.exp_filt)
+        this.fac = this.fac_filt
+        this.active_level = true
+      }
+    },
+
+    getFacilitylevelfilter (fl) {
+      this.fac_filtf = [], this.exp_filtf = []
+      this.active_fac = false
+      if (fl.length > 0) {
+        for (var l in fl) {
+          for (var a in this.fac_filtl) {
+            if (this.fac_filtl[a].level == fl[l]) {
+              this.fac_filtf.push(this.fac_filtl[a])
+            } else if (fl[l] === 'Level 5 and Above') {
+              if (Number(this.fac_filtl[a].level.slice(6, 7)) >= 5) {
+                this.fac_filtf.push(this.fac_filtl[a])
+              }
+            }
+          }
+          for (var e in this.exp_filtl) {
+            if (this.exp_filtl[e].facility_level === fl[l]) {
+              this.exp_filtf.push(this.exp_filtl[e])
+            } else if (fl[l] === 'Level 5 and Above') {
+              if (Number(this.exp_filtl[e].facility_level.slice(6, 7)) >= 5) {
+                this.exp_filtf.push(this.exp_filtl[e])
+              }
+            }
+          }
+        }
+
+        this.getcovidData(this.exp_filtf)
+        this.fac = this.fac_filtf.sort()
+      } else {
+        this.getcovidData(this.exp_filtl)
+        this.fac = this.fac_filtl
+        this.active_fac = true
+      }
+    },
+
+    getFacilityfilter (f) {
+      let exp = []
+      if (f.length > 0) {
+        for (var s in f) {
+          for (var e in this.exp_filtf) {
+            if (this.exp_filtf[e].facility === f[s].name) {
+              exp.push(this.exp_filtf[e])
+            }
+          }
+        }
+        this.getcovidData(exp)
+      } else {
+        this.getcovidData(this.exp_filtf)
+      }
+    },
+
+    cadreFilter (a) {
+      this.fac_filt = [], this.exp_filt = []
+      if (a.length > 0) {
+        for (var e in this.s) {
+          if (this.s[e].county === a[c].name) {
+            this.exp_filt.push(this.s[e])
+          }
+        }
+        this.getcovidData(this.exp_filt)
+      } else {
+        this.getcovidData(this.s)
+      }
+    },
+    // end filter
     getcovidExpo () {
-        axios.get('')
+      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+        axios.get(`exposures/covid/all`)
           .then((response) => {
-              this.covid = response.data.data
+              this.s = response.data.data
+              if (response.data.links.next != null) {
+              this.link = response.data.links.next
+              this.loopT(this.link)
+            } else {
+              this.getcovidData(this.s)
+            }
+            console.log(this.s)
+          })
+          
+          .catch(error => console.log(error.message))
+      }else if (this.user.role_id === 4) {
+        axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
+          .then((exp) => {
+            this.s = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              this.loopT(this.link)
+            } else {
+              this.getcovidData(this.s)
+            }
+            console.log(this.s)
           })
           .catch(error => console.log(error.message))
+      }
     },
      async loopT (l) {
       var i; var u = []
@@ -677,7 +953,7 @@ export default {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
-          this.covid = this.covid.concat(response.data.data)
+          this.s = this.s.concat(response.data.data)
         } else {
           i = 11
         }
@@ -685,62 +961,49 @@ export default {
       if (this.user.role_id === 5) {
         this.active = false
         for (var i in this.s) {
-          if (this.covid[i].county == this.user.county) {
+          if (this.s[i].county == this.user.county) {
             u.push(this.s[i])
           }
         }
         this.covid = u
       }
-      //this.getAgeData(this.s)
+      this.getcovidData(this.s)
       this.isLoading = false
     },
+    
     getcovidData (list) {
-        this.load = true
+      this.load = true
       var data = []
+      this.barOptionsMonth.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var i in this.barOptionsMonth.xAxis.categories) {
-        data.push(this.getMonthNum(i, list))
+        data.push(this.getMonthNum(this.barOptionsMonth.xAxis.categories[i], list))
       }
       this.barOptionsMonth.series[0].data = data
-      this.value = false
-      this.load = false
 
-      this.load = true
       var data = []
       for (var i in this.barOptionsHour.xAxis.categories) {
-        data.push(this.getHourNum(i, list))
+        data.push(this.getHourNum(this.barOptionsHour.xAxis.categories[i], list))
       }
       this.barOptionsHour.series[0].data = data
-      this.value = false
-      this.load = false
 
-      this.load = true
       var data = []
       for (var i in this.barOptionsContact.xAxis.categories) {
         data.push(this.getContactNum(i, list))
       }
       this.barOptionsContact.series[0].data = data
-      this.value = false
-      this.load = false
 
-      this.load = true
       var data = []
       for (var i in this.barOptionsCadre.xAxis.categories) {
-        data.push(this.getCadreNum(i, list))
+        data.push(this.getCadreNum(this.barOptionsCadre.xAxis.categories[i], list))
       }
       this.barOptionsCadre.series[0].data = data
-      this.value = false
-      this.load = false
 
-      this.load = true
       var data = []
       for (var i in this.barOptionsGender.xAxis.categories) {
-        data.push(this.getGenderNum(i, list))
+        data.push(this.getGenderNum(this.barOptionsGender.xAxis.categories[i], list))
       }
       this.barOptionsGender.series[0].data = data
-      this.value = false
-      this.load = false
 
-      this.load = true
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
         data.push(this.getAgeNum(i, list))
@@ -748,6 +1011,7 @@ export default {
       this.barOptionsAge.series[0].data = data
       this.value = false
       this.load = false
+      this.isLoading = false
 
     },
     getAgeNum (cat, ag) {
@@ -801,17 +1065,15 @@ export default {
             if (c[v].contact_with === contact) {
                 counter++
             }
+            if (contact === '4' && c[v].contact_with === '') { counter++ }
         }
         return counter
     },
-    getMonthNum (month, m) {
+    getMonthNum (name, li) {
       var counter = 0
-      var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      for (var k in m) {
-        var a = c.indexOf(m[xt].date_of_contact.slice(0, 3)) + 1 
-        if (a < 10) { a = '0' + a }
-        var d = [m[xt].date_of_contact.slice(8, 13).trim(), a].join('-')
-        if (d === month) {
+      for (var xt in li) {
+        var d = li[xt].date_of_contact.slice(0, 7).trim()
+        if (d === name) {
           counter++
         }
       }
@@ -820,17 +1082,36 @@ export default {
     getHourNum (name, t) {
       var counter = 0
       for (var xh in t) {
-        var hr = t[xh].exposure_date.split(':')[0].slice(-2).trim()
-
-        if (hr < 10) {
+        var hr = t[xh].date_of_contact.split(':')[0].slice(-2).trim()
+        if (hr < 10 && hr > 0) {
           hr = '0' + hr
         }
         if (hr === name) {
           counter++
+          
         }
       }
       return counter
     },
+
+    dateRange (startDate, endDate) {
+      var start = startDate.split('-')
+      var end = endDate.split('-')
+      var startYear = parseInt(start[0])
+      var endYear = parseInt(end[0])
+      var dates = []
+
+      for (var i = startYear; i <= endYear; i++) {
+        var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1
+        var startMon = i === startYear ? parseInt(start[1]) - 1 : 0
+        for (var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+          var month = j + 1
+          var displayMonth = month < 10 ? '0' + month : month
+          dates.push([i, displayMonth].join('-'))
+        }
+      }
+      return dates
+    }
   }
 }
 </script>
