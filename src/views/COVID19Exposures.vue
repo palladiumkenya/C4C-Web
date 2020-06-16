@@ -370,9 +370,9 @@ export default {
       active_level: true,
       menu: false,
       menu1: false,
-      startDate: '2017-01-01',
+      startDate: '2020-03-01',
       maxDate: new Date().toISOString().substr(0, 10),
-      minDate: '2017-01-01',
+      minDate: '2020-03-01',
       endDate: new Date().toISOString().substr(0, 10),
       value: true,
       value1: true,
@@ -988,7 +988,7 @@ export default {
 
       var data = []
       for (var i in this.barOptionsContact.xAxis.categories) {
-        data.push(this.getContactNum(i, list))
+        data.push(this.getContactNum(this.barOptionsContact.xAxis.categories[i], list))
       }
       this.barOptionsContact.series[0].data = data
 
@@ -1065,14 +1065,17 @@ export default {
             if (c[v].contact_with === contact) {
                 counter++
             }
-            if (contact === '4' && c[v].contact_with === '') { counter++ }
         }
         return counter
     },
-    getMonthNum (name, li) {
+    getMonthNum (name, expo) {
       var counter = 0
-      for (var xt in li) {
-        var d = li[xt].date_of_contact.slice(0, 7).trim()
+      var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      for (var xt in expo) {
+        var m = c.indexOf(expo[xt].date_of_contact.slice(0, 3)) + 1 
+        if (m < 10) { m = '0' + m }
+        var d = [expo[xt].date_of_contact.slice(8, 12).trim(), m].join('-')
+        console.log(d)
         if (d === name) {
           counter++
         }
