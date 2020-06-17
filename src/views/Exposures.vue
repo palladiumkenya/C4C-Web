@@ -1121,68 +1121,52 @@ export default {
         data.push(this.getAgeNum(i, list))
       }
       this.barOptionsAge.series[0].data = data
-      this.value = false
-      this.load = false
 
-      this.load = true
       var data = []
       for (var i in this.gendOptions.xAxis.categories) {
         data.push(this.getGend(this.gendOptions.xAxis.categories[i], list))
       }
       this.gendOptions.series[0].data = data
-      this.value1 = false
-      this.load = false
 
-      this.load = true
       var data = []
       for (var i in this.barOptionsDevice.xAxis.categories) {
         data.push(this.getDevice(this.barOptionsDevice.xAxis.categories[i], list))
       }
       this.barOptionsDevice.series[0].data = data
-      this.value1 = false
-      this.load = false
-
-      this.load = true
+     
       var datac = []
       for (var i in this.barOptionsCadre.xAxis.categories) {
         datac.push(this.getNumc(this.barOptionsCadre.xAxis.categories[i], list))
       }
       this.barOptionsCadre.series[0].data = datac
-      this.load = false
-
-      this.load = true
+      
       var data = []
       for (var i in this.barOptionsLocation.xAxis.categories) {
         data.push(this.getNum(this.barOptionsLocation.xAxis.categories[i], list))
       }
       this.barOptionsLocation.series[0].data = data
-      this.load = false
-
-      this.load = true
+     
       var data = []
       for (var i in this.barOptions.xAxis.categories) {
         data.push(this.getNums(this.barOptions.xAxis.categories[i], list))
       }
       this.barOptions.series[0].data = data
-      this.valuet = false
-      this.load = false
-
-      this.load = true
+      
       var data = []
       for (var i in this.barOptionsHour.xAxis.categories) {
         data.push(this.getNumh(this.barOptionsHour.xAxis.categories[i], list))
       }
       this.barOptionsHour.series[0].data = data
-      this.load = false
-
-      this.load = true
+      
       var data = []
       this.barOptionsTime.xAxis.categories = this.dateRange(this.startDate, this.endDate)
       for (var i in this.barOptionsTime.xAxis.categories) {
         data.push(this.getNumt(this.barOptionsTime.xAxis.categories[i], list))
       }
       this.barOptionsTime.series[0].data = data
+      this.value = false
       this.load = false
+      this.isLoading = false
     },
     getAgeNum (cat, ag) {
       var count = 0
