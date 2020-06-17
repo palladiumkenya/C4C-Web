@@ -19,7 +19,7 @@
         sm3
         xs8
         md2
-        lg2
+        lg3
       >
         <template>
           <v-card
@@ -40,7 +40,7 @@
         sm3
         xs8
         md2
-        lg2
+        lg3
       >
         <template>
           <v-card
@@ -61,7 +61,7 @@
         sm3
         xs8
         md2
-        lg2
+        lg3
       >
         <template>
           <v-card
@@ -82,7 +82,7 @@
         sm3
         xs8
         md2
-        lg2
+        lg3
       >
 
         <template>
@@ -105,7 +105,7 @@
         sm3
         xs8
         md2
-        lg2
+        lg4
       >
         <template>
           <v-card
@@ -126,7 +126,7 @@
         sm3
         xs8
         md2
-        lg2
+        lg4
       >
         <template>
           <v-card
@@ -147,7 +147,7 @@
         sm3
         xs8
         md2
-        lg2
+        lg4
       >
         <template>
           <v-card
