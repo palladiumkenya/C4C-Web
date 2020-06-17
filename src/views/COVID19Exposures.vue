@@ -930,7 +930,6 @@ export default {
             } else {
               this.getcovidData(this.s)
             }
-            console.log(this.s)
           })
           
           .catch(error => console.log(error.message))
@@ -944,7 +943,6 @@ export default {
             } else {
               this.getcovidData(this.s)
             }
-            console.log(this.s)
           })
           .catch(error => console.log(error.message))
       }
@@ -1077,7 +1075,6 @@ export default {
         var m = c.indexOf(expo[xt].date_of_contact.slice(0, 3)) + 1 
         if (m < 10) { m = '0' + m }
         var d = [expo[xt].date_of_contact.slice(8, 12).trim(), m].join('-')
-        console.log(d)
         if (d === name) {
           counter++
         }

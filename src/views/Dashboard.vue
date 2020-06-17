@@ -1025,7 +1025,7 @@ export default {
               this.c19count = 'loading...'
             } else {
               this.c19count = response.data.meta.total
-              console.log(response.data.meta.total)
+              //console.log(response.data.meta.total)
             }
             this.s = response.data.data
             this.link = response.data.links.next
@@ -1035,7 +1035,7 @@ export default {
               this.c19count = 'loading...'
             } else {
               this.c19count = response.data.meta.total
-              console.log(response.data.meta.total)
+             // console.log(response.data.meta.total)
             }
             this.s = response.data.data
             this.link = response.data.links.next
