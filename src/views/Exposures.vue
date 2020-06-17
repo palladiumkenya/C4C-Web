@@ -845,7 +845,7 @@ export default {
     this.getCad()
     this.getCounties()
     this.dateRange('2020-01-20', this.endDate)
-    // this.getExpo()
+    
   },
   methods: {
     getFacilities () {
@@ -998,15 +998,20 @@ export default {
     },
 
     cadreFilter (a) {
-      this.fac_filt = [], this.exp_filt = []
+      this.fac_filt = []
+      this.exp_filt = []
       if (a.length > 0) {
-        for (var e in this.s) {
-          if (this.s[e].county === a[c].name) {
-            this.exp_filt.push(this.s[e])
+        for (var c in a) {
+          for (var ex in this.s) {
+            if (this.s[ex].cadre === a[c].name) {
+              this.exp_filt.push(this.s[ex])
+            }
           }
         }
         this.getAgeData(this.exp_filt)
+        this.fac = this.fac_filt.sort()
       } else {
+        this.fac = this.all_facilities
         this.getAgeData(this.s)
       }
     },

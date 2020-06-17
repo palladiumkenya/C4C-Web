@@ -701,9 +701,13 @@ export default {
         this.getcovidExpo()
         this.getCounties()
         this.getFacilities()
-        this.getCad()
+       // this.getCad()
         this.getPartners()
         this.dateRange('2020-01-20', this.endDate)
+        axios.get('cadres')
+      .then((c) => {
+        this.cadres = c.data.data
+      })
     },
 
     methods: {
@@ -794,14 +798,7 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
-     getCad () {
-      axios.get('cadres')
-        .then((cad) => {
-          this.cadres = cad.data.data
-        })
-        .catch(error => console.log(error.message))
-    },
-
+    
     // filters
     getFacilitycountyfilter (a) {
       this.fac_filt = []
@@ -904,15 +901,20 @@ export default {
     },
 
     cadreFilter (a) {
-      this.fac_filt = [], this.exp_filt = []
+      this.fac_filt = []
+      this.exp_filt = []
       if (a.length > 0) {
-        for (var e in this.s) {
-          if (this.s[e].county === a[c].name) {
-            this.exp_filt.push(this.s[e])
+        for (var c in a) {
+          for (var ex in this.s) {
+            if (this.s[ex].cadre === a[c].name) {
+              this.exp_filt.push(this.s[ex])
+            }
           }
         }
         this.getcovidData(this.exp_filt)
+        this.fac = this.fac_filt.sort()
       } else {
+        this.fac = this.all_facilities
         this.getcovidData(this.s)
       }
     },
