@@ -16,10 +16,10 @@
 
       <!-- Start Cards -->
       <v-flex 
-        sm3
+        sm2
         xs8
         md2
-        lg3
+        lg2
       >
         <template>
           <v-card
@@ -37,10 +37,10 @@
       </v-flex>
 
       <v-flex
-        sm3
+        sm2
         xs8
         md2
-        lg3
+        lg2
       >
         <template>
           <v-card
@@ -57,11 +57,11 @@
         </template>
       </v-flex>
 
-      <v-flex
-        sm3
+      <!-- <v-flex
+        sm2
         xs8
         md2
-        lg3
+        lg2
       >
         <template>
           <v-card
@@ -76,13 +76,13 @@
             </v-card-text>
           </v-card>
         </template>
-      </v-flex>
+      </v-flex> -->
 
       <v-flex
-        sm3
+        sm2
         xs8
         md2
-        lg3
+        lg2
       >
 
         <template>
@@ -102,10 +102,10 @@
       </v-flex>
 
       <v-flex 
-        sm3
+        sm2
         xs8
         md2
-        lg4
+        lg2
       >
         <template>
           <v-card
@@ -123,10 +123,10 @@
       </v-flex>
 
       <v-flex 
-        sm3
+        sm2
         xs8
         md2
-        lg4
+        lg2
       >
         <template>
           <v-card
@@ -144,10 +144,10 @@
       </v-flex>
 
       <v-flex 
-        sm3
+        sm2
         xs8
         md2
-        lg4
+        lg2
       >
         <template>
           <v-card
@@ -171,7 +171,7 @@
     v-else
     wrap> 
 
-      <!-- Start Cards -->
+      <!-- Start Facility Cards -->
 
       <v-flex 
         sm3
