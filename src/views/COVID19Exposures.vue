@@ -483,7 +483,7 @@ export default {
         xAxis: {
           categories: ['Patient', 'Colleague', 'Community', 'Home', 'Unknown'],
           title: {
-            text: 'Contact With'
+            text: 'Nature of Contact'
           }
         },
         yAxis: {
