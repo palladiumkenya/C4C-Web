@@ -208,14 +208,15 @@
       color="teal lighten-5"
       centered
     >
-      <v-tab>Report By Month</v-tab>
-      <v-tab>Report By Hour</v-tab>
+      <v-tab>Summary Report</v-tab>
       <v-tab>Report By Contact</v-tab>
       <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Month</v-tab>
+      <v-tab>Report By Hour</v-tab>
       <v-tab>Report By Gender</v-tab>
       <v-tab>Report By Age</v-tab>
       <v-tab-item
-        v-for="n in 6"
+        v-for="n in 7"
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n===1">
@@ -242,24 +243,9 @@
             </v-container>
           </v-card-text>
 
-          <!-- Start Exposure Hour -->
-          <v-card-text v-if="n===2">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsHour"/>
-            </div>
-          </v-card-text>
-
           <!-- Start Exposure Contact -->
 
-          <v-card-text v-if="n===3">
+          <v-card-text v-if="n===2">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -275,7 +261,7 @@
 
           <!-- Start Exposure Cadre -->
 
-          <v-card-text v-if="n===4">
+          <v-card-text v-if="n===3">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -289,9 +275,39 @@
             </div>
           </v-card-text>
 
+          <!-- Start Exposure Month -->
+            <v-card-text v-if="n===4">
+                  <div class="card vld-parent">
+                    <loading
+                      :active.sync="isLoading"
+                      :can-cancel="false"
+                      :is-full-page="false"
+                      loader="bars"
+                      color="#007bff"/>
+                    <highcharts
+                      ref="barChart"
+                      :options="barOptionsMonth"/>
+                  </div>
+          </v-card-text>
+
+              <!-- Start Exposure Hour -->
+          <v-card-text v-if="n===5">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsHour"/>
+            </div>
+          </v-card-text>
+
           <!-- Start Exposure Gender -->
 
-          <v-card-text v-if="n===5">
+          <v-card-text v-if="n===6">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -306,7 +322,7 @@
           </v-card-text>
 
           <!-- Start Exposure Age -->
-          <v-card-text v-if="n===6">
+          <v-card-text v-if="n===7">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -924,9 +940,11 @@ export default {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
+              console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
+              
             } else {
               this.getcovidData(this.s)
             }
@@ -1074,7 +1092,7 @@ export default {
       for (var xt in expo) {
         var m = c.indexOf(expo[xt].date_of_contact.slice(0, 3)) + 1 
         if (m < 10) { m = '0' + m }
-        var d = [expo[xt].date_of_contact.slice(8, 12).trim(), m].join('-')
+        var d = [expo[xt].date_of_contact.slice(8, 13).trim(), m].join('-')
         if (d === name) {
           counter++
         }
