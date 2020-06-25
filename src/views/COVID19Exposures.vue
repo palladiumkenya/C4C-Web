@@ -210,13 +210,17 @@
     >
       <v-tab>Report By Month</v-tab>
       <v-tab>Report By Hour</v-tab>
-      <v-tab>IPC Training</v-tab>
-      <v-tab>Report By Contact</v-tab>
       <v-tab>Report By Cadre</v-tab>
       <v-tab>Report By Gender</v-tab>
       <v-tab>Report By Age</v-tab>
+      <v-tab>Report By Contact</v-tab>
+      <v-tab>IPC Training</v-tab>
+      <v-tab>PPE Worn</v-tab>
+      <v-tab>Personal Protective Equipment</v-tab>
+      <v-tab>PCR Test</v-tab>
+
       <v-tab-item
-        v-for="n in 6"
+        v-for="n in 10"
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n===1">
@@ -258,41 +262,9 @@
             </div>
           </v-card-text>
 
-          <!-- Start IPC Training -->
-
-          <v-card-text v-if="n===3">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsIPC"/>
-            </div>
-          </v-card-text>
-
-          <!-- Start Exposure Contact -->
-
-          <v-card-text v-if="n===4">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsContact"/>
-            </div>
-          </v-card-text>
-
           <!-- Start Exposure Cadre -->
 
-          <v-card-text v-if="n===5">
+          <v-card-text v-if="n===3">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -308,7 +280,7 @@
 
           <!-- Start Exposure Gender -->
 
-          <v-card-text v-if="n===6">
+          <v-card-text v-if="n===4">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -323,7 +295,8 @@
           </v-card-text>
 
           <!-- Start Exposure Age -->
-          <v-card-text v-if="n===7">
+
+          <v-card-text v-if="n===5">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -334,6 +307,82 @@
               <highcharts
                 ref="barChart"
                 :options="barOptionsAge"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start Exposure Contact -->
+
+          <v-card-text v-if="n===6">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsContact"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start Exposure IPC Training -->
+          <v-card-text v-if="n===7">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsIpc"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start PPE's Present -->
+          <v-card-text v-if="n===8">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsPpePresent"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start Specific PPE's -->
+          <v-card-text v-if="n===9">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsPpe"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start PCR Test -->
+          <v-card-text v-if="n===10">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsPCR"/>
             </div>
           </v-card-text>
 
@@ -395,7 +444,7 @@ export default {
       value1: true,
 
             // by month
-            barOptionsMonth: {
+        barOptionsMonth: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           title: {
@@ -497,7 +546,7 @@ export default {
       // by contact
 
       //by IPC Training
-      barOptionsIPC: {
+      barOptionsIpc: {
         xAxis: {
           categories: [0, 1],
           title: {
@@ -507,7 +556,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Health Care Workers ',
+            text: 'No. of Exposures ',
             align: 'high'
           },
           labels: {
@@ -544,7 +593,9 @@ export default {
           data: []
         }
       ]
-    },    
+    }, 
+    
+    //Report By Contact
       
       barOptionsContact: {
         xAxis: {
@@ -746,6 +797,158 @@ export default {
         ]
       },
 
+       //by PPE Present
+      barOptionsPpePresent: {
+        xAxis: {
+          categories: [0, 1],
+          title: {
+            text: 'HCW With PPES' 
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures ',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+      },
+      plotOptions: {
+        column: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Covid 19 Exposures Report by PPEs'
+      },
+      series: [
+        {
+          colorByPoint: true,
+          name: 'Numbers',
+          data: []
+        }
+      ]
+    }, 
+    
+    //Report By PPE Worn
+      
+      barOptionsPpe: {
+        xAxis: {
+          categories: ['None', 'Gloves', 'Fabric mask',  'N95 mask (or equivalent)', 'Surgical/medical mask', 'Face shield or goggles/protective glasses', 'Disposable gown', 'Waterproof apron'],
+          title: {
+            text: 'Types of Personal Protective Equipment'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Covid 19 Exposures Report by PPEs Worn'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+       //Report By PPE Worn
+      
+    barOptionsPCR: {
+        xAxis: {
+          categories: ['Positive', 'Negative', 'Waiting'],
+          title: {
+            text: 'Nature of Contact'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Covid 19 Exposures Report by PCR Tests Done'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
       load: true,
       fac_filt: [],
       fac_filtl: [],
@@ -760,7 +963,6 @@ export default {
       users: [],
       gender: [],
       hours: [],
-      ipc_training: []
 
     }
   },
@@ -1056,10 +1258,30 @@ export default {
       this.barOptionsHour.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsIPC.xAxis.categories) {
-        data.push(this.getIPCNum(this.barOptionsIPC.xAxis.categories[i], list))
+      for (var i in this.barOptionsIpc.xAxis.categories) {
+        data.push(this.getIPCNum(this.barOptionsIpc.xAxis.categories[i], list))
       }
-      this.barOptionsIPC.series[0].data = data
+      this.barOptionsIpc.series[0].data = data
+
+      var data = []
+      for (var i in this.barOptionsPpePresent.xAxis.categories) {
+        data.push(this.getPpePresent(this.barOptionsPpePresent.xAxis.categories[i], list))
+      }
+      this.barOptionsPpePresent.series[0].data = data
+      console.log(data)
+
+      var data = []
+      for (var i in this.barOptionsPpe.xAxis.categories) {
+        data.push(this.getPpe(this.barOptionsPpe.xAxis.categories[i], list))
+      }
+      this.barOptionsPpe.series[0].data = data
+      console.log(data)
+
+      var data = []
+      for (var i in this.barOptionsPCR.xAxis.categories) {
+        data.push(this.getPCR(this.barOptionsPCR.xAxis.categories[i], list))
+      }
+      this.barOptionsPCR.series[0].data = data
       console.log(data)
 
       var data = []
@@ -1131,6 +1353,33 @@ export default {
         var counter = 0
         for (var p in c) {
             if (c[p].ipc_training === ipc) {
+                counter++
+            }
+        }
+        return counter
+    },
+    getPpePresent (ppe, c) {
+        var counter = 0
+        for (var h in c) {
+            if (c[h].ppe_worn === ppe) {
+                counter++
+            }
+        }
+        return counter
+    },
+    getPpe (ppes, c) {
+        var counter = 0
+        for (var g in c) {
+            if (c[g].ppes === ppes) {
+                counter++
+            }
+        }
+        return counter
+    },
+    getPCR (pcr, c) {
+        var counter = 0
+        for (var k in c) {
+            if (c[k].pcr_test === pcr) {
                 counter++
             }
         }

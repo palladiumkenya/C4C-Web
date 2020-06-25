@@ -268,7 +268,7 @@
                 color="#007bff"/>
               <highcharts
                 ref="barChart"
-                :options="barOptionsIPC"/>
+                :options="barOptionsIpc"/>
             </div>
           </v-card-text>
 
@@ -480,7 +480,7 @@ export default {
       // by contact
 
       //by IPC Training
-      barOptionsIPC: {
+      barOptionsIpc: {
         xAxis: {
           categories: [0, 1],
           title: {
@@ -1039,10 +1039,10 @@ export default {
       this.barOptionsHour.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsIPC.xAxis.categories) {
-        data.push(this.getIPCNum(this.barOptionsIPC.xAxis.categories[i], list))
+      for (var i in this.barOptionsIpc.xAxis.categories) {
+        data.push(this.getIPCNum(this.barOptionsIpc.xAxis.categories[i], list))
       }
-      this.barOptionsIPC.series[0].data = data
+      this.barOptionsIpc.series[0].data = data
       console.log(data)
 
       var data = []
