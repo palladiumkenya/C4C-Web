@@ -215,8 +215,8 @@
       <v-tab>Report By Age</v-tab>
       <v-tab>Report By Contact</v-tab>
       <v-tab>IPC Training</v-tab>
+      <v-tab>PPE Present</v-tab>
       <v-tab>PPE Worn</v-tab>
-      <v-tab>Personal Protective Equipment</v-tab>
       <v-tab>PCR Test</v-tab>
 
       <v-tab-item
