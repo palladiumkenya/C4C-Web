@@ -210,6 +210,7 @@
     >
       <v-tab>Report By Month</v-tab>
       <v-tab>Report By Hour</v-tab>
+      <v-tab>IPC Training</v-tab>
       <v-tab>Report By Contact</v-tab>
       <v-tab>Report By Cadre</v-tab>
       <v-tab>Report By Gender</v-tab>
@@ -257,9 +258,25 @@
             </div>
           </v-card-text>
 
-          <!-- Start Exposure Contact -->
+          <!-- Start IPC Training -->
 
           <v-card-text v-if="n===3">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsIPC"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start Exposure Contact -->
+
+          <v-card-text v-if="n===4">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -275,7 +292,7 @@
 
           <!-- Start Exposure Cadre -->
 
-          <v-card-text v-if="n===4">
+          <v-card-text v-if="n===5">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -291,7 +308,7 @@
 
           <!-- Start Exposure Gender -->
 
-          <v-card-text v-if="n===5">
+          <v-card-text v-if="n===6">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -306,7 +323,7 @@
           </v-card-text>
 
           <!-- Start Exposure Age -->
-          <v-card-text v-if="n===6">
+          <v-card-text v-if="n===7">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -479,6 +496,56 @@ export default {
       },
       // by contact
 
+      //by IPC Training
+      barOptionsIPC: {
+        xAxis: {
+          categories: [0, 1],
+          title: {
+            text: 'HCW IPC Training' 
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Health Care Workers ',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+      },
+      plotOptions: {
+        column: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Health Care Workers IPC Training'
+      },
+      series: [
+        {
+          colorByPoint: true,
+          name: 'Numbers',
+          data: []
+        }
+      ]
+    },    
+      
       barOptionsContact: {
         xAxis: {
           categories: ['Patient', 'Colleague', 'Community', 'Home', 'Unknown'],
@@ -693,6 +760,7 @@ export default {
       users: [],
       gender: [],
       hours: [],
+      ipc_training: []
 
     }
   },
@@ -712,7 +780,7 @@ export default {
 
     methods: {
 
-        click () {
+      click () {
       let expo = []
       var dates = {
         convert: function (d) {
@@ -744,7 +812,7 @@ export default {
       this.getcovidData(expo)
     },
 
-        getFacilities () {
+    getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           this.all_facilities = facilities.data.data
@@ -924,6 +992,7 @@ export default {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
+             // console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -987,6 +1056,13 @@ export default {
       this.barOptionsHour.series[0].data = data
 
       var data = []
+      for (var i in this.barOptionsIPC.xAxis.categories) {
+        data.push(this.getIPCNum(this.barOptionsIPC.xAxis.categories[i], list))
+      }
+      this.barOptionsIPC.series[0].data = data
+      console.log(data)
+
+      var data = []
       for (var i in this.barOptionsContact.xAxis.categories) {
         data.push(this.getContactNum(this.barOptionsContact.xAxis.categories[i], list))
       }
@@ -1003,6 +1079,7 @@ export default {
         data.push(this.getGenderNum(this.barOptionsGender.xAxis.categories[i], list))
       }
       this.barOptionsGender.series[0].data = data
+      console.log(data)
 
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
@@ -1050,6 +1127,15 @@ export default {
       }
       return count
     },
+    getIPCNum (ipc, c) {
+        var counter = 0
+        for (var p in c) {
+            if (c[p].ipc_training === ipc) {
+                counter++
+            }
+        }
+        return counter
+    },
     getCadreNum (name, c) {
         var counter = 0
       for (var xc in c) {
@@ -1074,7 +1160,7 @@ export default {
       for (var xt in expo) {
         var m = c.indexOf(expo[xt].date_of_contact.slice(0, 3)) + 1 
         if (m < 10) { m = '0' + m }
-        var d = [expo[xt].date_of_contact.slice(8, 12).trim(), m].join('-')
+        var d = [expo[xt].date_of_contact.slice(8, 13).trim(), m].join('-')
         if (d === name) {
           counter++
         }
