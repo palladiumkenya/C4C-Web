@@ -1268,21 +1268,18 @@ export default {
         data.push(this.getPpePresent(this.barOptionsPpePresent.xAxis.categories[i], list))
       }
       this.barOptionsPpePresent.series[0].data = data
-      console.log(data)
 
       var data = []
       for (var i in this.barOptionsPpe.xAxis.categories) {
         data.push(this.getPpe(this.barOptionsPpe.xAxis.categories[i], list))
       }
       this.barOptionsPpe.series[0].data = data
-      console.log(data)
 
       var data = []
       for (var i in this.barOptionsPCR.xAxis.categories) {
         data.push(this.getPCR(this.barOptionsPCR.xAxis.categories[i], list))
       }
       this.barOptionsPCR.series[0].data = data
-      console.log(data)
 
       var data = []
       for (var i in this.barOptionsContact.xAxis.categories) {
@@ -1301,7 +1298,6 @@ export default {
         data.push(this.getGenderNum(this.barOptionsGender.xAxis.categories[i], list))
       }
       this.barOptionsGender.series[0].data = data
-      console.log(data)
 
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
@@ -1416,11 +1412,12 @@ export default {
       }
       return counter
     },
-    getHourNum (name, t) {
+    getHourNum (name, c) {
       var counter = 0
-      for (var xh in t) {
-        var hr = t[xh].date_of_contact.split(':')[0].slice(-2).trim()
-        if (hr < 10 && hr > 0) {
+      for (var xh in c) {
+        var hr = c[xh].date_of_contact.split(':')[0].slice(-2).trim()
+
+        if (hr < 10) {
           hr = '0' + hr
         }
         if (hr === name) {
