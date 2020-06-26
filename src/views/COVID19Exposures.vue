@@ -209,7 +209,6 @@
       centered
     >
       <v-tab>Report By Month</v-tab>
-      <v-tab>Report By Hour</v-tab>
       <v-tab>Report By Cadre</v-tab>
       <v-tab>Report By Gender</v-tab>
       <v-tab>Report By Age</v-tab>
@@ -220,7 +219,7 @@
       <v-tab>PCR Test</v-tab>
 
       <v-tab-item
-        v-for="n in 10"
+        v-for="n in 9"
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n===1">
@@ -248,7 +247,7 @@
           </v-card-text>
 
           <!-- Start Exposure Hour -->
-          <v-card-text v-if="n===2">
+          <!-- <v-card-text v-if="n===2">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -260,11 +259,11 @@
                 ref="barChart"
                 :options="barOptionsHour"/>
             </div>
-          </v-card-text>
+          </v-card-text> -->
 
           <!-- Start Exposure Cadre -->
 
-          <v-card-text v-if="n===3">
+          <v-card-text v-if="n===2">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -280,7 +279,7 @@
 
           <!-- Start Exposure Gender -->
 
-          <v-card-text v-if="n===4">
+          <v-card-text v-if="n===3">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -296,7 +295,7 @@
 
           <!-- Start Exposure Age -->
 
-          <v-card-text v-if="n===5">
+          <v-card-text v-if="n===4">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -312,7 +311,7 @@
 
           <!-- Start Exposure Contact -->
 
-          <v-card-text v-if="n===6">
+          <v-card-text v-if="n===5">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -327,7 +326,7 @@
           </v-card-text>
 
           <!-- Start Exposure IPC Training -->
-          <v-card-text v-if="n===7">
+          <v-card-text v-if="n===6">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -342,7 +341,7 @@
           </v-card-text>
 
           <!-- Start PPE's Present -->
-          <v-card-text v-if="n===8">
+          <v-card-text v-if="n===7">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -357,7 +356,7 @@
           </v-card-text>
 
           <!-- Start Specific PPE's -->
-          <v-card-text v-if="n===9">
+          <v-card-text v-if="n===8">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -372,7 +371,7 @@
           </v-card-text>
 
           <!-- Start PCR Test -->
-          <v-card-text v-if="n===10">
+          <v-card-text v-if="n===9">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -495,55 +494,54 @@ export default {
 
       // by hour
 
-      barOptionsHour: {
-        xAxis: {
-          categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ],
-          title: {
-            text: 'Hours Range'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'Covid 19 Exposures Report by Hours'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-      // by contact
+      // barOptionsHour: {
+      //   xAxis: {
+      //     categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ],
+      //     title: {
+      //       text: 'Hours Range'
+      //     }
+      //   },
+      //   yAxis: {
+      //     min: 0,
+      //     title: {
+      //       text: 'No. of Exposures',
+      //       align: 'high'
+      //     },
+      //     labels: {
+      //       overflow: 'justify',
+      //       items: [
+      //         {
+      //           html: '',
+      //           style: {
+      //             left: '50px',
+      //             top: '18px',
+      //             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   },
+      //   plotOptions: {
+      //     column: {
+      //       dataLabels: {
+      //         enabled: true
+      //       }
+      //     }
+      //   },
+      //   chart: {
+      //     type: 'column'
+      //   },
+      //   title: {
+      //     text: 'Covid 19 Exposures Report by Hours'
+      //   },
+      //   series: [
+      //     {
+      //       colorByPoint: true,
+      //       name: 'Numbers',
+      //       data: []
+      //     }
+      //   ]
+      // },
 
       //by IPC Training
       barOptionsIpc: {
@@ -584,7 +582,7 @@ export default {
         type: 'column'
       },
       title: {
-        text: 'Health Care Workers IPC Training'
+        text: 'Covid 19 Exposure by IPC Training'
       },
       series: [
         {
@@ -1251,11 +1249,11 @@ export default {
       }
       this.barOptionsMonth.series[0].data = data
 
-      var data = []
-      for (var i in this.barOptionsHour.xAxis.categories) {
-        data.push(this.getHourNum(this.barOptionsHour.xAxis.categories[i], list))
-      }
-      this.barOptionsHour.series[0].data = data
+      // var data = []
+      // for (var i in this.barOptionsHour.xAxis.categories) {
+      //   data.push(this.getHourNum(this.barOptionsHour.xAxis.categories[i], list))
+      // }
+      // this.barOptionsHour.series[0].data = data
 
       var data = []
       for (var i in this.barOptionsIpc.xAxis.categories) {
