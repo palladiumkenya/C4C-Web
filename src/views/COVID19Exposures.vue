@@ -208,8 +208,11 @@
       color="teal lighten-5"
       centered
     >
-      <v-tab>Report By Month</v-tab>
+
+      <v-tab>Summary Report</v-tab>
+      <v-tab>Report By Contact</v-tab>
       <v-tab>Report By Cadre</v-tab>
+      <v-tab>Report By Month</v-tab>
       <v-tab>Report By Gender</v-tab>
       <v-tab>Report By Age</v-tab>
       <v-tab>Report By Procedure</v-tab>
@@ -1195,6 +1198,7 @@ export default {
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
+              
             } else {
               this.getcovidData(this.s)
             }

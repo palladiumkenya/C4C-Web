@@ -211,14 +211,13 @@
       <v-tab>Report By Symptoms</v-tab>
       <v-tab>Risk Assessment reports</v-tab>
       <v-tab>Exposure management </v-tab>
-      <v-tab>Date Stopped Working</v-tab>
-      <v-tab>Date Returned to Work</v-tab>
+      <v-tab>Work Report</v-tab>
       <v-tab-item
-        v-for="n in 6"
+        v-for="n in 4"
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n===1">
-            <!-- Start Exposure Month -->
+            <!-- Start Symptoms -->
             <v-container py-0>
               <v-layout wrap>
                 <v-flex
@@ -234,29 +233,14 @@
                       color="#007bff"/>
                     <highcharts
                       ref="barChart"
-                      :options="barOptionsMonth"/>
+                      :options="barOptionsSymptoms"/>
                   </div>
                 </v-flex>
               </v-layout>
             </v-container>
           </v-card-text>
 
-          <!-- Start Exposure Hour -->
-          <v-card-text v-if="n===1">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsHour"/>
-            </div>
-          </v-card-text>
-
-          <!-- Start IPC Training -->
+          <!-- Start Risk Assessment -->
 
           <v-card-text v-if="n===2">
             <div class="card vld-parent">
@@ -268,11 +252,11 @@
                 color="#007bff"/>
               <highcharts
                 ref="barChart"
-                :options="barOptionsIpc"/>
+                :options="barOptionsRisk"/>
             </div>
           </v-card-text>
 
-          <!-- Start Exposure Contact -->
+          <!-- Start Exposure Management -->
 
           <v-card-text v-if="n===3">
             <div class="card vld-parent">
@@ -284,11 +268,11 @@
                 color="#007bff"/>
               <highcharts
                 ref="barChart"
-                :options="barOptionsContact"/>
+                :options="barOptionsExpo"/>
             </div>
           </v-card-text>
 
-          <!-- Start Exposure Cadre -->
+          <!-- Start Date Returned To work -->
 
           <v-card-text v-if="n===4">
             <div class="card vld-parent">
@@ -300,24 +284,121 @@
                 color="#007bff"/>
               <highcharts
                 ref="barChart"
-                :options="barOptionsCadre"/>
+                :options="barOptionsDateReturn"/>
             </div>
+          <!-- start list -->
+
+          <v-container
+    fill-height
+    fluid
+    grid-list-xl
+  >
+    <v-layout
+      justify-center
+      wrap
+    >
+      <v-flex
+        md12
+      >
+
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="12000"
+          color="error"
+          top>
+          <v-icon
+            color="white"
+            class="mr-3"
+          >
+            mdi-bell-plus
+          </v-icon>
+          <div> {{ output.error }} {{ result }}</div>
+          <v-icon
+            size="16"
+            @click="snackbar = false"
+          >
+            mdi-close-circle
+          </v-icon>
+        </v-snackbar>
+
+        <material-card
+          color="green"
+          title="Broadcast Messages"
+        >
+          <v-card-text>
+            <div/>
+            <p class="display-0 text--primary">
+              List of Wok Report
+            </p>
           </v-card-text>
+          <v-container py-0>
+            <v-layout wrap>
+              <v-flex
+                xs12
+                md10>
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-search-web"
+                  label="Search"
+                  single-line
+                  hide-details
+                />
+              </v-flex>
+              <v-flex
+                xs12
+                md2>
+                <v-btn
+                  :loading="downloadLoading"
+                  color="primary"
+                  @click="handleDownload">
+                  <v-icon left>mdi-download</v-icon>Export Excel
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container><br>
 
-          <!-- Start Exposure Cadre -->
+          <v-data-table
+            :headers="headers"
+            :items="exposures"
+            :search="search"
+            :rows-per-page-items="rowsPerPageItems"
+            :loading="true"
+          >
 
-          <v-card-text v-if="n===5">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsCadre"/>
-            </div>
+          <template slot='no-data'>
+              <v-progress-linear slot='progress' indeterminate></v-progress-linear>
+          </template>
+
+            <template
+              slot="items"
+              slot-scope="props">
+              <tr @click="props.expanded = !props.expanded">
+                <td>{{ s.indexOf(props.item)+1 }}</td>
+                <td>{{ props.item.gender }}</td>
+                <td>{{ props.item.cadre }}</td>
+                <td>{{ props.item.return_to_wor_date }}</td>
+                <td>
+                  <v-icon v-if="props.expanded">mdi-arrow-down</v-icon>
+                  <v-icon v-else>mdi-arrow-right</v-icon>
+                </td>
+              </tr>
+            </template>
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+          </v-data-table>
+        </material-card>
+      </v-flex>
+
+    </v-layout>
+  </v-container>
+
+          <!-- end list -->
+
           </v-card-text>
 
         </v-container>
@@ -353,6 +434,38 @@ export default {
   components: { highcharts: Chart, Loading },
     data () {
       return {
+        rowsPerPageItems: [100, 500, 1000],
+      search: '',
+      link: '',
+      output: '',
+      result: '',
+      snackbar: false,
+      headers: [
+        {
+          text: 'No.',
+          value: 'No.'
+        },
+        {
+          sortable: false,
+          text: 'Gender',
+          value: 'gender'
+        },
+        {
+          text: 'Cadre',
+          value: 'cadre'
+        },
+        {
+          text: 'Date Returned To work',
+          value: 'return_to _work_date'
+        }
+      ],
+      exposures: [],
+      downloadLoading: false,
+      filename: `Work Report ${new Date().toISOString()}`,
+      autoWidth: true,
+      bookType: 'xlsx',
+
+        //
         isLoading: true,
       partner: '',
       cadres: [],
@@ -377,18 +490,18 @@ export default {
       value: true,
       value1: true,
 
-            // by month
-            barOptionsMonth: {
+            // by symptoms
+            barOptionsSymptoms: {
         xAxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          categories: ['Fever', 'Cough', 'Fatigue', 'Difficult in breathing', 'Sore throat', 'Sneezing'],
           title: {
-            text: 'Year -  Month'
+            text: 'Symptoms'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposures',
+            text: 'Cumulative Number',
             align: 'high'
           },
           labels: {
@@ -416,7 +529,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Exposures Report by Months'
+          text: 'Covid 19 Symptoms Reports'
         },
         series: [
           {
@@ -427,19 +540,19 @@ export default {
         ]
       },
 
-      // by hour
+      // by exposure management
 
-      barOptionsHour: {
+      barOptionsExpo: {
         xAxis: {
-          categories: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00' ],
+          categories: ['Home Quarantine', 'Center Quarantine', 'Hospital Quarantine', 'Home-based Care'],
           title: {
-            text: 'Hours Range'
+            text: ''
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposures',
+            text: 'Cumulative Numbers',
             align: 'high'
           },
           labels: {
@@ -467,7 +580,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Exposures Report by Hours'
+          text: 'Covid 19 Exposures Management'
         },
         series: [
           {
@@ -477,20 +590,19 @@ export default {
           }
         ]
       },
-      // by contact
 
-      //by IPC Training
-      barOptionsIpc: {
+      //by Risk Assessment
+      barOptionsRisk: {
         xAxis: {
-          categories: [0, 1],
+          categories: ['High risk', 'Low risk'],
           title: {
-            text: 'HCW IPC Training' 
+            text: 'Risk Assessment' 
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Health Care Workers ',
+            text: 'Cumulative Numbers ',
             align: 'high'
           },
           labels: {
@@ -518,7 +630,7 @@ export default {
         type: 'column'
       },
       title: {
-        text: 'Health Care Workers IPC Training'
+        text: 'Risk Assessment Reports'
       },
       series: [
         {
@@ -527,69 +639,20 @@ export default {
           data: []
         }
       ]
-    },    
-      
-      barOptionsContact: {
-        xAxis: {
-          categories: ['Patient', 'Colleague', 'Community', 'Home', 'Unknown'],
-          title: {
-            text: 'Nature of Contact'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'Covid 19 Exposures Report by Contact'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
+    }, 
 
-      // by cadre
-      barOptionsCadre: {
+    // date returned to work  
+      barOptionsDateReturn: {
         xAxis: {
-          categories: ['Cleaner', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Nurse', 'Other-Specify', 'Student', 'VCT Counsellor', 'Waste Handler'],
+          categories: ['Stopped work', 'Returned to work'],
           title: {
-            text: 'Cadre'
+            text: ''
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposures',
+            text: 'Cumulative Numbers',
             align: 'high'
           },
           labels: {
@@ -617,108 +680,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Exposures by Cadre'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-      // by gender
-      barOptionsGender: {
-        xAxis: {
-          categories: ['MALE', 'FEMALE', 'UNDEFINED'],
-          title: {
-            text: 'Gender'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'Covid 19 Exposure by Gender'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: [],
-           
-          }
-        ]
-      },
-
-      // by age group
-      barOptionsAge: {
-        xAxis: {
-          categories: ['18 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
-          title: {
-            text: 'Age Groups'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'Covid 19 Exposures by Age'
+          text: 'Work Report'
         },
         series: [
           {
@@ -748,6 +710,14 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters({
+      user: 'auth/user',
+      token: 'auth/token',
+      e: 'auth/expo'
+    })
+  },
+
     created () {
         this.getcovidExpo()
         this.getCounties()
@@ -759,6 +729,12 @@ export default {
       .then((c) => {
         this.cadres = c.data.data
       })
+
+      if (this.s.length === 0) {
+      this.getcovidExpo()
+    } else {
+      this.s = this.e
+    }
     },
 
     methods: {
@@ -975,16 +951,22 @@ export default {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
-             // console.log(this.s)
+              console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
+              this.isLoading = false
             } else {
               this.getcovidData(this.s)
             }
           })
           
           .catch(error => console.log(error.message))
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
       }else if (this.user.role_id === 4) {
         axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {
@@ -992,11 +974,17 @@ export default {
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
+              this.isLoading = false
             } else {
               this.getcovidData(this.s)
             }
           })
           .catch(error => console.log(error.message))
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
       }
     },
      async loopT (l) {
@@ -1022,144 +1010,93 @@ export default {
       this.getcovidData(this.s)
       this.isLoading = false
     },
+
+    handleDownload () {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['Gender', 'Cadre', 'Return to Work Date']
+        const filterVal = ['gender', 'cadre', 'return_to_work_date']
+        const list = this.s
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
     
     getcovidData (list) {
       this.load = true
       var data = []
-      this.barOptionsMonth.xAxis.categories = this.dateRange(this.startDate, this.endDate)
-      for (var i in this.barOptionsMonth.xAxis.categories) {
-        data.push(this.getMonthNum(this.barOptionsMonth.xAxis.categories[i], list))
+      for (var i in this.barOptionsSymptoms.xAxis.categories) {
+        data.push(this.getSymNum(this.barOptionsSymptoms.xAxis.categories[i], list))
       }
-      this.barOptionsMonth.series[0].data = data
+      this.barOptionsSymptoms.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsHour.xAxis.categories) {
-        data.push(this.getHourNum(this.barOptionsHour.xAxis.categories[i], list))
+
+      for (var i in this.barOptionsExpo.xAxis.categories) {
+        data.push(this.getExpoMan(this.barOptionsExpo.xAxis.categories[i], list))
       }
-      this.barOptionsHour.series[0].data = data
+      this.barOptionsExpo.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsIpc.xAxis.categories) {
-        data.push(this.getIPCNum(this.barOptionsIpc.xAxis.categories[i], list))
+      for (var i in this.barOptionsRisk.xAxis.categories) {
+        data.push(this.getRisk(this.barOptionsRisk.xAxis.categories[i], list))
       }
-      this.barOptionsIpc.series[0].data = data
-      console.log(data)
+      this.barOptionsRisk.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsContact.xAxis.categories) {
-        data.push(this.getContactNum(this.barOptionsContact.xAxis.categories[i], list))
+      for (var i in this.barOptionsDateReturn.xAxis.categories) {
+        data.push(this.getDateReturn(this.barOptionsDateReturn.xAxis.categories[i], list))
       }
-      this.barOptionsContact.series[0].data = data
+      this.barOptionsDateReturn.series[0].data = data
 
-      var data = []
-      for (var i in this.barOptionsCadre.xAxis.categories) {
-        data.push(this.getCadreNum(this.barOptionsCadre.xAxis.categories[i], list))
-      }
-      this.barOptionsCadre.series[0].data = data
-
-      var data = []
-      for (var i in this.barOptionsGender.xAxis.categories) {
-        data.push(this.getGenderNum(this.barOptionsGender.xAxis.categories[i], list))
-      }
-      this.barOptionsGender.series[0].data = data
-      console.log(data)
-
-      var data = []
-      for (var i in this.barOptionsAge.xAxis.categories) {
-        data.push(this.getAgeNum(i, list))
-      }
-      this.barOptionsAge.series[0].data = data
       this.value = false
       this.load = false
       this.isLoading = false
 
     },
-    getAgeNum (cat, ag) {
-      var count = 0
-      for (var x in ag) {
-        var date = new Date(ag[x].dob)
-        var diff_ms = Date.now() - date.getTime()
-        var age_dt = new Date(diff_ms)
-        var age = Math.abs(age_dt.getUTCFullYear() - 1970)
-        if (age >= 18 && age < 26 && cat == 0) {
-          count++
-        } else if (age > 25 && age <= 35 && cat == 1) {
-          count++
-        } else if (age > 35 && age <= 45 && cat == 2) {
-          count++
-        } else if (age > 45 && age <= 55 && cat == 3) {
-          count++
-        } else if (age > 55 && age <= 65 && cat == 4) {
-          count++
-        } else if (age > 65 && cat == 5) {
-          count++
-        } else if (age < 18 && cat == 6) {
-          count++
-        } else {
-          count
-        }
-      }
-      return count
-    },
-    getGenderNum (cat, g) {
+    getRisk (cat, g) {
       var count = 0
       for (var x in g) {
-        if (g[x].gender === cat) {
+        if (g[x].risk_assessment_outcome === cat) {
           count++
         }
       }
       return count
     },
-    getIPCNum (ipc, c) {
+    getExpoMan (ipc, c) {
         var counter = 0
         for (var p in c) {
-            if (c[p].ipc_training === ipc) {
+            if (c[p].exposure_management === ipc) {
                 counter++
             }
         }
         return counter
     },
-    getCadreNum (name, c) {
+    getSymNum (name, c) {
         var counter = 0
       for (var xc in c) {
-        if (c[xc].cadre === name) {
+        if (c[xc].symptoms === name) {
           counter++
         }
       }
       return counter
     },
-    getContactNum (contact, c) {
-        var counter = 0
-        for (var v in c) {
-            if (c[v].contact_with === contact) {
-                counter++
-            }
-        }
-        return counter
-    },
-    getMonthNum (name, expo) {
+    getDateReturn (name, expo) {
       var counter = 0
       var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       for (var xt in expo) {
         var m = c.indexOf(expo[xt].date_of_contact.slice(0, 3)) + 1 
         if (m < 10) { m = '0' + m }
-        var d = [expo[xt].date_of_contact.slice(8, 13).trim(), m].join('-')
+        var d = [expo[xt].date_of_contact.slice(3, 13).trim(), m].join('-')
         if (d === name) {
           counter++
-        }
-      }
-      return counter
-    },
-    getHourNum (name, t) {
-      var counter = 0
-      for (var xh in t) {
-        var hr = t[xh].date_of_contact.split(':')[0].slice(-2).trim()
-        if (hr < 10 && hr > 0) {
-          hr = '0' + hr
-        }
-        if (hr === name) {
-          counter++
-          
         }
       }
       return counter
@@ -1178,7 +1115,8 @@ export default {
         for (var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
           var month = j + 1
           var displayMonth = month < 10 ? '0' + month : month
-          dates.push([i, displayMonth].join('-'))
+          dates.push([i, displayMonth, '01'].join('-'))
+          
         }
       }
       return dates
