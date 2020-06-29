@@ -104,10 +104,13 @@
                     <tr @click="props.expanded = !props.expanded">
                       <td>{{ props.item.first_name }}</td>
                       <td>{{ props.item.surname }}</td>
+                      <td>{{ props.item.gender }}</td>
+                      <td>{{ props.item.dob }}</td>
                       <td>{{ props.item.facility_name }}</td>
+                      <td>{{ props.item.county }}</td>
+                      <td>{{ props.item.sub_county }}</td>
                       <td>{{ props.item.department }}</td>
                       <td>{{ props.item.cadre }}</td>
-                      <td>{{ props.item.dob }}</td>
                     </tr>
                   </template>
                   <v-alert
@@ -314,10 +317,13 @@
                     <tr @click="props.expanded = !props.expanded">
                       <td>{{ props.item.first_name }}</td>
                       <td>{{ props.item.surname }}</td>
+                      <td>{{ props.item.gender }}</td>
+                      <td>{{ props.item.dob }}</td>
                       <td>{{ props.item.facility_name }}</td>
+                      <td>{{ props.item.county }}</td>
+                      <td>{{ props.item.sub_county }}</td>
                       <td>{{ props.item.department }}</td>
                       <td>{{ props.item.cadre }}</td>
-                      <td>{{ props.item.dob }}</td>
                     </tr>
 
           </template>
@@ -353,7 +359,7 @@ export default {
       isLoading: true,
       snackbar: false,
       result: '',
-      rowsPerPageItems: [200, 5000, 10000],
+      rowsPerPageItems: [20, 5000, 10000],
       headers: [
         {
           sortable: false,
@@ -367,8 +373,28 @@ export default {
         },
         {
           sortable: false,
+          text: 'Gender',
+          value: 'gender'
+        },
+        {
+          sortable: false,
+          text: 'Date Of Birth',
+          value: 'dob'
+        },
+        {
+          sortable: false,
           text: 'Facility',
           value: 'facility.name'
+        },
+        {
+          sortable: false,
+          text: 'County',
+          value: 'county'
+        },
+        {
+          sortable: false,
+          text: 'Sub County',
+          value: 'sub_county'
         },
         {
           sortable: false,
@@ -380,11 +406,6 @@ export default {
           text: 'Cadre',
           value: 'cadre'
         },
-        {
-          sortable: false,
-          text: 'Date Of Birth',
-          value: 'dob'
-        }
       ],
 
       headers1: [
