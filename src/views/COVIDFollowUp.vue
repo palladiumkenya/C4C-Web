@@ -1038,6 +1038,7 @@ export default {
       this.barOptionsSymptoms.series[0].data = data
 
       var data = []
+
       for (var i in this.barOptionsExpo.xAxis.categories) {
         data.push(this.getExpoMan(this.barOptionsExpo.xAxis.categories[i], list))
       }
