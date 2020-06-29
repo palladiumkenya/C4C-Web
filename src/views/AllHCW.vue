@@ -182,7 +182,7 @@
                     <v-btn
                       :loading="downloadLoading"
                       color="primary"
-                      @click="handleDownload">
+                      @click="handleDownload2">
                       <v-icon left>mdi-download</v-icon>Export Excel
                     </v-btn>
                   </v-flex>
@@ -353,13 +353,12 @@ export default {
   data () {
     return {
       n: null,
-      all_hcws: [],
       total_users: [],
       search: '',
       isLoading: true,
       snackbar: false,
       result: '',
-      rowsPerPageItems: [20, 5000, 10000],
+      rowsPerPageItems: [200, 5000, 10000],
       headers: [
         {
           sortable: false,
@@ -384,7 +383,7 @@ export default {
         {
           sortable: false,
           text: 'Facility',
-          value: 'facility.name'
+          value: 'facility_name'
         },
         {
           sortable: false,
@@ -434,7 +433,8 @@ export default {
           text: 'Email',
           value: 'email'
         }
-      ],  
+      ],
+      all_hcws: [],  
       downloadLoading: false,
       filename: `Health care workers ${new Date().toISOString()}`,
       autoWidth: true,
@@ -500,8 +500,8 @@ export default {
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
-          l = response.data.links.next
-          this.all_hcws = this.all_hcws.concat(response.data.data)
+          l = workers.data.links.next
+          this.all_hcws = this.all_hcws.concat(workers.data.data)
         } else {
           i = 11
         }
@@ -518,8 +518,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['First Name', 'Surname', 'Facility', 'Department', 'Cadre','DOB']
-        const filterVal = ['first_name', 'surname', 'facility_name', 'department', 'cadre', 'dob']
+        const tHeader = ['First Name', 'Surname', 'Gender', 'Date Of Birth', 'Facility', 'County', 'Sub County', 'Department', 'Cadre']
+        const filterVal = ['first_name', 'surname','gender', 'dob', 'facility_name', 'county', 'sub_county', 'department', 'cadre']
         const list = this.all_hcws
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -534,7 +534,7 @@ export default {
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'cadre') {
+        if (v[j] === 'surname') {
           return v[j]
         } else {
           return v[j]
@@ -572,7 +572,7 @@ export default {
       } 
     },
 
-    handleDownload () {
+    handleDownload2 () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['First Name', 'Surname', 'Gender', 'Phone Number', 'Email']
@@ -591,7 +591,7 @@ export default {
     },
     formatJson (filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'cadre') {
+        if (v[j] === 'surname') {
           return v[j]
         } else {
           return v[j]
