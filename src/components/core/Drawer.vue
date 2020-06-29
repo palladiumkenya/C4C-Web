@@ -195,6 +195,11 @@ export default {
               icon: 'mdi-poll-box'
             },
             {
+              text: 'Covid 19 Follow Up Reports',
+              to: '/covid_follow_ups',
+              icon: 'mdi-chart-line'
+            },
+            {
               to: '/exposure-list',
               icon: 'mdi-playlist-check',
               text: 'Exposures List'
