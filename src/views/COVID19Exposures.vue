@@ -209,10 +209,8 @@
       centered
     >
 
-      <v-tab>Summary Report</v-tab>
-      <v-tab>Report By Contact</v-tab>
-      <v-tab>Report By Cadre</v-tab>
       <v-tab>Report By Month</v-tab>
+      <v-tab>Report By Cadre</v-tab>
       <v-tab>Report By Gender</v-tab>
       <v-tab>Report By Age</v-tab>
       <v-tab>Report By Procedure</v-tab>
@@ -249,6 +247,8 @@
               </v-layout>
             </v-container>
           </v-card-text>
+
+        <!-- Start Exposure Cadre -->
 
           <v-card-text v-if="n===2">
             <div class="card vld-parent">
