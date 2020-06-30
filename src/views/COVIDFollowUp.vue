@@ -275,17 +275,7 @@
           <!-- Start Date Returned To work -->
 
           <v-card-text v-if="n===4">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsDateReturn"/>
-            </div>
+  
           <!-- start list -->
 
           <v-container
@@ -359,7 +349,7 @@
 
           <v-data-table
             :headers="headers"
-            :items="exposures"
+            :items="s"
             :search="search"
             :rows-per-page-items="rowsPerPageItems"
             :loading="true"
@@ -376,7 +366,7 @@
                 <td>{{ s.indexOf(props.item)+1 }}</td>
                 <td>{{ props.item.gender }}</td>
                 <td>{{ props.item.cadre }}</td>
-                <td>{{ props.item.return_to_wor_date }}</td>
+                <td>{{ props.item.return_to_work_date }}</td>
                 <td>
                   <v-icon v-if="props.expanded">mdi-arrow-down</v-icon>
                   <v-icon v-else>mdi-arrow-right</v-icon>
@@ -459,11 +449,6 @@ export default {
           value: 'return_to _work_date'
         }
       ],
-      exposures: [],
-      downloadLoading: false,
-      filename: `Work Report ${new Date().toISOString()}`,
-      autoWidth: true,
-      bookType: 'xlsx',
 
         //
         isLoading: true,
@@ -493,7 +478,7 @@ export default {
             // by symptoms
             barOptionsSymptoms: {
         xAxis: {
-          categories: ['Fever', 'Cough', 'Fatigue', 'Difficult in breathing', 'Sore throat', 'Sneezing'],
+          categories: ['Cough, high temp, fever', 'Sore throat, Headache, Diarrhea', 'Fever, Cough, Anorexia  (Loss of appetite), Sore throat'],
           title: {
             text: 'Symptoms'
           }
@@ -544,7 +529,7 @@ export default {
 
       barOptionsExpo: {
         xAxis: {
-          categories: ['Home Quarantine', 'Center Quarantine', 'Hospital Quarantine', 'Home-based Care'],
+          categories: ['Home Quarantine', 'Center Quarantine', 'Hospital Quarantine', 'Hospital Isolation', 'Home-based Care'],
           title: {
             text: ''
           }
@@ -690,6 +675,12 @@ export default {
           }
         ]
       },
+
+      // s: [],
+      downloadLoading: false,
+      filename: `WorkReport ${new Date().toISOString()}`,
+      autoWidth: true,
+      bookType: 'xlsx',
 
       load: true,
       fac_filt: [],
@@ -1027,6 +1018,15 @@ export default {
         })
         this.downloadLoading = false
       })
+    },
+    formatJson (filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (v[j] === '') {
+          return 'Not Specified'
+        } else {
+          return v[j]
+        }
+      }))
     },
     
     getcovidData (list) {
