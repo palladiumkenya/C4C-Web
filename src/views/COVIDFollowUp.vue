@@ -212,7 +212,7 @@
       <v-tab>Report By Covid Specific Training</v-tab>
       <v-tab>Risk Assessment reports</v-tab>
       <v-tab>Exposure management </v-tab>
-      <v-tab>Work Report</v-tab>
+      <v-tab>Risk Assesment Recommendation</v-tab>
       <v-tab-item
         v-for="n in 5"
         :key="n">
@@ -502,10 +502,10 @@ export default {
       value: true,
       value1: true,
 
-            // by symptoms
-            barOptionsSymptoms: {
+      // by symptoms
+      barOptionsSymptoms: {
         xAxis: {
-          categories: ['Cough, high temp, fever', 'Sore throat, Headache, Diarrhea', 'Fever, Cough, Anorexia  (Loss of appetite), Sore throat'],
+          categories: ['Cough', 'High temp', 'Fever', 'Sore throat', 'Headache', 'Diarrhea', 'Fever', 'Cough', 'Anorexia (Loss of appetite)', 'Sore throat'],
           title: {
             text: 'Symptoms'
           }
@@ -513,7 +513,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Cumulative Number',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -558,13 +558,13 @@ export default {
         xAxis: {
           categories: ['Home Quarantine', 'Center Quarantine', 'Hospital Quarantine', 'Hospital Isolation', 'Home-based Care'],
           title: {
-            text: ''
+            text: 'Exposure Management'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'Cumulative Numbers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -614,7 +614,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'Cumulative Numbers ',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -658,13 +658,13 @@ export default {
         xAxis: {
           categories: ['Stop working', 'Return to work'],
           title: {
-            text: ''
+            text: 'Risk Assesment Recommendation'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'Cumulative Numbers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -692,7 +692,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Work Report'
+          text: 'Risk Assesment Recommendation'
         },
         series: [
           {
@@ -708,13 +708,13 @@ export default {
         xAxis: {
           categories: ['Yes', 'No'],
           title: {
-            text: ''
+            text: 'Covid Specific Training'
           }
         },
         yAxis: {
           min: 0,
           title: {
-            text: 'Cumulative Numbers',
+            text: 'No. of Exposures',
             align: 'high'
           },
           labels: {
@@ -1166,23 +1166,24 @@ export default {
         }
         return counter
     },
-    getSymNum (name, c) {
+    getSymNum (symptoms, c) {
         var counter = 0
       for (var xc in c) {
-        if (c[xc].symptoms === name) {
+        var symp1 = c[xc].symptoms.split(',')[0].slice(0).trim()
+        var symp2 = c[xc].symptoms.split(',')[1].slice(0).trim()
+  
+        if (symp1 === symptoms) {
           counter++
-        }
+        } else if (symp2 === symptoms) {
+          counter++
+        } 
       }
       return counter
     },
     getDateReturn (name, expo) {
       var counter = 0
-      var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       for (var xt in expo) {
-        var m = c.indexOf(expo[xt].date_of_contact.slice(0, 3)) + 1 
-        if (m < 10) { m = '0' + m }
-        var d = [expo[xt].date_of_contact.slice(3, 13).trim(), m].join('-')
-        if (d === name) {
+        if (expo[xt].risk_assessment_recommendation === name) {
           counter++
         }
       }
