@@ -1420,7 +1420,7 @@ export default {
           var pes = c[g].ppes.split(',')[0].slice(0).trim()
           var pes1 = c[g].ppes.split(',')[1].slice(0).trim()
 
-            if (pes  === ppes) {
+            if (pes === ppes) {
                 counter++
             } else if (pes1 === ppes) {
                 counter++
