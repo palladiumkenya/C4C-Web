@@ -209,11 +209,12 @@
       centered
     >
       <v-tab>Report By Symptoms</v-tab>
+      <v-tab>Report By Covid Specific Training</v-tab>
       <v-tab>Risk Assessment reports</v-tab>
       <v-tab>Exposure management </v-tab>
       <v-tab>Work Report</v-tab>
       <v-tab-item
-        v-for="n in 4"
+        v-for="n in 5"
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n===1">
@@ -240,9 +241,25 @@
             </v-container>
           </v-card-text>
 
-          <!-- Start Risk Assessment -->
+          <!-- Start COVID Specific Training -->
 
           <v-card-text v-if="n===2">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsCovidTraining"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start Risk Assessment -->
+
+          <v-card-text v-if="n===3">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -258,7 +275,7 @@
 
           <!-- Start Exposure Management -->
 
-          <v-card-text v-if="n===3">
+          <v-card-text v-if="n===4">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -274,7 +291,7 @@
 
           <!-- Start Date Returned To work -->
 
-          <v-card-text v-if="n===4">
+          <v-card-text v-if="n===5">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -493,7 +510,7 @@ export default {
             // by symptoms
             barOptionsSymptoms: {
         xAxis: {
-          categories: ['Fever', 'Cough', 'Fatigue', 'Difficult in breathing', 'Sore throat', 'Sneezing'],
+          categories: ['Fever', 'Cough', 'Fatigue', 'Difficulty in breathing', 'Sore throat', 'Sneezing'],
           title: {
             text: 'Symptoms'
           }
@@ -644,7 +661,7 @@ export default {
     // date returned to work  
       barOptionsDateReturn: {
         xAxis: {
-          categories: ['Stopped work', 'Returned to work'],
+          categories: ['Stop working', 'Return to work'],
           title: {
             text: ''
           }
@@ -681,6 +698,56 @@ export default {
         },
         title: {
           text: 'Work Report'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // covid specific training  
+      barOptionsCovidTraining: {
+        xAxis: {
+          categories: ['Yes', 'No'],
+          title: {
+            text: ''
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'Cumulative Numbers',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWs With COVID Specific Training'
         },
         series: [
           {
@@ -1051,8 +1118,15 @@ export default {
       this.barOptionsRisk.series[0].data = data
 
       var data = []
+      for (var i in this.barOptionsCovidTraining.xAxis.categories) {
+        data.push(this.getCovidTraining(this.barOptionsCovidTraining.xAxis.categories[i], list))
+      }
+      this.barOptionsCovidTraining.series[0].data = data
+
+      var data = []
       for (var i in this.barOptionsDateReturn.xAxis.categories) {
         data.push(this.getDateReturn(this.barOptionsDateReturn.xAxis.categories[i], list))
+        console.log(data)
       }
       this.barOptionsDateReturn.series[0].data = data
 
@@ -1065,6 +1139,15 @@ export default {
       var count = 0
       for (var x in g) {
         if (g[x].risk_assessment_outcome === cat) {
+          count++
+        }
+      }
+      return count
+    },
+    getCovidTraining (cat, t) {
+      var count = 0
+      for (var x in t) {
+        if (t[x].covid_specific_training === cat) {
           count++
         }
       }

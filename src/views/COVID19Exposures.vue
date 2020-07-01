@@ -214,7 +214,7 @@
       <v-tab>Report By Gender</v-tab>
       <v-tab>Report By Age</v-tab>
       <v-tab>Report By Procedure</v-tab>
-      <v-tab>Report By Contact</v-tab>
+      <v-tab>Transmission Mode</v-tab>
       <v-tab>IPC Training</v-tab>
       <v-tab>PPE Present</v-tab>
       <v-tab>PPE Worn</v-tab>
@@ -323,7 +323,7 @@
                 color="#007bff"/>
               <highcharts
                 ref="barChart"
-                :options="barOptionsContact"/>
+                :options="barOptionsTransmission"/>
             </div>
           </v-card-text>
 
@@ -597,9 +597,9 @@ export default {
     
     //Report By Contact
       
-      barOptionsContact: {
+      barOptionsTransmission: {
         xAxis: {
-          categories: ['Patient', 'Colleague', 'Community', 'Home', 'Unknown'],
+          categories: ['Facility', 'Community'],
           title: {
             text: 'Nature of Contact'
           }
@@ -635,7 +635,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Exposures Report by Contact'
+          text: 'Covid 19 Exposures Report by Transmission'
         },
         series: [
           {
@@ -836,7 +836,7 @@ export default {
         type: 'column'
       },
       title: {
-        text: 'Covid 19 Exposures Report by PPEs'
+        text: 'No of HCWs with PPE Worn'
       },
       series: [
         {
@@ -848,7 +848,6 @@ export default {
     }, 
     
     //Report By PPE Worn
-      
       barOptionsPpe: {
         xAxis: {
           categories: ['None', 'Gloves', 'Fabric mask',  'N95 mask (or equivalent)', 'Surgical/medical mask', 'Face shield or goggles/protective glasses', 'Disposable gown', 'Waterproof apron'],
@@ -887,8 +886,9 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Exposures Report by PPEs Worn'
+          text: 'No of HCWs with PPEs'
         },
+
         series: [
           {
             colorByPoint: true,
@@ -897,6 +897,55 @@ export default {
           }
         ]
       },
+      
+      // barOptionsPpe: {
+      //   xAxis: {
+      //     categories: ['None', 'Gloves', 'Fabric mask',  'N95 mask (or equivalent)', 'Surgical/medical mask', 'Face shield or goggles/protective glasses', 'Disposable gown', 'Waterproof apron'],
+      //     title: {
+      //       text: 'Types of Personal Protective Equipment'
+      //     }
+      //   },
+      //   yAxis: {
+      //     min: 0,
+      //     title: {
+      //       text: 'No. of Exposures',
+      //       align: 'high'
+      //     },
+      //     labels: {
+      //       overflow: 'justify',
+      //       items: [
+      //         {
+      //           html: '',
+      //           style: {
+      //             left: '50px',
+      //             top: '18px',
+      //             color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   },
+      //   plotOptions: {
+      //     column: {
+      //       dataLabels: {
+      //         enabled: true
+      //       }
+      //     }
+      //   },
+      //   chart: {
+      //     type: 'column'
+      //   },
+      //   title: {
+      //     text: 'No of HCWs with PPEs'
+      //   },
+      //   series: [
+      //     {
+      //       colorByPoint: true,
+      //       name: 'Numbers',
+      //       data: []
+      //     }
+      //   ]
+      // },
 
        //Report By PPE Worn
       
@@ -938,7 +987,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Exposures Report by PCR Tests Done'
+          text: 'No of HCWs with PCR Test Done'
         },
         series: [
           {
@@ -1274,6 +1323,7 @@ export default {
       for (var i in this.barOptionsPpe.xAxis.categories) {
         data.push(this.getPpe(this.barOptionsPpe.xAxis.categories[i], list))
       }
+      console.log(data)
       this.barOptionsPpe.series[0].data = data
 
       var data = []
@@ -1283,10 +1333,10 @@ export default {
       this.barOptionsPCR.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsContact.xAxis.categories) {
-        data.push(this.getContactNum(this.barOptionsContact.xAxis.categories[i], list))
+      for (var i in this.barOptionsTransmission.xAxis.categories) {
+        data.push(this.getTransmissionModeNum(this.barOptionsTransmission.xAxis.categories[i], list))
       }
-      this.barOptionsContact.series[0].data = data
+      this.barOptionsTransmission.series[0].data = data
 
       var data = []
       for (var i in this.barOptionsCadre.xAxis.categories) {
@@ -1367,11 +1417,32 @@ export default {
     getPpe (ppes, c) {
         var counter = 0
         for (var g in c) {
-            if (c[g].ppes === ppes) {
+          var pes = c[g].ppes.split(',')[0].slice(0).trim()
+          var pes1 = c[g].ppes.split(',')[1].slice(0).trim()
+
+            if (pes  === ppes) {
+                counter++
+            } else if (pes1 === ppes) {
                 counter++
             }
         }
         return counter
+    },
+
+    getHourNum (name, c) {
+      var counter = 0
+      for (var xh in c) {
+        var hr = c[xh].date_of_contact.split(':')[0].slice(-2).trim()
+
+        if (hr < 10) {
+          hr = '0' + hr
+        }
+        if (hr === name) {
+          counter++
+          
+        }
+      }
+      return counter
     },
     getPCR (pcr, c) {
         var counter = 0
@@ -1400,10 +1471,10 @@ export default {
         }
         return counter
     },
-    getContactNum (contact, c) {
+    getTransmissionModeNum (transmission, c) {
         var counter = 0
         for (var v in c) {
-            if (c[v].contact_with === contact) {
+            if (c[v].transmission_mode === transmission) {
                 counter++
             }
         }
@@ -1418,21 +1489,6 @@ export default {
         var d = [expo[xt].date_of_contact.slice(8, 13).trim(), m].join('-')
         if (d === name) {
           counter++
-        }
-      }
-      return counter
-    },
-    getHourNum (name, c) {
-      var counter = 0
-      for (var xh in c) {
-        var hr = c[xh].date_of_contact.split(':')[0].slice(-2).trim()
-
-        if (hr < 10) {
-          hr = '0' + hr
-        }
-        if (hr === name) {
-          counter++
-          
         }
       }
       return counter
