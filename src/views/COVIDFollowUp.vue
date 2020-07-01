@@ -393,7 +393,11 @@
                 <td>{{ s.indexOf(props.item)+1 }}</td>
                 <td>{{ props.item.gender }}</td>
                 <td>{{ props.item.cadre }}</td>
-                <td>{{ props.item.return_to_work_date }}</td>
+                <td>{{ props.item.facility }}</td>
+                <td>{{ props.item.county }}</td>
+                <td>{{ props.item.sub_county }}</td>
+                <td>{{ props.item.risk_assessment_decision_date }}</td>
+                <td>{{ props.item.isolation_start_date }}</td>
                 <td>
                   <v-icon v-if="props.expanded">mdi-arrow-down</v-icon>
                   <v-icon v-else>mdi-arrow-right</v-icon>
@@ -472,8 +476,24 @@ export default {
           value: 'cadre'
         },
         {
-          text: 'Date Returned To work',
-          value: 'return_to _work_date'
+          text: 'Facility',
+          value: 'facility'
+        },
+        {
+          text: 'County',
+          value: 'county'
+        },
+        {
+          text: 'Sub County',
+          value: 'sub_county'
+        },
+        {
+          text: 'Date Stopped Working',
+          value: 'risk_assessment_decision_date'
+        },
+        {
+          text: 'Date Isolation Started',
+          value: 'isolation_start_date'
         }
       ],
 
@@ -505,7 +525,7 @@ export default {
       // by symptoms
       barOptionsSymptoms: {
         xAxis: {
-          categories: ['Cough', 'High temp', 'Fever', 'Sore throat', 'Headache', 'Diarrhea', 'Fever', 'Cough', 'Anorexia (Loss of appetite)', 'Sore throat'],
+          categories: ['Fever', 'Cough', 'Fatigue', 'Loss of appetite', 'Difficulty in Breathing', 'Muscle pains', 'Sore throat', 'Nasal congestion', 'Headache', 'Diarrhea', 'Nausea', 'Vomiting', 'Loss of smell', 'Loss of smell'],
           title: {
             text: 'Symptoms'
           }
@@ -1076,8 +1096,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Gender', 'Cadre', 'Return to Work Date']
-        const filterVal = ['gender', 'cadre', 'return_to_work_date']
+        const tHeader = ['Gender', 'Cadre','Facility', 'County', 'Sub County', 'Date Stopped Working', 'Date Isolation Started']
+        const filterVal = ['gender', 'cadre', 'facility', 'county', 'sub_county', 'risk_assessment_decision_date' ,'isolation_start_date']
         const list = this.s
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
