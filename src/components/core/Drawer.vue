@@ -181,6 +181,27 @@ export default {
           text: 'Registration Reports'
         },
         {
+          icon: 'mdi-account',
+          text: 'COVID19 Exposures',
+          subLinks: [
+            {
+              text: 'COVID19 General Reports',
+              to: '/covid_exposure',
+              icon: 'mdi-poll-box'
+            },
+            {
+              text: 'COVID19 Follow-Ups',
+              to: '/covid_follow_ups',
+              icon: 'mdi-chart-line'
+            },
+            {
+              text: 'COVID19 Exposures List',
+              to: '/covid_exposures_list',
+              icon: 'mdi-playlist-check'
+            },
+          ]
+        },
+        {
           icon: 'mdi-alert-circle-outline',
           text: 'Exposures',
           subLinks: [
@@ -188,16 +209,6 @@ export default {
               text: 'Exposure report',
               to: '/exposures',
               icon: 'mdi-chart-bar'
-            },
-            {
-              text: 'Covid 19 Exposure',
-              to: '/covid_exposure',
-              icon: 'mdi-poll-box'
-            },
-            {
-              text: 'Covid 19 Follow Ups',
-              to: '/covid_follow_ups',
-              icon: 'mdi-chart-line'
             },
             {
               to: '/exposure-list',

@@ -305,121 +305,6 @@
             </div>
           <!-- start list -->
 
-          <v-container
-    fill-height
-    fluid
-    grid-list-xl
-  >
-    <v-layout
-      justify-center
-      wrap
-    >
-      <v-flex
-        md12
-      >
-
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="12000"
-          color="error"
-          top>
-          <v-icon
-            color="white"
-            class="mr-3"
-          >
-            mdi-bell-plus
-          </v-icon>
-          <div> {{ output.error }} {{ result }}</div>
-          <v-icon
-            size="16"
-            @click="snackbar = false"
-          >
-            mdi-close-circle
-          </v-icon>
-        </v-snackbar>
-
-        <material-card
-          color="green"
-          title="Broadcast Messages"
-        >
-          <v-card-text>
-            <div/>
-            <p class="display-0 text--primary">
-              List of Wok Report
-            </p>
-          </v-card-text>
-          <v-container py-0>
-            <v-layout wrap>
-              <v-flex
-                xs12
-                md10>
-                <v-text-field
-                  v-model="search"
-                  append-icon="mdi-search-web"
-                  label="Search"
-                  single-line
-                  hide-details
-                />
-              </v-flex>
-              <v-flex
-                xs12
-                md2>
-                <v-btn
-                  :loading="downloadLoading"
-                  color="primary"
-                  @click="handleDownload">
-                  <v-icon left>mdi-download</v-icon>Export Excel
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-container><br>
-
-          <v-data-table
-            :headers="headers"
-            :items="s"
-            :search="search"
-            :rows-per-page-items="rowsPerPageItems"
-            :loading="true"
-          >
-
-          <template slot='no-data'>
-              <v-progress-linear slot='progress' indeterminate></v-progress-linear>
-          </template>
-
-            <template
-              slot="items"
-              slot-scope="props">
-              <tr @click="props.expanded = !props.expanded">
-                <td>{{ s.indexOf(props.item)+1 }}</td>
-                <td>{{ props.item.gender }}</td>
-                <td>{{ props.item.cadre }}</td>
-                <td>{{ props.item.facility }}</td>
-                <td>{{ props.item.county }}</td>
-                <td>{{ props.item.sub_county }}</td>
-                <td>{{ props.item.risk_assessment_decision_date }}</td>
-                <td>{{ props.item.isolation_start_date }}</td>
-                <td>
-                  <v-icon v-if="props.expanded">mdi-arrow-down</v-icon>
-                  <v-icon v-else>mdi-arrow-right</v-icon>
-                </td>
-              </tr>
-            </template>
-            <v-alert
-              slot="no-results"
-              :value="true"
-              color="success"
-              icon="mdi-emoticon-sad">
-              Your search for "{{ search }}" found no results.
-            </v-alert>
-          </v-data-table>
-        </material-card>
-      </v-flex>
-
-    </v-layout>
-  </v-container>
-
-          <!-- end list -->
-
           </v-card-text>
 
         </v-container>
@@ -787,7 +672,6 @@ export default {
       users: [],
       gender: [],
       hours: [],
-      ipc_training: []
 
     }
   },
@@ -1091,33 +975,6 @@ export default {
       }
       this.getcovidData(this.s)
       this.isLoading = false
-    },
-
-    handleDownload () {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Gender', 'Cadre','Facility', 'County', 'Sub County', 'Date Stopped Working', 'Date Isolation Started']
-        const filterVal = ['gender', 'cadre', 'facility', 'county', 'sub_county', 'risk_assessment_decision_date' ,'isolation_start_date']
-        const list = this.s
-        const data = this.formatJson(filterVal, list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: this.filename,
-          autoWidth: this.autoWidth,
-          bookType: this.bookType
-        })
-        this.downloadLoading = false
-      })
-    },
-    formatJson (filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (v[j] === '') {
-          return 'Not Specified'
-        } else {
-          return v[j]
-        }
-      }))
     },
     
     getcovidData (list) {
