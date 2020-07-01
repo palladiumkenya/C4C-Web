@@ -209,12 +209,14 @@
       centered
     >
       <v-tab>Report By Symptoms</v-tab>
-      <v-tab>Report By Covid Specific Training</v-tab>
       <v-tab>Risk Assessment reports</v-tab>
-      <v-tab>Exposure management </v-tab>
       <v-tab>Risk Assesment Recommendation</v-tab>
+      <v-tab>PCR Test Done</v-tab>
+      <v-tab>PCR Test Results</v-tab>
+      <v-tab>Exposure management </v-tab>
+      
       <v-tab-item
-        v-for="n in 5"
+        v-for="n in 7"
         :key="n">
         <v-container fluid>
           <v-card-text v-if="n===1">
@@ -241,25 +243,9 @@
             </v-container>
           </v-card-text>
 
-          <!-- Start COVID Specific Training -->
-
-          <v-card-text v-if="n===2">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsCovidTraining"/>
-            </div>
-          </v-card-text>
-
           <!-- Start Risk Assessment -->
 
-          <v-card-text v-if="n===3">
+          <v-card-text v-if="n===2">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -273,25 +259,9 @@
             </div>
           </v-card-text>
 
-          <!-- Start Exposure Management -->
-
-          <v-card-text v-if="n===4">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsExpo"/>
-            </div>
-          </v-card-text>
-
           <!-- Start Date Returned To work -->
 
-          <v-card-text v-if="n===5">
+          <v-card-text v-if="n===3">
             <div class="card vld-parent">
               <loading
                 :active.sync="isLoading"
@@ -303,8 +273,53 @@
                 ref="barChart"
                 :options="barOptionsDateReturn"/>
             </div>
-          <!-- start list -->
+          </v-card-text>
 
+           <!-- Start PCR Test Done -->
+
+          <v-card-text v-if="n===4">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsPCRDone"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start PCR Test -->
+          <v-card-text v-if="n===5">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsPCR"/>
+            </div>
+          </v-card-text>
+
+          <!-- Start Exposure Management -->
+
+          <v-card-text v-if="n===6">
+            <div class="card vld-parent">
+              <loading
+                :active.sync="isLoading"
+                :can-cancel="false"
+                :is-full-page="false"
+                loader="bars"
+                color="#007bff"/>
+              <highcharts
+                ref="barChart"
+                :options="barOptionsExpo"/>
+            </div>
           </v-card-text>
 
         </v-container>
@@ -446,7 +461,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Symptoms Reports'
+          text: 'No. Of Reported Exposures by Symptoms'
         },
         series: [
           {
@@ -497,7 +512,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Covid 19 Exposures Management'
+          text: 'No. Of Reported Exposures by Exposures Management'
         },
         series: [
           {
@@ -547,7 +562,7 @@ export default {
         type: 'column'
       },
       title: {
-        text: 'Risk Assessment Reports'
+        text: 'No. Of Reported Exposures by Risk Assessment Level'
       },
       series: [
         {
@@ -556,7 +571,107 @@ export default {
           data: []
         }
       ]
-    }, 
+    },
+    
+     //Report By PCR Test Done
+      
+      barOptionsPCRDone: {
+        xAxis: {
+          categories: ['Yes', 'No'],
+          title: {
+            text: 'PCR Test Done'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No Of HCWS Who Have Had A PCR Test'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+       barOptionsPCR: {
+        xAxis: {
+          categories: ['POSITIVE', 'NEGATIVE', 'WAITING'],
+          title: {
+            text: 'PCR Test Results'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No of HCWs with PCR Test Results'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
 
     // date returned to work  
       barOptionsDateReturn: {
@@ -597,7 +712,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'Risk Assesment Recommendation'
+          text: 'No. Of Reported Exposures by Risk Assesment Recommendation'
         },
         series: [
           {
@@ -608,55 +723,6 @@ export default {
         ]
       },
 
-      // covid specific training  
-      barOptionsCovidTraining: {
-        xAxis: {
-          categories: ['Yes', 'No'],
-          title: {
-            text: 'Covid Specific Training'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'HCWs With COVID Specific Training'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
 
       load: true,
       fac_filt: [],
@@ -999,10 +1065,16 @@ export default {
       this.barOptionsRisk.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsCovidTraining.xAxis.categories) {
-        data.push(this.getCovidTraining(this.barOptionsCovidTraining.xAxis.categories[i], list))
+      for (var i in this.barOptionsPCR.xAxis.categories) {
+        data.push(this.getPCR(this.barOptionsPCR.xAxis.categories[i], list))
       }
-      this.barOptionsCovidTraining.series[0].data = data
+      this.barOptionsPCR.series[0].data = data
+
+      var data = []
+      for (var i in this.barOptionsPCRDone.xAxis.categories) {
+        data.push(this.getPCRDone(this.barOptionsPCRDone.xAxis.categories[i], list))
+      }
+      this.barOptionsPCRDone.series[0].data = data
 
       var data = []
       for (var i in this.barOptionsDateReturn.xAxis.categories) {
@@ -1020,15 +1092,6 @@ export default {
       var count = 0
       for (var x in g) {
         if (g[x].risk_assessment_outcome === cat) {
-          count++
-        }
-      }
-      return count
-    },
-    getCovidTraining (cat, t) {
-      var count = 0
-      for (var x in t) {
-        if (t[x].covid_specific_training === cat) {
           count++
         }
       }
@@ -1065,6 +1128,24 @@ export default {
         }
       }
       return counter
+    },
+    getPCR (pcr, c) {
+        var counter = 0
+        for (var k in c) {
+            if (c[k].pcr_test_results === pcr) {
+                counter++
+            }
+        }
+        return counter
+    },
+     getPCRDone (pcrd, c) {
+        var counter = 0
+        for (var v in c) {
+            if (c[v].pcr_test_done === pcrd) {
+                counter++
+            }
+        }
+        return counter
     },
 
     dateRange (startDate, endDate) {
