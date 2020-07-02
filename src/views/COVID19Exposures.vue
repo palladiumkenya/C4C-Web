@@ -194,15 +194,14 @@
             <v-flex
             v-if="user.role_id !== 4"
             xs12
-            md2
+            md3
           >
             <template>
               <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="partner"
-                :items="all_partners"
+                v-model="transmissionMode"
+                :items="transmission_mode"
                 item-text="name"
-                item-value="id"
+                item-value="name"
                 label="Select Transmission Mode"
                 multiple
                 clearable
@@ -313,7 +312,7 @@
         <v-tab>PPE Worn</v-tab>
         <v-tab>IPC Training</v-tab>
         <v-tab>Covid Specific Training</v-tab>
-        <v-tab>Covid Specific  Period</v-tab>
+        <v-tab>Covid Training Period</v-tab>
 
         <v-tab-item
           v-for="n in 10"
@@ -516,12 +515,13 @@ export default {
       },
 
       totalFacilityCount () {
-        return this.exposures_total
+        return this.facility_exposures
       },
 
       totalCommunityCount () {
-        return this.exposures_total
+        return this.community_exposures
       },
+
 
       ...mapGetters({
       user: 'auth/user',
@@ -561,6 +561,28 @@ export default {
       endDate: new Date().toISOString().substr(0, 10),
       value: true,
       value1: true,
+      load: true,
+      fac_filt: [],
+      fac_filtl: [],
+      fac_filtf: [],
+      exp_filt: [],
+      exp_filtl: [],
+      exp_filtf: [],
+      s: [],
+      transmission_mode: ['Facility', 'Community'],
+      transmissionMode: [],
+      filteredCommunity: [],
+      filteredFacility: [],
+      cadre: [],
+      dob: [],
+      date: [],
+      users: [],
+      gender: [],
+      hours: [],
+      exposures_total: 0,
+      facility_exposures: 0,
+      community_exposures: 0,
+
 
             // by month
         barOptionsMonth: {
@@ -1015,23 +1037,6 @@ export default {
         ]
       },
 
-      load: true,
-      fac_filt: [],
-      fac_filtl: [],
-      fac_filtf: [],
-      exp_filt: [],
-      exp_filtl: [],
-      exp_filtf: [],
-      s: [],
-      transmission_mode: ['Facility', 'Community'],
-      cadre: [],
-      dob: [],
-      date: [],
-      users: [],
-      gender: [],
-      hours: [],
-      exposures_total: 0
-
     }
   },
 
@@ -1041,7 +1046,7 @@ export default {
         this.getCounties()
         this.getFacilities()
        // this.getCad()
-        this.getPartners()
+        //this.getPartners()
         this.dateRange('2020-01-20', this.endDate)
         axios.get('cadres')
       .then((c) => {
@@ -1130,13 +1135,13 @@ export default {
         this.getFacilitycountyfilter(a)
       }
     },
-     getPartners () {
-      axios.get('partners') 
-        .then((partners) => {
-          this.all_partners = partners.data.data
-        })
-        .catch(error => console.log(error.message))
-    },
+    //  getPartners () {
+    //   axios.get('partners') 
+    //     .then((partners) => {
+    //       this.all_partners = partners.data.data
+    //     })
+    //     .catch(error => console.log(error.message))
+    // },
     
     // filters
     getFacilitycountyfilter (a) {
@@ -1258,14 +1263,31 @@ export default {
       }
     },
     // end filter
+
+    transmissionModeFilter (a) {
+      
+    },
+
+    //end filter
     getcovidExpo () {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
 
+              const b = response.data.data
+
               this.exposures_total = response.data.meta.total
-             console.log(this.s)
+
+              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+
+              this.community_exposures = this.filteredCommunity.length
+
+              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
+
+              this.facility_exposures = this.filteredFacility.length
+
+             console.log(this.filteredFacility)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -1293,6 +1315,19 @@ export default {
           .catch(error => console.log(error.message))
       }
     },
+
+    // getcovidExpo () {
+    //   if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+    //     axios.get(`exposures/covid/all?filter={"where":{"transmission_mode":'+this.name }}`)
+    //       .then((response) => {
+    //         this.fac_exposures = response.data.data
+
+    //         this.facility_exposures = response.data.meta.total
+
+    //       })
+    //   }
+    // },    
+
      async loopT (l) {
       var i; var u = []
       for (i = 0; i < 1;) {

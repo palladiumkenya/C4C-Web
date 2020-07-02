@@ -214,14 +214,13 @@ export default {
     ...mapGetters({
       user: 'auth/user',
       token: 'auth/token',
-      e: 'auth/expo'
     })
   },
   created () {
     if (this.exposures.length === 0) {
       this.getExp()
     } else {
-      this.exposures = this.e
+      this.getExp()
     }
   },
   methods: {
@@ -230,7 +229,6 @@ export default {
         axios.get(`exposures/covid/all`)
           .then((response) => {
             this.exposures = response.data.data
-                        console.log(exposures)
 
             this.link = response.data.links.next
             if (this.link) {
@@ -238,22 +236,22 @@ export default {
               this.isLoading = false
             }
           })
-          .catch(() => {
+          .catch((error) => {
             this.error = true
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
       } else if (this.user.role_id === 4) {
         axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.exposures = exp.data.data
-            this.link = exp.data.links.next
+          .then((response) => {
+            this.exposures = response.data.data
+            this.link = response.data.links.next
             if (this.link) {
               this.loopT(this.link)
               this.isLoading = false
             }
           })
-          .catch(() => {
+          .catch((error) => {            
             this.error = true
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
@@ -264,7 +262,7 @@ export default {
     async loopT (l) {
       var i
       var u = []
-      if (this.user.role_id ===1) {
+      if (this.user.role_id ===1 || this.user.role_id ===4 ) {
         for (i = 0; i < 1;) {
           if (l != null) {
             let response = await axios.get(l)
