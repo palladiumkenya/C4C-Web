@@ -297,193 +297,193 @@
 
     
     
-    <v-card>
-      <v-tabs
-        color="teal lighten-5"
-        centered
-      >
+      <v-card>
+        <v-tabs
+          color="teal lighten-5"
+          centered
+        >
 
-        <v-tab>Report By Month</v-tab>
-        <v-tab>Report By Cadre</v-tab>
-        <v-tab>Report By Gender</v-tab>
-        <v-tab>Report By Age</v-tab>
-        <v-tab>Report By Procedure</v-tab>
-        <v-tab>PPE Present</v-tab>
-        <v-tab>PPE Worn</v-tab>
-        <v-tab>IPC Training</v-tab>
-        <v-tab>Covid Specific Training</v-tab>
-        <v-tab>Covid Training Period</v-tab>
+          <v-tab>Report By Month</v-tab>
+          <v-tab>Report By Cadre</v-tab>
+          <v-tab>Report By Gender</v-tab>
+          <v-tab>Report By Age</v-tab>
+          <v-tab>Report By Procedure</v-tab>
+          <v-tab>PPE Present</v-tab>
+          <v-tab>PPE Worn</v-tab>
+          <v-tab>IPC Training</v-tab>
+          <v-tab>Covid Specific Training</v-tab>
+          <v-tab>Covid Training Period</v-tab>
 
-        <v-tab-item
-          v-for="n in 10"
-          :key="n">
-          <v-container fluid>
-            <v-card-text v-if="n===1">
-              <!-- Start Exposure Month -->
-              <v-container py-0>
-                <v-layout wrap>
-                  <v-flex
-                    xs12
-                    md12
-                    >
-                    <div class="card vld-parent">
-                      <loading
-                        :active.sync="isLoading"
-                        :can-cancel="false"
-                        :is-full-page="false"
-                        loader="bars"
-                        color="#007bff"/>
-                      <highcharts
-                        ref="barChart"
-                        :options="barOptionsMonth"/>
-                    </div>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
+          <v-tab-item
+            v-for="n in 10"
+            :key="n">
+            <v-container fluid>
+              <v-card-text v-if="n===1">
+                <!-- Start Exposure Month -->
+                <v-container py-0>
+                  <v-layout wrap>
+                    <v-flex
+                      xs12
+                      md12
+                      >
+                      <div class="card vld-parent">
+                        <loading
+                          :active.sync="isLoading"
+                          :can-cancel="false"
+                          :is-full-page="false"
+                          loader="bars"
+                          color="#007bff"/>
+                        <highcharts
+                          ref="barChart"
+                          :options="barOptionsMonth"/>
+                      </div>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
 
-          <!-- Start Exposure Cadre -->
+            <!-- Start Exposure Cadre -->
 
-            <v-card-text v-if="n===2">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsCadre"/>
-              </div>
-            </v-card-text>
+              <v-card-text v-if="n===2">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsCadre"/>
+                </div>
+              </v-card-text>
 
-            <!-- Start Exposure Gender -->
+              <!-- Start Exposure Gender -->
 
-            <v-card-text v-if="n===3">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsGender"/>
-              </div>
-            </v-card-text>
+              <v-card-text v-if="n===3">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsGender"/>
+                </div>
+              </v-card-text>
 
-            <!-- Start Exposure Age -->
+              <!-- Start Exposure Age -->
 
-            <v-card-text v-if="n===4">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsAge"/>
-              </div>
-            </v-card-text>
+              <v-card-text v-if="n===4">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsAge"/>
+                </div>
+              </v-card-text>
 
-              <!-- Start Exposure Procedure -->
-            <v-card-text v-if="n===5">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsProcedure"/>
-              </div>
-            </v-card-text> 
+                <!-- Start Exposure Procedure -->
+              <v-card-text v-if="n===5">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsProcedure"/>
+                </div>
+              </v-card-text> 
 
-            <!-- Start PPE's Present -->
-            <v-card-text v-if="n===6">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsPpePresent"/>
-              </div>
-            </v-card-text>
+              <!-- Start PPE's Present -->
+              <v-card-text v-if="n===6">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsPpePresent"/>
+                </div>
+              </v-card-text>
 
-            <!-- Start Specific PPE's -->
-            <v-card-text v-if="n===7">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsPpe"/>
-              </div>
-            </v-card-text>
+              <!-- Start Specific PPE's -->
+              <v-card-text v-if="n===7">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsPpe"/>
+                </div>
+              </v-card-text>
 
-            <!-- Start Exposure IPC Training -->
-            <v-card-text v-if="n===8">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsIpc"/>
-              </div>
-            </v-card-text>
+              <!-- Start Exposure IPC Training -->
+              <v-card-text v-if="n===8">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsIpc"/>
+                </div>
+              </v-card-text>
 
-            <!-- Start Exposure IPC Training -->
-            <v-card-text v-if="n===9">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsCovidTraining"/>
-              </div>
-            </v-card-text>
+              <!-- Start Exposure IPC Training -->
+              <v-card-text v-if="n===9">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsCovidTraining"/>
+                </div>
+              </v-card-text>
 
-            <!-- Start Exposure IPC Training -->
-            <v-card-text v-if="n===10">
-              <div class="card vld-parent">
-                <loading
-                  :active.sync="isLoading"
-                  :can-cancel="false"
-                  :is-full-page="false"
-                  loader="bars"
-                  color="#007bff"/>
-                <highcharts
-                  ref="barChart"
-                  :options="barOptionsCovidTraining"/>
-              </div>
-            </v-card-text>
+              <!-- Start Exposure IPC Training -->
+              <v-card-text v-if="n===10">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsCovidTraining"/>
+                </div>
+              </v-card-text>
 
-          </v-container>
-        </v-tab-item>
-      </v-tabs>
-    </v-card>  
+            </v-container>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>  
 
     </v-layout>
   </v-container>
@@ -1300,13 +1300,23 @@ export default {
           .catch(error => console.log(error.message))
       }else if (this.user.role_id === 4) {
         axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.s = exp.data.data
+          .then((response) => {
+            this.s = response.data.data
 
-            this.exposures_total = s.data.meta.total
+            const b = response.data.data
 
-            if (exp.data.links.next != null) {
-              this.link = exp.data.links.next
+            this.exposures_total = response.data.meta.total
+
+            this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+
+            this.community_exposures = this.filteredCommunity.length
+
+            this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
+
+            this.facility_exposures = this.filteredFacility.length
+
+            if (response.data.links.next != null) {
+              this.link = response.data.links.next
               this.loopT(this.link)
             } else {
               this.getcovidData(this.s)
@@ -1385,12 +1395,6 @@ export default {
       }
       console.log(data)
       this.barOptionsPpe.series[0].data = data
-
-      var data = []
-      for (var i in this.barOptionsCadre.xAxis.categories) {
-        data.push(this.getCadreNum(this.barOptionsCadre.xAxis.categories[i], list))
-      }
-      this.barOptionsCadre.series[0].data = data
 
       var data = []
       for (var i in this.barOptionsGender.xAxis.categories) {

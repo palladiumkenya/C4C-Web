@@ -1,10 +1,85 @@
 <template>
-  <v-card>
-    <v-container
+  <v-container
       fill-height
       fluid
       grid-list-xl
-      py-0>
+      >
+
+    <v-layout  
+      justif
+      y-center
+      wrap>  
+
+       <v-layout  
+        justify-center
+        v-if="user.role_id === 1 || user.role_id === 2"
+        wrap>    
+
+        <!-- Start Cards -->
+        <v-flex 
+          sm3
+          xs8
+          md4
+          lg3
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1" >mdi-account-group</v-icon>
+                <h3 align="center">{{ totalExposuresCount }}</h3>
+                <h6 align="center">Total Exposures</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
+
+        <v-flex
+          sm3
+          xs8
+          md3
+          lg3
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-file-chart</v-icon>
+                <h3 align="center">{{ totalFacilityCount }}</h3>
+                <h6 align="center">Facility Exposures</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
+
+        <v-flex
+          sm3
+          xs8
+          md3
+          lg3
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-movie-roll</v-icon>
+                <h3 align="center">{{ totalCommunityCount }}</h3>
+                <h6 align="center">Community Exposures</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
+      </v-layout> 
+
       <v-layout
         justify-center
         wrap>
@@ -117,6 +192,24 @@
               chips
               @change="cadreFilter"/>
           </v-flex>
+           <v-flex
+            v-if="user.role_id !== 4"
+            xs12
+            md3
+          >
+            <template>
+              <v-combobox
+                v-model="transmissionMode"
+                :items="transmission_mode"
+                item-text="name"
+                item-value="name"
+                label="Select Transmission Mode"
+                multiple
+                clearable
+                persistent-hint
+                chips/>
+            </template>
+          </v-flex>
           <v-flex
             xs12
             md2>
@@ -201,132 +294,185 @@
           </v-flex>
         </template>
       </v-layout>
-    </v-container>
-    <!-- End filters -->
-
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
-      <v-tab>Report By Symptoms</v-tab>
-      <v-tab>Risk Assessment reports</v-tab>
-      <v-tab>Risk Assesment Recommendation</v-tab>
-      <v-tab>PCR Test Done</v-tab>
-      <v-tab>PCR Test Results</v-tab>
-      <v-tab>Exposure management </v-tab>
+      <!-- End filters -->
       
-      <v-tab-item
-        v-for="n in 7"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n===1">
-            <!-- Start Symptoms -->
-            <v-container py-0>
-              <v-layout wrap>
-                <v-flex
-                  xs12
-                  md12
-                  >
-                  <div class="card vld-parent">
-                    <loading
-                      :active.sync="isLoading"
-                      :can-cancel="false"
-                      :is-full-page="false"
-                      loader="bars"
-                      color="#007bff"/>
-                    <highcharts
-                      ref="barChart"
-                      :options="barOptionsSymptoms"/>
-                  </div>
-                </v-flex>
-              </v-layout>
+      <v-card>
+        <v-tabs
+          color="teal lighten-5"
+          centered
+        >
+          <v-tab>Report By Symptoms</v-tab>
+          <v-tab>Risk Assessment reports</v-tab>
+          <v-tab>Risk Assesment Recommendation</v-tab>
+          <v-tab>PCR Test Done</v-tab>
+          <v-tab>PCR Test Results</v-tab>
+          <v-tab>Exposure management </v-tab>
+          <v-tab>Isolation Period </v-tab>
+          <v-tab>Off Work </v-tab>
+          <v-tab>Returned To Work </v-tab>
+          
+          <v-tab-item
+            v-for="n in 9"
+            :key="n">
+            <v-container fluid>
+              <v-card-text v-if="n===1">
+                <!-- Start Symptoms -->
+                <v-container py-0>
+                  <v-layout wrap>
+                    <v-flex
+                      xs12
+                      md12
+                      >
+                      <div class="card vld-parent">
+                        <loading
+                          :active.sync="isLoading"
+                          :can-cancel="false"
+                          :is-full-page="false"
+                          loader="bars"
+                          color="#007bff"/>
+                        <highcharts
+                          ref="barChart"
+                          :options="barOptionsSymptoms"/>
+                      </div>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+
+              <!-- Start Risk Assessment -->
+
+              <v-card-text v-if="n===2">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsRisk"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Date Returned To work -->
+
+              <v-card-text v-if="n===3">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsDateReturn"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start PCR Test Done -->
+
+              <v-card-text v-if="n===4">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsPCRDone"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start PCR Test -->
+              <v-card-text v-if="n===5">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsPCR"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure Management -->
+
+              <v-card-text v-if="n===6">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsExpo"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure Quarantine Period -->
+
+              <v-card-text v-if="n===7">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsExpo"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure Days Off Work -->
+
+              <v-card-text v-if="n===8">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsExpo"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure Returned To Work-->
+
+              <v-card-text v-if="n===9">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsExpo"/>
+                </div>
+              </v-card-text>
+
             </v-container>
-          </v-card-text>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
 
-          <!-- Start Risk Assessment -->
-
-          <v-card-text v-if="n===2">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsRisk"/>
-            </div>
-          </v-card-text>
-
-          <!-- Start Date Returned To work -->
-
-          <v-card-text v-if="n===3">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsDateReturn"/>
-            </div>
-          </v-card-text>
-
-           <!-- Start PCR Test Done -->
-
-          <v-card-text v-if="n===4">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsPCRDone"/>
-            </div>
-          </v-card-text>
-
-          <!-- Start PCR Test -->
-          <v-card-text v-if="n===5">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsPCR"/>
-            </div>
-          </v-card-text>
-
-          <!-- Start Exposure Management -->
-
-          <v-card-text v-if="n===6">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsExpo"/>
-            </div>
-          </v-card-text>
-
-        </v-container>
-      </v-tab-item>
-    </v-tabs>
-  </v-card>
-
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -335,7 +481,7 @@ import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import moment from 'moment'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
@@ -343,18 +489,37 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 exportingInit(Highcharts)
 export default {
 
-    computed: {
+  computed: {
     cadreCount () {
-      return this.c
-    },
+        return this.c
+      },
+
+    totalExposuresCount () {
+          return this.exposures_total
+      },
+
+    totalFacilityCount () {
+        return this.facility_exposures
+      },
+
+    totalCommunityCount () {
+      return this.community_exposures
+      },
 
     ...mapGetters({
-      user: 'auth/user'
+      user: 'auth/user',
+      auth: 'auth/token',
+      all_users: 'auth/us_all',
+      us_no: 'auth/us_no',
+      next_link: 'auth/next_link',
+      curr: 'auth/curr_page',
+      last: 'auth/last_page'
     })
   },
   components: { highcharts: Chart, Loading },
     data () {
       return {
+
         rowsPerPageItems: [100, 500, 1000],
       search: '',
       link: '',
@@ -421,6 +586,13 @@ export default {
       endDate: new Date().toISOString().substr(0, 10),
       value: true,
       value1: true,
+      transmission_mode: ['Facility', 'Community'],
+      transmissionMode: [],
+      filteredCommunity: [],
+      filteredFacility: [],
+      exposures_total: 0,
+      facility_exposures: 0,
+      community_exposures: 0,
 
       // by symptoms
       barOptionsSymptoms: {
@@ -742,14 +914,6 @@ export default {
     }
   },
 
-  computed: {
-    ...mapGetters({
-      user: 'auth/user',
-      token: 'auth/token',
-      e: 'auth/expo'
-    })
-  },
-
     created () {
         this.getcovidExpo()
         this.getCounties()
@@ -983,7 +1147,20 @@ export default {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
-              console.log(this.s)
+
+              const b = response.data.data
+
+              this.exposures_total = response.data.meta.total
+
+              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+
+              this.community_exposures = this.filteredCommunity.length
+
+              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
+
+              this.facility_exposures = this.filteredFacility.length
+
+              console.log(this.filteredFacility)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -1001,10 +1178,23 @@ export default {
           })
       }else if (this.user.role_id === 4) {
         axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.s = exp.data.data
-            if (exp.data.links.next != null) {
-              this.link = exp.data.links.next
+          .then((response) => {
+            this.s = response.data.data
+
+            const b = response.data.data
+
+              this.exposures_total = response.data.meta.total
+
+              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+
+              this.community_exposures = this.filteredCommunity.length
+
+              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
+
+              this.facility_exposures = this.filteredFacility.length
+
+            if (response.data.links.next != null) {
+              this.link = response.data.links.next
               this.loopT(this.link)
               this.isLoading = false
             } else {
