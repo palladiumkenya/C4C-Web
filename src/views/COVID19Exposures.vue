@@ -1,395 +1,493 @@
 <template>
-  <v-card>
-    <v-container
-      fill-height
-      fluid
-      grid-list-xl
-      py-0>
-      <v-layout
+  <v-container
+    fill-height
+    fluid
+    grid-list-xl>
+
+    <v-layout  
+      justify-center
+      wrap>    
+
+      <v-layout  
         justify-center
-        wrap>
-        <v-flex
-          v-if="user.role_id === 1 || user.role_id === 2"
-          xs12
-          md2
+        v-if="user.role_id === 1 || user.role_id === 2"
+        wrap>    
+
+        <!-- Start Cards -->
+        <v-flex 
+          sm3
+          xs8
+          md4
+          lg3
         >
           <template>
-            <v-combobox
-              :items="all_counties"
-              item-text="name"
-              item-value="id"
-              label="Select County"
-              multiple
-              clearable
-              persistent-hint
-              chips
-              @change="getSubCounties"/>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1" >mdi-account-group</v-icon>
+                <h3 align="center">{{ totalExposuresCount }}</h3>
+                <h6 align="center">Total Exposures</h6>
+              </v-card-text>
+            </v-card>
           </template>
         </v-flex>
+
         <v-flex
-          v-if="user.role_id !== 4"
-          xs12
+          sm3
+          xs8
           md3
+          lg3
         >
           <template>
-            <v-combobox
-              v-model="subcounties"
-              :items="all_subcounties"
-              :disabled="active"
-              item-text="name"
-              item-value="id"
-              label="Select Sub-County"
-              multiple
-              clearable
-              persistent-hint
-              chips
-              @change="getFacilitysubcountyfilter"/>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-file-chart</v-icon>
+                <h3 align="center">{{ totalFacilityCount }}</h3>
+                <h6 align="center">Facility Exposures</h6>
+              </v-card-text>
+            </v-card>
           </template>
         </v-flex>
+
         <v-flex
-          v-if="user.role_id !== 4"
-          xs12
-          md2
-        >
-          <template>
-            <v-combobox
-              v-if="user.role_id !== 4"
-              v-model="partner"
-              :items="all_partners"
-              item-text="name"
-              item-value="id"
-              label="Select Partner"
-              multiple
-              disabled
-              clearable
-              persistent-hint
-              chips/>
-          </template>
-        </v-flex>
-        <v-flex
-          v-if="user.role_id !== 4"
-          xs12
-          md2
-        >
-          <template>
-            <v-combobox
-              :items="all_facilities_level"
-              :disabled="active_level"
-              label="Select Facility Level"
-              multiple
-              clerable
-              persistent-hint
-              chips
-              @change="getFacilitylevelfilter"/>
-          </template>
-        </v-flex>
-        <v-flex
-          v-if="user.role_id !== 4"
-          xs12
+          sm3
+          xs8
           md3
+          lg3
         >
-          <v-combobox
-            v-model="facility"
-            :items="fac"
-            item-text="name"
-            item-value="id"
-            label="Select Facility"
-            multiple
-            clearable
-            persistent-hint
-            chips
-            @change="getFacilityfilter"/>
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-movie-roll</v-icon>
+                <h3 align="center">{{ totalCommunityCount }}</h3>
+                <h6 align="center">Community Exposures</h6>
+              </v-card-text>
+            </v-card>
+          </template>
         </v-flex>
-        <template>
+      </v-layout>
+
+        <v-layout
+          justify-center
+          wrap>
           <v-flex
-            v-if="user.role_id === 4"
+            v-if="user.role_id === 1 || user.role_id === 2"
+            xs12
+            md3
+          >
+            <template>
+              <v-combobox
+                :items="all_counties"
+                item-text="name"
+                item-value="id"
+                label="Select County"
+                multiple
+                clearable
+                persistent-hint
+                chips
+                @change="getSubCounties"/>
+            </template>
+          </v-flex>
+          <v-flex
+            v-if="user.role_id !== 4"
+            xs12
+            md3
+          >
+            <template>
+              <v-combobox
+                v-model="subcounties"
+                :items="all_subcounties"
+                :disabled="active"
+                item-text="name"
+                item-value="id"
+                label="Select Sub-County"
+                multiple
+                clearable
+                persistent-hint
+                chips
+                @change="getFacilitysubcountyfilter"/>
+            </template>
+          </v-flex>
+          <!-- <v-flex
+            v-if="user.role_id !== 4"
             xs12
             md2
           >
+            <template>
+              <v-combobox
+                v-if="user.role_id !== 4"
+                v-model="partner"
+                :items="all_partners"
+                item-text="name"
+                item-value="id"
+                label="Select Partner"
+                multiple
+                disabled
+                clearable
+                persistent-hint
+                chips/>
+            </template>
+          </v-flex> -->
+          <v-flex
+            v-if="user.role_id !== 4"
+            xs12
+            md3
+          >
+            <template>
+              <v-combobox
+                :items="all_facilities_level"
+                :disabled="active_level"
+                label="Select Facility Level"
+                multiple
+                clerable
+                persistent-hint
+                chips
+                @change="getFacilitylevelfilter"/>
+            </template>
+          </v-flex>
+          <v-flex
+            v-if="user.role_id !== 4"
+            xs12
+            md3
+          >
             <v-combobox
-              :items="cadres"
+              v-model="facility"
+              :items="fac"
               item-text="name"
               item-value="id"
-              label="Select Cadre"
+              label="Select Facility"
               multiple
               clearable
               persistent-hint
               chips
-              @change="cadreFilter"/>
+              @change="getFacilityfilter"/>
           </v-flex>
-          <v-flex
-            xs12
-            md2>
-            <v-menu
-              ref="menu1"
-              :close-on-content-click="false"
-              v-model="menu1"
-              :nudge-right="40"
-              :return-value.sync="startDate"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
+          <template>
+            <v-flex
+              v-if="user.role_id === 4"
+              xs12
+              md3
             >
-              <v-text-field
-                slot="activator"
-                v-model="startDate"
-                label="Start Date"
-                prepend-icon="mdi-calendar"
-                readonly
-              />
-              <v-date-picker
-                :dark="true"
-                v-model="startDate"
-                :max="endDate"
-                :min="minDate"
-                no-title
-                scrollable>
-                <v-spacer/>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="menu1 = false">Cancel</v-btn>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
-              </v-date-picker>
-            </v-menu>
-          </v-flex>
-          <v-flex
+              <v-combobox
+                :items="cadres"
+                item-text="name"
+                item-value="id"
+                label="Select Cadre"
+                multiple
+                clearable
+                persistent-hint
+                chips
+                @change="cadreFilter"/>
+            </v-flex>
+
+            <v-flex
+            v-if="user.role_id !== 4"
             xs12
-            md2>
-            <v-menu
-              ref="menu"
-              :close-on-content-click="false"
-              v-model="menu"
-              :nudge-right="40"
-              :return-value.sync="endDate"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="endDate"
-                label="End Date"
-                prepend-icon="mdi-calendar"
-                readonly
-              />
-              <v-date-picker
-                :dark="true"
-                v-model="endDate"
-                :max="maxDate"
-                :min="startDate"
-                no-title
-                scrollable>
-                <v-spacer/>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="menu = false">Cancel</v-btn>
-                <v-btn
-                  flat
-                  color="primary"
-                  @click="click();$refs.menu.save(endDate)">OK</v-btn>
-              </v-date-picker>
-            </v-menu>
+            md2
+          >
+            <template>
+              <v-combobox
+                v-if="user.role_id !== 4"
+                v-model="partner"
+                :items="all_partners"
+                item-text="name"
+                item-value="id"
+                label="Select Transmission Mode"
+                multiple
+                clearable
+                persistent-hint
+                chips/>
+            </template>
           </v-flex>
-        </template>
-      </v-layout>
-    </v-container>
-    <!-- End filters -->
+            <v-flex
+              xs12
+              md2>
+              <v-menu
+                ref="menu1"
+                :close-on-content-click="false"
+                v-model="menu1"
+                :nudge-right="40"
+                :return-value.sync="startDate"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="startDate"
+                  label="Start Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                />
+                <v-date-picker
+                  :dark="true"
+                  v-model="startDate"
+                  :max="endDate"
+                  :min="minDate"
+                  no-title
+                  scrollable>
+                  <v-spacer/>
+                  <v-btn
+                    flat
+                    color="primary"
+                    @click="menu1 = false">Cancel</v-btn>
+                  <v-btn
+                    flat
+                    color="primary"
+                    @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-flex>
+            <v-flex
+              xs12
+              md2>
+              <v-menu
+                ref="menu"
+                :close-on-content-click="false"
+                v-model="menu"
+                :nudge-right="40"
+                :return-value.sync="endDate"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="endDate"
+                  label="End Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                />
+                <v-date-picker
+                  :dark="true"
+                  v-model="endDate"
+                  :max="maxDate"
+                  :min="startDate"
+                  no-title
+                  scrollable>
+                  <v-spacer/>
+                  <v-btn
+                    flat
+                    color="primary"
+                    @click="menu = false">Cancel</v-btn>
+                  <v-btn
+                    flat
+                    color="primary"
+                    @click="click();$refs.menu.save(endDate)">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-flex>
+          </template>
+        </v-layout>
+      <!-- End filters -->
 
-    <v-tabs
-      color="teal lighten-5"
-      centered
-    >
+    
+    
+    <v-card>
+      <v-tabs
+        color="teal lighten-5"
+        centered
+      >
 
-      <v-tab>Report By Month</v-tab>
-      <v-tab>Report By Cadre</v-tab>
-      <v-tab>Report By Gender</v-tab>
-      <v-tab>Report By Age</v-tab>
-      <v-tab>Report By Procedure</v-tab>
-      <v-tab>PPE Present</v-tab>
-      <v-tab>PPE Worn</v-tab>
-      <v-tab>IPC Training</v-tab>
-      <v-tab>Covid Specific Training</v-tab>
-      <v-tab>Covid Specific  Period</v-tab>
+        <v-tab>Report By Month</v-tab>
+        <v-tab>Report By Cadre</v-tab>
+        <v-tab>Report By Gender</v-tab>
+        <v-tab>Report By Age</v-tab>
+        <v-tab>Report By Procedure</v-tab>
+        <v-tab>PPE Present</v-tab>
+        <v-tab>PPE Worn</v-tab>
+        <v-tab>IPC Training</v-tab>
+        <v-tab>Covid Specific Training</v-tab>
+        <v-tab>Covid Specific  Period</v-tab>
 
-      <v-tab-item
-        v-for="n in 10"
-        :key="n">
-        <v-container fluid>
-          <v-card-text v-if="n===1">
-            <!-- Start Exposure Month -->
-            <v-container py-0>
-              <v-layout wrap>
-                <v-flex
-                  xs12
-                  md12
-                  >
-                  <div class="card vld-parent">
-                    <loading
-                      :active.sync="isLoading"
-                      :can-cancel="false"
-                      :is-full-page="false"
-                      loader="bars"
-                      color="#007bff"/>
-                    <highcharts
-                      ref="barChart"
-                      :options="barOptionsMonth"/>
-                  </div>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
+        <v-tab-item
+          v-for="n in 10"
+          :key="n">
+          <v-container fluid>
+            <v-card-text v-if="n===1">
+              <!-- Start Exposure Month -->
+              <v-container py-0>
+                <v-layout wrap>
+                  <v-flex
+                    xs12
+                    md12
+                    >
+                    <div class="card vld-parent">
+                      <loading
+                        :active.sync="isLoading"
+                        :can-cancel="false"
+                        :is-full-page="false"
+                        loader="bars"
+                        color="#007bff"/>
+                      <highcharts
+                        ref="barChart"
+                        :options="barOptionsMonth"/>
+                    </div>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
 
-        <!-- Start Exposure Cadre -->
+          <!-- Start Exposure Cadre -->
 
-          <v-card-text v-if="n===2">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsCadre"/>
-            </div>
-          </v-card-text>
+            <v-card-text v-if="n===2">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsCadre"/>
+              </div>
+            </v-card-text>
 
-          <!-- Start Exposure Gender -->
+            <!-- Start Exposure Gender -->
 
-          <v-card-text v-if="n===3">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsGender"/>
-            </div>
-          </v-card-text>
+            <v-card-text v-if="n===3">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsGender"/>
+              </div>
+            </v-card-text>
 
-          <!-- Start Exposure Age -->
+            <!-- Start Exposure Age -->
 
-          <v-card-text v-if="n===4">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsAge"/>
-            </div>
-          </v-card-text>
+            <v-card-text v-if="n===4">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsAge"/>
+              </div>
+            </v-card-text>
 
-            <!-- Start Exposure Procedure -->
-          <v-card-text v-if="n===5">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsProcedure"/>
-            </div>
-          </v-card-text> 
+              <!-- Start Exposure Procedure -->
+            <v-card-text v-if="n===5">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsProcedure"/>
+              </div>
+            </v-card-text> 
 
-          <!-- Start PPE's Present -->
-          <v-card-text v-if="n===6">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsPpePresent"/>
-            </div>
-          </v-card-text>
+            <!-- Start PPE's Present -->
+            <v-card-text v-if="n===6">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsPpePresent"/>
+              </div>
+            </v-card-text>
 
-          <!-- Start Specific PPE's -->
-          <v-card-text v-if="n===7">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsPpe"/>
-            </div>
-          </v-card-text>
+            <!-- Start Specific PPE's -->
+            <v-card-text v-if="n===7">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsPpe"/>
+              </div>
+            </v-card-text>
 
-          <!-- Start Exposure IPC Training -->
-          <v-card-text v-if="n===8">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsIpc"/>
-            </div>
-          </v-card-text>
+            <!-- Start Exposure IPC Training -->
+            <v-card-text v-if="n===8">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsIpc"/>
+              </div>
+            </v-card-text>
 
-          <!-- Start Exposure IPC Training -->
-          <v-card-text v-if="n===9">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsCovidTraining"/>
-            </div>
-          </v-card-text>
+            <!-- Start Exposure IPC Training -->
+            <v-card-text v-if="n===9">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsCovidTraining"/>
+              </div>
+            </v-card-text>
 
-          <!-- Start Exposure IPC Training -->
-          <v-card-text v-if="n===10">
-            <div class="card vld-parent">
-              <loading
-                :active.sync="isLoading"
-                :can-cancel="false"
-                :is-full-page="false"
-                loader="bars"
-                color="#007bff"/>
-              <highcharts
-                ref="barChart"
-                :options="barOptionsCovidTraining"/>
-            </div>
-          </v-card-text>
+            <!-- Start Exposure IPC Training -->
+            <v-card-text v-if="n===10">
+              <div class="card vld-parent">
+                <loading
+                  :active.sync="isLoading"
+                  :can-cancel="false"
+                  :is-full-page="false"
+                  loader="bars"
+                  color="#007bff"/>
+                <highcharts
+                  ref="barChart"
+                  :options="barOptionsCovidTraining"/>
+              </div>
+            </v-card-text>
 
-        </v-container>
-      </v-tab-item>
-    </v-tabs>
-  </v-card>
+          </v-container>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>  
+
+    </v-layout>
+  </v-container>
 
 </template>
 
@@ -399,7 +497,7 @@ import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
 import axios from 'axios'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import moment from 'moment'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
@@ -408,14 +506,35 @@ exportingInit(Highcharts)
 export default {
 
     computed: {
-    cadreCount () {
+
+      cadreCount () {
       return this.c
+      },
+
+      totalExposuresCount () {
+        return this.exposures_total
+      },
+
+      totalFacilityCount () {
+        return this.exposures_total
+      },
+
+      totalCommunityCount () {
+        return this.exposures_total
+      },
+
+      ...mapGetters({
+      user: 'auth/user',
+      auth: 'auth/token',
+      all_users: 'auth/us_all',
+      us_no: 'auth/us_no',
+      next_link: 'auth/next_link',
+      curr: 'auth/curr_page',
+      last: 'auth/last_page'
+    })
+
     },
 
-    ...mapGetters({
-      user: 'auth/user'
-    })
-  },
   components: { highcharts: Chart, Loading },
     data () {
       return {
@@ -904,15 +1023,18 @@ export default {
       exp_filtl: [],
       exp_filtf: [],
       s: [],
+      transmission_mode: ['Facility', 'Community'],
       cadre: [],
       dob: [],
       date: [],
       users: [],
       gender: [],
       hours: [],
+      exposures_total: 0
 
     }
   },
+
 
     created () {
         this.getcovidExpo()
@@ -1141,6 +1263,8 @@ export default {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
+
+              this.exposures_total = response.data.meta.total
              console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
@@ -1156,6 +1280,9 @@ export default {
         axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {
             this.s = exp.data.data
+
+            this.exposures_total = s.data.meta.total
+
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
