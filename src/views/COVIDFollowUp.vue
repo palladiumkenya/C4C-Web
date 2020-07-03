@@ -982,7 +982,7 @@ export default {
       //Report By Returned Work
       barOptionsReturnedWork: {
         xAxis: {
-          categories: ['Stop working', 'Went Back to work'],
+          categories: ['Stopped Working', 'Went Back to work'],
           title: {
             text: 'HCWs Who Returned To Work'
           }
@@ -1662,7 +1662,7 @@ export default {
 
       var data = []
       for (var i in this.barOptionsReturnedWork.xAxis.categories) {
-        data.push(this.getReturnedWorkNum(this.barOptionsReturnedWork.xAxis.categories[i], list))
+        data.push(this.getReturnedWorkNum(i, list))
       }
       this.barOptionsReturnedWork.series[0].data = data
 
@@ -1710,10 +1710,9 @@ export default {
     getReturnedWorkNum (name, c) {
       var counter = 0
       for (var tn in c) {
-        if (c[tn].risk_assessment_recommendation === name) {
+        if (c[tn].risk_assessment_recommendation === 'Stop working' && name == 0) {
           counter++
-        } else if(c[tn].return_to_work_date !== null && name == 2 )
-          
+        } else if(c[tn].return_to_work_date !== null && name == 1 )
           counter++
       }
       return counter
