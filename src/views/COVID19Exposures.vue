@@ -792,9 +792,9 @@ export default {
       //by IPC Training Period
       barOptionsIpcTraining: {
         xAxis: {
-          categories: ['1 year ago','2 years ago', '3 years ago', 4,'5 and Above'],
+          categories: ['0 - 1', '1 - 2', '3 - 5', '5 and Above'],
           title: {
-            text: 'HCW IPC Training Period' 
+            text: 'HCW IPC Training Period in Years' 
           }
         },
         yAxis: {
@@ -828,7 +828,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'HCWS IPCTraining Period'
+          text: 'HCWS IPCTraining Period in Years'
         },
         series: [
           {
@@ -1519,24 +1519,22 @@ export default {
     getIPCTrainingNum(cat, c) {
       var count = 0
         for (var q in c) {
-        // var t1 = c[q].ipc_training_period.split(' ')[0].slice(0).trim()
-        // var t2 = c[q].ipc_training_period.split(' ')[1]
+         var t1 = c[q].ipc_training_period.split(' ')[0].slice(0).trim()
+         var t2 = c[q].ipc_training_period.split(' ')[1]
 
-        //var period = (t1)
+        var period = (t1/365)
 
-        if (c[q].ipc_training_period === cat) {
-          count++
-        }
         console.log(t1)
 
-        // if(period == 1 && period <= 2 ) {
-        //   count++
-        // } else if (period == 3 && period <= 5 && cat == 1 ) {
-        //   count++
-        // } else if (t2 == 'Months' && cat == 0) {
-        //   cat == 0
-        //   count++
-        // }
+        if(period == 0 && period < 1 && cat == 0 ) {
+          count++
+        } else if (period >= 1 && period <= 2 && cat == 1 ) {
+          count++
+        } else if (period >= 3 && period <= 5 && cat == 2 ) {
+          count++
+        } else if (period > 5 && cat == 3 ) {
+          count++
+        }
       }
     },
     getGenderNum (cat, g) {

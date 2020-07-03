@@ -304,8 +304,8 @@
            <v-tab>Covid Specific Training</v-tab>
           <v-tab>Covid Training Period</v-tab>
           <v-tab>Report By Symptoms</v-tab>
-          <v-tab>Risk Assessment reports</v-tab>
-          <v-tab>Risk Assesment Recommendation</v-tab>
+          <v-tab>Risk Assessment(RA)</v-tab>
+          <v-tab>RA Recommendation</v-tab>
           <v-tab>PCR Test Done</v-tab>
           <v-tab>PCR Test Results</v-tab>
           <v-tab>Exposure management </v-tab>
@@ -676,7 +676,7 @@ export default {
         ]
       },
 
-    // covid specific training  
+    // covid specific training  time 
     barOptionsTrainingTime: {
       xAxis: {
         categories: ['1-2', '3 and More', 'null'],
@@ -978,6 +978,56 @@ export default {
         ]
       },
 
+      //Report By Returned Work
+      barOptionsReturnedWork: {
+        xAxis: {
+          categories: ['Positive', 'Negative', 'Waiting'],
+          title: {
+            text: 'PCR Test Results'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No of HCWs with PCR Test Results'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
     // date returned to work  
       barOptionsDateReturn: {
         xAxis: {
@@ -1031,7 +1081,7 @@ export default {
       // off work
       barOptionsOffWork: {
         xAxis: {
-          categories: ['1 - 7', '8 - 14', '15 - 21', '22 - 28', '29 - 35', '36 - 42', '43 - 49', 'Not Completed' ],
+          categories: ['1 - 7', '8 - 14', '15 - 21', '22 - 28', '29 - 35', '36 - 42', '43 - 49', 'Undefined' ],
           title: {
             text: 'Weeks HCW Was Away From Work'
           }
@@ -1081,9 +1131,9 @@ export default {
       // quarantine period
       barOptionsIsolationPeriod: {
         xAxis: {
-          categories: ['1 - 7', '8 - 14', '15 - 21', 'Not Completed' ],
+          categories: ['1 - 7', '8 - 14', '15 - 21', 'Undefined' ],
           title: {
-            text: 'Quarantine Period'
+            text: 'Quarantine Period in Days'
           }
         },
         yAxis: {
@@ -1117,7 +1167,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'HCWs Quarantine Period'
+          text: 'HCWs Quarantine Period in Days'
         },
         series: [
           {
@@ -1493,7 +1543,7 @@ export default {
 
               this.facility_exposures = this.filteredFacility.length
 
-              console.log(this.s)
+              //console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -1632,7 +1682,6 @@ export default {
         data.push(this.getOffWorkTime(i, list))
       }
       this.barOptionsOffWork.series[0].data = data
-      console.log(data)
 
     },
     getRisk (cat, g) {
@@ -1652,6 +1701,23 @@ export default {
             }
         }
         return counter
+    },
+     getReturnedWorkNum (name, c) {
+        var counter = 0
+
+        var stopped_work = c[rx].risk_assessment_recommendation
+        // var resumed_work = c[rx].return_to_work_date
+
+        var stopped_working = stopped_work.filter(function( ds ) {
+
+          count++
+          return ds.risk_assessment_recommendation == 'Stop working'
+        }).length
+
+
+        console.log(c)
+        console.log(resumed_work)
+        
     },
     getCovidTraining (cat, t) {
       var count = 0
@@ -1677,10 +1743,11 @@ export default {
           else if( period >= 3 ) {
               cat == 1
               count++
-          } else if( period >= 1 && period <= 2 ) {
-              cat == 0
+          } else if( period >= 1 && period <= 2 && cat == 1 ) {
               count++
-          } else {
+          } else if( period >= 3 && period <= 5 && cat == 1 ) {
+              count++
+          }else {
               count
           }
  
@@ -1699,9 +1766,9 @@ export default {
 
         if (days > 0 && days <= 7 && categ == 0) {
           count++
-        } else if (days > 8  && days <= 14 && categ == 1) {
+        } else if (days >= 8  && days <= 14 && categ == 1) {
           count++
-        } else if (days > 15 && days <= 21 && categ == 2) {
+        } else if (days >= 15 && days <= 21 && categ == 2) {
           count++
         } else if(days >= 22 && categ == 3){
           count++
