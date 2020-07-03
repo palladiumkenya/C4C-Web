@@ -301,6 +301,8 @@
           color="teal lighten-5"
           centered
         >
+           <v-tab>Covid Specific Training</v-tab>
+          <v-tab>Covid Training Period</v-tab>
           <v-tab>Report By Symptoms</v-tab>
           <v-tab>Risk Assessment reports</v-tab>
           <v-tab>Risk Assesment Recommendation</v-tab>
@@ -312,7 +314,7 @@
           <v-tab>Returned To Work </v-tab>
           
           <v-tab-item
-            v-for="n in 9"
+            v-for="n in 11"
             :key="n">
             <v-container fluid>
               <v-card-text v-if="n===1">
@@ -332,16 +334,46 @@
                           color="#007bff"/>
                         <highcharts
                           ref="barChart"
-                          :options="barOptionsSymptoms"/>
+                          :options="barOptionsCovidTraining"/>
                       </div>
                     </v-flex>
                   </v-layout>
                 </v-container>
               </v-card-text>
 
+              <!-- Start Exposure IPC Training -->
+              <v-card-text v-if="n===2">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsTrainingTime"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure IPC Training -->
+              <v-card-text v-if="n===3">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsSymptoms"/>
+                </div>
+              </v-card-text>
+
               <!-- Start Risk Assessment -->
 
-              <v-card-text v-if="n===2">
+              <v-card-text v-if="n===4">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -357,7 +389,7 @@
 
               <!-- Start Date Returned To work -->
 
-              <v-card-text v-if="n===3">
+              <v-card-text v-if="n===5">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -373,7 +405,7 @@
 
               <!-- Start PCR Test Done -->
 
-              <v-card-text v-if="n===4">
+              <v-card-text v-if="n===6">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -388,7 +420,7 @@
               </v-card-text>
 
               <!-- Start PCR Test -->
-              <v-card-text v-if="n===5">
+              <v-card-text v-if="n===7">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -404,7 +436,7 @@
 
               <!-- Start Exposure Management -->
 
-              <v-card-text v-if="n===6">
+              <v-card-text v-if="n===8">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -420,38 +452,6 @@
 
               <!-- Start Exposure Quarantine Period -->
 
-              <v-card-text v-if="n===7">
-                <div class="card vld-parent">
-                  <loading
-                    :active.sync="isLoading"
-                    :can-cancel="false"
-                    :is-full-page="false"
-                    loader="bars"
-                    color="#007bff"/>
-                  <highcharts
-                    ref="barChart"
-                    :options="barOptionsExpo"/>
-                </div>
-              </v-card-text>
-
-              <!-- Start Exposure Days Off Work -->
-
-              <v-card-text v-if="n===8">
-                <div class="card vld-parent">
-                  <loading
-                    :active.sync="isLoading"
-                    :can-cancel="false"
-                    :is-full-page="false"
-                    loader="bars"
-                    color="#007bff"/>
-                  <highcharts
-                    ref="barChart"
-                    :options="barOptionsExpo"/>
-                </div>
-              </v-card-text>
-
-              <!-- Start Exposure Returned To Work-->
-
               <v-card-text v-if="n===9">
                 <div class="card vld-parent">
                   <loading
@@ -462,7 +462,39 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsExpo"/>
+                    :options="barOptionsQuarantine"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure Days Off Work -->
+
+              <v-card-text v-if="n===10">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsWork"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure Returned To Work-->
+
+              <v-card-text v-if="n===11">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsReturnedWork"/>
                 </div>
               </v-card-text>
 
@@ -593,6 +625,106 @@ export default {
       exposures_total: 0,
       facility_exposures: 0,
       community_exposures: 0,
+
+       // covid specific training  
+      barOptionsCovidTraining: {
+        xAxis: {
+          categories: ['Yes', 'No'],
+          title: {
+            text: 'Covid Specific Training'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWs With COVID Specific Training'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+    // covid specific training  
+    barOptionsTrainingTime: {
+      xAxis: {
+        categories: ['1-2', '3 and More', 'null'],
+        title: {
+          text: 'Covid Specific Training Period'
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'No. of Exposures',
+          align: 'high'
+        },
+        labels: {
+          overflow: 'justify',
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        }
+      },
+      plotOptions: {
+        column: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'HCWs COVID Specific Training Period'
+      },
+      series: [
+        {
+          colorByPoint: true,
+          name: 'Numbers',
+          data: []
+        }
+      ]
+    },
 
       // by symptoms
       barOptionsSymptoms: {
@@ -798,7 +930,7 @@ export default {
 
        barOptionsPCR: {
         xAxis: {
-          categories: ['POSITIVE', 'NEGATIVE', 'WAITING'],
+          categories: ['Positive', 'Negative', 'Waiting'],
           title: {
             text: 'PCR Test Results'
           }
@@ -846,6 +978,156 @@ export default {
       },
 
     // date returned to work  
+      barOptionsDateReturn: {
+        xAxis: {
+          categories: ['Stop working', 'Return to work'],
+          title: {
+            text: 'Risk Assesment Recommendation'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Risk Assesment Recommendation'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // quarantine period
+      barOptionsQuarantine: {
+        xAxis: {
+          categories: ['7 Days', '14 Days', '21 Days' ],
+          title: {
+            text: 'Quarantine Period'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWs Quarantine Period'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // days off work
+      barOptionsDateReturn: {
+        xAxis: {
+          categories: ['Stop working', 'Return to work'],
+          title: {
+            text: 'Risk Assesment Recommendation'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Risk Assesment Recommendation'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // date returned to work  
       barOptionsDateReturn: {
         xAxis: {
           categories: ['Stop working', 'Return to work'],
@@ -1160,7 +1442,7 @@ export default {
 
               this.facility_exposures = this.filteredFacility.length
 
-              console.log(this.filteredFacility)
+              console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -1267,6 +1549,18 @@ export default {
       this.barOptionsPCRDone.series[0].data = data
 
       var data = []
+      for (var i in this.barOptionsCovidTraining.xAxis.categories) {
+        data.push(this.getCovidTraining(this.barOptionsCovidTraining.xAxis.categories[i], list))
+      }
+      this.barOptionsCovidTraining.series[0].data = data
+
+      var data = []
+      for (var i in this.barOptionsTrainingTime.xAxis.categories) {
+        data.push(this.getTrainingTime(this.barOptionsTrainingTime.xAxis.categories[i], list))
+      }
+      this.barOptionsTrainingTime.series[0].data = data
+
+      var data = []
       for (var i in this.barOptionsDateReturn.xAxis.categories) {
         data.push(this.getDateReturn(this.barOptionsDateReturn.xAxis.categories[i], list))
         console.log(data)
@@ -1295,6 +1589,39 @@ export default {
             }
         }
         return counter
+    },
+    getCovidTraining (cat, t) {
+      var count = 0
+      for (var x in t) {
+        if (t[x].covid_specific_training === cat) {
+          count++
+        }
+      }
+      return count
+    },
+     getTrainingTime (cat, t) {
+      var count = 0
+      for (var a in t) {
+        var detm = t[a].covid_training_period.split(' ')[1]
+
+        var period = parseInt(t[a].covid_training_period.split(' ')[0])
+
+          if (detm === 'Hours' ) {
+              cat == 0
+              count++
+          }
+          else if( period >= 3 ) {
+              cat == 1
+              count++
+          } else if( period >= 1 && period <= 2 ) {
+              cat == 0
+              count++
+          } else {
+              count
+          }
+ 
+      }
+      return count
     },
     getSymNum (symptoms, c) {
         var counter = 0

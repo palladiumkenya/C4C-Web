@@ -204,6 +204,7 @@
                 item-value="name"
                 label="Select Transmission Mode"
                 multiple
+                @change="getTransmissionModeFilter"
                 clearable
                 persistent-hint
                 chips/>
@@ -307,12 +308,13 @@
           <v-tab>Report By Cadre</v-tab>
           <v-tab>Report By Gender</v-tab>
           <v-tab>Report By Age</v-tab>
+          <v-tab>Transmission Report</v-tab>
           <v-tab>Report By Procedure</v-tab>
           <v-tab>PPE Present</v-tab>
           <v-tab>PPE Worn</v-tab>
           <v-tab>IPC Training</v-tab>
-          <v-tab>Covid Specific Training</v-tab>
-          <v-tab>Covid Training Period</v-tab>
+          <v-tab>IPC Training Period</v-tab>
+         
 
           <v-tab-item
             v-for="n in 10"
@@ -390,8 +392,23 @@
                 </div>
               </v-card-text>
 
-                <!-- Start Exposure Procedure -->
+              <!-- Start Exposure Transmission -->
               <v-card-text v-if="n===5">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsTransmission"/>
+                </div>
+              </v-card-text>
+
+                <!-- Start Exposure Procedure -->
+              <v-card-text v-if="n===6">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -406,7 +423,7 @@
               </v-card-text> 
 
               <!-- Start PPE's Present -->
-              <v-card-text v-if="n===6">
+              <v-card-text v-if="n===7">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -421,7 +438,7 @@
               </v-card-text>
 
               <!-- Start Specific PPE's -->
-              <v-card-text v-if="n===7">
+              <v-card-text v-if="n===8">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -436,7 +453,7 @@
               </v-card-text>
 
               <!-- Start Exposure IPC Training -->
-              <v-card-text v-if="n===8">
+              <v-card-text v-if="n===9">
                 <div class="card vld-parent">
                   <loading
                     :active.sync="isLoading"
@@ -450,22 +467,7 @@
                 </div>
               </v-card-text>
 
-              <!-- Start Exposure IPC Training -->
-              <v-card-text v-if="n===9">
-                <div class="card vld-parent">
-                  <loading
-                    :active.sync="isLoading"
-                    :can-cancel="false"
-                    :is-full-page="false"
-                    loader="bars"
-                    color="#007bff"/>
-                  <highcharts
-                    ref="barChart"
-                    :options="barOptionsCovidTraining"/>
-                </div>
-              </v-card-text>
-
-              <!-- Start Exposure IPC Training -->
+              <!-- Start Exposure IPC Training Period-->
               <v-card-text v-if="n===10">
                 <div class="card vld-parent">
                   <loading
@@ -476,7 +478,7 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsCovidTraining"/>
+                    :options="barOptionsIpcTraining"/>
                 </div>
               </v-card-text>
 
@@ -568,6 +570,7 @@ export default {
       exp_filt: [],
       exp_filtl: [],
       exp_filtf: [],
+      exp_filttm: [],
       s: [],
       transmission_mode: ['Facility', 'Community'],
       transmissionMode: [],
@@ -584,61 +587,61 @@ export default {
       community_exposures: 0,
 
 
-            // by month
+      // by month
         barOptionsMonth: {
-        xAxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          title: {
-            text: 'Year -  Month'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
+          xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            title: {
+              text: 'Year -  Month'
             }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No. Of Reported Exposures by Months'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'No. of Exposures',
+              align: 'high'
+            },
+            labels: {
+              overflow: 'justify',
+              items: [
+                {
+                  html: '',
+                  style: {
+                    left: '50px',
+                    top: '18px',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                  }
+                }
+              ]
+            }
+          },
+          plotOptions: {
+            column: {
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: 'No. Of Reported Exposures by Months'
+          },
+          series: [
+            {
+              colorByPoint: true,
+              name: 'Numbers',
+              data: []
+            }
+          ]
       },
 
       // by procedure
 
       barOptionsProcedure: {
         xAxis: {
-          categories: ['Direct care','Aerosal generating activity','Face-to-face contact (less than 1 meter)', 'Other' ],
+          categories: ['Direct care','Aerosol generating activity','Face-to-face contact (less than 1 meter)', 'Other' ],
           title: {
             text: 'Procedures'
           }
@@ -685,6 +688,57 @@ export default {
         ]
       },
 
+      // by transmission
+
+      barOptionsTransmission: {
+        xAxis: {
+          categories: ['Colleague','Patient', 'Client', 'Family Member', 'Community Member', 'Unknown' ],
+          title: {
+            text: 'Source'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWs Exposure Sources'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
       //by IPC Training
       barOptionsIpc: {
         xAxis: {
@@ -712,28 +766,78 @@ export default {
               }
             ]
           }
-      },
-      plotOptions: {
-        column: {
-          dataLabels: {
-            enabled: true
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
           }
-        }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No Of HCWS Who Have Received IPC Training'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      }, 
+
+      //by IPC Training Period
+      barOptionsIpcTraining: {
+        xAxis: {
+          categories: ['1-3', '3-5', '5 and Above'],
+          title: {
+            text: 'HCW IPC Training Period' 
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures ',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWS IPCTraining Period'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
       },
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: 'No Of HCWS Who Have Received IPC Training'
-      },
-      series: [
-        {
-          colorByPoint: true,
-          name: 'Numbers',
-          data: []
-        }
-      ]
-    }, 
     
       // by cadre
       barOptionsCadre: {
@@ -913,28 +1017,28 @@ export default {
               }
             ]
           }
-      },
-      plotOptions: {
-        column: {
-          dataLabels: {
-            enabled: true
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
           }
-        }
-      },
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: 'No of HCWs with PPE Worn'
-      },
-      series: [
-        {
-          colorByPoint: true,
-          name: 'Numbers',
-          data: []
-        }
-      ]
-    }, 
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No of HCWs with PPE Worn'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      }, 
     
     //Report By PPE Worn
       barOptionsPpe: {
@@ -987,55 +1091,6 @@ export default {
         ]
       },
       
-       // covid specific training  
-      barOptionsCovidTraining: {
-        xAxis: {
-          categories: ['Yes', 'No'],
-          title: {
-            text: 'Covid Specific Training'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'HCWs With COVID Specific Training'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
 
     }
   },
@@ -1045,7 +1100,7 @@ export default {
         this.getcovidExpo()
         this.getCounties()
         this.getFacilities()
-       // this.getCad()
+        //this.getCad()
         //this.getPartners()
         this.dateRange('2020-01-20', this.endDate)
         axios.get('cadres')
@@ -1244,6 +1299,23 @@ export default {
       }
     },
 
+    getTransmissionModeFilter (tm) {
+      let exp = []
+      if (tm.length > 0) {
+        for (var b in tm) {
+          for (var e in this.exp_filttm) {
+            if (this.exp_filttm[e].transmission_mode === tm[b].name) {
+              exp.push(this.exp_filttm[e])
+              console.log(this.exp_filttm[e])
+            }
+          }
+        }
+        this.getcovidData(exp)
+      } else {
+        this.getcovidData(this.exp_filttm)
+      }
+    },
+
     cadreFilter (a) {
       this.fac_filt = []
       this.exp_filt = []
@@ -1275,6 +1347,8 @@ export default {
           .then((response) => {
               this.s = response.data.data
 
+              //console.log(this.s)
+
               const b = response.data.data
 
               this.exposures_total = response.data.meta.total
@@ -1287,7 +1361,6 @@ export default {
 
               this.facility_exposures = this.filteredFacility.length
 
-             console.log(this.filteredFacility)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -1324,19 +1397,7 @@ export default {
           })
           .catch(error => console.log(error.message))
       }
-    },
-
-    // getcovidExpo () {
-    //   if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
-    //     axios.get(`exposures/covid/all?filter={"where":{"transmission_mode":'+this.name }}`)
-    //       .then((response) => {
-    //         this.fac_exposures = response.data.data
-
-    //         this.facility_exposures = response.data.meta.total
-
-    //       })
-    //   }
-    // },    
+    },   
 
      async loopT (l) {
       var i; var u = []
@@ -1371,11 +1432,24 @@ export default {
       }
       this.barOptionsMonth.series[0].data = data
 
+      var datac = []
+      for (var i in this.barOptionsCadre.xAxis.categories) {
+        datac.push(this.getCadreNum(this.barOptionsCadre.xAxis.categories[i], list))
+      }
+      this.barOptionsCadre.series[0].data = datac
+
+      var data = []
+      for (var i in this.barOptionsTransmission.xAxis.categories) {
+        data.push(this.getTransmissionNum(this.barOptionsTransmission.xAxis.categories[i], list))
+      }
+      this.barOptionsTransmission.series[0].data = data
+
       var data = []
       for (var i in this.barOptionsProcedure.xAxis.categories) {
         data.push(this.getProcedureNum(this.barOptionsProcedure.xAxis.categories[i], list))
       }
       this.barOptionsProcedure.series[0].data = data
+      //console.log(data)
 
       var data = []
       for (var i in this.barOptionsIpc.xAxis.categories) {
@@ -1393,7 +1467,6 @@ export default {
       for (var i in this.barOptionsPpe.xAxis.categories) {
         data.push(this.getPpe(this.barOptionsPpe.xAxis.categories[i], list))
       }
-      console.log(data)
       this.barOptionsPpe.series[0].data = data
 
       var data = []
@@ -1401,12 +1474,6 @@ export default {
         data.push(this.getGenderNum(this.barOptionsGender.xAxis.categories[i], list))
       }
       this.barOptionsGender.series[0].data = data
-
-      var data = []
-      for (var i in this.barOptionsCovidTraining.xAxis.categories) {
-        data.push(this.getCovidTraining(this.barOptionsCovidTraining.xAxis.categories[i], list))
-      }
-      this.barOptionsCovidTraining.series[0].data = data
 
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
@@ -1472,6 +1539,15 @@ export default {
         }
         return counter
     },
+    getTransmissionNum (transmission, c) {
+        var counter = 0
+        for (var h in c) {
+            if (c[h].contact_with === transmission ) {
+                counter++
+            }
+        }
+        return counter
+    },
     getPpe (ppes, c) {
         var counter = 0
         for (var g in c) {
@@ -1486,7 +1562,24 @@ export default {
         }
         return counter
     },
-
+    getProcedureNum (procedure, c) {
+        var counter = 0
+        for (var b in c) {
+            if (c[b].procedure_perfomed === procedure) {
+                counter++
+            }
+        }
+        return counter
+    },
+     getCadreNum (name, c) {
+        var counter = 0
+      for (var xc in c) {
+        if (c[xc].cadre === name) {
+          counter++
+        }
+      }
+      return counter
+    },
     getHourNum (name, c) {
       var counter = 0
       for (var xh in c) {
@@ -1501,33 +1594,6 @@ export default {
         }
       }
       return counter
-    },
-    getCadreNum (name, c) {
-        var counter = 0
-      for (var xc in c) {
-        if (c[xc].cadre === name) {
-          counter++
-        }
-      }
-      return counter
-    },
-    getProcedureNum (procedure, c) {
-        var counter = 0
-        for (var b in c) {
-            if (c[b].procedure_perfomed === procedure) {
-                counter++
-            }
-        }
-        return counter
-    },
-    getCovidTraining (cat, t) {
-      var count = 0
-      for (var x in t) {
-        if (t[x].covid_specific_training === cat) {
-          count++
-        }
-      }
-      return count
     },
     getMonthNum (name, expo) {
       var counter = 0
