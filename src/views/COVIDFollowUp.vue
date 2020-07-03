@@ -206,6 +206,7 @@
                 label="Select Transmission Mode"
                 multiple
                 clearable
+                @change="getTransmissionModeFilter"
                 persistent-hint
                 chips/>
             </template>
@@ -594,8 +595,8 @@ export default {
         }
       ],
 
-        //
-        isLoading: true,
+      //
+      isLoading: true,
       partner: '',
       cadres: [],
       facility: '',
@@ -1503,6 +1504,54 @@ export default {
         this.getcovidData(exp)
       } else {
         this.getcovidData(this.exp_filtf)
+      }
+    },
+
+    getTransmissionModeFilter (tm) {
+      this.fac_filt = []
+      let r = []
+      //this.exp_filt = []
+      if (tm.length > 0) {
+        for (var c in tm) {
+          if (this.exp_filt.length > 0) {
+            for (var dx in this.exp_filt) {
+              if (this.exp_filt[dx].transmission_mode === tm[c]) {
+              r.push(this.exp_filt[dx])
+              } 
+            }  
+          } else if (this.exp_filtl.length > 0) {
+            for (var dx in this.exp_filtl) {
+              if (this.exp_filtl[dx].transmission_mode === tm[c]) {
+              r.push(this.exp_filtl[dx])
+              } 
+            }  
+          } else if (this.exp_filtf.length > 0) {
+            for (var dx in this.exp_filtf) {
+              if (this.exp_filtf[dx].transmission_mode === tm[c]) {
+              r.push(this.exp_filtf[dx])
+              } 
+            }  
+          }else {
+            for (var ex in this.s) {
+              if (this.s[ex].transmission_mode === tm[c]) {
+              r.push(this.s[ex])
+              } 
+            }  
+          }
+        }
+        this.getcovidData(r)
+        this.fac = this.fac_filt.sort()
+      } else {
+        this.fac = this.all_facilities
+          if (this.exp_filt.length > 0) {
+            this.getcovidData(this.exp_filt)
+          } else if(this.exp_filtl.length > 0) {
+            this.getcovidData(this.exp_filtl)
+          } else if(this.exp_filtf.length > 0) {
+            this.getcovidData(this.exp_filtf)
+          } else{
+            this.getcovidData(this.s)
+          }
       }
     },
 
