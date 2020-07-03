@@ -982,9 +982,9 @@ export default {
       //Report By Returned Work
       barOptionsReturnedWork: {
         xAxis: {
-          categories: ['Positive', 'Negative', 'Waiting'],
+          categories: ['Stop working', 'Went Back to work'],
           title: {
-            text: 'PCR Test Results'
+            text: 'HCWs Who Returned To Work'
           }
         },
         yAxis: {
@@ -1018,7 +1018,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'No of HCWs with PCR Test Results'
+          text: 'No of Who Returned To Work'
         },
         series: [
           {
@@ -1169,56 +1169,6 @@ export default {
         },
         title: {
           text: 'HCWs Quarantine Period in Days'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-      // days off work
-      barOptionsDateReturn: {
-        xAxis: {
-          categories: ['Stop working', 'Return to work'],
-          title: {
-            text: 'Risk Assesment Recommendation'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No. Of Reported Exposures by Risk Assesment Recommendation'
         },
         series: [
           {
@@ -1711,6 +1661,12 @@ export default {
       this.barOptionsTrainingTime.series[0].data = data
 
       var data = []
+      for (var i in this.barOptionsReturnedWork.xAxis.categories) {
+        data.push(this.getReturnedWorkNum(this.barOptionsReturnedWork.xAxis.categories[i], list))
+      }
+      this.barOptionsReturnedWork.series[0].data = data
+
+      var data = []
       for (var i in this.barOptionsDateReturn.xAxis.categories) {
         data.push(this.getDateReturn(this.barOptionsDateReturn.xAxis.categories[i], list))
       }
@@ -1751,22 +1707,18 @@ export default {
         }
         return counter
     },
-     getReturnedWorkNum (name, c) {
-        var counter = 0
+    getReturnedWorkNum (name, c) {
+      var counter = 0
+      for (var tn in c) {
+        if (c[tn].risk_assessment_recommendation === name) {
+          counter++
+        } else if(c[tn].return_to_work_date !== null && name == 2 )
+          
+          counter++
+      }
+      return counter
 
-        var stopped_work = c[rx].risk_assessment_recommendation
-        // var resumed_work = c[rx].return_to_work_date
-
-        var stopped_working = stopped_work.filter(function( ds ) {
-
-          count++
-          return ds.risk_assessment_recommendation == 'Stop working'
-        }).length
-
-
-        console.log(c)
-        console.log(resumed_work)
-        
+          
     },
     getCovidTraining (cat, t) {
       var count = 0
@@ -1796,6 +1748,8 @@ export default {
               count++
           } else if( period >= 3 && period <= 5 && cat == 1 ) {
               count++
+          }else if (t[a].covid_training_period === null) {
+              count
           }else {
               count
           }
@@ -1821,6 +1775,10 @@ export default {
           count++
         } else if(days >= 22 && categ == 3){
           count++
+        } else if(ag[x].isolation_start_date === null || ag[x].isolation_end_date ) {
+          count
+        } else {
+          count
         }
       }
       return count
@@ -1854,6 +1812,10 @@ export default {
           count++        
         } else if(days >= 50 && categor == 9){
           count++
+        } else if(ag[x].risk_assessment_decision_date === null || ag[x].return_to_work_date) {
+          count
+        } else {
+          count
         }
       }
       return count
