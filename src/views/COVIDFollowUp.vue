@@ -152,7 +152,7 @@
               :disabled="active_level"
               label="Select Facility Level"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips
               @change="getFacilitylevelfilter"/>

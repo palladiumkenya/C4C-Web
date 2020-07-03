@@ -150,7 +150,7 @@
                 :disabled="active_level"
                 label="Select Facility Level"
                 multiple
-                clerable
+                clearable
                 persistent-hint
                 chips
                 @change="getFacilitylevelfilter"/>
@@ -1301,20 +1301,49 @@ export default {
 
     getTransmissionModeFilter (tm) {
       this.fac_filt = []
-      this.exp_filt = []
+      let r = []
+      //this.exp_filt = []
       if (tm.length > 0) {
         for (var c in tm) {
-          for (var ex in this.s) {
-            if (this.s[ex].transmission_mode === tm[c].name) {
-              this.exp_filt.push(this.s[ex])
-            }
+          if (this.exp_filt.length > 0) {
+            for (var dx in this.exp_filt) {
+              if (this.exp_filt[dx].transmission_mode === tm[c]) {
+              r.push(this.exp_filt[dx])
+              } 
+            }  
+          } else if (this.exp_filtl.length > 0) {
+            for (var dx in this.exp_filtl) {
+              if (this.exp_filtl[dx].transmission_mode === tm[c]) {
+              r.push(this.exp_filtl[dx])
+              } 
+            }  
+          } else if (this.exp_filtf.length > 0) {
+            for (var dx in this.exp_filtf) {
+              if (this.exp_filtf[dx].transmission_mode === tm[c]) {
+              r.push(this.exp_filtf[dx])
+              } 
+            }  
+          }else {
+            for (var ex in this.s) {
+              if (this.s[ex].transmission_mode === tm[c]) {
+              r.push(this.s[ex])
+              } 
+            }  
           }
         }
-        this.getcovidData(this.exp_filt)
+        this.getcovidData(r)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
-        this.getcovidData(this.s)
+          if (this.exp_filt.length > 0) {
+            this.getcovidData(this.exp_filt)
+          } else if(this.exp_filtl.length > 0) {
+            this.getcovidData(this.exp_filtl)
+          } else if(this.exp_filtf.length > 0) {
+            this.getcovidData(this.exp_filtf)
+          } else{
+            this.getcovidData(this.s)
+          }
       }
     },
 

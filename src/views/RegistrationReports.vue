@@ -26,7 +26,7 @@
                 label="Select County"
                 v-on:change="getSubCounties"
                 multiple
-                clerable
+                clearable
                 persistent-hint
                 chips/>
 
@@ -90,7 +90,7 @@
                 v-on:change="getFacilitylevelfilter"
                 :disabled="active_level"
                 multiple
-                clerable
+                clearable
                 persistent-hint
                 chips/>
             </template>
@@ -112,7 +112,7 @@
                 v-on:change="getFacilityfilter"
                 :disabled="active_fac"
                 multiple
-                clerable
+                clearable
                 persistent-hint
                 chips/>
             </template>
