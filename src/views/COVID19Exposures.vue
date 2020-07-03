@@ -792,7 +792,7 @@ export default {
       //by IPC Training Period
       barOptionsIpcTraining: {
         xAxis: {
-          categories: ['1-3', '3-5', '5 and Above'],
+          categories: ['1 year ago','2 years ago', '3 years ago', 4,'5 and Above'],
           title: {
             text: 'HCW IPC Training Period' 
           }
@@ -1300,19 +1300,21 @@ export default {
     },
 
     getTransmissionModeFilter (tm) {
-      let exp = []
+      this.fac_filt = []
+      this.exp_filt = []
       if (tm.length > 0) {
-        for (var b in tm) {
-          for (var e in this.exp_filttm) {
-            if (this.exp_filttm[e].transmission_mode === tm[b].name) {
-              exp.push(this.exp_filttm[e])
-              console.log(this.exp_filttm[e])
+        for (var c in tm) {
+          for (var ex in this.s) {
+            if (this.s[ex].transmission_mode === tm[c].name) {
+              this.exp_filt.push(this.s[ex])
             }
           }
         }
-        this.getcovidData(exp)
+        this.getcovidData(this.exp_filt)
+        this.fac = this.fac_filt.sort()
       } else {
-        this.getcovidData(this.exp_filttm)
+        this.fac = this.all_facilities
+        this.getcovidData(this.s)
       }
     },
 
@@ -1334,11 +1336,6 @@ export default {
         this.getcovidData(this.s)
       }
     },
-    // end filter
-
-    transmissionModeFilter (a) {
-      
-    },
 
     //end filter
     getcovidExpo () {
@@ -1347,7 +1344,7 @@ export default {
           .then((response) => {
               this.s = response.data.data
 
-              //console.log(this.s)
+              console.log(this.s)
 
               const b = response.data.data
 
@@ -1449,7 +1446,6 @@ export default {
         data.push(this.getProcedureNum(this.barOptionsProcedure.xAxis.categories[i], list))
       }
       this.barOptionsProcedure.series[0].data = data
-      //console.log(data)
 
       var data = []
       for (var i in this.barOptionsIpc.xAxis.categories) {
@@ -1474,6 +1470,13 @@ export default {
         data.push(this.getGenderNum(this.barOptionsGender.xAxis.categories[i], list))
       }
       this.barOptionsGender.series[0].data = data
+
+      var data = []
+      for (var i in this.barOptionsIpcTraining.xAxis.categories) {
+        data.push(this.getTransmissionNum(this.barOptionsIpcTraining.xAxis.categories[i], list))
+      }
+      this.barOptionsIpcTraining.series[0].data = data
+      console.log(data)
 
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
@@ -1511,6 +1514,30 @@ export default {
         }
       }
       return count
+    },
+
+    getIPCTrainingNum(cat, c) {
+      var count = 0
+        for (var q in c) {
+        // var t1 = c[q].ipc_training_period.split(' ')[0].slice(0).trim()
+        // var t2 = c[q].ipc_training_period.split(' ')[1]
+
+        //var period = (t1)
+
+        if (c[q].ipc_training_period === cat) {
+          count++
+        }
+        console.log(t1)
+
+        // if(period == 1 && period <= 2 ) {
+        //   count++
+        // } else if (period == 3 && period <= 5 && cat == 1 ) {
+        //   count++
+        // } else if (t2 == 'Months' && cat == 0) {
+        //   cat == 0
+        //   count++
+        // }
+      }
     },
     getGenderNum (cat, g) {
       var count = 0

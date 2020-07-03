@@ -462,7 +462,7 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsQuarantine"/>
+                    :options="barOptionsIsolationPeriod"/>
                 </div>
               </v-card-text>
 
@@ -478,7 +478,7 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsWork"/>
+                    :options="barOptionsOffWork"/>
                 </div>
               </v-card-text>
 
@@ -854,28 +854,28 @@ export default {
               }
             ]
           }
-      },
-      plotOptions: {
-        column: {
-          dataLabels: {
-            enabled: true
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
           }
-        }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Risk Assessment Level'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
       },
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: 'No. Of Reported Exposures by Risk Assessment Level'
-      },
-      series: [
-        {
-          colorByPoint: true,
-          name: 'Numbers',
-          data: []
-        }
-      ]
-    },
     
      //Report By PCR Test Done
       
@@ -928,7 +928,8 @@ export default {
         ]
       },
 
-       barOptionsPCR: {
+      //Report By PCR Test
+      barOptionsPCR: {
         xAxis: {
           categories: ['Positive', 'Negative', 'Waiting'],
           title: {
@@ -1027,10 +1028,60 @@ export default {
         ]
       },
 
-      // quarantine period
-      barOptionsQuarantine: {
+      // off work
+      barOptionsOffWork: {
         xAxis: {
-          categories: ['7 Days', '14 Days', '21 Days' ],
+          categories: ['1 - 7', '8 - 14', '15 - 21', '22 - 28', '29 - 35', '36 - 42', '43 - 49', 'Not Completed' ],
+          title: {
+            text: 'Weeks HCW Was Away From Work'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWs Period Off Work In Weeks'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // quarantine period
+      barOptionsIsolationPeriod: {
+        xAxis: {
+          categories: ['1 - 7', '8 - 14', '15 - 21', 'Not Completed' ],
           title: {
             text: 'Quarantine Period'
           }
@@ -1563,13 +1614,25 @@ export default {
       var data = []
       for (var i in this.barOptionsDateReturn.xAxis.categories) {
         data.push(this.getDateReturn(this.barOptionsDateReturn.xAxis.categories[i], list))
-        console.log(data)
       }
       this.barOptionsDateReturn.series[0].data = data
 
       this.value = false
       this.load = false
       this.isLoading = false
+
+      var data = []
+      for (var i in this.barOptionsIsolationPeriod.xAxis.categories) {
+        data.push(this.getIsolationTime(i, list))
+      }
+      this.barOptionsIsolationPeriod.series[0].data = data
+
+      var data = []
+      for (var i in this.barOptionsOffWork.xAxis.categories) {
+        data.push(this.getOffWorkTime(i, list))
+      }
+      this.barOptionsOffWork.series[0].data = data
+      console.log(data)
 
     },
     getRisk (cat, g) {
@@ -1599,6 +1662,7 @@ export default {
       }
       return count
     },
+    
      getTrainingTime (cat, t) {
       var count = 0
       for (var a in t) {
@@ -1623,6 +1687,62 @@ export default {
       }
       return count
     },
+    getIsolationTime (categ, ag) {
+      var count = 0
+      for (var x in ag) {
+        var date_start = new Date(ag[x].isolation_start_date)
+        var date_end = new Date(ag[x].isolation_end_date)
+
+        var diff = Math.abs(date_end - date_start)
+
+        var days = Math.ceil(diff / (1000 * 3600 * 24) ) 
+
+        if (days > 0 && days <= 7 && categ == 0) {
+          count++
+        } else if (days > 8  && days <= 14 && categ == 1) {
+          count++
+        } else if (days > 15 && days <= 21 && categ == 2) {
+          count++
+        } else if(days >= 22 && categ == 3){
+          count++
+        }
+      }
+      return count
+    },
+
+    getOffWorkTime (categor, ag) {
+      var count = 0
+      for (var x in ag) {
+        var date_start = new Date(ag[x].risk_assessment_decision_date)
+        var date_end = new Date(ag[x].return_to_work_date)
+
+        var diff = Math.abs(date_end - date_start)
+
+        var days = Math.ceil(diff / (1000 * 3600 * 24) ) 
+
+        if (days > 0 && days <= 7 && categor == 0) {
+          count++
+        } else if (days > 8  && days <= 14 && categor == 1) {
+          count++
+        } else if (days > 15 && days <= 21 && categor == 2) {
+          count++
+        } else if (days > 22 && days <= 28 && categor == 3) {
+          count++  
+        } else if (days > 29 && days <= 35 && categor == 4) {
+          count++  
+        } else if (days > 36 && days <= 42 && categor == 6) {
+          count++ 
+        } else if (days > 36 && days <= 42 && categor == 7) {
+          count++ 
+        } else if (days > 43 && days <= 49 && categor == 8) {
+          count++        
+        } else if(days >= 50 && categor == 9){
+          count++
+        }
+      }
+      return count
+    },
+
     getSymNum (symptoms, c) {
         var counter = 0
       for (var xc in c) {
