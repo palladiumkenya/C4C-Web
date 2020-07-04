@@ -1465,12 +1465,6 @@ export default {
       this.barOptionsCadre.series[0].data = datac
 
       var data = []
-      for (var i in this.barOptionsTransmission.xAxis.categories) {
-        data.push(this.getTransmissionNum(this.barOptionsTransmission.xAxis.categories[i], list))
-      }
-      this.barOptionsTransmission.series[0].data = data
-
-      var data = []
       for (var i in this.barOptionsProcedure.xAxis.categories) {
         data.push(this.getProcedureNum(this.barOptionsProcedure.xAxis.categories[i], list))
       }
@@ -1501,11 +1495,16 @@ export default {
       this.barOptionsGender.series[0].data = data
 
       var data = []
+      for (var i in this.barOptionsTransmission.xAxis.categories) {
+        data.push(this.getTransmissionNum(this.barOptionsTransmission.xAxis.categories[i], list))
+      }
+      this.barOptionsTransmission.series[0].data = data
+
+      var data = []
       for (var i in this.barOptionsIpcTraining.xAxis.categories) {
-        data.push(this.getTransmissionNum(this.barOptionsIpcTraining.xAxis.categories[i], list))
+        data.push(this.getIPCTrainingNum(i, list))
       }
       this.barOptionsIpcTraining.series[0].data = data
-      console.log(data)
 
       var data = []
       for (var i in this.barOptionsAge.xAxis.categories) {
@@ -1547,24 +1546,25 @@ export default {
 
     getIPCTrainingNum(cat, c) {
       var count = 0
-        for (var q in c) {
-         var t1 = c[q].ipc_training_period.split(' ')[0].slice(0).trim()
-         var t2 = c[q].ipc_training_period.split(' ')[1]
+        for (var m in c) {
 
-        var period = (t1/365)
+          var t1 = c[m].ipc_training_period
 
-        console.log(t1)
+          console.log(t1)
 
-        if(period == 0 && period < 1 && cat == 0 ) {
-          count++
-        } else if (period >= 1 && period <= 2 && cat == 1 ) {
-          count++
-        } else if (period >= 3 && period <= 5 && cat == 2 ) {
-          count++
-        } else if (period > 5 && cat == 3 ) {
-          count++
-        }
+          var period = parseInt(t1/12)
+
+          if(period == 0 && period < 1 && cat == 0 ) {
+            count++
+          } else if (period >= 1 && period <= 2 && cat == 1 ) {
+            count++
+          } else if (period >= 3 && period <= 5 && cat == 2 ) {
+            count++
+          } else if (period > 5 && cat == 3 ) {
+            count++
+          }
       }
+      return count
     },
     getGenderNum (cat, g) {
       var count = 0
