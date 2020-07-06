@@ -74,6 +74,7 @@
           </template>
                 
           <template slot="items" slot-scope="props">
+            
             <td>{{ props.item.id }}</td>
             <td>{{ props.item.county }}</td>
             <td>{{ props.item.sub_county }}</td>
@@ -177,11 +178,11 @@ export default {
       var i
       for (i = 0; i < 1;) {
         if (l != null) {
-          let response = await axios.get(l)
-          l = response.data.links.next
-          this.all_users = this.all_users.concat(response.data.data)
+          let users = await axios.get(l)
+          l = users.data.links.next
+          this.all_users = this.all_users.concat(users.data.data)
         } else {
-          i = 11
+          i = 100
         }
       } 
     },
