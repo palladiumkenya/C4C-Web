@@ -750,7 +750,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposures ',
+            text: 'No. of Health Care Workers ',
             align: 'high'
           },
           labels: {
@@ -800,7 +800,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposures ',
+            text: 'No. of Health Care Workers',
             align: 'high'
           },
           labels: {
@@ -1603,18 +1603,14 @@ export default {
         return counter
     },
     getPpe (ppes, c) {
-        var counter = 0
-        for (var g in c) {
-          var pes = c[g].ppes.split(',')[0].slice(0).trim()
-          var pes1 = c[g].ppes.split(',')[1].slice(0).trim()
+      var counter = 0
 
-            if (pes === ppes) {
-                counter++
-            } else if (pes1 === ppes) {
-                counter++
-            }
+      for (var xc in c) {
+        if(c[xc].ppes.indexOf(ppes) !== -1){
+          counter++;
         }
-        return counter
+      }
+      return counter  
     },
     getProcedureNum (procedure, c) {
         var counter = 0

@@ -638,7 +638,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposures',
+            text: 'No. of Health Care Workers',
             align: 'high'
           },
           labels: {
@@ -680,15 +680,15 @@ export default {
     // covid specific training  time 
     barOptionsTrainingTime: {
       xAxis: {
-        categories: ['1-2', '3 and More', 'null'],
+        categories: ['1 - 2 Days', '3 or More Days', 'null'],
         title: {
-          text: 'Covid Specific Training Period'
+          text: 'Covid Specific Training Period in Days'
         }
       },
       yAxis: {
         min: 0,
         title: {
-          text: 'No. of Exposures',
+          text: 'No. of Health Care Workers',
           align: 'high'
         },
         labels: {
@@ -730,7 +730,7 @@ export default {
       // by symptoms
       barOptionsSymptoms: {
         xAxis: {
-          categories: ['Fever', 'Cough', 'Fatigue', 'Loss of appetite', 'Difficulty in Breathing', 'Muscle pains', 'Sore throat', 'Nasal congestion', 'Headache', 'Diarrhea', 'Nausea', 'Vomiting', 'Loss of smell', 'Loss of smell'],
+          categories: ['Fever', 'Cough', 'Fatigue', 'Anorexia  (Loss of appetite)', 'Shortness of breath (Difficult in breathing)', 'Myalgias (Muscle pains)', 'Sore throat', 'Nasal congestion', 'Headache', 'Diarrhea', 'Nausea', 'Vomiting', 'Loss of smell', 'Loss of smell'],
           title: {
             text: 'Symptoms'
           }
@@ -738,7 +738,7 @@ export default {
         yAxis: {
           min: 0,
           title: {
-            text: 'No. of Exposures',
+            text: 'No. of Health Care Workers',
             align: 'high'
           },
           labels: {
@@ -1542,7 +1542,7 @@ export default {
 
               this.facility_exposures = this.filteredFacility.length
 
-              //console.log(this.s)
+              console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -1656,7 +1656,7 @@ export default {
 
       var data = []
       for (var i in this.barOptionsTrainingTime.xAxis.categories) {
-        data.push(this.getTrainingTime(this.barOptionsTrainingTime.xAxis.categories[i], list))
+        data.push(this.getTrainingTime(i, list))
       }
       this.barOptionsTrainingTime.series[0].data = data
 
@@ -1734,24 +1734,22 @@ export default {
       for (var a in t) {
         var detm = t[a].covid_training_period.split(' ')[1]
 
-        var period = parseInt(t[a].covid_training_period.split(' ')[0])
+        var period = t[a].covid_training_period.split(' ')[0]
 
-          if (detm === 'Hours' ) {
-              cat == 0
+          if (detm === 'Hours' && cat == 0 ) {
               count++
-          }
-          else if( period >= 3 ) {
-              cat == 1
+          } else if (detm === 'Days' && period != null) {
+            if( period >= 1 && period <= 2 && cat == 1 ) {
               count++
-          } else if( period >= 1 && period <= 2 && cat == 1 ) {
-              count++
-          } else if( period >= 3 && period <= 5 && cat == 1 ) {
-              count++
-          }else if (t[a].covid_training_period === null) {
-              count
-          }else {
-              count
-          }
+            } else if( period >= 3 && period <= 5 && cat == 1 ) {
+                count++
+            }else if (period === null && cat == 2 ) {
+                count++
+            }else {
+                count
+            }
+
+          } 
  
       }
       return count
@@ -1820,19 +1818,15 @@ export default {
       return count
     },
 
-    getSymNum (symptoms, c) {
-        var counter = 0
+    getSymNum (symp, c) {
+      var counter = 0
+
       for (var xc in c) {
-        var symp1 = c[xc].symptoms.split(',')[0].slice(0).trim()
-        var symp2 = c[xc].symptoms.split(',')[1].slice(0).trim()
-  
-        if (symp1 === symptoms) {
-          counter++
-        } else if (symp2 === symptoms) {
-          counter++
-        } 
+        if(c[xc].symptoms.indexOf(symp) !== -1){
+          counter++;
+        }
       }
-      return counter
+      return counter  
     },
     getDateReturn (name, expo) {
       var counter = 0
