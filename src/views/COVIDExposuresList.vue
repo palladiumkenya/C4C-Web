@@ -91,7 +91,7 @@
                 <td>{{ props.item.facility_level }}</td>
                 <td>{{ props.item.county }}</td>
                 <td>{{ props.item.sub_county }}</td>
-                <td>{{ props.item.risk_assessment_decision_date }}</td>
+                <td>{{ props.item.risk_assessment_recommendation }}</td>
                 <td>{{ props.item.isolation_start_date }}</td>
                 <td>
                   <v-icon v-if="props.expanded">mdi-arrow-down</v-icon>
@@ -182,7 +182,7 @@ export default {
           value: 'facility'
         },
         {
-          text: 'Facility',
+          text: 'Facility Level',
           value: 'facility_level'
         },
         {
@@ -194,8 +194,8 @@ export default {
           value: 'sub_county'
         },
         {
-          text: 'Date Stopped Working',
-          value: 'risk_assessment_decision_date'
+          text: 'Risk Assesment Recommendation',
+          value: 'risk_assessment_recommendation'
         },
         {
           text: 'Date Isolation Started',
@@ -294,8 +294,8 @@ export default {
     handleDownload () {
       this.downLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-       const tHeader = ['Gender', 'Cadre','Facility', 'County', 'Sub County', 'Date Stopped Working', 'Date Isolation Started']
-        const filterVal = ['gender', 'cadre', 'facility', 'county', 'sub_county', 'risk_assessment_decision_date' ,'isolation_start_date']
+       const tHeader = ['Gender', 'Cadre','Facility', 'Facility Level', 'County', 'Sub County', 'Risk Assesment Recommendation', 'Date Isolation Started']
+        const filterVal = ['gender', 'cadre', 'facility', 'facility_level', 'county', 'sub_county', 'risk_assessment_recommendation' ,'isolation_start_date']
         const list = this.exposures
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

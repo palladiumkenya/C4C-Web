@@ -792,7 +792,7 @@ export default {
       //by IPC Training Period
       barOptionsIpcTraining: {
         xAxis: {
-          categories: ['0 - 1', '1 - 2', '3 - 5', '5 and Above'],
+          categories: ['0 - 1 Years', '1 - 2 Years', '3 - 5 Years', '5 Years and Above'],
           title: {
             text: 'HCW IPC Training Period in Years' 
           }

@@ -12,7 +12,7 @@
 
        <v-layout  
         justify-center
-        v-if="user.role_id === 1 || user.role_id === 2"
+        v-if="user.role_id === 1 || user.role_id === 2 || user.role_id === 4"
         wrap>    
 
         <!-- Start Cards -->
@@ -716,7 +716,7 @@ export default {
         type: 'column'
       },
       title: {
-        text: 'HCWs COVID Specific Training Period'
+        text: 'HCWs COVID Specific Training Period in Days'
       },
       series: [
         {
@@ -1082,7 +1082,7 @@ export default {
       // off work
       barOptionsOffWork: {
         xAxis: {
-          categories: ['1 - 7', '8 - 14', '15 - 21', '22 - 28', '29 - 35', '36 - 42', '43 - 49', 'Undefined' ],
+          categories: ['1 - 7 Days', '8 - 14 Days', '15 - 21 Days', '22 - 28 Days', '29 - 35 Days', '36 - 42 Days', '43 - 49 Days', 'Undefined' ],
           title: {
             text: 'Weeks HCW Was Away From Work'
           }
@@ -1118,7 +1118,7 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'HCWs Period Off Work In Weeks'
+          text: 'HCWs Period Off Work In Days'
         },
         series: [
           {
@@ -1132,7 +1132,7 @@ export default {
       // quarantine period
       barOptionsIsolationPeriod: {
         xAxis: {
-          categories: ['1 - 7', '8 - 14', '15 - 21', 'Undefined' ],
+          categories: ['1 - 7 Days', '8 - 14 Days', '15 - 21 Days', 'Undefined' ],
           title: {
             text: 'Quarantine Period in Days'
           }
