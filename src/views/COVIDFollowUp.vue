@@ -12,7 +12,6 @@
 
        <v-layout  
         justify-center
-        v-if="user.role_id === 1 || user.role_id === 2 || user.role_id === 4"
         wrap>    
 
         <!-- Start Cards -->
@@ -193,7 +192,6 @@
               @change="cadreFilter"/>
           </v-flex>
            <v-flex
-            v-if="user.role_id !== 4"
             xs12
             md3
           >
