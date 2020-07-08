@@ -639,7 +639,7 @@ export default {
 
       barOptionsProcedure: {
         xAxis: {
-          categories: ['Direct care','Aerosol generating activity','Face-to-face contact (less than 1 meter)', 'Other' ],
+          categories: ['Direct care','Aerosol generating activity','Face to face contact with suspected/confirmed case', 'Other' ],
           title: {
             text: 'Procedures'
           }
@@ -1371,7 +1371,7 @@ export default {
           .then((response) => {
               this.s = response.data.data
 
-              console.log(this.s)
+              //console.log(this.s)
 
               const b = response.data.data
 
@@ -1604,8 +1604,10 @@ export default {
       var counter = 0
 
       for (var xc in c) {
-        if(c[xc].ppes.indexOf(ppes) !== -1){
+        if(c[xc].ppes !== null && c[xc].ppes.indexOf(ppes) !== -1){
           counter++;
+        } else {
+          counter
         }
       }
       return counter  
