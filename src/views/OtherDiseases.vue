@@ -23,7 +23,7 @@
               item-value="id"
               label="Select County"
               multiple
-              clerable
+              clearable
               persistent-hint
               chips
               @change="getSubCounties"/>
@@ -45,7 +45,7 @@
                 item-value="id"
                 label="Select Sub-County"
                 multiple
-                clerable
+                clearable
                 persistent-hint
                 chips
                 @change="facilitySubCounty"/>
@@ -67,7 +67,7 @@
                 item-value="id"
                 label="Select Partner"
                 multiple
-                clerable
+                clearable
                 disabled
                 persistent-hint
                 chips/>
@@ -87,7 +87,7 @@
                 :disabled="active_level"
                 label="Select Facility Level"
                 multiple
-                clerable
+                clearable
                 persistent-hint
                 chips
                 @change="facilityLevel"/>
@@ -109,7 +109,7 @@
                 item-value="id"
                 label="Select Facility"
                 multiple
-                clerable
+                clearable
                 persistent-hint
                 chips
                 @change="facilityFilter"/>

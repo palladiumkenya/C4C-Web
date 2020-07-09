@@ -8,168 +8,168 @@
     justify-center
       wrap>
 
-  <v-layout  
-    justify-center
-    v-if="user.role_id === 1 || user.role_id === 2"
-    wrap>    
+    <v-layout  
+      justify-center
+      v-if="user.role_id === 1 || user.role_id === 2"
+      wrap>    
 
 
-      <!-- Start Cards -->
-      <v-flex 
-        sm2
-        xs8
-        md2
-        lg2
-      >
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#4B9FD2"
-            dark
-          >
-            <v-card-text>
-              <v-icon class="mr-1" >mdi-account-group</v-icon>
-              <h3 align="center">{{ aUsersCount }}</h3>
-              <h6 align="center">Healthcare Workers</h6>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-flex>
+        <!-- Start Cards -->
+        <v-flex 
+          sm2
+          xs8
+          md2
+          lg2
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1" >mdi-account-group</v-icon>
+                <h3 align="center">{{ aUsersCount }}</h3>
+                <h6 align="center">Healthcare Workers</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
 
-      <v-flex
-        sm2
-        xs8
-        md2
-        lg2
-      >
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#4B9FD2"
-            dark
-          >
-            <v-card-text>
-              <v-icon class="mr-1">mdi-file-chart</v-icon>
-              <h3 align="center">{{ exposuresCount }}</h3>
-              <h6 align="center">Reported Exposures</h6>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-flex>
+        <v-flex
+          sm2
+          xs8
+          md2
+          lg2
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-file-chart</v-icon>
+                <h3 align="center">{{ exposuresCount }}</h3>
+                <h6 align="center">Reported Exposures</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
 
-      <!-- <v-flex
-        sm2
-        xs8
-        md2
-        lg2
-      >
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#4B9FD2"
-            dark
-          >
-            <v-card-text>
-              <v-icon class="mr-1">mdi-movie-roll</v-icon>
-              <h3 align="center">{{ covidCount }}</h3>
-              <h6 align="center">Covid 19 Exposures</h6>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-flex> -->
+        <!-- <v-flex
+          sm2
+          xs8
+          md2
+          lg2
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-movie-roll</v-icon>
+                <h3 align="center">{{ covidCount }}</h3>
+                <h6 align="center">Covid 19 Exposures</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex> -->
 
-      <v-flex
-        sm2
-        xs8
-        md2
-        lg2
-      >
+        <v-flex
+          sm2
+          xs8
+          md2
+          lg2
+        >
 
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#4B9FD2"
-            dark
-          >
-            <v-card-text>
-              <v-icon class="mr-1">mdi-message</v-icon>
-              <h3 align="center">{{ broadcastsCount }}</h3>
-              <h6 align="center">Broadcasts Sent </h6>
-            </v-card-text>
-          </v-card>
-        </template>
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-message</v-icon>
+                <h3 align="center">{{ broadcastsCount }}</h3>
+                <h6 align="center">Broadcasts Sent </h6>
+              </v-card-text>
+            </v-card>
+          </template>
 
-      </v-flex>
+        </v-flex>
 
-      <v-flex 
-        sm2
-        xs8
-        md2
-        lg2
-      >
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#4B9FD2"
-            dark
-          >
-            <v-card-text>
-              <v-icon class="mr-1">mdi-home-outline</v-icon>
-              <h3 align="center">{{ all_facilities.length }}</h3>
-              <h6 align="center"> Facilities</h6>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-flex>
+        <v-flex 
+          sm2
+          xs8
+          md2
+          lg2
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-home-outline</v-icon>
+                <h3 align="center">{{ all_facilities.length }}</h3>
+                <h6 align="center"> Facilities</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
 
-      <v-flex 
-        sm2
-        xs8
-        md2
-        lg2
-      >
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#4B9FD2"
-            dark
-          >
-            <v-card-text>
-              <v-icon class="mr-1">mdi-map-marker</v-icon>
-              <h3 align="center">{{ all_counties.length }}</h3>
-              <h6 align="center">Counties</h6>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-flex>
+        <v-flex 
+          sm2
+          xs8
+          md2
+          lg2
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-map-marker</v-icon>
+                <h3 align="center">{{ all_counties.length }}</h3>
+                <h6 align="center">Counties</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
 
-      <v-flex 
-        sm2
-        xs8
-        md2
-        lg2
-      >
-        <template>
-          <v-card
-            class="mx-auto"
-            color="#4B9FD2"
-            dark
-          >
-            <v-card-text>
-              <v-icon class="mr-1">mdi-account-check</v-icon>
-              <h3 align="center">{{ partnerCount }}</h3>
-              <h6 align="center">Partners</h6>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-flex>
-      <!-- End Cards -->
-  </v-layout>
+        <v-flex 
+          sm2
+          xs8
+          md2
+          lg2
+        >
+          <template>
+            <v-card
+              class="mx-auto"
+              color="#4B9FD2"
+              dark
+            >
+              <v-card-text>
+                <v-icon class="mr-1">mdi-account-check</v-icon>
+                <h3 align="center">{{ partnerCount }}</h3>
+                <h6 align="center">Partners</h6>
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-flex>
+        <!-- End Cards -->
+    </v-layout>
 
     <v-layout  
-    justify-center
-    v-else
-    wrap> 
+      justify-center
+      v-else
+      wrap> 
 
       <!-- Start Facility Cards -->
 
@@ -370,7 +370,7 @@
               </template>
             </v-flex>
           </v-layout>
-        </v-container>
+      </v-container>
 
         <template>
           <v-flex

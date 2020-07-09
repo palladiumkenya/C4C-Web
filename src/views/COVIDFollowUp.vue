@@ -1,14 +1,16 @@
 <template>
   <v-container
-    fill-height
-    fluid
-    grid-list-xl>
+      fill-height
+      fluid
+      grid-list-xl
+      >
 
     <v-layout  
-      justify-center
-      wrap>    
+      justif
+      y-center
+      wrap>  
 
-      <v-layout  
+       <v-layout  
         justify-center
         wrap>    
 
@@ -75,122 +77,121 @@
             </v-card>
           </template>
         </v-flex>
-      </v-layout>
+      </v-layout> 
 
-        <v-layout
-          justify-center
-          wrap>
-          <v-flex
-            v-if="user.role_id === 1 || user.role_id === 2"
-            xs12
-            md3
-          >
-            <template>
-              <v-combobox
-                :items="all_counties"
-                item-text="name"
-                item-value="id"
-                label="Select County"
-                multiple
-                clearable
-                persistent-hint
-                chips
-                @change="getSubCounties"/>
-            </template>
-          </v-flex>
-          <v-flex
-            v-if="user.role_id !== 4"
-            xs12
-            md3
-          >
-            <template>
-              <v-combobox
-                v-model="subcounties"
-                :items="all_subcounties"
-                :disabled="active"
-                item-text="name"
-                item-value="id"
-                label="Select Sub-County"
-                multiple
-                clearable
-                persistent-hint
-                chips
-                @change="getFacilitysubcountyfilter"/>
-            </template>
-          </v-flex>
-          <!-- <v-flex
-            v-if="user.role_id !== 4"
-            xs12
-            md2
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="partner"
-                :items="all_partners"
-                item-text="name"
-                item-value="id"
-                label="Select Partner"
-                multiple
-                disabled
-                clearable
-                persistent-hint
-                chips/>
-            </template>
-          </v-flex> -->
-          <v-flex
-            v-if="user.role_id !== 4"
-            xs12
-            md3
-          >
-            <template>
-              <v-combobox
-                :items="all_facilities_level"
-                :disabled="active_level"
-                label="Select Facility Level"
-                multiple
-                clearable
-                persistent-hint
-                chips
-                @change="getFacilitylevelfilter"/>
-            </template>
-          </v-flex>
-          <v-flex
-            v-if="user.role_id !== 4"
-            xs12
-            md3
-          >
+      <v-layout
+        justify-center
+        wrap>
+        <v-flex
+          v-if="user.role_id === 1 || user.role_id === 2"
+          xs12
+          md2
+        >
+          <template>
             <v-combobox
-              v-model="facility"
-              :items="fac"
+              :items="all_counties"
               item-text="name"
               item-value="id"
-              label="Select Facility"
+              label="Select County"
               multiple
               clearable
               persistent-hint
               chips
-              @change="getFacilityfilter"/>
-          </v-flex>
+              @change="getSubCounties"/>
+          </template>
+        </v-flex>
+        <v-flex
+          v-if="user.role_id !== 4"
+          xs12
+          md3
+        >
           <template>
-            <v-flex
-              v-if="user.role_id === 4"
-              xs12
-              md3
-            >
-              <v-combobox
-                :items="cadres"
-                item-text="name"
-                item-value="id"
-                label="Select Cadre"
-                multiple
-                clearable
-                persistent-hint
-                chips
-                @change="cadreFilter"/>
-            </v-flex>
-
-            <v-flex
+            <v-combobox
+              v-model="subcounties"
+              :items="all_subcounties"
+              :disabled="active"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="getFacilitysubcountyfilter"/>
+          </template>
+        </v-flex>
+        <v-flex
+          v-if="user.role_id !== 4"
+          xs12
+          md2
+        >
+          <template>
+            <v-combobox
+              v-if="user.role_id !== 4"
+              v-model="partner"
+              :items="all_partners"
+              item-text="name"
+              item-value="id"
+              label="Select Partner"
+              multiple
+              disabled
+              clearable
+              persistent-hint
+              chips/>
+          </template>
+        </v-flex>
+        <v-flex
+          v-if="user.role_id !== 4"
+          xs12
+          md2
+        >
+          <template>
+            <v-combobox
+              :items="all_facilities_level"
+              :disabled="active_level"
+              label="Select Facility Level"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="getFacilitylevelfilter"/>
+          </template>
+        </v-flex>
+        <v-flex
+          v-if="user.role_id !== 4"
+          xs12
+          md3
+        >
+          <v-combobox
+            v-model="facility"
+            :items="fac"
+            item-text="name"
+            item-value="id"
+            label="Select Facility"
+            multiple
+            clearable
+            persistent-hint
+            chips
+            @change="getFacilityfilter"/>
+        </v-flex>
+        <template>
+          <v-flex
+            v-if="user.role_id === 4"
+            xs12
+            md2
+          >
+            <v-combobox
+              :items="cadres"
+              item-text="name"
+              item-value="id"
+              label="Select Cadre"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="cadreFilter"/>
+          </v-flex>
+           <v-flex
             xs12
             md3
           >
@@ -202,124 +203,121 @@
                 item-value="name"
                 label="Select Transmission Mode"
                 multiple
-                @change="getTransmissionModeFilter"
                 clearable
+                @change="getTransmissionModeFilter"
                 persistent-hint
                 chips/>
             </template>
           </v-flex>
-            <v-flex
-              xs12
-              md2>
-              <v-menu
-                ref="menu1"
-                :close-on-content-click="false"
-                v-model="menu1"
-                :nudge-right="40"
-                :return-value.sync="startDate"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="startDate"
-                  label="Start Date"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                />
-                <v-date-picker
-                  :dark="true"
-                  v-model="startDate"
-                  :max="endDate"
-                  :min="minDate"
-                  no-title
-                  scrollable>
-                  <v-spacer/>
-                  <v-btn
-                    flat
-                    color="primary"
-                    @click="menu1 = false">Cancel</v-btn>
-                  <v-btn
-                    flat
-                    color="primary"
-                    @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
-                </v-date-picker>
-              </v-menu>
-            </v-flex>
-            <v-flex
-              xs12
-              md2>
-              <v-menu
-                ref="menu"
-                :close-on-content-click="false"
-                v-model="menu"
-                :nudge-right="40"
-                :return-value.sync="endDate"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="endDate"
-                  label="End Date"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                />
-                <v-date-picker
-                  :dark="true"
-                  v-model="endDate"
-                  :max="maxDate"
-                  :min="startDate"
-                  no-title
-                  scrollable>
-                  <v-spacer/>
-                  <v-btn
-                    flat
-                    color="primary"
-                    @click="menu = false">Cancel</v-btn>
-                  <v-btn
-                    flat
-                    color="primary"
-                    @click="click();$refs.menu.save(endDate)">OK</v-btn>
-                </v-date-picker>
-              </v-menu>
-            </v-flex>
-          </template>
-        </v-layout>
+          <v-flex
+            xs12
+            md2>
+            <v-menu
+              ref="menu1"
+              :close-on-content-click="false"
+              v-model="menu1"
+              :nudge-right="40"
+              :return-value.sync="startDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="startDate"
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="startDate"
+                :max="endDate"
+                :min="minDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu1 = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+          <v-flex
+            xs12
+            md2>
+            <v-menu
+              ref="menu"
+              :close-on-content-click="false"
+              v-model="menu"
+              :nudge-right="40"
+              :return-value.sync="endDate"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="endDate"
+                label="End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+              />
+              <v-date-picker
+                :dark="true"
+                v-model="endDate"
+                :max="maxDate"
+                :min="startDate"
+                no-title
+                scrollable>
+                <v-spacer/>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="menu = false">Cancel</v-btn>
+                <v-btn
+                  flat
+                  color="primary"
+                  @click="click();$refs.menu.save(endDate)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
+        </template>
+      </v-layout>
       <!-- End filters -->
-
-    
-    
+      
       <v-card>
         <v-tabs
           color="teal lighten-5"
           centered
         >
-
-          <v-tab>Report By Month</v-tab>
-          <v-tab>Report By Cadre</v-tab>
-          <v-tab>Report By Gender</v-tab>
-          <v-tab>Report By Age</v-tab>
-          <v-tab>Transmission Report</v-tab>
-          <v-tab>Report By Procedure</v-tab>
-          <v-tab>PPE Present</v-tab>
-          <v-tab>PPE Worn</v-tab>
-          <v-tab>IPC Training</v-tab>
-          <v-tab>IPC Training Period</v-tab>
-         
-
+           <v-tab>Covid Specific Training</v-tab>
+          <v-tab>Covid Training Period</v-tab>
+          <v-tab>Report By Symptoms</v-tab>
+          <v-tab>Risk Assessment(RA)</v-tab>
+          <v-tab>RA Recommendation</v-tab>
+          <v-tab>PCR Test Done</v-tab>
+          <v-tab>PCR Test Results</v-tab>
+          <v-tab>Exposure management </v-tab>
+          <v-tab>Isolation Period </v-tab>
+          <v-tab>Off Work </v-tab>
+          <v-tab>Returned To Work </v-tab>
+          
           <v-tab-item
-            v-for="n in 10"
+            v-for="n in 11"
             :key="n">
             <v-container fluid>
               <v-card-text v-if="n===1">
-                <!-- Start Exposure Month -->
+                <!-- Start Symptoms -->
                 <v-container py-0>
                   <v-layout wrap>
                     <v-flex
@@ -335,15 +333,14 @@
                           color="#007bff"/>
                         <highcharts
                           ref="barChart"
-                          :options="barOptionsMonth"/>
+                          :options="barOptionsCovidTraining"/>
                       </div>
                     </v-flex>
                   </v-layout>
                 </v-container>
               </v-card-text>
 
-            <!-- Start Exposure Cadre -->
-
+              <!-- Start Exposure IPC Training -->
               <v-card-text v-if="n===2">
                 <div class="card vld-parent">
                   <loading
@@ -354,12 +351,11 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsCadre"/>
+                    :options="barOptionsTrainingTime"/>
                 </div>
               </v-card-text>
 
-              <!-- Start Exposure Gender -->
-
+              <!-- Start Exposure IPC Training -->
               <v-card-text v-if="n===3">
                 <div class="card vld-parent">
                   <loading
@@ -370,11 +366,11 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsGender"/>
+                    :options="barOptionsSymptoms"/>
                 </div>
               </v-card-text>
 
-              <!-- Start Exposure Age -->
+              <!-- Start Risk Assessment -->
 
               <v-card-text v-if="n===4">
                 <div class="card vld-parent">
@@ -386,11 +382,12 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsAge"/>
+                    :options="barOptionsRisk"/>
                 </div>
               </v-card-text>
 
-              <!-- Start Exposure Transmission -->
+              <!-- Start Date Returned To work -->
+
               <v-card-text v-if="n===5">
                 <div class="card vld-parent">
                   <loading
@@ -401,11 +398,12 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsTransmission"/>
+                    :options="barOptionsDateReturn"/>
                 </div>
               </v-card-text>
 
-                <!-- Start Exposure Procedure -->
+              <!-- Start PCR Test Done -->
+
               <v-card-text v-if="n===6">
                 <div class="card vld-parent">
                   <loading
@@ -416,11 +414,11 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsProcedure"/>
+                    :options="barOptionsPCRDone"/>
                 </div>
-              </v-card-text> 
+              </v-card-text>
 
-              <!-- Start PPE's Present -->
+              <!-- Start PCR Test -->
               <v-card-text v-if="n===7">
                 <div class="card vld-parent">
                   <loading
@@ -431,11 +429,12 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsPpePresent"/>
+                    :options="barOptionsPCR"/>
                 </div>
               </v-card-text>
 
-              <!-- Start Specific PPE's -->
+              <!-- Start Exposure Management -->
+
               <v-card-text v-if="n===8">
                 <div class="card vld-parent">
                   <loading
@@ -446,11 +445,12 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsPpe"/>
+                    :options="barOptionsExpo"/>
                 </div>
               </v-card-text>
 
-              <!-- Start Exposure IPC Training -->
+              <!-- Start Exposure Quarantine Period -->
+
               <v-card-text v-if="n===9">
                 <div class="card vld-parent">
                   <loading
@@ -461,11 +461,12 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsIpc"/>
+                    :options="barOptionsIsolationPeriod"/>
                 </div>
               </v-card-text>
 
-              <!-- Start Exposure IPC Training Period-->
+              <!-- Start Exposure Days Off Work -->
+
               <v-card-text v-if="n===10">
                 <div class="card vld-parent">
                   <loading
@@ -476,18 +477,33 @@
                     color="#007bff"/>
                   <highcharts
                     ref="barChart"
-                    :options="barOptionsIpcTraining"/>
+                    :options="barOptionsOffWork"/>
+                </div>
+              </v-card-text>
+
+              <!-- Start Exposure Returned To Work-->
+
+              <v-card-text v-if="n===11">
+                <div class="card vld-parent">
+                  <loading
+                    :active.sync="isLoading"
+                    :can-cancel="false"
+                    :is-full-page="false"
+                    loader="bars"
+                    color="#007bff"/>
+                  <highcharts
+                    ref="barChart"
+                    :options="barOptionsReturnedWork"/>
                 </div>
               </v-card-text>
 
             </v-container>
           </v-tab-item>
         </v-tabs>
-      </v-card>  
+      </v-card>
 
     </v-layout>
   </v-container>
-
 </template>
 
 <script>
@@ -504,26 +520,24 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 exportingInit(Highcharts)
 export default {
 
-    computed: {
-
-      cadreCount () {
-      return this.c
+  computed: {
+    cadreCount () {
+        return this.c
       },
 
-      totalExposuresCount () {
-        return this.exposures_total
+    totalExposuresCount () {
+          return this.exposures_total
       },
 
-      totalFacilityCount () {
+    totalFacilityCount () {
         return this.facility_exposures
       },
 
-      totalCommunityCount () {
-        return this.community_exposures
+    totalCommunityCount () {
+      return this.community_exposures
       },
 
-
-      ...mapGetters({
+    ...mapGetters({
       user: 'auth/user',
       auth: 'auth/token',
       all_users: 'auth/us_all',
@@ -532,13 +546,55 @@ export default {
       curr: 'auth/curr_page',
       last: 'auth/last_page'
     })
-
-    },
-
+  },
   components: { highcharts: Chart, Loading },
     data () {
       return {
-        isLoading: true,
+
+        rowsPerPageItems: [100, 500, 1000],
+      search: '',
+      link: '',
+      output: '',
+      result: '',
+      snackbar: false,
+      headers: [
+        {
+          text: 'No.',
+          value: 'No.'
+        },
+        {
+          sortable: false,
+          text: 'Gender',
+          value: 'gender'
+        },
+        {
+          text: 'Cadre',
+          value: 'cadre'
+        },
+        {
+          text: 'Facility',
+          value: 'facility'
+        },
+        {
+          text: 'County',
+          value: 'county'
+        },
+        {
+          text: 'Sub County',
+          value: 'sub_county'
+        },
+        {
+          text: 'Date Stopped Working',
+          value: 'risk_assessment_decision_date'
+        },
+        {
+          text: 'Date Isolation Started',
+          value: 'isolation_start_date'
+        }
+      ],
+
+      //
+      isLoading: true,
       partner: '',
       cadres: [],
       facility: '',
@@ -561,238 +617,20 @@ export default {
       endDate: new Date().toISOString().substr(0, 10),
       value: true,
       value1: true,
-      load: true,
-      fac_filt: [],
-      fac_filtl: [],
-      fac_filtf: [],
-      exp_filt: [],
-      exp_filtl: [],
-      exp_filtf: [],
-      exp_filttm: [],
-      s: [],
       transmission_mode: ['Facility', 'Community'],
       transmissionMode: [],
       filteredCommunity: [],
       filteredFacility: [],
-      cadre: [],
-      dob: [],
-      date: [],
-      users: [],
-      gender: [],
-      hours: [],
       exposures_total: 0,
       facility_exposures: 0,
       community_exposures: 0,
 
-
-      // by month
-        barOptionsMonth: {
-          xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            title: {
-              text: 'Year -  Month'
-            }
-          },
-          yAxis: {
-            min: 0,
-            title: {
-              text: 'No. of Exposures',
-              align: 'high'
-            },
-            labels: {
-              overflow: 'justify',
-              items: [
-                {
-                  html: '',
-                  style: {
-                    left: '50px',
-                    top: '18px',
-                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                  }
-                }
-              ]
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true
-              }
-            }
-          },
-          chart: {
-            type: 'column'
-          },
-          title: {
-            text: 'No. Of Reported Exposures by Months'
-          },
-          series: [
-            {
-              colorByPoint: true,
-              name: 'Numbers',
-              data: []
-            }
-          ]
-      },
-
-      // by procedure
-
-      barOptionsProcedure: {
-        xAxis: {
-          categories: ['Direct care','Aerosol generating activity','Face to face contact with suspected/confirmed case', 'Other' ],
-          title: {
-            text: 'Procedures'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No. Of Reported Exposures by Procedure Being Done'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-      // by transmission
-
-      barOptionsTransmission: {
-        xAxis: {
-          categories: ['Colleague','Patient', 'Client', 'Family Member', 'Community Member', 'Unknown' ],
-          title: {
-            text: 'Source'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'HCWs Exposure Sources'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-      //by IPC Training
-      barOptionsIpc: {
+       // covid specific training  
+      barOptionsCovidTraining: {
         xAxis: {
           categories: ['Yes', 'No'],
           title: {
-            text: 'HCW IPC Training' 
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Health Care Workers ',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No Of HCWS Who Have Received IPC Training'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      }, 
-
-      //by IPC Training Period
-      barOptionsIpcTraining: {
-        xAxis: {
-          categories: ['0 - 1 Years', '1 - 2 Years', '3 - 5 Years', '5 Years and Above'],
-          title: {
-            text: 'HCW IPC Training Period in Years' 
+            text: 'Covid Specific Training'
           }
         },
         yAxis: {
@@ -826,7 +664,208 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'HCWS IPCTraining Period in Years'
+          text: 'HCWs With COVID Specific Training'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+    // covid specific training  time 
+    barOptionsTrainingTime: {
+      xAxis: {
+        categories: ['1 - 2 Days', '3 or More Days', 'null'],
+        title: {
+          text: 'Covid Specific Training Period in Days'
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'No. of Health Care Workers',
+          align: 'high'
+        },
+        labels: {
+          overflow: 'justify',
+          items: [
+            {
+              html: '',
+              style: {
+                left: '50px',
+                top: '18px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+              }
+            }
+          ]
+        }
+      },
+      plotOptions: {
+        column: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'HCWs COVID Specific Training Period in Days'
+      },
+      series: [
+        {
+          colorByPoint: true,
+          name: 'Numbers',
+          data: []
+        }
+      ]
+    },
+
+      // by symptoms
+      barOptionsSymptoms: {
+        xAxis: {
+          categories: ['Fever', 'Cough', 'Fatigue', 'Anorexia  (Loss of appetite)', 'Shortness of breath (Difficult in breathing)', 'Myalgias (Muscle pains)', 'Sore throat', 'Nasal congestion', 'Headache', 'Diarrhea', 'Nausea', 'Vomiting', 'Loss of smell', 'Loss of smell'],
+          title: {
+            text: 'Symptoms'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Health Care Workers',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Symptoms'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // by exposure management
+
+      barOptionsExpo: {
+        xAxis: {
+          categories: ['Home Quarantine', 'Center Quarantine', 'Hospital Quarantine', 'Hospital Isolation', 'Home-based Care'],
+          title: {
+            text: 'Exposure Management'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Exposures Management'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      //by Risk Assessment
+      barOptionsRisk: {
+        xAxis: {
+          categories: ['High risk', 'Low risk'],
+          title: {
+            text: 'Risk Assessment' 
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Risk Assessment Level'
         },
         series: [
           {
@@ -837,213 +876,13 @@ export default {
         ]
       },
     
-      // by cadre
-      barOptionsCadre: {
-        xAxis: {
-          categories: ['Cleaner', 'Clinical officer', 'Doctor', 'Laboratory Technologist', 'Nurse', 'Other-Specify', 'Student', 'VCT Counsellor', 'Waste Handler'],
-          title: {
-            text: 'Cadre'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No. Of Reported Exposures by Cadre'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-      // by gender
-      barOptionsGender: {
-        xAxis: {
-          categories: ['MALE', 'FEMALE', 'UNDEFINED'],
-          title: {
-            text: 'Gender'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No. Of Reported Exposures by Gender'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: [],
-           
-          }
-        ]
-      },
-
-      // by age group
-      barOptionsAge: {
-        xAxis: {
-          categories: ['18 - 25', '26 - 35', '36 - 45', '46 - 55', '56 - 65', '65 and Above', 'undefined'],
-          title: {
-            text: 'Age Groups'
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No. Of Reported Exposures by Age'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      },
-
-       //by PPE Present
-      barOptionsPpePresent: {
+     //Report By PCR Test Done
+      
+      barOptionsPCRDone: {
         xAxis: {
           categories: ['Yes', 'No'],
           title: {
-            text: 'HCW With PPES' 
-          }
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'No. of Exposures ',
-            align: 'high'
-          },
-          labels: {
-            overflow: 'justify',
-            items: [
-              {
-                html: '',
-                style: {
-                  left: '50px',
-                  top: '18px',
-                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                }
-              }
-            ]
-          }
-        },
-        plotOptions: {
-          column: {
-            dataLabels: {
-              enabled: true
-            }
-          }
-        },
-        chart: {
-          type: 'column'
-        },
-        title: {
-          text: 'No of HCWs with PPE Worn'
-        },
-        series: [
-          {
-            colorByPoint: true,
-            name: 'Numbers',
-            data: []
-          }
-        ]
-      }, 
-    
-    //Report By PPE Worn
-      barOptionsPpe: {
-        xAxis: {
-          categories: ['None', 'Gloves', 'Fabric mask',  'N95 mask (or equivalent)', 'Surgical/medical mask', 'Face shield or goggles/protective glasses', 'Disposable gown', 'Waterproof apron'],
-          title: {
-            text: 'Types of Personal Protective Equipment'
+            text: 'PCR Test Done'
           }
         },
         yAxis: {
@@ -1077,9 +916,8 @@ export default {
           type: 'column'
         },
         title: {
-          text: 'No of HCWs with PPEs'
+          text: 'No Of HCWS Who Have Had A PCR Test'
         },
-
         series: [
           {
             colorByPoint: true,
@@ -1088,23 +926,343 @@ export default {
           }
         ]
       },
-      
+
+      //Report By PCR Test
+      barOptionsPCR: {
+        xAxis: {
+          categories: ['Positive', 'Negative', 'Waiting'],
+          title: {
+            text: 'PCR Test Results'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No of HCWs with PCR Test Results'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      //Report By Returned Work
+      barOptionsReturnedWork: {
+        xAxis: {
+          categories: ['Stopped Working', 'Went Back to work'],
+          title: {
+            text: 'HCWs Who Returned To Work'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No of Who Returned To Work'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+    // date returned to work  
+      barOptionsDateReturn: {
+        xAxis: {
+          categories: ['Stop working', 'Return to work'],
+          title: {
+            text: 'Risk Assesment Recommendation'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Risk Assesment Recommendation'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // off work
+      barOptionsOffWork: {
+        xAxis: {
+          categories: ['1 - 7 Days', '8 - 14 Days', '15 - 21 Days', '22 - 28 Days', '29 - 35 Days', '36 - 42 Days', '43 - 49 Days', 'Undefined' ],
+          title: {
+            text: 'Weeks HCW Was Away From Work'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWs Period Off Work In Days'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // quarantine period
+      barOptionsIsolationPeriod: {
+        xAxis: {
+          categories: ['1 - 7 Days', '8 - 14 Days', '15 - 21 Days', 'Undefined' ],
+          title: {
+            text: 'Quarantine Period in Days'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'HCWs Quarantine Period in Days'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+      // date returned to work  
+      barOptionsDateReturn: {
+        xAxis: {
+          categories: ['Stop working', 'Return to work'],
+          title: {
+            text: 'Risk Assesment Recommendation'
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'No. of Exposures',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify',
+            items: [
+              {
+                html: '',
+                style: {
+                  left: '50px',
+                  top: '18px',
+                  color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+              }
+            ]
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'No. Of Reported Exposures by Risk Assesment Recommendation'
+        },
+        series: [
+          {
+            colorByPoint: true,
+            name: 'Numbers',
+            data: []
+          }
+        ]
+      },
+
+
+      load: true,
+      fac_filt: [],
+      fac_filtl: [],
+      fac_filtf: [],
+      exp_filt: [],
+      exp_filtl: [],
+      exp_filtf: [],
+      s: [],
+      cadre: [],
+      dob: [],
+      date: [],
+      users: [],
+      gender: [],
+      hours: [],
 
     }
   },
-
 
     created () {
         this.getcovidExpo()
         this.getCounties()
         this.getFacilities()
-        //this.getCad()
-        //this.getPartners()
+       // this.getCad()
+        this.getPartners()
         this.dateRange('2020-01-20', this.endDate)
         axios.get('cadres')
       .then((c) => {
         this.cadres = c.data.data
       })
+
+      if (this.s.length === 0) {
+      this.getcovidExpo()
+    } else {
+      this.s = this.e
+    }
     },
 
     methods: {
@@ -1188,13 +1346,13 @@ export default {
         this.getFacilitycountyfilter(a)
       }
     },
-    //  getPartners () {
-    //   axios.get('partners') 
-    //     .then((partners) => {
-    //       this.all_partners = partners.data.data
-    //     })
-    //     .catch(error => console.log(error.message))
-    // },
+     getPartners () {
+      axios.get('partners') 
+        .then((partners) => {
+          this.all_partners = partners.data.data
+        })
+        .catch(error => console.log(error.message))
+    },
     
     // filters
     getFacilitycountyfilter (a) {
@@ -1363,15 +1521,12 @@ export default {
         this.getcovidData(this.s)
       }
     },
-
-    //end filter
+    // end filter
     getcovidExpo () {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
-
-              //console.log(this.s)
 
               const b = response.data.data
 
@@ -1385,16 +1540,22 @@ export default {
 
               this.facility_exposures = this.filteredFacility.length
 
+              console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
-              
+              this.isLoading = false
             } else {
               this.getcovidData(this.s)
             }
           })
           
           .catch(error => console.log(error.message))
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
       }else if (this.user.role_id === 4) {
         axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
           .then((response) => {
@@ -1402,27 +1563,32 @@ export default {
 
             const b = response.data.data
 
-            this.exposures_total = response.data.meta.total
+              this.exposures_total = response.data.meta.total
 
-            this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
 
-            this.community_exposures = this.filteredCommunity.length
+              this.community_exposures = this.filteredCommunity.length
 
-            this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
+              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
 
-            this.facility_exposures = this.filteredFacility.length
+              this.facility_exposures = this.filteredFacility.length
 
             if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
+              this.isLoading = false
             } else {
               this.getcovidData(this.s)
             }
           })
           .catch(error => console.log(error.message))
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
       }
-    },   
-
+    },
      async loopT (l) {
       var i; var u = []
       for (i = 0; i < 1;) {
@@ -1450,91 +1616,162 @@ export default {
     getcovidData (list) {
       this.load = true
       var data = []
-      this.barOptionsMonth.xAxis.categories = this.dateRange(this.startDate, this.endDate)
-      for (var i in this.barOptionsMonth.xAxis.categories) {
-        data.push(this.getMonthNum(this.barOptionsMonth.xAxis.categories[i], list))
+      for (var i in this.barOptionsSymptoms.xAxis.categories) {
+        data.push(this.getSymNum(this.barOptionsSymptoms.xAxis.categories[i], list))
       }
-      this.barOptionsMonth.series[0].data = data
-
-      var datac = []
-      for (var i in this.barOptionsCadre.xAxis.categories) {
-        datac.push(this.getCadreNum(this.barOptionsCadre.xAxis.categories[i], list))
-      }
-      this.barOptionsCadre.series[0].data = datac
+      this.barOptionsSymptoms.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsProcedure.xAxis.categories) {
-        data.push(this.getProcedureNum(this.barOptionsProcedure.xAxis.categories[i], list))
+
+      for (var i in this.barOptionsExpo.xAxis.categories) {
+        data.push(this.getExpoMan(this.barOptionsExpo.xAxis.categories[i], list))
       }
-      this.barOptionsProcedure.series[0].data = data
+      this.barOptionsExpo.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsIpc.xAxis.categories) {
-        data.push(this.getIPCNum(this.barOptionsIpc.xAxis.categories[i], list))
+      for (var i in this.barOptionsRisk.xAxis.categories) {
+        data.push(this.getRisk(this.barOptionsRisk.xAxis.categories[i], list))
       }
-      this.barOptionsIpc.series[0].data = data
+      this.barOptionsRisk.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsPpePresent.xAxis.categories) {
-        data.push(this.getPpePresent(this.barOptionsPpePresent.xAxis.categories[i], list))
+      for (var i in this.barOptionsPCR.xAxis.categories) {
+        data.push(this.getPCR(this.barOptionsPCR.xAxis.categories[i], list))
       }
-      this.barOptionsPpePresent.series[0].data = data
+      this.barOptionsPCR.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsPpe.xAxis.categories) {
-        data.push(this.getPpe(this.barOptionsPpe.xAxis.categories[i], list))
+      for (var i in this.barOptionsPCRDone.xAxis.categories) {
+        data.push(this.getPCRDone(this.barOptionsPCRDone.xAxis.categories[i], list))
       }
-      this.barOptionsPpe.series[0].data = data
+      this.barOptionsPCRDone.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsGender.xAxis.categories) {
-        data.push(this.getGenderNum(this.barOptionsGender.xAxis.categories[i], list))
+      for (var i in this.barOptionsCovidTraining.xAxis.categories) {
+        data.push(this.getCovidTraining(this.barOptionsCovidTraining.xAxis.categories[i], list))
       }
-      this.barOptionsGender.series[0].data = data
+      this.barOptionsCovidTraining.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsTransmission.xAxis.categories) {
-        data.push(this.getTransmissionNum(this.barOptionsTransmission.xAxis.categories[i], list))
+      for (var i in this.barOptionsTrainingTime.xAxis.categories) {
+        data.push(this.getTrainingTime(i, list))
       }
-      this.barOptionsTransmission.series[0].data = data
+      this.barOptionsTrainingTime.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsIpcTraining.xAxis.categories) {
-        data.push(this.getIPCTrainingNum(i, list))
+      for (var i in this.barOptionsReturnedWork.xAxis.categories) {
+        data.push(this.getReturnedWorkNum(i, list))
       }
-      this.barOptionsIpcTraining.series[0].data = data
+      this.barOptionsReturnedWork.series[0].data = data
 
       var data = []
-      for (var i in this.barOptionsAge.xAxis.categories) {
-        data.push(this.getAgeNum(i, list))
+      for (var i in this.barOptionsDateReturn.xAxis.categories) {
+        data.push(this.getDateReturn(this.barOptionsDateReturn.xAxis.categories[i], list))
       }
-      this.barOptionsAge.series[0].data = data
+      this.barOptionsDateReturn.series[0].data = data
+
       this.value = false
       this.load = false
       this.isLoading = false
 
+      var data = []
+      for (var i in this.barOptionsIsolationPeriod.xAxis.categories) {
+        data.push(this.getIsolationTime(i, list))
+      }
+      this.barOptionsIsolationPeriod.series[0].data = data
+
+      var data = []
+      for (var i in this.barOptionsOffWork.xAxis.categories) {
+        data.push(this.getOffWorkTime(i, list))
+      }
+      this.barOptionsOffWork.series[0].data = data
+
     },
-    getAgeNum (cat, ag) {
+    getRisk (cat, g) {
+      var count = 0
+      for (var x in g) {
+        if (g[x].risk_assessment_outcome === cat) {
+          count++
+        }
+      }
+      return count
+    },
+    getExpoMan (ipc, c) {
+        var counter = 0
+        for (var p in c) {
+            if (c[p].exposure_management === ipc) {
+                counter++
+            }
+        }
+        return counter
+    },
+    getReturnedWorkNum (name, c) {
+      var counter = 0
+      for (var tn in c) {
+        if (c[tn].risk_assessment_recommendation === 'Stop working' && name == 0) {
+          counter++
+        } else if(c[tn].return_to_work_date !== null && name == 1 )
+          counter++
+      }
+      return counter
+
+          
+    },
+    getCovidTraining (cat, t) {
+      var count = 0
+      for (var x in t) {
+        if (t[x].covid_specific_training === cat) {
+          count++
+        }
+      }
+      return count
+    },
+    
+     getTrainingTime (cat, t) {
+      var count = 0
+      for (var a in t) {
+        var detm = t[a].covid_training_period.split(' ')[1]
+
+        var period = t[a].covid_training_period.split(' ')[0]
+
+          if (detm === 'Hours' && cat == 0 ) {
+              count++
+          } else if (detm === 'Days' && period != null) {
+            if( period >= 1 && period <= 2 && cat == 1 ) {
+              count++
+            } else if( period >= 3 && period <= 5 && cat == 1 ) {
+                count++
+            }else if (period === null && cat == 2 ) {
+                count++
+            }else {
+                count
+            }
+
+          } 
+ 
+      }
+      return count
+    },
+    getIsolationTime (categ, ag) {
       var count = 0
       for (var x in ag) {
-        var date = new Date(ag[x].dob)
-        var diff_ms = Date.now() - date.getTime()
-        var age_dt = new Date(diff_ms)
-        var age = Math.abs(age_dt.getUTCFullYear() - 1970)
-        if (age >= 18 && age < 26 && cat == 0) {
+        var date_start = new Date(ag[x].isolation_start_date)
+        var date_end = new Date(ag[x].isolation_end_date)
+
+        var diff = Math.abs(date_end - date_start)
+
+        var days = Math.ceil(diff / (1000 * 3600 * 24) ) 
+
+        if (days > 0 && days <= 7 && categ == 0) {
           count++
-        } else if (age > 25 && age <= 35 && cat == 1) {
+        } else if (days >= 8  && days <= 14 && categ == 1) {
           count++
-        } else if (age > 35 && age <= 45 && cat == 2) {
+        } else if (days >= 15 && days <= 21 && categ == 2) {
           count++
-        } else if (age > 45 && age <= 55 && cat == 3) {
+        } else if(days >= 22 && categ == 3){
           count++
-        } else if (age > 55 && age <= 65 && cat == 4) {
-          count++
-        } else if (age > 65 && cat == 5) {
-          count++
-        } else if (age < 18 && cat == 6) {
-          count++
+        } else if(ag[x].isolation_start_date === null || ag[x].isolation_end_date ) {
+          count
         } else {
           count
         }
@@ -1542,121 +1779,79 @@ export default {
       return count
     },
 
-    getIPCTrainingNum(cat, c) {
+    getOffWorkTime (categor, ag) {
       var count = 0
-        for (var m in c) {
+      for (var x in ag) {
+        var date_start = new Date(ag[x].risk_assessment_decision_date)
+        var date_end = new Date(ag[x].return_to_work_date)
 
-          var t1 = c[m].ipc_training_period
+        var diff = Math.abs(date_end - date_start)
 
-          console.log(t1)
+        var days = Math.ceil(diff / (1000 * 3600 * 24) ) 
 
-          var period = parseInt(t1/12)
-
-          if(period == 0 && period < 1 && cat == 0 ) {
-            count++
-          } else if (period >= 1 && period <= 2 && cat == 1 ) {
-            count++
-          } else if (period >= 3 && period <= 5 && cat == 2 ) {
-            count++
-          } else if (period > 5 && cat == 3 ) {
-            count++
-          }
-      }
-      return count
-    },
-    getGenderNum (cat, g) {
-      var count = 0
-      for (var x in g) {
-        if (g[x].gender === cat) {
+        if (days > 0 && days <= 7 && categor == 0) {
           count++
+        } else if (days > 8  && days <= 14 && categor == 1) {
+          count++
+        } else if (days > 15 && days <= 21 && categor == 2) {
+          count++
+        } else if (days > 22 && days <= 28 && categor == 3) {
+          count++  
+        } else if (days > 29 && days <= 35 && categor == 4) {
+          count++  
+        } else if (days > 36 && days <= 42 && categor == 6) {
+          count++ 
+        } else if (days > 36 && days <= 42 && categor == 7) {
+          count++ 
+        } else if (days > 43 && days <= 49 && categor == 8) {
+          count++        
+        } else if(days >= 50 && categor == 9){
+          count++
+        } else if(ag[x].risk_assessment_decision_date === null || ag[x].return_to_work_date) {
+          count
+        } else {
+          count
         }
       }
       return count
     },
-    getIPCNum (ipc, c) {
-        var counter = 0
-        for (var p in c) {
-            if (c[p].ipc_training === ipc) {
-                counter++
-            }
-        }
-        return counter
-    },
-    getPpePresent (ppe, c) {
-        var counter = 0
-        for (var h in c) {
-            if (c[h].ppe_worn === ppe) {
-                counter++
-            }
-        }
-        return counter
-    },
-    getTransmissionNum (transmission, c) {
-        var counter = 0
-        for (var h in c) {
-            if (c[h].contact_with === transmission ) {
-                counter++
-            }
-        }
-        return counter
-    },
-    getPpe (ppes, c) {
+
+    getSymNum (symp, c) {
       var counter = 0
 
       for (var xc in c) {
-        if(c[xc].ppes !== null && c[xc].ppes.indexOf(ppes) !== -1){
+        if(c[xc].symptoms.indexOf(symp) !== -1){
           counter++;
-        } else {
-          counter
         }
       }
       return counter  
     },
-    getProcedureNum (procedure, c) {
+    getDateReturn (name, expo) {
+      var counter = 0
+      for (var xt in expo) {
+        if (expo[xt].risk_assessment_recommendation === name) {
+          counter++
+        }
+      }
+      return counter
+    },
+    getPCR (pcr, c) {
         var counter = 0
-        for (var b in c) {
-            if (c[b].procedure_perfomed === procedure) {
+        for (var k in c) {
+            if (c[k].pcr_test_results === pcr) {
                 counter++
             }
         }
         return counter
     },
-     getCadreNum (name, c) {
+     getPCRDone (pcrd, c) {
         var counter = 0
-      for (var xc in c) {
-        if (c[xc].cadre === name) {
-          counter++
+        for (var v in c) {
+            if (c[v].pcr_test_done === pcrd) {
+                counter++
+            }
         }
-      }
-      return counter
-    },
-    getHourNum (name, c) {
-      var counter = 0
-      for (var xh in c) {
-        var hr = c[xh].date_of_contact.split(':')[0].slice(-2).trim()
-
-        if (hr < 10) {
-          hr = '0' + hr
-        }
-        if (hr === name) {
-          counter++
-          
-        }
-      }
-      return counter
-    },
-    getMonthNum (name, expo) {
-      var counter = 0
-      var c = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      for (var xt in expo) {
-        var m = c.indexOf(expo[xt].date_of_contact.slice(0, 3)) + 1 
-        if (m < 10) { m = '0' + m }
-        var d = [expo[xt].date_of_contact.slice(8, 13).trim(), m].join('-')
-        if (d === name) {
-          counter++
-        }
-      }
-      return counter
+        return counter
     },
 
     dateRange (startDate, endDate) {
@@ -1672,7 +1867,8 @@ export default {
         for (var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
           var month = j + 1
           var displayMonth = month < 10 ? '0' + month : month
-          dates.push([i, displayMonth].join('-'))
+          dates.push([i, displayMonth, '01'].join('-'))
+          
         }
       }
       return dates

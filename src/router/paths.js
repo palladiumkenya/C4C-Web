@@ -453,5 +453,31 @@ export default [
       }
       next()
     }
+  },
+  {
+    path: '/covid_follow_ups',
+    name: 'COVID 19 Follow Up Reports',
+    view: 'COVIDFollowUp',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
+    path: '/covid_exposures_list',
+    name: 'COVID 19 Exposures List',
+    view: 'COVIDExposuresList',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
   }
 ]
