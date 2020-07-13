@@ -115,7 +115,7 @@
             >
               <v-card-text>
                 <v-icon class="mr-1">mdi-home-outline</v-icon>
-                <h3 align="center">{{ all_facilities.length }}</h3>
+                <h3 align="center">{{ active_fac }}</h3>
                 <h6 align="center"> Facilities</h6>
               </v-card-text>
             </v-card>
@@ -684,10 +684,17 @@ export default {
       fac_filtf: [],
       exp_filtf: [],
       us_filtf: [],
-      c19count: 0
+      c19count: 0,
+      filteredFacility: [],
+      active_fac: 0,
+      
     }
   },
   computed: {
+    facilityCount () {
+      return this.active_fac
+    },
+
     broadcastsCount () {
       return this.b
     },
@@ -764,6 +771,7 @@ export default {
     this.getFacilities()
     this.getCounties()
     this.getBroadcasts()
+    this.getActiveFacilities()
     axios.get('cadres')
       .then((c) => {
         this.cadres = c.data.data
@@ -808,10 +816,16 @@ export default {
       this.getTest(us)
       this.getMonth(exp)
     },
+
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {
           this.all_facilities = facilities.data.data
+
+          this.filteredFacility = facilities.data.data.filter(filteredFacility => filteredFacility.active === 1)
+
+          this.active_fac = this.filteredFacility.length
+          console.log(this.active_fac)
 
           if (this.user.role_id === 5) {
             this.subCounties()

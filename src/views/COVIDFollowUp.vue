@@ -1820,8 +1820,10 @@ export default {
       var counter = 0
 
       for (var xc in c) {
-        if(c[xc].symptoms.indexOf(symp) !== -1){
+        if(c[xc].symptoms !== null && c[xc].symptoms.indexOf(symp) !== -1){
           counter++;
+        } else {
+          counter
         }
       }
       return counter  
