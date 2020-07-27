@@ -1730,6 +1730,8 @@ export default {
      getTrainingTime (cat, t) {
       var count = 0
       for (var a in t) {
+        var ttl = t[a].covid_training_period; 
+
         var detm = t[a].covid_training_period.split(' ')[1]
 
         var period = t[a].covid_training_period.split(' ')[0]
@@ -1743,7 +1745,7 @@ export default {
                 count++
             }else if (period === null && cat == 2 ) {
                 count++
-            }else {
+            }else if ( detm === null ) {
                 count
             }
 
