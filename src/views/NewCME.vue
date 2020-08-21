@@ -239,7 +239,7 @@ export default {
         formData.append('title', this.title)
         formData.append('body', this.editorData)
 
-        axios.post('resources/special/create', formData, {
+        axios.post('resources/cmes/create', formData, {
           headers: { 'Content-Type': `multipart/form-data` }
         })
           .then((response) => {
