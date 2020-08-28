@@ -10,7 +10,7 @@
 
     <v-layout  
       justify-center
-      v-if="user.role_id === 1 || user.role_id === 2"
+      v-if="user.role_id === 1 || user.role_id === 2 || user.role_id === 5"
       wrap>    
 
 
@@ -20,7 +20,7 @@
           xs8
           md2
           lg2
-        >
+          >
           <template>
             <v-card
               class="mx-auto"
@@ -41,7 +41,7 @@
           xs8
           md2
           lg2
-        >
+          >
           <template>
             <v-card
               class="mx-auto"
@@ -83,7 +83,7 @@
           xs8
           md2
           lg2
-        >
+          >
 
           <template>
             <v-card
@@ -106,7 +106,7 @@
           xs8
           md2
           lg2
-        >
+          >
           <template>
             <v-card
               class="mx-auto"
@@ -115,7 +115,7 @@
             >
               <v-card-text>
                 <v-icon class="mr-1">mdi-home-outline</v-icon>
-                <h3 align="center">{{ all_facilities.length }}</h3>
+                <h3 align="center">{{ all_facilities.length}}</h3>
                 <h6 align="center"> Facilities</h6>
               </v-card-text>
             </v-card>
@@ -127,7 +127,7 @@
           xs8
           md2
           lg2
-        >
+          >
           <template>
             <v-card
               class="mx-auto"
@@ -148,7 +148,7 @@
           xs8
           md2
           lg2
-        >
+          >
           <template>
             <v-card
               class="mx-auto"
@@ -168,7 +168,7 @@
 
     <v-layout  
       justify-center
-      v-else
+      v-else-if="user.role_id === 4"
       wrap> 
 
       <!-- Start Facility Cards -->
@@ -251,7 +251,7 @@
           >
             <v-card-text>
               <v-icon class="mr-1">mdi-message</v-icon>
-              <h2 align="center">{{ broadcastsCount }}</h2>
+              <h2 align="center">{{ broadcastsFCount }}</h2>
               <h5 align="center">Broadcast Messages Sent</h5>
             </v-card-text>
           </v-card>
@@ -492,7 +492,7 @@
       <v-flex
         xs12
         md12
-      >
+        >
         <div class="card vld-parent">
           <loading
             :active.sync="isLoading"
@@ -509,7 +509,7 @@
       <v-flex
         xs12
         md12
-      >
+        >
         <highcharts
           ref="barChart"
           :options="barOptionsTime"/>
@@ -558,12 +558,36 @@ export default {
       subcounties: '',
       fac: [],
       all_facilities: [],
+      fac_total: [],
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
       all_subcounties: [],
       active: true,
       active_fac: true,
       active_level: true,
+      s: [],
+      userz: [],
+      load: true,
+      u: 0,
+      b: 0,
+      bf: 0,
+      p: 0,
+      f: 0,
+      scount: 0,
+      partners: 0,
+      musers: 0,
+      broad: [],
+      total_users: [],
+      fac_filt: [],
+      exp_filt: [],
+      us_filt: [],
+      fac_filtl: [],
+      exp_filtl: [],
+      us_filtl: [],
+      fac_filtf: [],
+      exp_filtf: [],
+      us_filtf: [],
+      c19count: 0,
       barOptionsTime: {
         xAxis: {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -664,32 +688,20 @@ export default {
           }
         ]
       },
-      s: [],
-      userz: [],
-      load: true,
-      u: 0,
-      b: 0,
-      p: 0,
-      scount: 0,
-      partners: 0,
-      musers: 0,
-      broad: [],
-      total_users: [],
-      fac_filt: [],
-      exp_filt: [],
-      us_filt: [],
-      fac_filtl: [],
-      exp_filtl: [],
-      us_filtl: [],
-      fac_filtf: [],
-      exp_filtf: [],
-      us_filtf: [],
-      c19count: 0
+      
     }
   },
   computed: {
     broadcastsCount () {
       return this.b
+    },
+
+    broadcastsFCount () {
+      return this.bf
+    },
+
+    facCount () {
+      return this.f
     },
 
     aUsersCount () {
@@ -813,12 +825,21 @@ export default {
         .then((facilities) => {
           this.all_facilities = facilities.data.data
 
+            this.f = this.all_facilities.data.meta.total
+
+          // const fac_ttl = facilities.data.data
+
+          // this.filtered = this.fac_ttl.filter(item => item.active === 1);
+
+          // this.f = this.filtered.meta.total;
+
           if (this.user.role_id === 5) {
             this.subCounties()
           }
         })
         .catch(error => console.log(error.message))
     },
+
     getCounties () {
       axios.get('counties')
         .then((counties) => {
@@ -827,6 +848,7 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+
     subCounties () {
       axios.get('counties')
         .then((counties) => {
@@ -838,6 +860,7 @@ export default {
         })
         .catch(error => console.log(error.message))
     },
+
     getSubCounties (a) {
       if (a.length > 0) {
         this.active = false
@@ -855,6 +878,7 @@ export default {
         this.facilityCounty(a)
       }
     },
+
     facilityCounty (a) {
       this.us_filt = []
       this.fac_filt = []
@@ -886,6 +910,7 @@ export default {
         this.getMonth(this.s)
       }
     },
+
     facilitySubCounty (a) {
       this.exp_filtl = []
       this.fac_filtl = []
@@ -1108,6 +1133,7 @@ export default {
           .catch(error => console.log(error.message))
       }
     },
+
     async loopT (l) {
       var i
       var e = []
@@ -1328,6 +1354,7 @@ export default {
       }
       return counter
     },
+
     getNumTest (name, li) {
       var counter = 0
       var c = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
@@ -1392,12 +1419,13 @@ export default {
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
-          .then((broadcasts) => {
-            this.b = broadcasts.data.meta.total
+          .then((broadcast_fac) => {
+            this.bf = broadcast_fac.data.meta.total
           })
           .catch(error => console.log(error.message))
       }
     },
+
     async loopBroad (l) {
       var i
       for (i = 0; i < 1;) {
@@ -1409,13 +1437,13 @@ export default {
           i = 11
         }
       }
-      for (var ex in this.broad) {
-        if (this.broad[ex].facility) {
-          if (this.broad[ex].facility.county === this.user.hcw.county) {
-            this.b += 1
-          }
-        }
-      }
+      // for (var ex in this.broad) {
+      //   if (this.broad[ex].facility) {
+      //     if (this.broad[ex].facility.county === this.user.hcw.county) {
+      //       this.b += 1
+      //     }
+      //   }
+      // }
     }
   }
 
