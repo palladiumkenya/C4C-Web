@@ -115,7 +115,8 @@
             >
               <v-card-text>
                 <v-icon class="mr-1">mdi-home-outline</v-icon>
-                <h3 align="center">{{ all_facilities.length}}</h3>
+                <!-- //<h3 align="center">{{ all_facilities.length}}</h3> -->
+                <h3 align="center">{{ active_fac }}</h3>
                 <h6 align="center"> Facilities</h6>
               </v-card-text>
             </v-card>
@@ -692,6 +693,10 @@ export default {
     }
   },
   computed: {
+    facilityCount () {
+      return this.active_fac
+    },
+
     broadcastsCount () {
       return this.b
     },
@@ -776,6 +781,7 @@ export default {
     this.getFacilities()
     this.getCounties()
     this.getBroadcasts()
+    this.getActiveFacilities()
     axios.get('cadres')
       .then((c) => {
         this.cadres = c.data.data
@@ -820,6 +826,7 @@ export default {
       this.getTest(us)
       this.getMonth(exp)
     },
+
     getFacilities () {
       axios.get('facilities')
         .then((facilities) => {

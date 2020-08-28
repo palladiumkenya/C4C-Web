@@ -1560,6 +1560,8 @@ export default {
             count++
           } else if (period > 5 && cat == 3 ) {
             count++
+          } else if (c[m].ipc_training_period == null) {
+            count++
           }
       }
       return count
