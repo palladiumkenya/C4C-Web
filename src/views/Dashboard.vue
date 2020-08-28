@@ -115,8 +115,7 @@
             >
               <v-card-text>
                 <v-icon class="mr-1">mdi-home-outline</v-icon>
-                <!-- //<h3 align="center">{{ all_facilities.length}}</h3> -->
-                <h3 align="center">{{ active_fac }}</h3>
+                <h3 align="center">{{ all_facilities.length}}</h3>
                 <h6 align="center"> Facilities</h6>
               </v-card-text>
             </v-card>
