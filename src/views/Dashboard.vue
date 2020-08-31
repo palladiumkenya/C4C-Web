@@ -115,7 +115,7 @@
             >
               <v-card-text>
                 <v-icon class="mr-1">mdi-home-outline</v-icon>
-                <h3 align="center">{{ all_facilities.length}}</h3>
+                <h3 align="center">{{ new_fac.length}}</h3>
                 <h6 align="center"> Facilities</h6>
               </v-card-text>
             </v-card>
@@ -558,6 +558,7 @@ export default {
       subcounties: '',
       fac: [],
       all_facilities: [],
+      new_fac: [],
       fac_total: [],
       all_facilities_level: ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5 and Above'],
       all_counties: [],
@@ -831,13 +832,9 @@ export default {
         .then((facilities) => {
           this.all_facilities = facilities.data.data
 
-            this.f = this.all_facilities.data.meta.total
+          const fac_ttl = facilities.data.data
 
-          // const fac_ttl = facilities.data.data
-
-          // this.filtered = this.fac_ttl.filter(item => item.active === 1);
-
-          // this.f = this.filtered.meta.total;
+          this.new_fac = fac_ttl.filter(item => item.active === 1);
 
           if (this.user.role_id === 5) {
             this.subCounties()
