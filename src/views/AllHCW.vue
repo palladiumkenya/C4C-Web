@@ -105,8 +105,8 @@
                   <template
                     slot="items"
                     slot-scope="props">
-                      <td>{{ props.item.first_name }}</td>
-                      <td>{{ props.item.surname }}</td>
+                      <!-- <td>{{ props.item.first_name }}</td>
+                      <td>{{ props.item.surname }}</td> -->
                       <td>{{ props.item.gender }}</td>
                       <td>{{ props.item.dob }}</td>
                       <td>{{ props.item.facility_name }}</td>
@@ -208,8 +208,8 @@
                   <template
                     slot="items" slot-scope="props"
                     v-if="props.item.profile_complete === 0">
-                      <td>{{ props.item.first_name }}</td>
-                      <td>{{ props.item.surname }}</td>
+                      <!-- <td>{{ props.item.first_name }}</td>
+                      <td>{{ props.item.surname }}</td> -->
                       <td>{{ props.item.gender }}</td>
                       <td>{{ props.item.msisdn }}</td>
                       <td>{{ props.item.email }}</td>
@@ -361,16 +361,16 @@ export default {
       rowsPerPageItems: [200, 1000, 5000, 10000],
       rowsPerPage: [1000, 5000, 10000],
       headers: [
-        {
-          sortable: false,
-          text: 'First Name',
-          value: 'first_name'
-        },
-        {
-          sortable: false,
-          text: 'Surname',
-          value: 'surname'
-        },
+        // {
+        //   sortable: false,
+        //   text: 'First Name',
+        //   value: 'first_name'
+        // },
+        // {
+        //   sortable: false,
+        //   text: 'Surname',
+        //   value: 'surname'
+        // },
         {
           sortable: false,
           text: 'Gender',
@@ -409,16 +409,16 @@ export default {
       ],
 
       headers1: [
-        {
-          sortable: false,
-          text: 'First Name',
-          value: 'first_name'
-        },
-        {
-          sortable: false,
-          text: 'Surname',
-          value: 'surname'
-        },
+        // {
+        //   sortable: false,
+        //   text: 'First Name',
+        //   value: 'first_name'
+        // },
+        // {
+        //   sortable: false,
+        //   text: 'Surname',
+        //   value: 'surname'
+        // },
         {
           sortable: false,
           text: 'Gender',
@@ -500,8 +500,8 @@ export default {
     handleDownload () {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['First Name', 'Surname', 'Gender', 'Date Of Birth', 'Facility', 'County', 'Sub County', 'Department', 'Cadre']
-        const filterVal = ['first_name', 'surname','gender', 'dob', 'facility_name', 'county', 'sub_county', 'department', 'cadre']
+        const tHeader = ['First Name', 'Surname', 'Gender', 'Mobile', 'Date Of Birth', 'Facility', 'County', 'Sub County', 'Department', 'Cadre', 'Registration Date']
+        const filterVal = ['first_name', 'surname','gender', 'msisdn', 'dob', 'facility_name', 'county', 'sub_county', 'department', 'cadre', 'created_at']
         const list = this.all_hcws
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
