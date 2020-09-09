@@ -315,8 +315,8 @@
                   <template
                     slot="items"
                     slot-scope="props">
-                      <td>{{ props.item.first_name }}</td>
-                      <td>{{ props.item.surname }}</td>
+                      <!-- <td>{{ props.item.first_name }}</td>
+                      <td>{{ props.item.surname }}</td> -->
                       <td>{{ props.item.gender }}</td>
                       <td>{{ props.item.dob }}</td>
                       <td>{{ props.item.facility_name }}</td>
