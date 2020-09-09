@@ -215,7 +215,6 @@
                       <td>{{ props.item.gender }}</td>
                       <td>{{ props.item.msisdn }}</td>
                       <td>{{ props.item.email }}</td>
-                      <td>{{ props.item.profile_complete }}</td>
 
                   </template>
                   <v-alert
