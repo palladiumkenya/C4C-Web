@@ -191,9 +191,11 @@
 
                 </v-card-title>
 
+  
+
                 <v-data-table
                   :headers="headers1"
-                  :items="total_users"
+                  :items="filteredList"
                   :rows-per-page-items="rowsPerPage"
                   :search="search"
                   :loading="true"
@@ -206,13 +208,14 @@
                 </template>
 
                   <template
-                    slot="items" slot-scope="props"
-                    v-if="props.item.profile_complete === 0">
+                    slot="items" slot-scope="props">
+                    <!-- v-if="props.item.profile_complete === 0"> -->
                       <!-- <td>{{ props.item.first_name }}</td>
                       <td>{{ props.item.surname }}</td> -->
                       <td>{{ props.item.gender }}</td>
                       <td>{{ props.item.msisdn }}</td>
                       <td>{{ props.item.email }}</td>
+                      <td>{{ props.item.profile_complete }}</td>
 
                   </template>
                   <v-alert
@@ -350,7 +353,8 @@ export default {
   data () {
     return {
       n: null,
-      total_users: [],
+      new_users: [],
+      users_ttl: [],
       all_hcws: [],  
       incompletes: [],
       search: '',
@@ -446,6 +450,13 @@ export default {
       user: 'auth/user',
     }),
 
+    filteredList() {
+      let self = this;
+
+      return this.new_users = this.users_ttl.filter(item => item.profile_complete === 0);
+
+    }
+
   },
   created () {
     this.getHCW()
@@ -528,13 +539,7 @@ export default {
       axios.get('users')
         .then((response) => {
 
-          this.total_users = response.data.data
-
-          // const users_profile = response.data.data
-
-          // this.incompletes = users_profile.filter(users_profile => users_profile.profile_complete.includes(0))
-
-          // console.log(incompletes)
+          this.users_ttl = response.data.data
 
           this.loopT(response.data.links.next)
           this.isLoading = false
@@ -554,9 +559,9 @@ export default {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
-          this.total_users = this.total_users.concat(response.data.data)
+          this.users_ttl = this.users_ttl.concat(response.data.data)
         } else {
-          i = 100
+          i = 200
         }
       } 
     },
@@ -566,7 +571,7 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['First Name', 'Surname', 'Gender', 'Phone Number', 'Email']
         const filterVal = ['first_name', 'surname', 'gender', 'msisdn', 'email']
-        const list = this.total_users
+        const list = this.new_users
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
           header: tHeader,
