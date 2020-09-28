@@ -251,7 +251,7 @@
           >
             <v-card-text>
               <v-icon class="mr-1">mdi-message</v-icon>
-              <h2 align="center">{{ broadcastsFCount }}</h2>
+              <h2 align="center">{{ broadcastsCount }}</h2>
               <h5 align="center">Broadcast Messages Sent</h5>
             </v-card-text>
           </v-card>
@@ -701,10 +701,6 @@ export default {
       return this.b
     },
 
-    broadcastsFCount () {
-      return this.bf
-    },
-
     facCount () {
       return this.f
     },
@@ -1105,9 +1101,7 @@ export default {
             this.link = response.data.links.next
             this.loopT(this.link)
 
-            if (this.user.role_id === 1 ) {
-              this.scount = 'Loading...'
-            } else {
+            if (this.user.role_id === 1 || this.user.role_id === 2 ) {
               this.scount = response.data.meta.total
             }
             this.s = response.data.data
@@ -1172,8 +1166,8 @@ export default {
           this.getMonth(e)
           this.storeExp(e)
         }
-        this.scount = e.length
         this.s = e
+        this.scount = e.length
         this.storeExp(this.s)
       }
       this.getMonth(this.s)
@@ -1371,7 +1365,7 @@ export default {
           l = response.data.links.next
           this.musers = this.musers.concat(response.data.data)
         } else {
-          i = 1000
+          i = 100
         }
       } 
     },
@@ -1379,40 +1373,48 @@ export default {
     getBroadcasts () {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5 ) {
         axios.get('broadcasts/web/all')
-          .then((broadcasts) => {
-              this.broad = broadcasts.data.data
+          .then((response) => {
+            if (this.user.role_id === 1 || this.user.role_id === 2) {
+              this.b = response.data.meta.total
+            } 
+              this.broadcasts = response.data.data
+              this.loopBroad(response.data.links.next)
 
-              this.b = broadcasts.data.meta.total
-            
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
         axios.get(`broadcasts/web/history/${this.user.hcw.facility_id}`)
-          .then((broadcast_fac) => {
-            this.bf = broadcast_fac.data.meta.total
+          .then((response) => {
+            this.b = response.data.meta.total
           })
           .catch(error => console.log(error.message))
       }
     },
 
     async loopBroad (l) {
-      var i
+      var i; var e = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let response = await axios.get(l)
           l = response.data.links.next
-          this.broad = this.broad.concat(response.data.data)
+          this.broadcasts = this.broadcasts.concat(response.data.data)
         } else {
           i = 11
         }
       }
-      // for (var ex in this.broad) {
-      //   if (this.broad[ex].facility) {
-      //     if (this.broad[ex].facility.county === this.user.hcw.county) {
-      //       this.b += 1
-      //     }
-      //   }
-      // }
+      if (this.user.role_id === 5) {
+        for (var ex in this.broadcasts) {
+          if (this.broadcasts[ex].facility) {
+            if (this.broadcasts[ex].facility.county === this.user.hcw.county) {
+              e.push(this.broadcasts[ex])
+            }
+          }  
+        }
+        this.broadcasts = e
+
+        this.b = e.length
+
+      }  
     }
   }
 
