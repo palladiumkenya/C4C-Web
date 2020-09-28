@@ -11,7 +11,7 @@
         <v-tabs-slider></v-tabs-slider>
 
         <v-tab href="#mobile-tabs-5-1" class="primary--text">
-          <v-icon>Health Care Workers Complete Profiles</v-icon>
+          <v-icon>Health Care response Complete Profiles</v-icon>
         </v-tab>
 
         <v-tab href="#mobile-tabs-5-2" class="primary--text">
@@ -238,7 +238,7 @@
   </div>
 
   
-  <v-container v-else
+  <v-container v-else-if="user.role_id === 4 || user.role_id === 5"
     fill-height
     fluid
     grid-list-xl
@@ -466,9 +466,12 @@ export default {
     getHCW () {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get('hcw')
-          .then((workers) => {
-            this.all_hcws = workers.data.data
-            this.loopH(workers.data.links.next)
+          .then((response) => {
+            if(this.user.role_id === 1 || this.user.role_id === 2) {
+              this.all_hcws = response.data.data
+            }
+
+            this.loopH(response.data.links.next)
             this.isLoading = false
           })
           .catch(() => {
@@ -476,10 +479,10 @@ export default {
             this.snackbar = true            })
           } else if (this.user.role_id === 4) {
             axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-              .then((workers) => {
-                this.all_hcws = workers.data.data
+              .then((response) => {
+                this.all_hcws = response.data.data
 
-                this.loopH(workers.data.links.next)
+                this.loopH(response.data.links.next)
                 this.isLoading = false
               })
           .catch(() => {
@@ -490,23 +493,30 @@ export default {
     },
     async loopH (l) {
       var i; var u = []
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let workers = await axios.get(l)
-          l = workers.data.links.next
-          this.all_hcws = this.all_hcws.concat(workers.data.data)
-        } else {
-          i = 200
-        }
-      }
-      if (this.user.role_id === 5) {
-        for (var ax in this.all_hcws) {
-          if(this.all_hcws[ax].facility) {
-            if (this.all_hcws[ax].county === this.user.county) {
-              console.log(this.all_hcws[ax]);
-
-              u.push(this.all_hcws[ax])
+      if (this.user.role_id === 1|| this.user.role_id === 2) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.all_hcws = this.all_hcws.concat(response.data.data)
+          } else {
+            i = 200
           }
+        }
+     } else if (this.user.role_id === 5) {
+       for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.all_hcws = this.all_hcws.concat(response.data.data)
+          } else {
+            i = 200
+          }
+        }
+        i = 0
+        for (var ax in this.all_hcws) {
+          if (this.all_hcws[ax].county === this.user.county) {
+            u.push(this.all_hcws[ax])
           }
         }
         this.all_hcws = u

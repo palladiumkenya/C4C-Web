@@ -1096,10 +1096,8 @@ export default {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get(`exposures/all`)
           .then((response) => {
-
-            if (this.user.role_id === 1 || this.user.role_id === 2 ) {
-              this.scount = response.data.meta.total
-            }
+            
+            this.scount = response.data.meta.total
             this.s = response.data.data
 
             this.link = response.data.links.next
@@ -1107,7 +1105,7 @@ export default {
               this.loopT(this.link)
             } else {
               this.getMonth(this.s)
-              //this.storeExp(this.s)
+              this.storeExp(this.s)
             }
           })
           .catch(error => {
@@ -1137,7 +1135,7 @@ export default {
             let response = await axios.get(l)
             l = response.data.links.next
             this.s = this.s.concat(response.data.data)
-           // this.storeExp(this.s)
+            this.storeExp(this.s)
             this.getMonth(this.s)
           } else {
             i = 11
@@ -1151,12 +1149,13 @@ export default {
               }
             }  
             this.getMonth(e)
-            //this.storeExp(e)
+            this.storeExp(e)
           }
           this.s = e
+          console.log(e)
+
           this.scount = e.length
-          console.log(this.s)
-         // this.storeExp(this.s)
+          this.storeExp(this.s)
       }
       this.getMonth(this.s)
     },
@@ -1215,14 +1214,13 @@ export default {
         axios.get('hcw')
           .then((exp) => {
             
-            this.userz = exp.data.data
-
-            if (this.user.role_id === 1 || this.user.role_id === 2) {
+            if(this.user.role_id === 1 || this.user.role_id === 2 ) {
               this.u = exp.data.meta.total
+              this.userz = exp.data.data
               this.storeUsNo(exp.data)
               this.storeAllUsers(this.userz)
+            } 
 
-            }
             this.link = exp.data.links.next
             this.loopG(this.link)
           })
@@ -1260,8 +1258,8 @@ export default {
         for (var ex in this.userz) {
           if (this.userz[ex].county === this.user.hcw.county) {
             e.push(this.userz[ex])
-            this.getTest(u)
-            this.storeAllUsers(u)
+            this.getTest(e)
+            this.storeAllUsers(e)
           }
         }
         this.userz = e

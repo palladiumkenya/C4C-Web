@@ -1371,8 +1371,6 @@ export default {
           .then((response) => {
               this.s = response.data.data
 
-              //console.log(this.s)
-
               const b = response.data.data
 
               this.exposures_total = response.data.meta.total
@@ -1547,8 +1545,6 @@ export default {
         for (var m in c) {
 
           var t1 = c[m].ipc_training_period
-
-          console.log(t1)
 
           var period = parseInt(t1/12)
 

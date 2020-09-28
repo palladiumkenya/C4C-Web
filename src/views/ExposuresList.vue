@@ -257,7 +257,7 @@ export default {
 
     async loopT (l) {
       var i; var u = []
-      if (this.user.role_id === 1) {
+      if (this.user.role_id === 1|| this.user.role_id === 2) {
         for (i = 0; i < 1;) {
           if (l != null) {
             let response = await axios.get(l)
