@@ -1097,30 +1097,27 @@ export default {
         axios.get(`exposures/all`)
           .then((response) => {
 
-            this.s = response.data.data
-            this.link = response.data.links.next
-            this.loopT(this.link)
-
             if (this.user.role_id === 1 || this.user.role_id === 2 ) {
               this.scount = response.data.meta.total
             }
             this.s = response.data.data
+
             this.link = response.data.links.next
             if (this.link) {
               this.loopT(this.link)
             } else {
               this.getMonth(this.s)
-              this.storeExp(this.s)
+              //this.storeExp(this.s)
             }
           })
           .catch(error => {
           })
       } else if (this.user.role_id === 4) {
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.scount = exp.data.meta.total
-            this.s = exp.data.data
-            this.link = exp.data.links.next
+          .then((response) => {
+            this.scount = response.data.meta.total
+            this.s = response.data.data
+            this.link = response.data.links.next
             if (this.link) {
               this.loopT(this.link)
             }
@@ -1134,41 +1131,32 @@ export default {
     },
 
     async loopT (l) {
-      var i
-      var e = []
-      if (this.user.role_id !== 5) {
+      var i; var e = []
         for (i = 0; i < 1;) {
           if (l != null) {
             let response = await axios.get(l)
             l = response.data.links.next
             this.s = this.s.concat(response.data.data)
-            this.storeExp(this.s)
+           // this.storeExp(this.s)
             this.getMonth(this.s)
           } else {
             i = 11
           }
         }
-      } else if (this.user.role_id === 5) {
-        for (i = 0; i < 1;) {
-          if (l != null) {
-            let response = await axios.get(l)
-            l = response.data.links.next
-            this.s = this.s.concat(response.data.data)
-            this.storeExp(this.s)
-          } else {
-            i = 11
+        if (this.user.role_id === 5) {
+          for (var ex in this.s) {
+            if (this.s[ex].facility) {
+              if (this.s[ex].county === this.user.county) {
+                e.push(this.s[ex])
+              }
+            }  
+            this.getMonth(e)
+            //this.storeExp(e)
           }
-        }
-        for (var ex in this.s) {
-          if (this.s[ex].county === this.user.hcw.county) {
-            e.push(this.s[ex])
-          }
-          this.getMonth(e)
-          this.storeExp(e)
-        }
-        this.s = e
-        this.scount = e.length
-        this.storeExp(this.s)
+          this.s = e
+          this.scount = e.length
+          console.log(this.s)
+         // this.storeExp(this.s)
       }
       this.getMonth(this.s)
     },
@@ -1226,15 +1214,15 @@ export default {
       if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get('hcw')
           .then((exp) => {
-            if (this.user.role_id === 5) {
-              this.u = 'Loading...'
-              this.storePages(exp.data)
-            } else {
+            
+            this.userz = exp.data.data
+
+            if (this.user.role_id === 1 || this.user.role_id === 2) {
               this.u = exp.data.meta.total
               this.storeUsNo(exp.data)
+              this.storeAllUsers(this.userz)
+
             }
-            this.userz = exp.data.data
-            this.storeAllUsers(this.userz)
             this.link = exp.data.links.next
             this.loopG(this.link)
           })
@@ -1253,9 +1241,8 @@ export default {
     },
 
     async loopG (l) {
-      var i; var u = []
+      var i; var e = []
       this.userz = this.all_users
-      if (this.user.role_id !== 5) {
         for (i = 0; i < 1;) {
           if (l != null) {
             let response = await axios.get(l)
@@ -1268,28 +1255,17 @@ export default {
             i = 11
           }
         }
-      } else if (this.user.role_id === 5) {
+      if (this.user.role_id === 5) {
         this.isLoading = true
-        for (i = 0; i < 1;) {
-          if (l != null) {
-            let response = await axios.get(l)
-            l = response.data.links.next
-            this.userz = this.userz.concat(response.data.data)
-            this.storePages(response.data)
-            this.storeAllUsers(this.userz)
-          } else {
-            i = 11
-          }
-        }
         for (var ex in this.userz) {
           if (this.userz[ex].county === this.user.hcw.county) {
-            u.push(this.userz[ex])
+            e.push(this.userz[ex])
             this.getTest(u)
             this.storeAllUsers(u)
           }
         }
-        this.userz = u
-        this.u = u.length
+        this.userz = e
+        this.u = e.length
         this.storeAllUsers(this.userz)
       }
       this.getTest(this.userz)
