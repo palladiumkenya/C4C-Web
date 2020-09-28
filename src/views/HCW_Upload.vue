@@ -105,12 +105,40 @@
                   </v-btn>
                 </v-flex>
 
+                <div v-if="user.role_id === 1 || user.role_id === 2 || user.role_id === 5">
+                <v-flex
+                  xs12
+                  md12
+                  text-xs-right
+                  >
+                  <router-link to="/bulk-signup">
+                    <v-btn
+                      class="mx-0 font-weight-light"
+                      color="primary"
+                    >
+                      Bulk signup
+                    </v-btn>
+                  </router-link>
+
+                  <router-link to="/bulk-signup-facility">
+                    <v-btn
+                      class="mx-0 font-weight-light"
+                      color="primary"
+                    >
+                      Facility signup
+                    </v-btn>
+                  </router-link>
+
+                </v-flex>
+                </div>
+
+                <div v-else>
                 <v-flex
                   xs12
                   md6
                   text-xs-right
                   >
-                  <router-link to="/bulk-signup">
+                  <router-link to="/bulk-signup-facility">
                     <v-btn
                       class="mx-0 font-weight-light"
                       color="primary"
@@ -119,6 +147,9 @@
                     </v-btn>
                   </router-link>
                 </v-flex>
+                </div>
+
+
               </v-layout>
             </v-container>
           </v-form>

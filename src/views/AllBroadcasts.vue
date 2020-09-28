@@ -34,7 +34,7 @@
         text-xs-right
       >
 
-        <div v-if="user.role_id === 1 || user.role_id === 2">
+        <div v-if="user.role_id === 1 || user.role_id === 2 || user.role_id === 5">
           <v-btn
             class="mx-0 font-weight-light "
             color="success"

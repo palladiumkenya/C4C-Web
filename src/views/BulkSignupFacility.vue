@@ -38,7 +38,7 @@
                     </v-btn>
                   </v-flex>
                   <v-flex
-                    v-if="user.role_id === 1 || user.role_id === 2"
+                    v-if="user.role_id === 1 || user.role_id === 2 || user.role_id === 5"
                     xs12
                     md4
                   >
@@ -329,7 +329,7 @@ export default {
           gender: this.tableData[v].Gender,
           dob: this.tableData[v].Date_Of_Birth,          
           id_no: this.tableData[v].National_ID,
-          consent: '1',
+          consent: 1,
           password: this.tableData[v].Mobile.toString(),
           
           message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` 
