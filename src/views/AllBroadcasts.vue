@@ -217,7 +217,7 @@ export default {
           l = response.data.links.next
           this.all_messages = this.all_messages.concat(response.data.data)
         } else {
-          i = 11
+          i = 100
         }
       }
       if (this.user.role_id === 5) {

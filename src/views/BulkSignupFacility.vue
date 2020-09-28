@@ -309,7 +309,7 @@ export default {
     },
 
     pushData () {
-      if (this.user.role_id === 1 || this.user.role_id === 2) {
+      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
             this.facility = this.facility.id
           } else {
             this.facility = this.user.hcw.facility_id
@@ -329,7 +329,7 @@ export default {
           gender: this.tableData[v].Gender,
           dob: this.tableData[v].Date_Of_Birth,          
           id_no: this.tableData[v].National_ID,
-          consent: 1,
+          consent: '1',
           password: this.tableData[v].Mobile.toString(),
           
           message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` 

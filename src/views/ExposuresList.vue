@@ -230,11 +230,9 @@ export default {
         axios.get(`exposures/all`)
           .then((response) => {
             this.exposures = response.data.data
-            this.link = response.data.links.next
-            if (this.link) {
-              this.loopT(this.link)
-              this.isLoading = false
-            }
+
+            this.loopT(response.data.links.next)
+            this.isLoading = false
           })
           .catch(() => {
             this.error = true
@@ -243,13 +241,11 @@ export default {
           })
       } else if (this.user.role_id === 4) {
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
-          .then((exp) => {
-            this.exposures = exp.data.data
-            this.link = exp.data.links.next
-            if (this.link) {
-              this.loopT(this.link)
-              this.isLoading = false
-            }
+          .then((response) => {
+            this.exposures = response.data.data
+
+            this.loopT(response.data.links.next)
+            this.isLoading = false
           })
           .catch(() => {
             this.error = true
@@ -260,9 +256,8 @@ export default {
     },
 
     async loopT (l) {
-      var i
-      var u = []
-      if (this.user.role_id ===1) {
+      var i; var u = []
+      if (this.user.role_id === 1) {
         for (i = 0; i < 1;) {
           if (l != null) {
             let response = await axios.get(l)

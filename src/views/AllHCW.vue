@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user.role_id ===1 || user.role_id ===2">
+  <div v-if="user.role_id === 1 || user.role_id === 2">
     <v-toolbar-title tabs>
      
       <v-tabs grow
@@ -464,7 +464,7 @@ export default {
   methods: {
 
     getHCW () {
-      if (this.user.role_id === 1 || this.user.role_id === 5 || this.user.role_id === 2) {
+      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
         axios.get('hcw')
           .then((workers) => {
             this.all_hcws = workers.data.data
@@ -478,6 +478,7 @@ export default {
             axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
               .then((workers) => {
                 this.all_hcws = workers.data.data
+
                 this.loopH(workers.data.links.next)
                 this.isLoading = false
               })
@@ -488,7 +489,7 @@ export default {
       }
     },
     async loopH (l) {
-      var i
+      var i; var u = []
       for (i = 0; i < 1;) {
         if (l != null) {
           let workers = await axios.get(l)
@@ -499,9 +500,13 @@ export default {
         }
       }
       if (this.user.role_id === 5) {
-        for (var a in this.all_hcws) {
-          if (this.all_hcws[a].county === this.user.county) {
-            u.push(this.all_hcws[a])
+        for (var ax in this.all_hcws) {
+          if(this.all_hcws[ax].facility) {
+            if (this.all_hcws[ax].county === this.user.county) {
+              console.log(this.all_hcws[ax]);
+
+              u.push(this.all_hcws[ax])
+          }
           }
         }
         this.all_hcws = u

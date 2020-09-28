@@ -10,7 +10,7 @@
 
     <v-layout  
       justify-center
-      v-if="user.role_id === 1 || user.role_id === 2 || user.role_id === 5"
+      v-if="user.role_id === 1 || user.role_id === 2 "
       wrap>    
 
 
@@ -168,7 +168,7 @@
 
     <v-layout  
       justify-center
-      v-else-if="user.role_id === 4"
+      v-else-if="user.role_id === 4 || user.role_id === 5"
       wrap> 
 
       <!-- Start Facility Cards -->
@@ -1050,7 +1050,7 @@ export default {
         axios.get(`exposures/covid/all`)
           .then((response) => {
             if (this.user.role_id === 5) {
-              this.c19count = 'loading...'
+              this.c19count = 'Loading...'
             } else {
               this.c19count = response.data.meta.total
               //console.log(response.data.meta.total)
@@ -1060,7 +1060,7 @@ export default {
             this.loopCovid(this.link)
 
             if (this.user.role_id === 5) {
-              this.c19count = 'loading...'
+              this.c19count = 'Loading...'
             } else {
               this.c19count = response.data.meta.total
              // console.log(response.data.meta.total)
@@ -1104,7 +1104,7 @@ export default {
             this.loopT(this.link)
 
             if (this.user.role_id === 5) {
-              this.scount = 'loading...'
+              this.scount = 'Loading...'
             } else {
               this.scount = response.data.meta.total
             }
@@ -1153,16 +1153,16 @@ export default {
           }
         }
       } else if (this.user.role_id === 5) {
-        for (i = 0; i < 1;) {
-          if (l != null) {
-            let response = await axios.get(l)
-            l = response.data.links.next
-            this.s = this.s.concat(response.data.data)
-            this.storeExp(this.s)
-          } else {
-            i = 11
-          }
-        }
+        // for (i = 0; i < 1;) {
+        //   if (l != null) {
+        //     let response = await axios.get(l)
+        //     l = response.data.links.next
+        //     this.s = this.s.concat(response.data.data)
+        //     this.storeExp(this.s)
+        //   } else {
+        //     i = 11
+        //   }
+        // }
         for (var ex in this.s) {
           if (this.s[ex].county === this.user.hcw.county) {
             e.push(this.s[ex])
@@ -1267,7 +1267,7 @@ export default {
         axios.get('hcw')
           .then((exp) => {
             if (this.user.role_id === 5) {
-              this.u = 'loading...'
+              this.u = 'Loading...'
               this.storePages(exp.data)
             } else {
               this.u = exp.data.meta.total
@@ -1405,13 +1405,13 @@ export default {
           l = response.data.links.next
           this.musers = this.musers.concat(response.data.data)
         } else {
-          i = 11
+          i = 1000
         }
       } 
     },
 
     getBroadcasts () {
-      if (this.user.role_id === 1 || this.user.role_id === 2) {
+      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5 ) {
         axios.get('broadcasts/web/all')
           .then((broadcasts) => {
               this.broad = broadcasts.data.data
