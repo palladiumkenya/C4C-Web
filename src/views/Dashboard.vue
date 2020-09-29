@@ -335,8 +335,7 @@
               <v-combobox
                 v-model="this.user.county"
                 disabled
-                chips
-                @change="getSubCounties"/>
+                chips/>
             </v-flex>
 
             <v-flex
@@ -587,8 +586,6 @@ export default {
     return {
       cadres: [],
       partner: [],
-      county_users: [],
-      county_exposures: [],
       isLoading: true,
       fullPage: false,
       menu: false,
@@ -766,7 +763,7 @@ export default {
 
     countyExposures () {
       let self = this;
-      this.c_exposures = this.county_exposures.filter(item => item.county === this.user.county);
+      this.c_exposures = this.s.filter(item => item.county === this.user.county);
       return this.c_exposures.length
     },
 
@@ -776,8 +773,9 @@ export default {
 
     countyUsers() {
       let self = this;
-      this.new_users = this.county_users.filter(item => item.county === this.user.county);
-      return this.new_users.length
+        this.new_users = this.userz.filter(item => item.county === this.user.county);
+        return this.new_users.length
+      
     },
 
     ...mapGetters({
@@ -942,17 +940,26 @@ export default {
           for (var f in this.all_facilities) {
             if (this.all_facilities[f].county === a[c].name) {
               this.fac_filt.push(this.all_facilities[f])
-            }
+            } 
+            // else if(this.user.role_id === 5 && this.all_facilities[f].county === this.user.county)  {
+            //   this.us_filt.push(this.userz[u])
+            // }
           }
           for (var ex in this.s) {
             if (this.s[ex].county === a[c].name) {
               this.exp_filt.push(this.s[ex])
-            }
+            } 
+            // else if(this.user.role_id === 5 && this.s[ex].county === this.user.county) {
+            //   this.exp_filt.push(this.s[ex])
+            // }
           }
           for (var u in this.userz) {
             if (this.userz[u].county === a[c].name) {
               this.us_filt.push(this.userz[u])
-            }
+            } 
+            // else if(this.user.role_id === 5 && this.userz[u].county === this.user.county)  {
+            //   this.us_filt.push(this.userz[u])
+            // }
           }
         }
         this.getTest(this.us_filt)
@@ -1168,8 +1175,6 @@ export default {
       } else if (this.user.role_id === 5 ) {
         axios.get(`exposures/all`)
           .then((response) => {
-            this.county_exposures = response.data.data
-
             this.s = response.data.data
 
             this.link = response.data.links.next
@@ -1272,22 +1277,19 @@ export default {
             
           this.u = exp.data.meta.total
           this.userz = exp.data.data
-          this.storeUsNo(exp.data)
-          this.storeAllUsers(this.userz)
-
           this.link = exp.data.links.next
+          this.storeAllUsers(this.userz)
           this.loopG(this.link)
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 5) {
         axios.get('hcw')
           .then((exp) => {
-            
-          this.county_users = exp.data.data
+
           this.userz = exp.data.data
-          this.storeUsNo(exp.data)
+          this.link = exp.data.links.next
           this.storeAllUsers(this.userz)
-          this.loopG(exp.data.links.next)
+          this.loopG(this.link)
 
           })
           .catch(error => console.log(error.message))
@@ -1306,7 +1308,6 @@ export default {
 
     async loopG (l) {
       var i; var e = []
-      this.userz = this.all_users
         for (i = 0; i < 1;) {
           if (l != null) {
             let response = await axios.get(l)
