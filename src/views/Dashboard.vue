@@ -173,7 +173,7 @@
 
       <!-- Start Facility Cards -->
 
-      <v-flex 
+      <v-flex v-if="this.user.role_id === 4"
         sm3
         xs8
         md4
@@ -194,7 +194,28 @@
         </template>
       </v-flex>
 
-      <v-flex
+      <v-flex v-if="this.user.role_id === 5"
+        sm3
+        xs8
+        md4
+        lg3
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1" >mdi-account-group</v-icon>
+              <h2 align="center">{{ countyUsers }}</h2>
+              <h5 align="center">Total Number Of Users</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex v-if="this.user.role_id === 4"
         sm3
         xs8
         md4
@@ -209,6 +230,27 @@
             <v-card-text>
               <v-icon class="mr-1">mdi-file-chart</v-icon>
               <h2 align="center">{{ exposuresCount }}</h2>
+              <h5 align="center">Reported Exposures</h5>
+            </v-card-text>
+          </v-card>
+        </template>
+      </v-flex>
+
+      <v-flex v-if="this.user.role_id === 5"
+        sm3
+        xs8
+        md4
+        lg3
+      >
+        <template>
+          <v-card
+            class="mx-auto"
+            color="#4B9FD2"
+            dark
+          >
+            <v-card-text>
+              <v-icon class="mr-1">mdi-file-chart</v-icon>
+              <h2 align="center">{{ countyExposures }}</h2>
               <h5 align="center">Reported Exposures</h5>
             </v-card-text>
           </v-card>
@@ -267,108 +309,108 @@
 
         <v-container py-0>
           <v-layout wrap>
-            <v-flex
+            <v-flex 
               xs10
               md2
+              v-if="user.role_id === 1 || user.role_id === 2"
             >
-              <template>
-                <v-combobox
-                  v-if="user.role_id === 1 || user.role_id === 2"
-                  v-model="counties"
-                  :items="all_counties"
-                  item-text="name"
-                  item-value="id"
-                  label="Select County"
-                  multiple
-                  clearable
-                  persistent-hint
-                  chips
-                  @change="getSubCounties"/>
-              </template>
+              <v-combobox
+                v-model="counties"
+                :items="all_counties"
+                item-text="name"
+                item-value="id"
+                label="Select County"
+                multiple
+                clearable
+                persistent-hint
+                chips
+                @change="getSubCounties"/>
             </v-flex>
+
             <v-flex
               xs10
               md2
+              v-if="user.role_id === 5"
             >
-              <template>
-                <v-combobox
-                  v-if="user.role_id != 4"
-                  v-model="subcounties"
-                  :items="all_subcounties"
-                  :disabled="active"
-                  item-text="name"
-                  item-value="id"
-                  label="Select Sub-County"
-                  multiple
-                  clearable
-                  persistent-hint
-                  chips
-                  @change="facilitySubCounty"/>
-
-              </template>
+              <v-combobox
+                v-model="this.user.county"
+                disabled
+                chips
+                @change="getSubCounties"/>
             </v-flex>
 
             <v-flex
               xs10
               md2
             >
-              <template>
-                <v-combobox
-                  v-if="user.role_id != 4"
-                  v-model="partner"
-                  :items="partners"
-                  item-text="name"
-                  item-value="id"
-                  label="Select Partner"
-                  multiple
-                  clearable
-                  disabled
-                  persistent-hint
-                  chips/>
-
-              </template>
+              <v-combobox
+                v-if="user.role_id != 4"
+                v-model="subcounties"
+                :items="all_subcounties"
+                :disabled="active"
+                item-text="name"
+                item-value="id"
+                label="Select Sub-County"
+                multiple
+                clearable
+                persistent-hint
+                chips
+                @change="facilitySubCounty"/>
             </v-flex>
 
             <v-flex
               xs10
               md2
             >
-              <template>
-                <v-combobox
-                  v-if="user.role_id != 4"
-                  :items="all_facilities_level"
-                  :disabled="active_level"
-                  label="Select Facility Level"
-                  multiple
-                  clearable
-                  persistent-hint
-                  chips
-                  @change="facilityLevel"/>
-
-              </template>
+              <v-combobox
+                v-if="user.role_id != 4"
+                v-model="partner"
+                :items="partners"
+                item-text="name"
+                item-value="id"
+                label="Select Partner"
+                multiple
+                clearable
+                disabled
+                persistent-hint
+                chips/>
             </v-flex>
 
             <v-flex
               xs10
-              md4
+              md2
             >
-              <template>
-                <v-combobox
-                  v-if="user.role_id != 4"
-                  v-model="facility"
-                  :items="fac"
-                  :disabled="active_fac"
-                  item-text="name"
-                  item-value="id"
-                  label="Select Facility"
-                  multiple
-                  clearable
-                  persistent-hint
-                  chips
-                  @change="facilityFilter"/>
-
-              </template>
+              <v-combobox
+                v-if="user.role_id != 4"
+                :items="all_facilities_level"
+                :disabled="active_level"
+                label="Select Facility Level"
+                multiple
+                clearable
+                persistent-hint
+                chips
+                @change="facilityLevel"/>
             </v-flex>
+
+            <v-flex
+              xs10
+              md2
+            >
+              <v-combobox
+                v-if="user.role_id != 4"
+                v-model="facility"
+                :items="fac"
+                :disabled="active_fac"
+                item-text="name"
+                item-value="id"
+                label="Select Facility"
+                multiple
+                clearable
+                persistent-hint
+                chips
+                @change="facilityFilter"/>
+            </v-flex>
+            
           </v-layout>
       </v-container>
 
@@ -515,7 +557,7 @@
           :options="barOptionsTime"/>
       </v-flex>
       <!-- Start Maps -->
-        <Map v-if="(user.role_id === 1 || user.role_id === 2) && !isLoading" :exposures="s" :users="userz" />
+        <Map v-if="(this.user.role_id === 1 || this.user.role_id === 2) && !isLoading" :exposures="s" :users="userz" />
       <!-- End Maps -->
 
     </v-layout>
@@ -545,6 +587,8 @@ export default {
     return {
       cadres: [],
       partner: [],
+      county_users: [],
+      county_exposures: [],
       isLoading: true,
       fullPage: false,
       menu: false,
@@ -720,8 +764,20 @@ export default {
       return this.scount
     },
 
+    countyExposures () {
+      let self = this;
+      this.c_exposures = this.county_exposures.filter(item => item.county === this.user.county);
+      return this.c_exposures.length
+    },
+
     covidCount () {
       return this.c19count
+    },
+
+    countyUsers() {
+      let self = this;
+      this.new_users = this.county_users.filter(item => item.county === this.user.county);
+      return this.new_users.length
     },
 
     ...mapGetters({
@@ -745,7 +801,7 @@ export default {
     }
     if (this.user.role_id === 5) {
       this.subCounties()
-      this.active = false
+      this.active = true
       if (this.curr === 0) {
         this.getAllUsers()
       } else if(this.curr !== this.last) {
@@ -777,7 +833,6 @@ export default {
     this.getFacilities()
     this.getCounties()
     this.getBroadcasts()
-    this.getActiveFacilities()
     axios.get('cadres')
       .then((c) => {
         this.cadres = c.data.data
@@ -1093,11 +1148,28 @@ export default {
     },
 
     getExp () {
-      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 2 ) {
         axios.get(`exposures/all`)
           .then((response) => {
             
             this.scount = response.data.meta.total
+            this.s = response.data.data
+
+            this.link = response.data.links.next
+            if (this.link) {
+              this.loopT(this.link)
+            } else {
+              this.getMonth(this.s)
+              this.storeExp(this.s)
+            }
+          })
+          .catch(error => {
+          })
+      } else if (this.user.role_id === 5 ) {
+        axios.get(`exposures/all`)
+          .then((response) => {
+            this.county_exposures = response.data.data
+
             this.s = response.data.data
 
             this.link = response.data.links.next
@@ -1141,22 +1213,6 @@ export default {
             i = 11
           }
         }
-        if (this.user.role_id === 5) {
-          for (var ex in this.s) {
-            if (this.s[ex].facility) {
-              if (this.s[ex].county === this.user.county) {
-                e.push(this.s[ex])
-              }
-            }  
-            this.getMonth(e)
-            this.storeExp(e)
-          }
-          this.s = e
-          console.log(e)
-
-          this.scount = e.length
-          this.storeExp(this.s)
-      }
       this.getMonth(this.s)
     },
 
@@ -1210,7 +1266,7 @@ export default {
     }),
 
     getAllUsers () {
-      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 2) {
         axios.get('hcw')
           .then((exp) => {
             
@@ -1221,6 +1277,18 @@ export default {
 
           this.link = exp.data.links.next
           this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 5) {
+        axios.get('hcw')
+          .then((exp) => {
+            
+          this.county_users = exp.data.data
+          this.userz = exp.data.data
+          this.storeUsNo(exp.data)
+          this.storeAllUsers(this.userz)
+          this.loopG(exp.data.links.next)
+
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
@@ -1248,22 +1316,9 @@ export default {
             this.storeUsNo(response.data)
             this.getTest(this.userz)
           } else {
-            i = 11
+            i = 1000
           }
         }
-      if (this.user.role_id === 5) {
-        this.isLoading = true
-        for (var ex in this.userz) {
-          if (this.userz[ex].county === this.user.hcw.county) {
-            e.push(this.userz[ex])
-            this.getTest(e)
-            this.storeAllUsers(e)
-          }
-        }
-        this.userz = e
-        this.u = e.length
-        this.storeAllUsers(this.userz)
-      }
       this.getTest(this.userz)
       this.isLoading = false
     },
