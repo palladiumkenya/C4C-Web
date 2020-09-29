@@ -1214,15 +1214,13 @@ export default {
         axios.get('hcw')
           .then((exp) => {
             
-            if(this.user.role_id === 1 || this.user.role_id === 2 ) {
-              this.u = exp.data.meta.total
-              this.userz = exp.data.data
-              this.storeUsNo(exp.data)
-              this.storeAllUsers(this.userz)
-            } 
+          this.u = exp.data.meta.total
+          this.userz = exp.data.data
+          this.storeUsNo(exp.data)
+          this.storeAllUsers(this.userz)
 
-            this.link = exp.data.links.next
-            this.loopG(this.link)
+          this.link = exp.data.links.next
+          this.loopG(this.link)
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {

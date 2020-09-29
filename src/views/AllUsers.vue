@@ -61,7 +61,7 @@
 
           <v-data-table
             :headers="headers"
-            :items="all_users"
+            :items="filteredList"
             :loading="true"
             class="elevation-1"
             :search="search"
@@ -78,7 +78,7 @@
             <td>{{ props.item.id }}</td>
             <td>{{ props.item.county }}</td>
             <td>{{ props.item.sub_county }}</td>
-            <td>{{ props.item.role.name }}</td>
+            <!-- <td>{{ props.item.role.name }}</td> -->
             <td>{{ props.item.cadre }}</td>
             <td>{{ props.item.gender }}</td>
 
@@ -103,12 +103,13 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
 
   data () {
     return {
-      rowsPerPageItems: [500, 5000, 10000],
+      rowsPerPageItems: [100, 500, 2000, 5000, 10000],
       search: '',
       isLoading: true,
       all_users: [],
@@ -136,11 +137,11 @@ export default {
             text: 'Sub County',
             value: 'sub_county'
           },
-        {
-          sortable: true,
-          text: 'Role',
-          value: 'role_name'
-        },
+        // {
+        //   sortable: true,
+        //   text: 'Role',
+        //   value: 'role_name'
+        // },
       
         {
           sortable: false,
@@ -158,14 +159,29 @@ export default {
   created () {
     this.getUsers()
   },
-  methods: {
 
+  computed: {
+    ...mapGetters({
+      user: 'auth/user',
+    }),
+
+    filteredList() {
+      let self = this;
+
+      return this.new_users = this.all_users.filter(item => item.county === this.user.county);
+
+    }
+  },
+
+  methods: {
     getUsers () {
-      axios.get('users')
+      if (this.user.role_id === 1 || this.user.role_id === 2) {
+      axios.get('hcw')
         .then((users) => {
           this.all_users = users.data.data
           this.loopT(users.data.links.next)
           this.isLoading = false
+
         })
         .catch(() => {
           this.error = true
@@ -173,18 +189,65 @@ export default {
           this.snackbar = true
 
         })
-    },
+      } else if(this.user.role_id === 5) {
+          axios.get('hcw')
+          .then((users) => {
+            this.all_users = users.data.data
+            this.loopT(users.data.links.next)
+            this.isLoading = false
+
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+
+          })
+
+      } else if(this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((users) => {
+            this.all_users = users.data.data
+
+            this.loopH(users.data.links.next)
+            this.isLoading = false
+          })
+          .catch(() => {
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      }
+     } ,
     async loopT (l) {
-      var i
-      for (i = 0; i < 1;) {
-        if (l != null) {
-          let users = await axios.get(l)
-          l = users.data.links.next
-          this.all_users = this.all_users.concat(users.data.data)
-        } else {
-          i = 100
+      var i; var u = []
+      if(this.user.role_id === 1|| this.user.role_id === 2) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let users = await axios.get(l)
+            l = users.data.links.next
+            this.all_users = this.all_users.concat(users.data.data)
+          } else {
+            i = 100
+          }
+        }  
+      } else if(this.user.role_id === 5) {
+        for (i = 0; i < 1;) {
+          if (l != null) {
+            let response = await axios.get(l)
+            l = response.data.links.next
+            this.all_users = this.all_users.concat(response.data.data)
+          } else {
+            i = 11
+          }
         }
-      } 
+        i = 0
+        for (var i in this.all_users) {
+          if (this.all_users[i].county === this.user.county) {
+            u.push(this.all_users[i])
+          }
+        }
+        this.all_users = u
+      }
     },
 
     handleDownload () {

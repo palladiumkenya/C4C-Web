@@ -237,8 +237,114 @@
    </v-tabs-items>
   </div>
 
+   <v-container v-else-if="user.role_id === 5"
+    fill-height
+    fluid
+    grid-list-xl
+    >
+    <v-layout
+      justify-center
+      wrap
+    >
+
+      <v-flex
+        md12
+      >
+
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
+        <v-card>
+          <v-card-title>
+            All Users
+            <v-spacer/>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            />
+
+            <v-flex
+              xs12
+              md2>
+              <v-btn
+                :loading="downloadLoading"
+                color="primary"
+                @click="handleDownload">
+                <v-icon left>mdi-download</v-icon>Export Excel
+              </v-btn>
+            </v-flex>
+
+
+          </v-card-title>
+
+          <v-data-table
+                  :headers="headers"
+                  :items="filteredUsers"
+                  :rows-per-page-items="rowsPerPageItems"
+                  :search="search"
+                  :loading="true"
+                  class="elevation-1"
+                  item-key="id"
+                >
+
+                <template slot='no-data'>
+                    <v-progress-linear slot='progress' indeterminate></v-progress-linear>
+                </template>
+
+                  <template
+                    slot="items"
+                    slot-scope="props">
+
+                      <!-- <td>{{ props.item.first_name }}</td>
+                      <td>{{ props.item.surname }}</td> -->
+                      <td>{{ props.item.gender }}</td>
+                      <td>{{ props.item.dob }}</td>
+                      <td>{{ props.item.facility_name }}</td>
+                      <td>{{ props.item.county }}</td>
+                      <td>{{ props.item.sub_county }}</td>
+                      <td>{{ props.item.department }}</td>
+                      <td>{{ props.item.cadre }}</td>
+
+          </template>
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+
+          </v-data-table>
+
+        </v-card>
+
+      </v-flex>
+
+    </v-layout>
+  </v-container>
+
   
-  <v-container v-else-if="user.role_id === 4 || user.role_id === 5"
+  <v-container v-else-if="user.role_id === 4"
     fill-height
     fluid
     grid-list-xl
@@ -342,6 +448,7 @@
 
     </v-layout>
   </v-container>
+
 </template>
 
 
@@ -353,6 +460,7 @@ export default {
     return {
       n: null,
       new_users: [],
+      county_users: [],
       users_ttl: [],
       all_hcws: [],  
       incompletes: [],
@@ -454,6 +562,13 @@ export default {
 
       return this.new_users = this.users_ttl.filter(item => item.profile_complete === 0);
 
+    },
+
+    filteredUsers() {
+      let self = this;
+
+      return this.county_users = this.all_hcws.filter(item => item.county === this.user.county);
+
     }
 
   },
@@ -464,27 +579,42 @@ export default {
   methods: {
 
     getHCW () {
-      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 2) {
         axios.get('hcw')
-          .then((response) => {
-            if(this.user.role_id === 1 || this.user.role_id === 2) {
-              this.all_hcws = response.data.data
-            }
+          .then((hcws) => {
+            this.all_hcws = hcws.data.data
 
-            this.loopH(response.data.links.next)
+            this.loopH(hcws.data.links.next)
             this.isLoading = false
           })
           .catch(() => {
             this.result = 'Check your internet connection or retry logging in.'
-            this.snackbar = true            })
-          } else if (this.user.role_id === 4) {
-            axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
-              .then((response) => {
-                this.all_hcws = response.data.data
+            this.snackbar = true    
+          })
+      } else if(this.user.role_id === 5) {
+          axios.get('hcw')
+          .then((hcws) => {
+            this.all_hcws = hcws.data.data
 
-                this.loopH(response.data.links.next)
-                this.isLoading = false
-              })
+            this.loopH(hcws.data.links.next)
+            this.isLoading = false
+
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+
+          })
+
+      } else if (this.user.role_id === 4) {
+        axios.get(`hcw/facility/${this.user.hcw.facility_id}`)
+          .then((hcws) => {
+            this.all_hcws = hcws.data.data
+
+            this.loopH(hcws.data.links.next)
+            this.isLoading = false
+          })
           .catch(() => {
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
@@ -492,34 +622,15 @@ export default {
       }
     },
     async loopH (l) {
-      var i; var u = []
-      if (this.user.role_id === 1|| this.user.role_id === 2) {
-        for (i = 0; i < 1;) {
-          if (l != null) {
-            let response = await axios.get(l)
-            l = response.data.links.next
-            this.all_hcws = this.all_hcws.concat(response.data.data)
-          } else {
-            i = 200
-          }
+      var i
+      for (i = 0; i < 1;) {
+        if (l != null) {
+          let response = await axios.get(l)
+          l = response.data.links.next
+          this.all_hcws = this.all_hcws.concat(response.data.data)
+        } else {
+          i = 200
         }
-     } else if (this.user.role_id === 5) {
-       for (i = 0; i < 1;) {
-          if (l != null) {
-            let response = await axios.get(l)
-            l = response.data.links.next
-            this.all_hcws = this.all_hcws.concat(response.data.data)
-          } else {
-            i = 200
-          }
-        }
-        i = 0
-        for (var ax in this.all_hcws) {
-          if (this.all_hcws[ax].county === this.user.county) {
-            u.push(this.all_hcws[ax])
-          }
-        }
-        this.all_hcws = u
       }
     },
     handleDownload () {
