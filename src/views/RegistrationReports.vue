@@ -15,181 +15,201 @@
             xs12
             md6
             lg2
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id === 1 || user.role_id === 2 "
-                v-model="counties"
-                :items="all_counties"
-                item-text="name"
-                item-value="id"
-                label="Select County"
-                v-on:change="getSubCounties"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-
-            </template>
-          </v-flex>
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="subcounties"
-                :items="all_subcounties"
-                item-text="name"
-                item-value="id"
-                label="Select Sub-County"
-                v-on:change="getFacilitysubcountyfilter"
-                :disabled="active"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-            </template>
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg2
-          >
-
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="partner"
-                :items="all_partner"
-                item-text="partner"
-                item-value="sub_county"
-                label="Select Partner"
-                multiple
-                disabled
-                clearable
-                persistent-hint
-                chips/>
-
-            </template>
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg2
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                :items="all_facilities_level"
-                label="Select Facility Level"
-                v-on:change="getFacilitylevelfilter"
-                :disabled="active_level"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-            </template>
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg2
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="facility"
-                :items="fac"
-                item-text="name"
-                item-value="id"
-                label="Select Facility"
-                v-on:change="getFacilityfilter"
-                :disabled="active_fac"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-            </template>
-          </v-flex>
-        
-        <template>
-          <v-flex
-            v-if="user.role_id === 4"
-            xs12
-            md2
+            v-if="user.role_id === 1 || user.role_id === 2 "
           >
             <v-combobox
-              :items="cadres"
+              v-model="counties"
+              :items="all_counties"
               item-text="name"
               item-value="id"
-              label="Select Cadre"
-              v-on:change="cadreFilter"
+              label="Select County"
+              v-on:change="getSubCounties"
               multiple
               clearable
               persistent-hint
               chips/>
           </v-flex>
-          <v-flex xs12 md2>
-            <v-menu
-              ref="menu1"
-              :close-on-content-click="false"
-              v-model="menu1"
-              :nudge-right="40"
-              :return-value.sync="startDate"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
+          <v-flex
+              xs10
+              md2
+              v-if="user.role_id === 5"
             >
-              <v-text-field
-                slot="activator"
-                v-model="startDate"
-                label="Start Date"
-                prepend-icon="mdi-calendar"
-                readonly
-              ></v-text-field>
-              <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
-              </v-date-picker>
-            </v-menu>
+              <v-combobox
+                v-model="this.user.county"
+                disabled
+                chips/>
           </v-flex>
-          <v-flex xs12 md2>
-            <v-menu
-              ref="menu"
-              :close-on-content-click="false"
-              v-model="menu"
-              :nudge-right="40"
-              :return-value.sync="endDate"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id === 1 || user.role_id === 2"
+          >
+            <v-combobox
+              v-model="subcounties"
+              :items="all_subcounties"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              v-on:change="getFacilitysubcountyfilter"
+              :disabled="active"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id === 5"
+          >
+            <v-combobox
+              v-model="subcounties"
+              :items="all_subcounties"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              v-on:change="getFacilitysubcountyfilter"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id !== 4"
+          >
+            <v-combobox
+              v-model="partner"
+              :items="all_partner"
+              item-text="partner"
+              item-value="sub_county"
+              label="Select Partner"
+              multiple
+              disabled
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id !== 4"
+          >
+            <v-combobox
+              :items="all_facilities_level"
+              label="Select Facility Level"
+              v-on:change="getFacilitylevelfilter"
+              :disabled="active_level"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id !== 4"
+          >
+            <v-combobox
+              v-model="facility"
+              :items="fac"
+              item-text="name"
+              item-value="id"
+              label="Select Facility"
+              v-on:change="getFacilityfilter"
+              :disabled="active_fac"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+
+          <template>
+            <v-flex
+              v-if="user.role_id === 4"
+              xs12
+              md3
             >
-              <v-text-field
-                slot="activator"
-                v-model="endDate"
-                label="End Date"
-                prepend-icon="mdi-calendar"
-                readonly
-              ></v-text-field>
-              <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
-              </v-date-picker>
-            </v-menu>
-          </v-flex>
-        </template>
+              <v-combobox
+                :items="cadres"
+                item-text="name"
+                item-value="id"
+                label="Select Cadre"
+                v-on:change="cadreFilter"
+                multiple
+                clearable
+                persistent-hint
+                chips/>
+            </v-flex>
+            <v-flex
+              xs12
+              md3
+            >
+              <v-menu
+                ref="menu1"
+                :close-on-content-click="false"
+                v-model="menu1"
+                :nudge-right="40"
+                :return-value.sync="startDate"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="startDate"
+                  label="Start Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                ></v-text-field>
+                <v-date-picker :dark="true" v-model="startDate" no-title scrollable :max="endDate" :min="minDate">
+                  <v-spacer></v-spacer>
+                  <v-btn flat color="primary" @click="menu1 = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="click();$refs.menu1.save(startDate);click">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-flex>
+            <v-flex
+              xs12
+              md3
+            >
+              <v-menu
+                ref="menu"
+                :close-on-content-click="false"
+                v-model="menu"
+                :nudge-right="40"
+                :return-value.sync="endDate"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="endDate"
+                  label="End Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                ></v-text-field>
+                <v-date-picker :dark="true" v-model="endDate" no-title scrollable :max="maxDate" :min="startDate">
+                  <v-spacer></v-spacer>
+                  <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                  <v-btn flat color="primary" @click="click();$refs.menu.save(endDate)">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-flex>
+
+          </template>
+
         </v-layout>
       </v-container>
     </template>
