@@ -4,84 +4,104 @@
       fill-height
       fluid
       grid-list-xl
-      py-0>
+      >
       <v-layout
         justify-center
         wrap>
+
         <v-flex
           v-if="user.role_id === 1 || user.role_id === 2"
           xs12
           md2
         >
-          <template>
-            <v-combobox
-              :items="all_counties"
-              item-text="name"
-              item-value="id"
-              label="Select County"
-              multiple
-              clearable
-              persistent-hint
-              chips
-              @change="getSubCounties"/>
-          </template>
+          <v-combobox
+            :items="all_counties"
+            item-text="name"
+            item-value="id"
+            label="Select County"
+            multiple
+            clearable
+            persistent-hint
+            chips
+            @change="getSubCounties"/>
         </v-flex>
         <v-flex
-          v-if="user.role_id !== 4"
+              xs10
+              md2
+              v-if="user.role_id === 5"
+            >
+              <v-combobox
+                v-model="this.user.county"
+                disabled
+                chips/>
+        </v-flex>
+        <v-flex
+          v-if="user.role_id == 1 || user.role_id === 2"
           xs12
           md3
         >
-          <template>
-            <v-combobox
-              v-model="subcounties"
-              :items="all_subcounties"
-              :disabled="active"
-              item-text="name"
-              item-value="id"
-              label="Select Sub-County"
-              multiple
-              clearable
-              persistent-hint
-              chips
-              @change="getFacilitysubcountyfilter"/>
-          </template>
+          <v-combobox
+            v-model="subcounties"
+            :items="all_subcounties"
+            :disabled="active"
+            item-text="name"
+            item-value="id"
+            label="Select Sub-County"
+            multiple
+            clearable
+            persistent-hint
+            chips
+            @change="getFacilitysubcountyfilter"/>
+        </v-flex>
+        <v-flex
+          v-if="user.role_id === 5"
+          xs12
+          md3
+        >
+          <v-combobox
+            v-model="subcounties"
+            :items="all_subcounties"
+            item-text="name"
+            item-value="id"
+            label="Select Sub-County"
+            multiple
+            clearable
+            persistent-hint
+            chips
+            @change="getFacilitysubcountyfilter"/>
         </v-flex>
         <v-flex
           v-if="user.role_id !== 4"
           xs12
           md2
         >
-          <template>
-            <v-combobox
-              v-if="user.role_id !== 4"
-              v-model="partner"
-              :items="all_partners"
-              item-text="name"
-              item-value="id"
-              label="Select Partner"
-              multiple
-              disabled
-              clearable
-              persistent-hint
-              chips/>
-          </template>
+          <v-combobox
+            v-if="user.role_id !== 4"
+            v-model="partner"
+            :items="all_partners"
+            item-text="name"
+            item-value="id"
+            label="Select Partner"
+            multiple
+            disabled
+            clearable
+            persistent-hint
+            chips/>
         </v-flex>
         <v-flex
           v-if="user.role_id !== 4"
           xs12
           md2
         >
-          <template>
-            <v-combobox
-              :items="all_facilities_level"
-              :disabled="active_level"
-              label="Select Facility Level"
-              multiple
-              clearable
-              persistent-hint
-              chips
-              @change="getFacilitylevelfilter"/>
-          </template>
+          <v-combobox
+            :items="all_facilities_level"
+            :disabled="active_level"
+            label="Select Facility Level"
+            multiple
+            clearable
+            persistent-hint
+            chips
+            @change="getFacilitylevelfilter"/>
         </v-flex>
         <v-flex
           v-if="user.role_id !== 4"
@@ -100,11 +120,12 @@
             chips
             @change="getFacilityfilter"/>
         </v-flex>
+
         <template>
           <v-flex
             v-if="user.role_id === 4"
             xs12
-            md2
+            md3
           >
             <v-combobox
               :items="cadres"
@@ -119,7 +140,7 @@
           </v-flex>
           <v-flex
             xs12
-            md2>
+            md3>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -160,7 +181,7 @@
           </v-flex>
           <v-flex
             xs12
-            md2>
+            md3>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
