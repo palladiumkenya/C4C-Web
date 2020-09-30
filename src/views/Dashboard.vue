@@ -1287,8 +1287,10 @@ export default {
           .then((exp) => {
 
           this.userz = exp.data.data
+          
           this.link = exp.data.links.next
           this.storeAllUsers(this.userz)
+          this.storePages(exp.data)
           this.loopG(this.link)
 
           })
