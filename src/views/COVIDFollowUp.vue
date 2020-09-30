@@ -101,6 +101,16 @@
           </template>
         </v-flex>
         <v-flex
+              xs10
+              md2
+              v-if="user.role_id === 5"
+            >
+              <v-combobox
+                v-model="this.user.county"
+                disabled
+                chips/>
+        </v-flex>
+        <v-flex
           v-if="user.role_id !== 4"
           xs12
           md3
@@ -1523,7 +1533,7 @@ export default {
     },
     // end filter
     getcovidExpo () {
-      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 2) {
         axios.get(`exposures/covid/all`)
           .then((response) => {
               this.s = response.data.data
@@ -1532,15 +1542,10 @@ export default {
 
               this.exposures_total = response.data.meta.total
 
-              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+              this.community_exposures = b.filter(b => b.transmission_mode.includes('Community')).length
 
-              this.community_exposures = this.filteredCommunity.length
+              this.facility_exposures = b.filter(b => b.transmission_mode.includes('Facility')).length
 
-              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
-
-              this.facility_exposures = this.filteredFacility.length
-
-              console.log(this.s)
               if (response.data.links.next != null) {
               this.link = response.data.links.next
               this.loopT(this.link)
@@ -1556,7 +1561,30 @@ export default {
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true
           })
-      }else if (this.user.role_id === 4) {
+      } else if (this.user.role_id === 5) {
+        axios.get(`exposures/covid/all`)
+          .then((response) => {
+              this.s = response.data.data
+
+              const b = response.data.data
+
+              this.exposures_total = b.filter(item => item.county === this.user.county).length
+
+              this.community_exposures = b.filter(item => item.transmission_mode.includes('Community') && item.county === this.user.county).length
+
+              this.facility_exposures = b.filter(item => item.transmission_mode.includes('Facility') && item.county === this.user.county).length
+
+              if (response.data.links.next != null) {
+              this.link = response.data.links.next
+              this.loopT(this.link)
+              
+            } else {
+              this.getcovidData(this.s)
+            }
+          })
+          
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 4) {
         axios.get(`exposures/covid/facility/${this.user.hcw.facility_id}`)
           .then((response) => {
             this.s = response.data.data
@@ -1565,13 +1593,9 @@ export default {
 
               this.exposures_total = response.data.meta.total
 
-              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+              this.community_exposures = b.filter(b => b.transmission_mode.includes('Community')).length
 
-              this.community_exposures = this.filteredCommunity.length
-
-              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
-
-              this.facility_exposures = this.filteredFacility.length
+              this.facility_exposures = b.filter(b => b.transmission_mode.includes('Facility')).length
 
             if (response.data.links.next != null) {
               this.link = response.data.links.next

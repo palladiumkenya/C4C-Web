@@ -8,7 +8,7 @@
       justify-center
       wrap>    
 
-      <v-layout v-if="user.role_id !== 5"  
+      <v-layout
         justify-center
         wrap>    
 
@@ -70,75 +70,6 @@
               <v-card-text>
                 <v-icon class="mr-1">mdi-movie-roll</v-icon>
                 <h3 align="center">{{ totalCommunityCount }}</h3>
-                <h6 align="center">Community Exposures</h6>
-              </v-card-text>
-            </v-card>
-          </template>
-        </v-flex>
-      </v-layout>
-
-      <v-layout v-else-if="user.role_id === 5"  
-        justify-center
-        wrap>    
-
-        <!-- Start Cards -->
-        <v-flex 
-          sm3
-          xs8
-          md4
-          lg3
-        >
-          <template>
-            <v-card
-              class="mx-auto"
-              color="#4B9FD2"
-              dark
-            >
-              <v-card-text>
-                <v-icon class="mr-1" >mdi-account-group</v-icon>
-                <h3 align="center">{{ countyTotals }}</h3>
-                <h6 align="center">Total Exposures</h6>
-              </v-card-text>
-            </v-card>
-          </template>
-        </v-flex>
-
-        <v-flex
-          sm3
-          xs8
-          md3
-          lg3
-        >
-          <template>
-            <v-card
-              class="mx-auto"
-              color="#4B9FD2"
-              dark
-            >
-              <v-card-text>
-                <v-icon class="mr-1">mdi-file-chart</v-icon>
-                <h3 align="center">{{ countyFacilityCount }}</h3>
-                <h6 align="center">Facility Exposures</h6>
-              </v-card-text>
-            </v-card>
-          </template>
-        </v-flex>
-
-        <v-flex
-          sm3
-          xs8
-          md3
-          lg3
-        >
-          <template>
-            <v-card
-              class="mx-auto"
-              color="#4B9FD2"
-              dark
-            >
-              <v-card-text>
-                <v-icon class="mr-1">mdi-movie-roll</v-icon>
-                <h3 align="center">{{ countyCommunityCount }}</h3>
                 <h6 align="center">Community Exposures</h6>
               </v-card-text>
             </v-card>
@@ -373,8 +304,6 @@
         </v-layout>
       <!-- End filters -->
 
-    
-    
       <v-card>
         <v-tabs
           color="teal lighten-5"
@@ -600,25 +529,6 @@ export default {
       totalCommunityCount () {
         return this.community_exposures
       },
-
-      countyTotals () {
-        let self = this;
-        this.ttls = this.s.filter(item => item.county === this.user.role_id === 5);
-        return this.ttls.length
-      },
-
-      countyFacilityCount () {
-        let self = this;
-        this.c_ttls = this.filteredFacility.filter(item => item.county === this.user.role_id === 5);
-        return this.c_ttls.length
-      },
-
-      countyCommunityCount () {
-        let self = this;
-        this.f_ttls = this.filteredCommunity.filter(item => item.county === this.user.role_id === 5);
-        return this.f_ttls.length
-      },
-
 
       ...mapGetters({
       user: 'auth/user',
@@ -1190,7 +1100,6 @@ export default {
     }
   },
 
-
     created () {
         this.getcovidExpo()
         this.getCounties()
@@ -1472,13 +1381,9 @@ export default {
 
               this.exposures_total = response.data.meta.total
 
-              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+              this.community_exposures = b.filter(b => b.transmission_mode.includes('Community')).length
 
-              this.community_exposures = this.filteredCommunity.length
-
-              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
-
-              this.facility_exposures = this.filteredFacility.length
+              this.facility_exposures = b.filter(b => b.transmission_mode.includes('Facility')).length
 
               if (response.data.links.next != null) {
               this.link = response.data.links.next
@@ -1497,15 +1402,11 @@ export default {
 
               const b = response.data.data
 
-              this.exposures_total = response.data.meta.total
+              this.exposures_total = b.filter(item => item.county === this.user.county).length
 
-              this.filteredCommunity = b.filter(b => b.transmission_mode.includes('Community'))
+              this.community_exposures = b.filter(item => item.transmission_mode.includes('Community') && item.county === this.user.county).length
 
-              this.community_exposures = this.filteredCommunity.length
-
-              this.filteredFacility = b.filter(b => b.transmission_mode.includes('Facility'))
-
-              this.facility_exposures = this.filteredFacility.length
+              this.facility_exposures = b.filter(item => item.transmission_mode.includes('Facility') && item.county === this.user.county).length
 
               if (response.data.links.next != null) {
               this.link = response.data.links.next
