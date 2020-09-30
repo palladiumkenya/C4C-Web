@@ -26,14 +26,14 @@
             @change="getSubCounties"/>
         </v-flex>
         <v-flex
-              xs10
-              md2
-              v-if="user.role_id === 5"
-            >
-              <v-combobox
-                v-model="this.user.county"
-                disabled
-                chips/>
+            xs10
+            md2
+            v-if="user.role_id === 5"
+          >
+            <v-combobox
+              v-model="this.user.county"
+              disabled
+              chips/>
         </v-flex>
         <v-flex
           v-if="user.role_id == 1 || user.role_id === 2"

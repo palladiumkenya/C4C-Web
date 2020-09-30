@@ -11,117 +11,127 @@
           <v-flex
             xs12
             md6
-            lg3
+            lg2
+            v-if="user.role_id === 1 || user.role_id === 2 "
           >
-            <template>
-              <v-combobox
-                v-if="user.role_id === 1 || user.role_id === 2 "
-                v-model="counties"
-                :items="all_counties"
-                item-text="name"
-                item-value="id"
-                label="Select County"
-                v-on:change="getSubCounties"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-            </template>
+            <v-combobox
+              v-model="counties"
+              :items="all_counties"
+              item-text="name"
+              item-value="id"
+              label="Select County"
+              v-on:change="getSubCounties"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            xs10
+            md2
+            v-if="user.role_id === 5"
+          >
+            <v-combobox
+              v-model="this.user.county"
+              disabled
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id === 1 || user.role_id === 2"
+          >
+            <v-combobox
+              v-model="subcounties"
+              :items="all_subcounties"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              :disabled="active"
+              v-on:change="facilitySubCounty"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            v-if="user.role_id === 5"
+            xs12
+            md2
+          >
+            <v-combobox
+              v-model="subcounties"
+              :items="all_subcounties"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="getFacilitysubcountyfilter"/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id !== 4"
+          >
+            <v-combobox
+              v-model="partner"
+              :items="all_partners"
+              item-text="name"
+              item-value="id"
+              label="Select Partner"
+              multiple
+              clearable
+              disabled
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+          >
+            <v-combobox
+              v-if="user.role_id !== 4"
+              :items="all_facilities_level"
+              label="Select Facility Level"
+              v-on:change="facilityLevel"
+              :disabled="active_level"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
           </v-flex>
           <v-flex
             xs12
             md6
             lg3
+            v-if="user.role_id !== 4"
           >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="subcounties"
-                :items="all_subcounties"
-                item-text="name"
-                item-value="id"
-                label="Select Sub-County"
-                :disabled="active"
-                v-on:change="facilitySubCounty"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-
-            </template>
-          </v-flex>
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-
-            <template>
-
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="partner"
-                :items="all_partners"
-                item-text="name"
-                item-value="id"
-                label="Select Partner"
-                multiple
-                clearable
-                disabled
-                persistent-hint
-                chips/>
-
-            </template>
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-
-            <template>
-
-              <v-combobox
-                v-if="user.role_id !== 4"
-                :items="all_facilities_level"
-                label="Select Facility Level"
-                v-on:change="facilityLevel"
-                :disabled="active_level"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-
-            </template>
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="facility"
-                :items="fac"
-                item-text="name"
-                item-value="id"
-                label="Select Facility"
-                v-on:change="facilityFilter"
-                :disabled="active_fac"
-                multiple
-                clearable
-                persistent-hint
-                chips/>
-
-            </template>
+            <v-combobox
+              v-model="facility"
+              :items="fac"
+              item-text="name"
+              item-value="id"
+              label="Select Facility"
+              v-on:change="facilityFilter"
+              :disabled="active_fac"
+              multiple
+              clearable
+              persistent-hint
+              chips/>
           </v-flex>
         </v-layout>
 
         <template>
-          <v-flex xs12 sm6 md2>
+          <v-flex
+              xs12
+              sm6
+              md3>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -148,7 +158,10 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12 sm6 md2>
+          <v-flex
+            xs12
+            sm6
+            md3>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
