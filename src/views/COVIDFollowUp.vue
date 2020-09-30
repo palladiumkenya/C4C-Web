@@ -119,7 +119,6 @@
             <v-combobox
               v-model="subcounties"
               :items="all_subcounties"
-              :disabled="active"
               item-text="name"
               item-value="id"
               label="Select Sub-County"

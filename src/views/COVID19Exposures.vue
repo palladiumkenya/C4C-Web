@@ -117,7 +117,6 @@
               <v-combobox
                 v-model="subcounties"
                 :items="all_subcounties"
-                :disabled="active"
                 item-text="name"
                 item-value="id"
                 label="Select Sub-County"
@@ -1115,19 +1114,19 @@ export default {
 
     methods: {
 
-      click () {
-      let expo = []
-      var dates = {
-        convert: function (d) {
-          return (
-            d.constructor === Date ? d
-              : d.constructor === Array ? new Date(d[0], d[1], d[2])
-                : d.constructor === Number ? new Date(d)
-                  : d.constructor === String ? new Date(d)
-                    : typeof d === 'object' ? new Date(d.year, d.month, d.date)
-                      : NaN
-          )
-        },
+    click () {
+    let expo = []
+    var dates = {
+      convert: function (d) {
+        return (
+          d.constructor === Date ? d
+            : d.constructor === Array ? new Date(d[0], d[1], d[2])
+              : d.constructor === Number ? new Date(d)
+                : d.constructor === String ? new Date(d)
+                  : typeof d === 'object' ? new Date(d.year, d.month, d.date)
+                    : NaN
+        )
+      },
         inRange: function (d, start, end) {
           return (
             isFinite(d = this.convert(d).valueOf()) &&
