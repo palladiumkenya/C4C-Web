@@ -12,11 +12,10 @@
           <v-flex
             xs12
             md6
-            lg3
+            lg2
+            v-if="user.role_id === 1 || user.role_id === 2 "
           >
-          <template>
             <v-combobox
-              v-if="user.role_id === 1 || user.role_id === 2 "
               v-model="counties"
               :items="all_counties"
               item-text="name"
@@ -27,99 +26,114 @@
               persistent-hint
               chips
               @change="getSubCounties"/>
-            </template>  
           </v-flex>
-
+          <v-flex
+            xs10
+            md2
+            v-if="user.role_id === 5"
+          >
+            <v-combobox
+              v-model="this.user.county"
+              disabled
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id === 1 || user.role_id === 2 "
+          >
+            <v-combobox
+              v-model="subcounties"
+              :items="all_subcounties"
+              :disabled="active"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="facilitySubCounty"/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id === 5"
+          >
+            <v-combobox
+              v-model="subcounties"
+              :items="all_subcounties"
+              item-text="name"
+              item-value="id"
+              label="Select Sub-County"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="facilitySubCounty"/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id !== 4"
+          >
+            <v-combobox
+              v-model="partner"
+              :items="all_partners"
+              item-text="name"
+              item-value="id"
+              label="Select Partner"
+              multiple
+              clearable
+              disabled
+              persistent-hint
+              chips/>
+          </v-flex>
+          <v-flex
+            xs12
+            md6
+            lg2
+            v-if="user.role_id !== 4"
+          >
+            <v-combobox
+              :items="all_facilities_level"
+              :disabled="active_level"
+              label="Select Facility Level"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="facilityLevel"/>
+          </v-flex>
           <v-flex
             xs12
             md6
             lg3
+            v-if="user.role_id !== 4"
           >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="subcounties"
-                :items="all_subcounties"
-                :disabled="active"
-                item-text="name"
-                item-value="id"
-                label="Select Sub-County"
-                multiple
-                clearable
-                persistent-hint
-                chips
-                @change="facilitySubCounty"/>
-
-            </template>
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="partner"
-                :items="all_partners"
-                item-text="name"
-                item-value="id"
-                label="Select Partner"
-                multiple
-                clearable
-                disabled
-                persistent-hint
-                chips/>
-
-            </template>
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                :items="all_facilities_level"
-                :disabled="active_level"
-                label="Select Facility Level"
-                multiple
-                clearable
-                persistent-hint
-                chips
-                @change="facilityLevel"/>
-            </template>    
-          </v-flex>
-
-          <v-flex
-            xs12
-            md6
-            lg3
-          >
-            <template>
-              <v-combobox
-                v-if="user.role_id !== 4"
-                v-model="facility"
-                :items="fac"
-                :disabled="active_fac"
-                item-text="name"
-                item-value="id"
-                label="Select Facility"
-                multiple
-                clearable
-                persistent-hint
-                chips
-                @change="facilityFilter"/>
-
-            </template>
+            <v-combobox
+              v-model="facility"
+              :items="fac"
+              :disabled="active_fac"
+              item-text="name"
+              item-value="id"
+              label="Select Facility"
+              multiple
+              clearable
+              persistent-hint
+              chips
+              @change="facilityFilter"/>
           </v-flex>
         </v-layout>
 
         <template>
-          <v-flex xs12 sm6 md2>
+          <v-flex
+            xs12
+            sm6
+            md3>
             <v-menu
               ref="menu1"
               :close-on-content-click="false"
@@ -161,7 +175,7 @@
           <v-flex
             xs12
             sm6
-            md2>
+            md3>
             <v-menu
               ref="menu"
               :close-on-content-click="false"
