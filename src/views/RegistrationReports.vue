@@ -906,7 +906,7 @@ export default {
           count++
         } else if (age > 65 && cat == 5) {
           count++
-        } else if (cat == 6 && isNaN(age) ) {
+        } else if (cat == 6 && isNaN(age)) {
           count++
         }
       }
