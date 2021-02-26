@@ -1092,6 +1092,32 @@ export default {
             }
           })
           .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 2) {
+        axios.get(`exposures/partner/${this.user.hcw.partner_id}`)
+          .then((exp) => {
+            this.s = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              // this.c = exp.data.cadre.meta.total // total cadre
+              this.loopT(this.link)
+            } else {
+              this.getAgeData(this.s)
+            }
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 5) {
+        axios.get(`exposures/all`)
+          .then((exp) => {
+            this.s = exp.data.data
+            if (exp.data.links.next != null) {
+              this.link = exp.data.links.next
+              // this.c = exp.data.cadre.meta.total // total cadre
+              this.loopT(this.link)
+            } else {
+              this.getAgeData(this.s)
+            }
+          })
+          .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
         axios.get(`exposures/facility/${this.user.hcw.facility_id}`)
           .then((exp) => {

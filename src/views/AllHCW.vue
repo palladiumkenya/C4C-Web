@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user.role_id === 1 || user.role_id === 2">
+  <div v-if="user.role_id === 1">
     <v-toolbar-title tabs>
      
       <v-tabs grow
@@ -236,6 +236,111 @@
       </v-tab-item>
    </v-tabs-items>
   </div>
+
+  <v-container v-else-if="user.role_id === 2"
+    fill-height
+    fluid
+    grid-list-xl
+    >
+    <v-layout
+      justify-center
+      wrap
+    >
+
+      <v-flex
+        md12
+      >
+
+      <v-snackbar
+        color="error"
+        v-model="snackbar"
+        :timeout="12000"
+        top>
+        <v-icon
+        color="white"
+        class="mr-3"
+      >
+        mdi-bell-plus
+      </v-icon>
+      <div> {{result}}</div>
+      <v-icon
+        size="16"
+        @click="snackbar = false"
+      >
+        mdi-close-circle
+      </v-icon>
+      </v-snackbar>
+
+        <v-card>
+          <v-card-title>
+            All Users
+            <v-spacer/>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            />
+
+            <v-flex
+              xs12
+              md2>
+              <v-btn
+                :loading="downloadLoading"
+                color="primary"
+                @click="handleDownload">
+                <v-icon left>mdi-download</v-icon>Export Excel
+              </v-btn>
+            </v-flex>
+
+
+          </v-card-title>
+
+          <v-data-table
+                  :headers="headers"
+                  :items="all_hcws"
+                  :rows-per-page-items="rowsPerPageItems"
+                  :search="search"
+                  :loading="true"
+                  class="elevation-1"
+                  item-key="id"
+                >
+
+                <template slot='no-data'>
+                    <v-progress-linear slot='progress' indeterminate></v-progress-linear>
+                </template>
+
+                  <template
+                    slot="items"
+                    slot-scope="props">
+                      <!-- <td>{{ props.item.first_name }}</td>
+                      <td>{{ props.item.surname }}</td> -->
+                      <td>{{ props.item.gender }}</td>
+                      <td>{{ props.item.dob }}</td>
+                      <td>{{ props.item.facility_name }}</td>
+                      <td>{{ props.item.county }}</td>
+                      <td>{{ props.item.sub_county }}</td>
+                      <td>{{ props.item.department }}</td>
+                      <td>{{ props.item.cadre }}</td>
+
+          </template>
+            <v-alert
+              slot="no-results"
+              :value="true"
+              color="success"
+              icon="mdi-emoticon-sad">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+
+          </v-data-table>
+
+        </v-card>
+
+      </v-flex>
+
+    </v-layout>
+  </v-container>
 
    <v-container v-else-if="user.role_id === 5"
     fill-height
@@ -579,7 +684,7 @@ export default {
   methods: {
 
     getHCW () {
-      if (this.user.role_id === 1 || this.user.role_id === 2) {
+      if (this.user.role_id === 1 ) {
         axios.get('hcw')
           .then((hcws) => {
             this.all_hcws = hcws.data.data
@@ -591,6 +696,24 @@ export default {
             this.result = 'Check your internet connection or retry logging in.'
             this.snackbar = true    
           })
+      } else if(this.user.role_id === 2) {
+          axios.get(`hcw/partner/${this.user.hcw.partner_id}`)
+          .then((hcws) => {
+            this.all_hcws = hcws.data.data
+
+            console.log("ndani", this.all_hcws)
+
+            this.loopH(hcws.data.links.next)
+            this.isLoading = false
+
+          })
+          .catch(() => {
+            this.error = true
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+
+          })
+
       } else if(this.user.role_id === 5) {
           axios.get('hcw')
           .then((hcws) => {
