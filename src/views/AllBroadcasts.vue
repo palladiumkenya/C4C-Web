@@ -185,8 +185,19 @@ export default {
 
   methods: {
     getBroadcast () {
-      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5) {
+      if (this.user.role_id === 1 || this.user.role_id === 5) {
         axios.get(`broadcasts/web/all`)
+          .then((broadcast) => {
+            this.all_messages = broadcast.data.data
+            this.loopT(broadcast.data.links.next)
+            this.isLoading = false
+          })
+          .catch(() => {
+            this.result = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+          })
+      } else if (this.user.role_id === 2 ) {
+        axios.get(`broadcasts/web/partner/history/2`)
           .then((broadcast) => {
             this.all_messages = broadcast.data.data
             this.loopT(broadcast.data.links.next)

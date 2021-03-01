@@ -877,7 +877,8 @@ export default {
     },
 
     getFacilities () {
-      axios.get('facilities')
+      if (this.user.role_id === 1){
+        axios.get('facilities')
         .then((facilities) => {
           this.all_facilities = facilities.data.data
 
@@ -890,6 +891,22 @@ export default {
           }
         })
         .catch(error => console.log(error.message))
+
+      }else if(this.user.role_id === 2) {
+        axios.get('facilities/2')
+        .then((facilities) => {
+          this.all_facilities = facilities.data.data
+
+          const new_fac = facilities.data.data
+
+          if (this.user.role_id === 5) {
+            this.subCounties()
+          }
+        })
+        .catch(error => console.log(error.message))
+
+      }
+      
     },
 
     getCounties () {
@@ -1155,8 +1172,25 @@ export default {
     },
 
     getExp () {
-      if (this.user.role_id === 1 || this.user.role_id === 2 ) {
+      if (this.user.role_id === 1 ) {
         axios.get(`exposures/all`)
+          .then((response) => {
+            
+            this.scount = response.data.meta.total
+            this.s = response.data.data
+
+            this.link = response.data.links.next
+            if (this.link) {
+              this.loopT(this.link)
+            } else {
+              this.getMonth(this.s)
+              this.storeExp(this.s)
+            }
+          })
+          .catch(error => {
+          })
+      }else if (this.user.role_id === 2 ) {
+        axios.get(`exposures/partner/2`)
           .then((response) => {
             
             this.scount = response.data.meta.total
@@ -1271,7 +1305,7 @@ export default {
     }),
 
     getAllUsers () {
-      if (this.user.role_id === 1 || this.user.role_id === 2) {
+      if (this.user.role_id === 1 ) {
         axios.get('hcw')
           .then((exp) => {
             
@@ -1280,6 +1314,19 @@ export default {
           this.link = exp.data.links.next
           this.storeAllUsers(this.userz)
           this.loopG(this.link)
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 2) {
+        axios.get('hcw/partner/2')
+          .then((exp) => {
+
+          this.userz = exp.data.data
+          
+          this.link = exp.data.links.next
+          this.storeAllUsers(this.userz)
+          this.storePages(exp.data)
+          this.loopG(this.link)
+
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 5) {
@@ -1374,17 +1421,29 @@ export default {
     },
 
     getUsers () {
+      if (this.user.role_id === 1) {
         axios.get('users') 
           .then((users) => {
-            if (this.user.role_id === 1 || this.user.role_id === 2) {
               this.total_users = users.data.data
               
               this.loopBroad(users.data.links.next)
 
               this.musers = users.data.meta.total
-            }
           })
           .catch(error => console.log(error.message))
+      } else if(this.user.role_id === 2) {
+
+        axios.get('hcw/partner/2') 
+          .then((users) => {
+              this.total_users = users.data.data
+              
+              this.loopBroad(users.data.links.next)
+
+              this.musers = users.data.meta.total
+          })
+          .catch(error => console.log(error.message))
+
+      }    
     },
 
     async loopT (l) {
@@ -1401,12 +1460,22 @@ export default {
     },
 
     getBroadcasts () {
-      if (this.user.role_id === 1 || this.user.role_id === 2 || this.user.role_id === 5 ) {
+      if (this.user.role_id === 1 || this.user.role_id === 5 ) {
         axios.get('broadcasts/web/all')
           .then((response) => {
-            if (this.user.role_id === 1 || this.user.role_id === 2) {
+            if (this.user.role_id === 1) {
               this.b = response.data.meta.total
             } 
+              this.broadcasts = response.data.data
+              this.loopBroad(response.data.links.next)
+
+          })
+          .catch(error => console.log(error.message))
+      } else if (this.user.role_id === 2  ) {
+        axios.get('broadcasts/web/partner/history/2')
+          .then((response) => {
+              this.b = response.data.meta.total
+            
               this.broadcasts = response.data.data
               this.loopBroad(response.data.links.next)
 
