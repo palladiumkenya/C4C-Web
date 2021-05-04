@@ -189,7 +189,7 @@ export default {
         },
         {
           sortable: false,
-          text: 'First Name',
+          text: 'FirstName',
           value: 'FirstName'
         },
         {
@@ -333,7 +333,7 @@ export default {
           consent: '1',
           password: this.tableData[v].Mobile.toString(),
           
-          message: `Welcome ${this.tableData[v].first_name} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` 
+          message: `Welcome ${this.tableData[v].FirstName} to Care For the Carer (C4C) SMS Platform. ${this.affl} has successfully registered you. Messages sent and received are not charged.${this.affl}` 
         })
           .then((response) => {
             this.output = response.data
@@ -379,7 +379,9 @@ export default {
         var elapsedDays;
 
         if(results[r].Date_Of_Birth === '' || results[r].Date_Of_Birth === undefined ) {
-          results[r].Date_Of_Birth = '000-00-00'
+          
+          results[r].Date_Of_Birth = ''
+
         } else if(results[r].Date_Of_Birth  < 61) {
           elapsedDays = results[r].Date_Of_Birth ;
 
