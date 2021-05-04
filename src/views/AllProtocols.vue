@@ -91,9 +91,17 @@
 <script>
 import axios from 'axios'
 import Loader from '../components/core/Loader'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: { Loader },
+
+  computed: {
+
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
 
   data () {
     return {
@@ -110,7 +118,7 @@ export default {
   methods: {
 
     getProtocols () {
-      axios.get('resources/hcw/protocols')
+      axios.get(`resources/protocols/${this.user.hcw.facility_id}`)
         .then((protocols) => {
           this.results = protocols.data.data
 
