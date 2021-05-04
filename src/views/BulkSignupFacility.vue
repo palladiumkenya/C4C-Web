@@ -298,11 +298,12 @@ export default {
           this.output_pre = `ERROR: Fill cadre for record: ${u + 1}`
           this.snack('bottom', 'center')
           return
-        } else if (this.tableData[u].Date_Of_Birth === undefined) {
-          this.output_pre = `ERROR: Fill date of birth for record: ${u + 1}`
-          this.snack('bottom', 'center')
-          return
         } 
+        // else if (this.tableData[u].Date_Of_Birth === undefined) {
+        //   this.output_pre = `ERROR: Fill date of birth for record: ${u + 1}`
+        //   this.snack('bottom', 'center')
+        //   return
+        // } 
       }
       this.loading = true
       this.pushData()
@@ -377,15 +378,23 @@ export default {
 
         var elapsedDays;
 
-        if (results[r].Date_Of_Birth  < 61) {
+        if(results[r].Date_Of_Birth === '' || results[r].Date_Of_Birth === undefined ) {
+          results[r].Date_Of_Birth = '000-00-00'
+        } else if(results[r].Date_Of_Birth  < 61) {
           elapsedDays = results[r].Date_Of_Birth ;
+
+          var millisPerDay = 86400000
+          var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
+          results[r].Date_Of_Birth = new Date(jsTimestamp).toISOString().substr(0, 10)
         }
         else {
           elapsedDays = results[r].Date_Of_Birth  - 1;
+
+          var millisPerDay = 86400000
+          var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
+          results[r].Date_Of_Birth = new Date(jsTimestamp).toISOString().substr(0, 10)
         }
-        var millisPerDay = 86400000
-        var jsTimestamp = xlSerialOffset + elapsedDays * millisPerDay
-        results[r].Date_Of_Birth = new Date(jsTimestamp).toISOString().substr(0, 10)
+        
 
         if (String(results[r].Mobile).slice(0, 3) !== '254' && String(results[r].Mobile).slice(0, 1) === '7') {
           results[r].Mobile = '254' + String(results[r].Mobile)
