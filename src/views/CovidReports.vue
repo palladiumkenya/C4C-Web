@@ -1,4 +1,4 @@
-<template>
+  <template>
   <v-container
     fill-height
     fluid
@@ -224,7 +224,7 @@
             <h3/>
             <highcharts
               ref="columnChart"
-              :options="barOptionsHBV"/>
+              :options="barOptionsCOVID"/>
           </div>
         </v-flex>
       </template>
@@ -274,11 +274,11 @@ export default {
       active_level: true,
 
       downloadLoading: false,
-      filename: `HBV Report ${new Date().toISOString()}`,
+      filename: `COVID Report ${new Date().toISOString()}`,
       autoWidth: true,
       bookType: 'xlsx',
 
-      barOptionsHBV: {
+      barOptionsCOVID: {
         chart: {
           type: 'column',
           options3d: {
@@ -287,7 +287,7 @@ export default {
           }
         },
         title: {
-          text: 'Immunizations by HBV'
+          text: 'COVID 19 Immunizations'
         },
         xAxis: {
           //
@@ -318,14 +318,14 @@ export default {
           {
             // type: 'column',
             colorByPoint: true,
-            name: 'HBV Immunizations',
+            name: 'COVID 19 Immunizations',
             data: []
           }
 
         ]
       },
       seriesname: [1, 2, 3],
-      hbvs: [],
+      covid: [],
 
       s: [],
       userz: [],
@@ -385,7 +385,7 @@ export default {
           exp.push(this.s[e])
         }
       }
-      this.getHBV(exp)
+      this.getCOVID(exp)
      
     },
     getFacilities () {
@@ -435,11 +435,11 @@ export default {
             }
           }
         }
-        this.getHBV(this.exp_filt)
+        this.getCOVID(this.exp_filt)
         this.fac = this.fac_filt.sort()
       } else {
         this.fac = this.all_facilities
-        this.getHBV(this.s)
+        this.getCOVID(this.s)
       }
     },
     facilitySubCounty (a) {
@@ -458,11 +458,11 @@ export default {
             }
           }
         }
-        this.getHBV(this.exp_filtl)
+        this.getCOVID(this.exp_filtl)
         this.fac = this.fac_filtl.sort()
       } else {
         this.fac = this.fac_filt
-        this.getHBV(this.exp_filt)
+        this.getCOVID(this.exp_filt)
         this.active_level = true
       }
     },
@@ -491,12 +491,12 @@ export default {
             }
           }
         }
-        this.getHBV(this.exp_filtf)
+        this.getCOVID(this.exp_filtf)
         this.fac = this.fac_filtf.sort()
       } else {
         this.fac = this.fac_filtl
         this.active_fac = true
-        this.getHBV(this.exp_filtl)
+        this.getCOVID(this.exp_filtl)
       }
     },
 
@@ -511,35 +511,35 @@ export default {
             }
           }
         }
-        this.getHBV(e)
+        this.getCOVID(e)
       } else {
-        this.getHBV(this.exp_filtf)
+        this.getCOVID(this.exp_filtf)
       }
     },
 
     getImmunizations () {
       if (this.user.role_id === 1 || this.user.role_id == 2 || this.user.role_id == 5) {
-        axios.get('immunizations/all/disease/1')
+        axios.get('immunizations/all/disease/6')
           .then((exp) => {
             this.s = exp.data.data
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
             } else {
-              this.getHBV(this.s)
+              this.getCOVID(this.s)
               this.isLoading = false
             }
           })
           .catch(error => console.log(error.message))
       } else if (this.user.role_id === 4) {
-        axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/1`)
+        axios.get(`immunizations/facility/${this.user.hcw.facility_id}/disease/6`)
           .then((exp) => {
             this.s = exp.data.data
             if (exp.data.links.next != null) {
               this.link = exp.data.links.next
               this.loopT(this.link)
             } else {
-              this.getHBV(this.s)
+              this.getCOVID(this.s)
               this.isLoading = false
             }
           })
@@ -565,15 +565,15 @@ export default {
           i = 11
         }
       }
-      this.getHBV(this.s)
+      this.getCOVID(this.s)
       this.isLoading = false
     },
-    getHBV (list) {
+    getCOVID (list) {
       this.seriesdata = []
       for (var vac in this.seriesname) {
         this.seriesdata.push(this.getNum(vac, list))
       }
-      this.barOptionsHBV.series[0].data = this.seriesdata
+      this.barOptionsCOVID.series[0].data = this.seriesdata
     },
     getNum (name, list) {
       var a = [], b = [], prev, count = 0, arr = []

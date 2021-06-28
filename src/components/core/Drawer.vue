@@ -231,7 +231,12 @@ export default {
               to: '/other-diseases',
               icon: 'mdi-chart-line',
               text: 'Other Diseases'
-            }
+            },
+            {
+              text: 'COVID 19 Reports',
+              to: '/covid-summary',
+              icon: 'mdi-copyright'
+            },
           ]
         },
         {

@@ -52,6 +52,19 @@ export default [
     }
   },
   {
+    path: '/covid-summary',
+    name: 'COVID 19 Reports',
+    view: 'CovidReports',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
+        return next({
+          name: 'login'
+        })
+      }
+      next()
+    }
+  },
+  {
     path: '/other-diseases',
     name: 'Other Diseases',
     view: 'OtherDiseases',
