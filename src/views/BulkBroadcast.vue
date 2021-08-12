@@ -133,7 +133,7 @@ export default {
       rules: {
         required: value => !!value || 'This field is required.'
       },
-      textRules: [v => v.length <= 160 || 'Max of 160 Characters' || 'This field is required.'],
+      textRules: [v => v.length <= 400 || 'Max of 320 Characters' || 'This field is required.'],
     }
   },
 

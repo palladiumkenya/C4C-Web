@@ -53,6 +53,10 @@
 
         <v-divider/>
 
+        <v-card-title class="text--primary">{{ result.facility.name }}</v-card-title>
+
+        <v-divider/>
+
         <v-card-actions>
           <v-card-text class="text--primary">
             <div><span> Created On: </span> {{ result.created_at }}</div>
@@ -118,19 +122,37 @@ export default {
   methods: {
 
     getProtocols () {
-      axios.get(`resources/protocols/${this.user.hcw.facility_id}`)
-        .then((protocols) => {
-          this.results = protocols.data.data
+      if (this.user.role_id === 1){
+        axios.get(`resources/protocols`)
+          .then((protocols) => {
+            this.results = protocols.data.data
 
-          this.loading = false
-        })
-        .catch(() => {
-          this.error = true
-          this.resp = 'Check your internet connection or retry logging in.'
-          this.snackbar = true
+            this.loading = false
+          })
+          .catch(() => {
+            this.error = true
+            this.resp = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
 
-          this.loading = false
-        })
+            this.loading = false
+          })
+      } else {
+        axios.get(`resources/protocols/${this.user.hcw.facility_id}`)
+          .then((protocols) => {
+            this.results = protocols.data.data
+
+            this.loading = false
+          })
+          .catch(() => {
+            this.error = true
+            this.resp = 'Check your internet connection or retry logging in.'
+            this.snackbar = true
+
+            this.loading = false
+          })
+
+      }
+
     },
 
     deleteResource (id, index) {
