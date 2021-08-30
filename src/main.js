@@ -23,7 +23,7 @@ Vue.use(VuetifyDaterangePicker)
 
 require('@/store/subscriber')
 
-axios.defaults.baseURL = 'c4c-test-api.mhealthkenya.co.ke/api'
+axios.defaults.baseURL = 'c4c-api-test.mhealthkenya.co.ke/api'
 Vue.use(VuetifyDaterangePicker)
 
 delete Icon.Default.prototype._getIconUrl
