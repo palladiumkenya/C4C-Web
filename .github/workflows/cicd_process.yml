@@ -20,12 +20,10 @@ jobs:
           cd /apps/github-workflows/mhealth-apps/C4C-Web/
           git pull origin main
           git status
-          cp  /apps/configs/C4C-Web/node.dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
           cp  /apps/configs/C4C-Web/.env /apps/github-workflows/mhealth-apps/C4C-Web/
-          cp  /apps/configs/C4C-Web/nginx.dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
+          cp  /apps/configs/C4C-Web/Dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
           cp -r /apps/configs/C4C-Web/nginx/ /apps/github-workflows/mhealth-apps/C4C-Web/
           cp  /apps/configs/C4C-Web/docker-compose.yml /apps/github-workflows/mhealth-apps/C4C-Web/
-          docker-compose down
-          docker-compose rm -f
-          docker-compose up -d
+          docker build -t cforcweb:latest .
+          docker run -p 7005:443 -d --name=cforcweb --restart always cforcweb:latest
           
