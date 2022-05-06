@@ -1,0 +1,29 @@
+name: deploy to test instance
+on:
+  push:
+    branches: [ cicd ]
+jobs:
+
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote connection
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.CICD_SECRET }}
+        port: ${{ secrets.PORT }}
+        script: |
+          git config --global --add safe.directory /apps/github-workflows/mhealth-apps/C4C-Web/      
+          cd /apps/github-workflows/mhealth-apps/C4C-Web/
+          git pull origin main
+          git status
+          cp  /apps/configs/C4C-Web/node.dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
+          cp  /apps/configs/C4C-Web/.env /apps/github-workflows/mhealth-apps/C4C-Web/
+          cp  /apps/configs/C4C-Web/nginx.dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
+          cp -r /apps/configs/C4C-Web/nginx/ /apps/github-workflows/mhealth-apps/ushauri_api/
+          cp  /apps/configs/C4C-Web/docker-compose.yml /apps/github-workflows/mhealth-apps/C4C-Web/
+          docker-compose up -d
+          
