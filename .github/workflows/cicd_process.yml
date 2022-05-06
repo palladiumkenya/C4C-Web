@@ -25,5 +25,7 @@ jobs:
           cp  /apps/configs/C4C-Web/nginx.dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
           cp -r /apps/configs/C4C-Web/nginx/ /apps/github-workflows/mhealth-apps/C4C-Web/
           cp  /apps/configs/C4C-Web/docker-compose.yml /apps/github-workflows/mhealth-apps/C4C-Web/
+          docker-compose down
+	  docker-compose rm -f
           docker-compose up -d
           
