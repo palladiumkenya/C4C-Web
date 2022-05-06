@@ -27,5 +27,5 @@ jobs:
           cp  /apps/configs/C4C-Web/docker-compose.yml /apps/github-workflows/mhealth-apps/C4C-Web/
           docker-compose down
           docker-compose rm -f
-          docker-compose up-d
+          docker-compose up -d
           
