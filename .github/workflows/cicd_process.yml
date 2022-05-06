@@ -24,6 +24,6 @@ jobs:
           cp  /apps/configs/C4C-Web/Dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
           cp -r /apps/configs/C4C-Web/nginx/ /apps/github-workflows/mhealth-apps/C4C-Web/
           cp  /apps/configs/C4C-Web/docker-compose.yml /apps/github-workflows/mhealth-apps/C4C-Web/
-          docker build -t cforcweb:latest .
-          docker run -p 7005:443 -d --name=cforcweb --restart always cforcweb:latest
+          docker build -t cicdapplication/cforcweb:latest .
+          docker run -p 7005:443 -d --name=cforcweb --restart always cicdapplication/cforcweb:latest
           
