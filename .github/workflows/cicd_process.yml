@@ -18,7 +18,7 @@ jobs:
         script: |
           git config --global --add safe.directory /apps/github-workflows/mhealth-apps/C4C-Web/      
           cd /apps/github-workflows/mhealth-apps/C4C-Web/
-          git pull origin main
+          git pull origin master
           git status
           cp  /apps/configs/C4C-Web/.env /apps/github-workflows/mhealth-apps/C4C-Web/
           cp  /apps/configs/C4C-Web/Dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
