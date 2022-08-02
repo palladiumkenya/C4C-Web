@@ -16,12 +16,13 @@ jobs:
         key: ${{ secrets.CICD_SECRET }}
         port: ${{ secrets.PORT }}
         script: |
+          cd /apps/github-workflows/mhealth-apps/
           sudo rm -rf C4C-Web
           sudo mkdir C4C-Web
           sudo chown -R cicd2:cicd2 C4C-Web
           git config --global --add safe.directory /apps/github-workflows/mhealth-apps/C4C-Web/
           cd C4C-Web/
-          git clone -b main https://github.com/palladiumkenya/C4C-Web.git .
+          git clone -b master https://github.com/palladiumkenya/C4C-Web.git .
           git status
           # cp  /apps/configs/C4C-Web/.env /apps/github-workflows/mhealth-apps/C4C-Web/
           cp  /apps/configs/C4C-Web/Dockerfile /apps/github-workflows/mhealth-apps/C4C-Web/
