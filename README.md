@@ -25,7 +25,7 @@ c4c_api has the following modules: <br>
 This project is built using [Vue.js](https://vuejs.org/) and Node v14
 
 ## Prerequisites
-You will need [Node.js](https://nodejs.org) version 6.0 or greater installed on your system.
+You will need [Node.js](https://nodejs.org) version 14 installed on your system.
 
 ## Setup
 
