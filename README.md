@@ -22,7 +22,7 @@ c4c_api has the following modules: <br>
  
 ## Installation
 
-This project is built using [Vue.js](https://vuejs.org/).
+This project is built using [Vue.js](https://vuejs.org/) and Node v14
 
 ## Prerequisites
 You will need [Node.js](https://nodejs.org) version 6.0 or greater installed on your system.
@@ -45,20 +45,20 @@ cd C4C-Web
 ### Install project dependancies
 
 ```
-npm install
+yarn
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+yarn dev
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+yarn build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+yarn lint
 ```
