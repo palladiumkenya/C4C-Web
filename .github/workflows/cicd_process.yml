@@ -32,4 +32,4 @@ jobs:
           docker stop c4cwebtest
           docker rm -f c4cwebtest
           docker build --no-cache -t c4cwebtest:latest .
-          docker run -p 7005:443 -d --name=c4cwebtest --restart always c4cwebtest:latest
+          docker run -p 7005:80 -d --name=c4cwebtest --restart always c4cwebtest:latest
