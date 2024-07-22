@@ -2,7 +2,7 @@ module.exports = {
 
     devServer: {
         disableHostCheck: true,
-    proxy: 'https://c4c-api.mhealthkenya.co.ke/',
+    proxy: 'https://prod.kenyahmis.org:8003/',
 
 
   },
