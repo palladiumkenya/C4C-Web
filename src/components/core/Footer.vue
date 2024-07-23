@@ -21,8 +21,8 @@
       &copy;
       {{ (new Date()).getFullYear() }}
       <a
-        href="https://www.mhealthkenya.org/"
-        target="_blank">m-Health Kenya </a>
+        href="https://kenyahmis.org/"
+        target="_blank">KenyaHMIS</a>
     </span>
   </v-footer>
 </template>
@@ -32,8 +32,8 @@ export default {
   data: () => ({
     links: [
       { name: 'Home', Link: '/' },
-      { name: 'About Us', Link: 'https://www.mhealthkenya.org/why-choose-us' },
-      { name: 'Publication', Link: 'https://www.mhealthkenya.org/news-publications' }
+      { name: 'About Us', Link: 'https://kenyahmis.org/about-us/' },
+      { name: 'Publication', Link: 'https://kenyahmis.org/resources/' }
     ]
   })
 }
